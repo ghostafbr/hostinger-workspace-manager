@@ -30,7 +30,10 @@ export interface Workspace {
   updatedAt: Timestamp;
 
   /** Timestamp of the last token test */
-  lastTestAt?: Timestamp;
+  lastTestedAt?: Timestamp | Date;
+
+  /** Error message from last token test (if failed) */
+  lastTestError?: string;
 
   /** Timestamp of the last successful synchronization */
   lastSyncAt?: Timestamp;

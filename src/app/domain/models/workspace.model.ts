@@ -15,7 +15,8 @@ export class Workspace implements WorkspaceInterface {
   status: WorkspaceStatus;
   createdAt: Timestamp;
   updatedAt: Timestamp;
-  lastTestAt?: Timestamp;
+  lastTestedAt?: Timestamp | Date;
+  lastTestError?: string;
   lastSyncAt?: Timestamp;
   lastSyncStatus?: string;
   lastError?: string;
@@ -29,7 +30,8 @@ export class Workspace implements WorkspaceInterface {
     this.status = data.status;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
-    this.lastTestAt = data.lastTestAt;
+    this.lastTestedAt = data.lastTestedAt;
+    this.lastTestError = data.lastTestError;
     this.lastSyncAt = data.lastSyncAt;
     this.lastSyncStatus = data.lastSyncStatus;
     this.lastError = data.lastError;
@@ -102,7 +104,8 @@ export class Workspace implements WorkspaceInterface {
       status: this.status,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      lastTestAt: this.lastTestAt,
+      lastTestedAt: this.lastTestedAt,
+      lastTestError: this.lastTestError,
       lastSyncAt: this.lastSyncAt,
       lastSyncStatus: this.lastSyncStatus,
       lastError: this.lastError,
@@ -122,7 +125,8 @@ export class Workspace implements WorkspaceInterface {
       status: data['status'] as WorkspaceStatus,
       createdAt: data['createdAt'] as Timestamp,
       updatedAt: data['updatedAt'] as Timestamp,
-      lastTestAt: data['lastTestAt'] as Timestamp | undefined,
+      lastTestedAt: data['lastTestedAt'] as Timestamp | Date | undefined,
+      lastTestError: data['lastTestError'] as string | undefined,
       lastSyncAt: data['lastSyncAt'] as Timestamp | undefined,
       lastSyncStatus: data['lastSyncStatus'] as string | undefined,
       lastError: data['lastError'] as string | undefined,

@@ -17,6 +17,7 @@ import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
 import { Workspace, WorkspaceStatus, type IWorkspace } from '@app/domain';
 import { AuthService } from './auth.service';
 import { EncryptionService } from './encryption.service';
+import { HostingerApiService } from '@app/infrastructure/adapters/hostinger-api.service';
 
 /**
  * Workspace Service
@@ -30,6 +31,7 @@ export class WorkspaceService {
   private readonly firestore: Firestore = FirebaseAdapter.getFirestore();
   private readonly authService = inject(AuthService);
   private readonly encryptionService = inject(EncryptionService);
+  private readonly hostingerApi = inject(HostingerApiService);
   private readonly collectionName = 'workspaces';
 
   // Signals for reactive state
@@ -260,55 +262,6 @@ export class WorkspaceService {
   }
 
   /**
-   * Test connection to Hostinger API
-   * Updates lastTestAt and status based on result
-   */
-  async testConnection(id: string): Promise<void> {
-    try {
-      this.isLoading.set(true);
-      this.error.set(null);
-
-      const workspace = await this.getWorkspaceByIdAsync(id);
-      if (!workspace) {
-        throw new Error('Workspace not found');
-      }
-
-      // TODO: Implement actual Hostinger API test
-      // For now, simulate a test
-      const isValid = true; // Simulate success
-
-      const docRef = doc(this.firestore, this.collectionName, id);
-      const updateData = {
-        lastTestAt: Timestamp.now(),
-        status: isValid ? WorkspaceStatus.ACTIVE : WorkspaceStatus.INVALID_TOKEN,
-        updatedAt: Timestamp.now(),
-      };
-
-      await updateDoc(docRef, updateData as Record<string, unknown>);
-
-      // Update local state
-      this.workspaces.update((workspaces) =>
-        workspaces.map((ws) => {
-          if (ws.id === id) {
-            return Workspace.fromFirestore(id, {
-              ...ws,
-              ...updateData,
-            });
-          }
-          return ws;
-        }),
-      );
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to test connection';
-      this.error.set(errorMessage);
-      throw error;
-    } finally {
-      this.isLoading.set(false);
-    }
-  }
-
-  /**
    * Synchronize workspace now
    * Updates lastSyncAt and fetches data from Hostinger API
    */
@@ -385,5 +338,63 @@ export class WorkspaceService {
     }
 
     return latestSync;
+  }
+
+  /**
+   * Test connection to Hostinger API
+   * Decrypts token and validates it against Hostinger API
+   */
+  async testConnection(workspaceId: string): Promise<{
+    success: boolean;
+    error?: string;
+  }> {
+    try {
+      this.isLoading.set(true);
+      this.error.set(null);
+
+      // Get workspace
+      const workspace = await this.getWorkspaceByIdAsync(workspaceId);
+      if (!workspace) {
+        return { success: false, error: 'Workspace no encontrado' };
+      }
+
+      if (!workspace.encryptedToken) {
+        return { success: false, error: 'No hay token configurado' };
+      }
+
+      // Decrypt token (only exists in memory during this request)
+      const decryptedToken = this.encryptionService.decrypt(workspace.encryptedToken);
+
+      if (!decryptedToken) {
+        return { success: false, error: 'Error al descifrar el token' };
+      }
+
+      // Test connection with Hostinger API
+      const result = await this.hostingerApi.testConnection(decryptedToken);
+
+      // Update workspace status based on result
+      const updateData: Partial<IWorkspace> = {
+        lastTestedAt: new Date(),
+      };
+
+      if (result.success) {
+        updateData.status = WorkspaceStatus.ACTIVE;
+        updateData.lastTestError = undefined;
+      } else {
+        updateData.status = WorkspaceStatus.INVALID_TOKEN;
+        updateData.lastTestError = result.error;
+      }
+
+      await this.updateWorkspace(workspaceId, updateData);
+
+      return result;
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Error al probar conexión';
+      this.error.set(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 }

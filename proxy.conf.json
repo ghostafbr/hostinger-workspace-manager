@@ -1,0 +1,11 @@
+{
+  "/api/hostinger": {
+    "target": "https://api.hostinger.com",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/hostinger": ""
+    },
+    "logLevel": "debug"
+  }
+}
