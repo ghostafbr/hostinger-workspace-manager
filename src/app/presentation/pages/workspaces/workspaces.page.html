@@ -51,15 +51,14 @@
           <th pSortableColumn="name">
             Nombre <p-sortIcon field="name" />
           </th>
-          <th pSortableColumn="description">Descripción</th>
           <th pSortableColumn="status">
             Estado <p-sortIcon field="status" />
           </th>
+          <th pSortableColumn="lastSyncAt">
+            Última Sync <p-sortIcon field="lastSyncAt" />
+          </th>
           <th pSortableColumn="createdAt">
             Creado <p-sortIcon field="createdAt" />
-          </th>
-          <th pSortableColumn="updatedAt">
-            Actualizado <p-sortIcon field="updatedAt" />
           </th>
           <th>Acciones</th>
         </tr>
@@ -69,20 +68,37 @@
         <tr>
           <td>
             <strong>{{ workspace.name }}</strong>
-          </td>
-          <td>
-            <span class="text-overflow">{{ workspace.description || 'Sin descripción' }}</span>
+            <div class="text-sm text-gray-500">{{ workspace.description || 'Sin descripción' }}</div>
           </td>
           <td>
             <p-tag
               [value]="getStatusLabel(workspace.status)"
               [severity]="getStatusSeverity(workspace.status)"
+              [pTooltip]="getStatusTooltip(workspace.status, workspace.lastError)"
             />
           </td>
+          <td>{{ formatDate(workspace.lastSyncAt) }}</td>
           <td>{{ formatDate(workspace.createdAt) }}</td>
-          <td>{{ formatDate(workspace.updatedAt) }}</td>
           <td>
             <div class="flex gap-2">
+              <p-button
+                icon="pi pi-wifi"
+                [rounded]="true"
+                [text]="true"
+                severity="secondary"
+                pTooltip="Test connection"
+                [loading]="isTestingConnection() === workspace.id"
+                (onClick)="testConnection(workspace)"
+              />
+              <p-button
+                icon="pi pi-refresh"
+                [rounded]="true"
+                [text]="true"
+                severity="secondary"
+                pTooltip="Sync now"
+                [loading]="isSyncing() === workspace.id"
+                (onClick)="syncNow(workspace)"
+              />
               <p-button
                 icon="pi pi-pencil"
                 [rounded]="true"
@@ -115,7 +131,7 @@
 
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td colspan="6" class="text-center">
+          <td colspan="5" class="text-center">
             <div class="py-5">
               <i class="pi pi-inbox text-4xl text-gray-400"></i>
               <p class="mt-3 text-gray-500">No se encontraron workspaces</p>

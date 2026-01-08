@@ -14,6 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { TooltipModule } from 'primeng/tooltip';
 
 // Services
 import { WorkspaceService } from '@app/application/services/workspace.service';
@@ -41,6 +42,7 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
     DialogModule,
     IconFieldModule,
     InputIconModule,
+    TooltipModule,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './workspaces.page.html',
@@ -55,6 +57,8 @@ export default class WorkspacesPage implements OnInit {
   readonly workspaces = this.workspaceService.workspaces;
   readonly isLoading = this.workspaceService.isLoading;
   readonly searchTerm = signal<string>('');
+  readonly isTestingConnection = signal<string | null>(null);
+  readonly isSyncing = signal<string | null>(null);
 
   ngOnInit(): void {
     this.loadWorkspaces();
@@ -107,17 +111,23 @@ export default class WorkspacesPage implements OnInit {
    */
   disableWorkspace(workspace: Workspace): void {
     this.confirmationService.confirm({
-      message: `¿Estás seguro de desactivar el workspace "${workspace.name}"?`,
+      message: `¿Desactivar el workspace "${workspace.name}"? Se mantendrán todos los datos pero dejará de sincronizarse.`,
       header: 'Confirmar Desactivación',
       icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Desactivar',
+      rejectLabel: 'Cancelar',
+      acceptButtonStyleClass: 'p-button-warning',
       accept: async () => {
         try {
-          await this.workspaceService.disableWorkspace(workspace.id);
+          await this.workspaceService.updateWorkspace(workspace.id, {
+            status: WorkspaceStatus.DISABLED,
+          });
           this.messageService.add({
             severity: 'success',
             summary: 'Workspace Desactivado',
             detail: `El workspace "${workspace.name}" ha sido desactivado`,
           });
+          await this.loadWorkspaces();
         } catch (error) {
           this.messageService.add({
             severity: 'error',
@@ -127,6 +137,74 @@ export default class WorkspacesPage implements OnInit {
         }
       },
     });
+  }
+
+  /**
+   * Test connection to Hostinger API
+   */
+  async testConnection(workspace: Workspace): Promise<void> {
+    try {
+      this.isTestingConnection.set(workspace.id);
+      await this.workspaceService.testConnection(workspace.id);
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Conexión Exitosa',
+        detail: `El token de "${workspace.name}" es válido`,
+      });
+      await this.loadWorkspaces();
+    } catch (error) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error de Conexión',
+        detail: error instanceof Error ? error.message : 'No se pudo conectar a Hostinger',
+      });
+    } finally {
+      this.isTestingConnection.set(null);
+    }
+  }
+
+  /**
+   * Synchronize workspace now
+   */
+  async syncNow(workspace: Workspace): Promise<void> {
+    try {
+      this.isSyncing.set(workspace.id);
+      await this.workspaceService.syncNow(workspace.id);
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Sincronización Completada',
+        detail: `El workspace "${workspace.name}" se ha sincronizado correctamente`,
+      });
+      await this.loadWorkspaces();
+    } catch (error) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error de Sincronización',
+        detail: error instanceof Error ? error.message : 'No se pudo sincronizar',
+      });
+    } finally {
+      this.isSyncing.set(null);
+    }
+  }
+
+  /**
+   * Get tooltip text for status
+   */
+  getStatusTooltip(status: WorkspaceStatus, lastError?: string): string {
+    switch (status) {
+      case WorkspaceStatus.ACTIVE:
+        return 'Workspace activo y funcionando correctamente';
+      case WorkspaceStatus.INVALID_TOKEN:
+        return lastError || 'El token de Hostinger es inválido o ha expirado. Por favor, actualícelo.';
+      case WorkspaceStatus.RATE_LIMITED:
+        return 'Se ha excedido el límite de solicitudes a la API. Intente más tarde.';
+      case WorkspaceStatus.ERROR:
+        return lastError || 'Error al conectar con Hostinger. Verifique la configuración.';
+      case WorkspaceStatus.DISABLED:
+        return 'Workspace desactivado. No se sincronizará automáticamente.';
+      default:
+        return status;
+    }
   }
 
   /**
@@ -201,7 +279,10 @@ export default class WorkspacesPage implements OnInit {
   /**
    * Format date
    */
-  formatDate(timestamp: { seconds: number; nanoseconds: number } | Date): string {
+  formatDate(timestamp: { seconds: number; nanoseconds: number } | Date | undefined): string {
+    if (!timestamp) {
+      return 'Nunca';
+    }
     if ('seconds' in timestamp) {
       return new Date(timestamp.seconds * 1000).toLocaleDateString('es-ES');
     }

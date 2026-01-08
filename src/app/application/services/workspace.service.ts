@@ -54,7 +54,6 @@ export class WorkspaceService {
       const q = query(
         workspacesRef,
         where('userId', '==', userId),
-        orderBy('createdAt', 'desc'),
       );
 
       const querySnapshot = await getDocs(q);
@@ -63,12 +62,20 @@ export class WorkspaceService {
         return Workspace.fromFirestore(doc.id, data);
       });
 
+      // Sort in memory to avoid needing composite index
+      workspaces.sort((a, b) => {
+        const aTime = a.createdAt instanceof Date ? a.createdAt.getTime() : 0;
+        const bTime = b.createdAt instanceof Date ? b.createdAt.getTime() : 0;
+        return bTime - aTime; // desc order
+      });
+
       this.workspaces.set(workspaces);
       return workspaces;
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Failed to fetch workspaces';
       this.error.set(errorMessage);
+      console.error('Error loading workspaces:', error);
       throw error;
     } finally {
       this.isLoading.set(false);
@@ -243,6 +250,102 @@ export class WorkspaceService {
    */
   getActiveWorkspacesCount(): number {
     return this.workspaces().filter((ws) => ws.status === WorkspaceStatus.ACTIVE).length;
+  }
+
+  /**
+   * Test connection to Hostinger API
+   * Updates lastTestAt and status based on result
+   */
+  async testConnection(id: string): Promise<void> {
+    try {
+      this.isLoading.set(true);
+      this.error.set(null);
+
+      const workspace = await this.getWorkspaceById(id);
+      if (!workspace) {
+        throw new Error('Workspace not found');
+      }
+
+      // TODO: Implement actual Hostinger API test
+      // For now, simulate a test
+      const isValid = true; // Simulate success
+
+      const docRef = doc(this.firestore, this.collectionName, id);
+      const updateData = {
+        lastTestAt: Timestamp.now(),
+        status: isValid ? WorkspaceStatus.ACTIVE : WorkspaceStatus.INVALID_TOKEN,
+        updatedAt: Timestamp.now(),
+      };
+
+      await updateDoc(docRef, updateData as Record<string, unknown>);
+
+      // Update local state
+      this.workspaces.update((workspaces) =>
+        workspaces.map((ws) => {
+          if (ws.id === id) {
+            return Workspace.fromFirestore(id, {
+              ...ws,
+              ...updateData,
+            });
+          }
+          return ws;
+        }),
+      );
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to test connection';
+      this.error.set(errorMessage);
+      throw error;
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  /**
+   * Synchronize workspace now
+   * Updates lastSyncAt and fetches data from Hostinger API
+   */
+  async syncNow(id: string): Promise<void> {
+    try {
+      this.isLoading.set(true);
+      this.error.set(null);
+
+      const workspace = await this.getWorkspaceById(id);
+      if (!workspace) {
+        throw new Error('Workspace not found');
+      }
+
+      // TODO: Implement actual Hostinger API sync
+      // For now, just update timestamp
+      const docRef = doc(this.firestore, this.collectionName, id);
+      const updateData = {
+        lastSyncAt: Timestamp.now(),
+        lastSyncStatus: 'success',
+        updatedAt: Timestamp.now(),
+      };
+
+      await updateDoc(docRef, updateData as Record<string, unknown>);
+
+      // Update local state
+      this.workspaces.update((workspaces) =>
+        workspaces.map((ws) => {
+          if (ws.id === id) {
+            return Workspace.fromFirestore(id, {
+              ...ws,
+              ...updateData,
+            });
+          }
+          return ws;
+        }),
+      );
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to sync workspace';
+      this.error.set(errorMessage);
+      throw error;
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 
   /**

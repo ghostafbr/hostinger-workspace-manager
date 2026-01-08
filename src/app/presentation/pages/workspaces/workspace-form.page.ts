@@ -62,7 +62,6 @@ export default class WorkspaceFormPage implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.initForm();
     this.checkEditMode();
   }
 
@@ -89,8 +88,12 @@ export default class WorkspaceFormPage implements OnInit {
    */
   private async checkEditMode(): Promise<void> {
     this.workspaceId = this.route.snapshot.paramMap.get('id');
+    this.isEditMode = !!this.workspaceId;
+
+    // Initialize form after knowing the mode
+    this.initForm();
+
     if (this.workspaceId) {
-      this.isEditMode = true;
       await this.loadWorkspace(this.workspaceId);
     }
   }
