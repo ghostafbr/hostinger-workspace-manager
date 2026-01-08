@@ -34,6 +34,109 @@ body {
   background-color: #f9fafb;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 16px; // Base font size
+}
+
+// 2K scaling
+@media screen and (min-width: 2560px) {
+  html {
+    font-size: 18px; // 112.5% scaling
+  }
+}
+
+// 4K scaling
+@media screen and (min-width: 3840px) {
+  html {
+    font-size: 22px; // 137.5% scaling for better readability
+  }
+
+  // Scale PrimeNG components
+  .p-component {
+    font-size: 1rem;
+  }
+
+  // Scale buttons
+  .p-button {
+    font-size: 1rem;
+    padding: 0.875rem 1.75rem;
+
+    &.p-button-sm {
+      font-size: 0.875rem;
+      padding: 0.625rem 1.25rem;
+    }
+
+    &.p-button-lg {
+      font-size: 1.125rem;
+      padding: 1rem 2rem;
+    }
+
+    .p-button-icon {
+      font-size: 1.25rem;
+    }
+  }
+
+  // Scale inputs
+  .p-inputtext {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  // Scale tables
+  .p-datatable {
+    font-size: 1rem;
+
+    .p-datatable-thead > tr > th {
+      padding: 1rem 1.25rem;
+      font-size: 0.95rem;
+    }
+
+    .p-datatable-tbody > tr > td {
+      padding: 1rem 1.25rem;
+    }
+  }
+
+  // Scale cards
+  .p-card {
+    .p-card-title {
+      font-size: 1.375rem;
+    }
+
+    .p-card-content {
+      font-size: 1rem;
+    }
+  }
+
+  // Scale tags
+  .p-tag {
+    font-size: 0.875rem;
+    padding: 0.375rem 0.75rem;
+  }
+
+  // Scale dialogs
+  .p-dialog {
+    .p-dialog-title {
+      font-size: 1.5rem;
+    }
+
+    .p-dialog-content {
+      font-size: 1rem;
+    }
+  }
+
+  // Scale menus and dropdowns
+  .p-menu,
+  .p-select-overlay {
+    font-size: 1rem;
+
+    .p-menuitem-text {
+      font-size: 1rem;
+    }
+  }
+
+  // Scale tooltips
+  .p-tooltip-text {
+    font-size: 0.875rem;
+  }
 }
 
 // Utility classes

@@ -1,13 +1,15 @@
-// Breakpoints
-$breakpoint-xs: 576px;
-$breakpoint-sm: 768px;
-$breakpoint-md: 992px;
-$breakpoint-lg: 1200px;
-$breakpoint-xl: 1400px;
-$breakpoint-xxl: 1920px;
-$breakpoint-xxxl: 2560px;
+// Breakpoints (Mobile-first approach)
+$breakpoint-xs: 375px;    // Small phones
+$breakpoint-sm: 576px;    // Phones
+$breakpoint-md: 768px;    // Tablets
+$breakpoint-lg: 992px;    // Small desktops
+$breakpoint-xl: 1200px;   // Desktops
+$breakpoint-xxl: 1400px;  // Large desktops
+$breakpoint-xxxl: 1920px; // Full HD
+$breakpoint-2k: 2560px;   // 2K monitors
+$breakpoint-4k: 3840px;   // 4K monitors
 
-// Media query mixins
+// Media query mixins - Max Width (for mobile-first)
 @mixin media-max-xs {
   @media screen and (max-width: #{$breakpoint-xs - 1}) {
     @content;
@@ -44,6 +46,25 @@ $breakpoint-xxxl: 2560px;
   }
 }
 
+// Media query mixins - Min Width (for desktop-first enhancements)
+@mixin media-sm {
+  @media screen and (min-width: $breakpoint-sm) {
+    @content;
+  }
+}
+
+@mixin media-md {
+  @media screen and (min-width: $breakpoint-md) {
+    @content;
+  }
+}
+
+@mixin media-lg {
+  @media screen and (min-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
 @mixin media-xl {
   @media screen and (min-width: $breakpoint-xl) {
     @content;
@@ -58,6 +79,18 @@ $breakpoint-xxxl: 2560px;
 
 @mixin media-xxxl {
   @media screen and (min-width: $breakpoint-xxxl) {
+    @content;
+  }
+}
+
+@mixin media-2k {
+  @media screen and (min-width: $breakpoint-2k) {
+    @content;
+  }
+}
+
+@mixin media-4k {
+  @media screen and (min-width: $breakpoint-4k) {
     @content;
   }
 }

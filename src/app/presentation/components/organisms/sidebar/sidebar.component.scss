@@ -6,11 +6,12 @@
   left: 0;
   width: 280px;
   height: 100vh;
-  background: var(--surface-card);
+  background: #ffffff;
+  background-color: #ffffff !important;
   border-right: 2px solid var(--surface-border);
   display: flex;
   flex-direction: column;
-  transition: width 0.3s ease;
+  transition: width 0.3s ease, transform 0.3s ease;
   z-index: 999;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
 
@@ -26,7 +27,7 @@
   align-items: center;
   justify-content: space-between;
   min-height: 80px;
-  background: var(--surface-ground);
+  background: #f8f9fa;
 
   .logo {
     display: flex;
@@ -178,7 +179,8 @@
 .sidebar-footer {
   padding: 1rem;
   border-top: 2px solid var(--surface-border);
-  background: var(--surface-ground);
+  background: #f8f9fa;
+  background-color: #f8f9fa !important;
 
   .logout-btn {
     width: 100%;
@@ -217,12 +219,177 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+// Responsive adjustments
+// Mobile: sidebar as overlay
+@include variables.media-max-md {
   .sidebar {
-    transform: translateX(-100%);
+    position: fixed !important;
+    transform: translateX(-100%) !important;
+    z-index: 1100 !important;
+    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.15) !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    width: 280px !important;
 
     &:not(.collapsed) {
-      transform: translateX(0);
+      transform: translateX(0) !important;
     }
+
+    // Keep collapsed state hidden in mobile
+    &.collapsed {
+      transform: translateX(-100%) !important;
+    }
+  }
+
+  .sidebar-header {
+    background: #f8f9fa !important;
+
+    .toggle-btn {
+      display: flex;
+    }
+  }
+}
+
+// Tablet and up: sidebar is fixed
+@include variables.media-md {
+  .sidebar {
+    transform: translateX(0) !important;
+  }
+}
+
+// Tablet adjustments
+@include variables.media-lg {
+  .sidebar {
+    width: 280px;
+
+    &.collapsed {
+      width: 80px;
+    }
+  }
+}
+
+// Large screens
+@include variables.media-xxxl {
+  .sidebar {
+    width: 320px;
+
+    &.collapsed {
+      width: 100px;
+    }
+  }
+
+  .sidebar-header {
+    padding: 2rem;
+    min-height: 100px;
+
+    .logo {
+      gap: 1rem;
+
+      i {
+        font-size: 2rem;
+      }
+
+      .logo-text {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  .menu-link {
+    padding: 1.25rem 2rem;
+    gap: 1.25rem;
+
+    .menu-label {
+      font-size: 1.125rem;
+    }
+  }
+}
+
+// 2K screens
+@include variables.media-2k {
+  .sidebar {
+    width: 360px;
+
+    &.collapsed {
+      width: 120px;
+    }
+  }
+
+  .sidebar-header {
+    padding: 2.5rem;
+
+    .logo {
+      i {
+        font-size: 2.5rem;
+      }
+
+      .logo-text {
+        font-size: 1.75rem;
+      }
+    }
+  }
+
+  .menu-link {
+    padding: 1.5rem 2.5rem;
+
+    i {
+      font-size: 1.75rem;
+      min-width: 2.5rem;
+    }
+
+    .menu-label {
+      font-size: 1.25rem;
+    }
+  }
+}
+
+// 4K screens
+@include variables.media-4k {
+  .sidebar {
+    width: 480px;
+
+    &.collapsed {
+      width: 160px;
+    }
+  }
+
+  .sidebar-header {
+    padding: 3rem;
+    min-height: 140px;
+
+    .logo {
+      gap: 1.5rem;
+
+      i {
+        font-size: 3rem;
+      }
+
+      .logo-text {
+        font-size: 2rem;
+      }
+    }
+  }
+
+  .menu-link {
+    padding: 2rem 3rem;
+    gap: 1.5rem;
+
+    i {
+      font-size: 2rem;
+      min-width: 3rem;
+    }
+
+    .menu-label {
+      font-size: 1.5rem;
+    }
+
+    .badge {
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+    }
+  }
+
+  .section-title {
+    font-size: 1rem;
   }
 }

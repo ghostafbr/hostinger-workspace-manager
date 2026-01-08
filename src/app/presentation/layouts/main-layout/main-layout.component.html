@@ -1,4 +1,11 @@
 <div class="layout-wrapper">
+  <!-- Mobile backdrop (only on mobile) -->
+  <div
+    class="sidebar-backdrop"
+    [class.show]="isMobile() && !sidebarCollapsed()"
+    (click)="onSidebarToggle(true)"
+  ></div>
+
   <!-- Sidebar -->
   <app-sidebar
     [collapsed]="sidebarCollapsed()"
