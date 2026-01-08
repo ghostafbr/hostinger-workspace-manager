@@ -1,5 +1,4 @@
-import { Component, signal, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -28,8 +27,8 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 @Component({
   selector: 'app-login',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     CardModule,
     InputTextModule,

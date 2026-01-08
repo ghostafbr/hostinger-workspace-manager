@@ -1,5 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 
 // PrimeNG Imports
@@ -29,8 +28,8 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
 @Component({
   selector: 'app-workspaces',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     TableModule,
     ButtonModule,
     CardModule,
@@ -67,7 +66,7 @@ export default class WorkspacesPage implements OnInit {
   async loadWorkspaces(): Promise<void> {
     try {
       await this.workspaceService.getAllWorkspaces();
-    } catch (error) {
+    } catch (_error) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -128,7 +127,7 @@ export default class WorkspacesPage implements OnInit {
             detail: `El workspace "${workspace.name}" ha sido desactivado`,
           });
           await this.loadWorkspaces();
-        } catch (error) {
+        } catch (_error) {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -224,7 +223,7 @@ export default class WorkspacesPage implements OnInit {
             summary: 'Workspace Eliminado',
             detail: `El workspace "${workspace.name}" ha sido eliminado`,
           });
-        } catch (error) {
+        } catch (_error) {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',

@@ -1,7 +1,7 @@
 import {
   Component,
-  EventEmitter,
-  Output,
+  ChangeDetectionStrategy,
+  output,
   inject,
   computed,
   signal,
@@ -9,7 +9,6 @@ import {
   ViewChild,
   OnDestroy,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -41,8 +40,8 @@ interface WorkspaceOption {
 @Component({
   selector: 'app-header',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     FormsModule,
     ButtonModule,
     AvatarModule,
@@ -56,7 +55,7 @@ interface WorkspaceOption {
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent implements OnDestroy {
-  @Output() toggleSidebar = new EventEmitter<void>();
+  toggleSidebar = output<void>();
   @ViewChild('userPopover') userPopover!: Popover;
 
   private readonly authService = inject(AuthService);

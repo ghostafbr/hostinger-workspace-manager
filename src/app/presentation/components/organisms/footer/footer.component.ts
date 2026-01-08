@@ -1,5 +1,4 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectionStrategy, computed, inject, OnInit } from '@angular/core';
 import { TagModule } from 'primeng/tag';
 import { environment } from '@app/../environments/environment';
 import { WorkspaceService } from '@app/application/services/workspace.service';
@@ -18,7 +17,8 @@ interface HealthStatus {
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, TagModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [TagModule],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss',
 })

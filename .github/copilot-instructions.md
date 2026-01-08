@@ -80,14 +80,18 @@ export class MyComponent {
 - Selector prefix: `app-` (e.g., `app-workspace-card`)
 - NO `@HostBinding`/`@HostListener` - use `host` object in decorator instead
 - Use `inject()` function instead of constructor DI (preferred)
+- **NEVER import CommonModule** in standalone components - import specific directives instead:
+  - `NgIf`, `NgFor`, `NgSwitch` → Use native `@if`, `@for`, `@switch` instead (no imports needed)
+  - `AsyncPipe`, `DatePipe`, `JsonPipe` → Import from `@angular/common` individually
+  - `NgClass`, `NgStyle` → Avoid; use property bindings instead
 
 **Templates:**
 - Use native control flow: `@if`, `@for`, `@switch` (NOT `*ngIf`, `*ngFor`, `*ngSwitch`)
 - NO `ngClass` - use `[class.active]="isActive"` or `[class]="{'active': isActive}"`
 - NO `ngStyle` - use `[style.color]="color"` bindings
 - NO arrow functions in templates (not supported)
-- Use `async` pipe for observables
-- Use `NgOptimizedImage` for static images
+- Use `async` pipe for observables (import `AsyncPipe` from `@angular/common`)
+- Use `NgOptimizedImage` for static images (import from `@angular/common`)
 
 ### 3. Firebase Integration
 
@@ -214,17 +218,18 @@ See [app.routes.ts](src/app/app.routes.ts) for routing structure.
 ## Common Pitfalls to Avoid
 
 1. **Don't use custom HTML form elements** - Always use PrimeNG components (`<p-inputText>`, `<p-button>`)
-2. **Don't import domain into infrastructure** - Infrastructure implements domain interfaces, not vice versa
-3. **Don't use RxJS for local component state** - Use signals (`signal()`, `computed()`)
-4. **Don't skip barrel exports** - Always import via `@app/domain`, `@app/application`, etc.
-5. **Don't forget standalone: true** - All components must be standalone in Angular 21
-6. **Don't skip change detection strategy** - Always use `OnPush`
-7. **Don't call Firebase directly** - Use `FirebaseAdapter` methods
-8. **Don't use `any` type** - Use `unknown` for uncertain types, then narrow with type guards
-9. **Don't use `var`** - Always use `const` (default) or `let` when reassignment needed
-10. **Don't use `==` or `!=`** - Always use `===` and `!==` (except for `null` checks)
-11. **Don't use arrow functions in templates** - Not supported by Angular compiler
-12. **Don't mutate signals directly** - Use `set()` or `update()` methods
+2. **Don't import CommonModule** - In standalone components, import specific directives/pipes individually (e.g., `AsyncPipe`)
+3. **Don't import domain into infrastructure** - Infrastructure implements domain interfaces, not vice versa
+4. **Don't use RxJS for local component state** - Use signals (`signal()`, `computed()`)
+5. **Don't skip barrel exports** - Always import via `@app/domain`, `@app/application`, etc.
+6. **Don't forget standalone: true** - All components must be standalone in Angular 21
+7. **Don't skip change detection strategy** - Always use `OnPush`
+8. **Don't call Firebase directly** - Use `FirebaseAdapter` methods
+9. **Don't use `any` type** - Use `unknown` for uncertain types, then narrow with type guards
+10. **Don't use `var`** - Always use `const` (default) or `let` when reassignment needed
+11. **Don't use `==` or `!=`** - Always use `===` and `!==` (except for `null` checks)
+12. **Don't use arrow functions in templates** - Not supported by Angular compiler
+13. **Don't mutate signals directly** - Use `set()` or `update()` methods
 
 ## When Creating New Features
 

@@ -103,15 +103,16 @@
                 pTooltip="Editar"
                 (onClick)="editWorkspace(workspace)"
               />
-              <p-button
-                *ngIf="workspace.status !== 'disabled'"
-                icon="pi pi-ban"
-                [rounded]="true"
-                [text]="true"
-                severity="warn"
-                pTooltip="Desactivar"
-                (onClick)="disableWorkspace(workspace)"
-              />
+              @if (workspace.status !== 'disabled') {
+                <p-button
+                  icon="pi pi-ban"
+                  [rounded]="true"
+                  [text]="true"
+                  severity="warn"
+                  pTooltip="Desactivar"
+                  (onClick)="disableWorkspace(workspace)"
+                />
+              }
               <p-button
                 icon="pi pi-trash"
                 [rounded]="true"

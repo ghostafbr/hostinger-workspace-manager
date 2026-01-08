@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectionStrategy, input, output, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
@@ -22,13 +21,14 @@ interface MenuItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule, TooltipModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterModule, ButtonModule, TooltipModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })
 export class SidebarComponent {
-  @Input() collapsed = false;
-  @Output() toggleSidebar = new EventEmitter<boolean>();
+  collapsed = input<boolean>(false);
+  toggleSidebar = output<boolean>();
 
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);

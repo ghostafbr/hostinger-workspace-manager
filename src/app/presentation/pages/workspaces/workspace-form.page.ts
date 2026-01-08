@@ -1,5 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectionStrategy, OnInit, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
@@ -25,8 +24,8 @@ import { WorkspaceStatus } from '@app/domain';
 @Component({
   selector: 'app-workspace-form',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     CardModule,
     ButtonModule,
@@ -123,7 +122,7 @@ export default class WorkspaceFormPage implements OnInit {
           status: workspace.status,
         });
       }
-    } catch (error) {
+    } catch (_error) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -169,7 +168,7 @@ export default class WorkspaceFormPage implements OnInit {
       setTimeout(() => {
         this.router.navigate(['/workspaces']);
       }, 1000);
-    } catch (error) {
+    } catch (_error) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',

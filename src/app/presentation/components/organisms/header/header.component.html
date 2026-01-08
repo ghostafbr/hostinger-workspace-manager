@@ -21,15 +21,18 @@
         styleClass="workspace-dropdown"
       >
         <ng-template let-workspace pTemplate="selectedItem">
-          <div class="workspace-item" *ngIf="workspace">
-            <span class="workspace-name">{{ workspace.label }}</span>
-            <p-tag
-              *ngIf="workspace.status"
-              [value]="workspace.status"
-              [severity]="getStatusSeverity(workspace.status)"
-              styleClass="workspace-status-tag"
-            ></p-tag>
-          </div>
+          @if (workspace) {
+            <div class="workspace-item">
+              <span class="workspace-name">{{ workspace.label }}</span>
+              @if (workspace.status) {
+                <p-tag
+                  [value]="workspace.status"
+                  [severity]="getStatusSeverity(workspace.status)"
+                  styleClass="workspace-status-tag"
+                ></p-tag>
+              }
+            </div>
+          }
         </ng-template>
         <ng-template let-workspace pTemplate="item">
           <div class="workspace-item">
@@ -44,30 +47,32 @@
     </div>
 
     <!-- Quick Actions -->
-    <div class="quick-actions" *ngIf="hasWorkspaceSelected()">
-      <button
-        pButton
-        icon="pi pi-link"
-        label="Test"
-        class="p-button-outlined p-button-sm"
-        (click)="onTestConnection()"
-        [loading]="isTestingConnection()"
-        [disabled]="!canTestConnection()"
-        pTooltip="Test connection to Hostinger API"
-        tooltipPosition="bottom"
-      ></button>
-      <button
-        pButton
-        icon="pi pi-refresh"
-        label="Sync"
-        class="p-button-outlined p-button-sm"
-        (click)="onSyncNow()"
-        [loading]="isSyncing()"
-        [disabled]="!canSync()"
-        pTooltip="Sync data from Hostinger"
-        tooltipPosition="bottom"
-      ></button>
-    </div>
+    @if (hasWorkspaceSelected()) {
+      <div class="quick-actions">
+        <button
+          pButton
+          icon="pi pi-link"
+          label="Test"
+          class="p-button-outlined p-button-sm"
+          (click)="onTestConnection()"
+          [loading]="isTestingConnection()"
+          [disabled]="!canTestConnection()"
+          pTooltip="Test connection to Hostinger API"
+          tooltipPosition="bottom"
+        ></button>
+        <button
+          pButton
+          icon="pi pi-refresh"
+          label="Sync"
+          class="p-button-outlined p-button-sm"
+          (click)="onSyncNow()"
+          [loading]="isSyncing()"
+          [disabled]="!canSync()"
+          pTooltip="Sync data from Hostinger"
+          tooltipPosition="bottom"
+        ></button>
+      </div>
+    }
   </div>
 
   <div class="header-right">

@@ -33,12 +33,11 @@
           [class.ng-dirty]="isFieldInvalid('name')"
           class="w-full"
         />
-        <small
-          *ngIf="isFieldInvalid('name')"
-          class="text-red-500"
-        >
-          {{ getErrorMessage('name') }}
-        </small>
+        @if (isFieldInvalid('name')) {
+          <small class="text-red-500">
+            {{ getErrorMessage('name') }}
+          </small>
+        }
       </div>
 
       <!-- Description Field -->
@@ -60,49 +59,54 @@
       <div class="field mb-4">
         <label for="token" class="block mb-2 font-semibold">
           Token Hostinger
-          <span class="text-red-500" *ngIf="!isEditMode || showTokenField">*</span>
+          @if (!isEditMode || showTokenField) {
+            <span class="text-red-500">*</span>
+          }
         </label>
 
         <!-- Modo creación o token visible en edición -->
-        <div *ngIf="!isEditMode || showTokenField">
-          <p-password
-            id="token"
-            formControlName="token"
-            placeholder="Pegue aquí su token de Hostinger"
-            [toggleMask]="true"
-            [feedback]="false"
-            [class.ng-invalid]="isFieldInvalid('token')"
-            [class.ng-dirty]="isFieldInvalid('token')"
-            styleClass="w-full"
-            inputStyleClass="w-full"
-          />
-          <small
-            *ngIf="isFieldInvalid('token')"
-            class="text-red-500"
-          >
-            {{ getErrorMessage('token') }}
-          </small>
-          <small class="block mt-2 text-gray-600">
-            <i class="pi pi-info-circle"></i>
-            El token se cifra y almacena de forma segura. Nunca se muestra en la interfaz.
-          </small>
-        </div>
+        @if (!isEditMode || showTokenField) {
+          <div>
+            <p-password
+              id="token"
+              formControlName="token"
+              placeholder="Pegue aquí su token de Hostinger"
+              [toggleMask]="true"
+              [feedback]="false"
+              [class.ng-invalid]="isFieldInvalid('token')"
+              [class.ng-dirty]="isFieldInvalid('token')"
+              styleClass="w-full"
+              inputStyleClass="w-full"
+            />
+            @if (isFieldInvalid('token')) {
+              <small class="text-red-500">
+                {{ getErrorMessage('token') }}
+              </small>
+            }
+            <small class="block mt-2 text-gray-600">
+              <i class="pi pi-info-circle"></i>
+              El token se cifra y almacena de forma segura. Nunca se muestra en la interfaz.
+            </small>
+          </div>
+        }
 
         <!-- Modo edición sin token visible -->
-        <div *ngIf="isEditMode && !showTokenField">
-          <p-button
-            label="Pegar nuevo token"
-            icon="pi pi-key"
-            severity="secondary"
-            [outlined]="true"
-            (onClick)="onPasteNewToken()"
-            type="button"
-          />
-          <small class="block mt-2 text-gray-600">
-            <i class="pi pi-info-circle"></i>
-            Por seguridad, el token actual no se muestra. Haga clic para pegar uno nuevo.
-          </small>
-        </div>
+        @if (isEditMode && !showTokenField) {
+          <div>
+            <p-button
+              label="Pegar nuevo token"
+              icon="pi pi-key"
+              severity="secondary"
+              [outlined]="true"
+              (onClick)="onPasteNewToken()"
+              type="button"
+            />
+            <small class="block mt-2 text-gray-600">
+              <i class="pi pi-info-circle"></i>
+              Por seguridad, el token actual no se muestra. Haga clic para pegar uno nuevo.
+            </small>
+          </div>
+        }
       </div>
 
       <!-- Status Field -->
@@ -121,12 +125,11 @@
           [class.ng-dirty]="isFieldInvalid('status')"
           styleClass="w-full"
         />
-        <small
-          *ngIf="isFieldInvalid('status')"
-          class="text-red-500"
-        >
-          {{ getErrorMessage('status') }}
-        </small>
+        @if (isFieldInvalid('status')) {
+          <small class="text-red-500">
+            {{ getErrorMessage('status') }}
+          </small>
+        }
       </div>
 
       <!-- Form Actions -->

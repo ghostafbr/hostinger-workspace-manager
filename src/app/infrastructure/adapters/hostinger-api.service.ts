@@ -125,7 +125,7 @@ export class HostingerApiService {
   /**
    * Handle HTTP errors and return user-friendly messages
    */
-  private handleError(error: any): { success: false; error: string } {
+  private handleError(error: unknown): { success: false; error: string } {
     if (error instanceof HttpErrorResponse) {
       // Status 0 generalmente indica CORS o problemas de red
       if (error.status === 0) {
@@ -167,10 +167,14 @@ export class HostingerApiService {
       }
     }
 
-    if (error.name === 'TimeoutError') {
+    if (error instanceof Error && error.name === 'TimeoutError') {
       return { success: false, error: 'Timeout: La solicitud tardó demasiado' };
     }
 
-    return { success: false, error: error.message || 'Error desconocido' };
+    if (error instanceof Error) {
+      return { success: false, error: error.message };
+    }
+
+    return { success: false, error: 'Error desconocido' };
   }
 }

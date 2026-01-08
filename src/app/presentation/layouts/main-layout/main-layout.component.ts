@@ -1,5 +1,4 @@
-import { Component, signal, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from '../../components/organisms/sidebar/sidebar.component';
 import { HeaderComponent } from '../../components/organisms/header/header.component';
@@ -13,13 +12,16 @@ import { FooterComponent } from '../../components/organisms/footer/footer.compon
 @Component({
   selector: 'app-main-layout',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
     RouterOutlet,
     SidebarComponent,
     HeaderComponent,
     FooterComponent,
   ],
+  host: {
+    '(window:resize)': 'onWindowResize()'
+  },
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',
 })
@@ -32,8 +34,7 @@ export class MainLayoutComponent {
     return typeof window !== 'undefined' && window.innerWidth < 768;
   }
 
-  @HostListener('window:resize')
-  onResize(): void {
+  onWindowResize(): void {
     const mobile = this.isMobileView();
     this.isMobile.set(mobile);
 

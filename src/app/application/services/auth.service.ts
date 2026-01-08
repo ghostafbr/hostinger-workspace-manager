@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import {
   Auth,
   User,
@@ -77,8 +77,6 @@ export class AuthService {
         password,
       );
       return credential;
-    } catch (error) {
-      throw error;
     } finally {
       this.isLoading.set(false);
     }
@@ -95,8 +93,6 @@ export class AuthService {
       await signOut(this.auth);
       this.currentUser.set(null);
       this.isAuthenticated.set(false);
-    } catch (error) {
-      throw error;
     } finally {
       this.isLoading.set(false);
     }
