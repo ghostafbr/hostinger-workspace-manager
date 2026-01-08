@@ -1,0 +1,57 @@
+<aside class="sidebar" [class.collapsed]="collapsed">
+  <!-- Logo & Toggle -->
+  <div class="sidebar-header">
+    <div class="logo" *ngIf="!collapsed">
+      <i class="pi pi-server text-primary"></i>
+      <span class="logo-text">Hostinger WM</span>
+    </div>
+    <div class="logo-icon" *ngIf="collapsed">
+      <i class="pi pi-server text-primary"></i>
+    </div>
+    <button
+      pButton
+      [icon]="collapsed ? 'pi pi-angle-right' : 'pi pi-angle-left'"
+      class="p-button-text p-button-rounded toggle-btn"
+      (click)="onToggle()"
+      [pTooltip]="collapsed ? 'Expandir' : 'Colapsar'"
+      tooltipPosition="right"
+    ></button>
+  </div>
+
+  <!-- Navigation Menu -->
+  <nav class="sidebar-nav">
+    <ul class="menu-list">
+      <li
+        *ngFor="let item of menuItems"
+        class="menu-item"
+        [class.active]="isActiveRoute(item.route)"
+      >
+        <a
+          class="menu-link"
+          [routerLink]="item.route"
+          [pTooltip]="collapsed ? item.label : ''"
+          tooltipPosition="right"
+        >
+          <i [class]="item.icon"></i>
+          <span class="menu-label" *ngIf="!collapsed">{{ item.label }}</span>
+          <span class="badge" *ngIf="item.badge && !collapsed">{{
+            item.badge
+          }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Logout -->
+  <div class="sidebar-footer">
+    <button
+      pButton
+      [icon]="'pi pi-sign-out'"
+      [label]="collapsed ? '' : 'Cerrar Sesión'"
+      class="p-button-text p-button-danger logout-btn"
+      (click)="logout()"
+      [pTooltip]="collapsed ? 'Cerrar Sesión' : ''"
+      tooltipPosition="right"
+    ></button>
+  </div>
+</aside>

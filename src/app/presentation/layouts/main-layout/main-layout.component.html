@@ -1,0 +1,21 @@
+<div class="layout-wrapper">
+  <!-- Sidebar -->
+  <app-sidebar
+    [collapsed]="sidebarCollapsed()"
+    (toggleSidebar)="onSidebarToggle($event)"
+  />
+
+  <!-- Main Content Area -->
+  <div class="layout-main" [class.sidebar-collapsed]="sidebarCollapsed()">
+    <!-- Header -->
+    <app-header (toggleSidebar)="onSidebarToggle(!sidebarCollapsed())" />
+
+    <!-- Content -->
+    <div class="layout-content">
+      <router-outlet />
+    </div>
+
+    <!-- Footer -->
+    <app-footer />
+  </div>
+</div>

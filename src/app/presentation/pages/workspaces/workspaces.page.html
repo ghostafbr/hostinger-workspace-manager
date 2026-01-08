@@ -4,18 +4,14 @@
 
   <p-card>
     <ng-template pTemplate="header">
-      <p-toolbar>
-        <ng-template pTemplate="left">
-          <h2 class="m-0">Workspaces</h2>
-        </ng-template>
-        <ng-template pTemplate="right">
-          <p-button
-            label="Nuevo Workspace"
-            icon="pi pi-plus"
-            (onClick)="createWorkspace()"
-          />
-        </ng-template>
-      </p-toolbar>
+      <div class="page-header">
+        <h2 class="m-0">Workspaces</h2>
+        <p-button
+          label="Nuevo Workspace"
+          icon="pi pi-plus"
+          (onClick)="createWorkspace()"
+        />
+      </div>
     </ng-template>
 
     <!-- Search Bar -->
