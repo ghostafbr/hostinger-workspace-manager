@@ -1,7 +1,8 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TagModule } from 'primeng/tag';
 import { environment } from '@app/../environments/environment';
+import { WorkspaceService } from '@app/application/services/workspace.service';
 
 interface HealthStatus {
   label: string;
@@ -20,16 +21,84 @@ interface HealthStatus {
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss',
 })
-export class FooterComponent {
+export class FooterComponent implements OnInit {
+  private readonly workspaceService = inject(WorkspaceService);
+
   readonly currentYear = new Date().getFullYear();
   readonly appVersion = environment.version || '1.0.0';
 
-  // Placeholder for last global sync (TODO: connect with real sync service)
-  readonly lastGlobalSync = signal<string | null>(null);
+  async ngOnInit(): Promise<void> {
+    // Load workspaces only if not already loaded
+    if (this.workspaceService.workspaces().length === 0) {
+      await this.loadWorkspaces();
+    }
+  }
 
-  // Placeholder for health status (TODO: connect with real health check)
+  private async loadWorkspaces(): Promise<void> {
+    try {
+      await this.workspaceService.getAllWorkspaces();
+    } catch (error) {
+      console.error('Error loading workspaces in footer:', error);
+    }
+  }
+
+  // Last global sync computed from workspaces
+  readonly lastGlobalSync = computed<string>(() => {
+    const lastSync = this.workspaceService.getLastGlobalSync();
+    if (!lastSync) return 'Nunca';
+
+    const now = Date.now();
+    const diffMs = now - lastSync.getTime();
+    const diffMinutes = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMinutes / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffMinutes < 1) return 'Hace un momento';
+    if (diffMinutes < 60) return `Hace ${diffMinutes} min`;
+    if (diffHours < 24) return `Hace ${diffHours}h`;
+    if (diffDays === 1) return 'Ayer';
+    if (diffDays < 7) return `Hace ${diffDays} d\u00edas`;
+
+    return lastSync.toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+  });
+
+  // Health status based on workspace states
   readonly healthStatus = computed<HealthStatus>(() => {
-    // Simular estado de salud
+    const workspaces = this.workspaceService.workspaces();
+
+    if (workspaces.length === 0) {
+      return {
+        label: 'Sin datos',
+        severity: 'info',
+      };
+    }
+
+    const hasErrors = workspaces.some(ws =>
+      ws.status === 'ERROR' || ws.status === 'INVALID_TOKEN'
+    );
+
+    const hasWarnings = workspaces.some(ws =>
+      ws.status === 'RATE_LIMITED' || ws.status === 'DISABLED'
+    );
+
+    if (hasErrors) {
+      return {
+        label: 'Con errores',
+        severity: 'danger',
+      };
+    }
+
+    if (hasWarnings) {
+      return {
+        label: 'Con avisos',
+        severity: 'warn',
+      };
+    }
+
     return {
       label: 'Operativo',
       severity: 'success',

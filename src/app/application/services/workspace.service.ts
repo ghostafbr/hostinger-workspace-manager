@@ -11,7 +11,6 @@ import {
   getDoc,
   query,
   where,
-  orderBy,
   Timestamp,
 } from 'firebase/firestore';
 import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
@@ -361,5 +360,30 @@ export class WorkspaceService {
    */
   clearError(): void {
     this.error.set(null);
+  }
+
+  /**
+   * Get the most recent sync timestamp across all workspaces
+   */
+  getLastGlobalSync(): Date | null {
+    const workspaces = this.workspaces();
+    if (workspaces.length === 0) return null;
+
+    let latestSync: Date | null = null;
+
+    for (const workspace of workspaces) {
+      if (workspace.lastSyncAt) {
+        // Convert Firestore Timestamp to Date
+        const syncDate = workspace.lastSyncAt instanceof Date
+          ? workspace.lastSyncAt
+          : workspace.lastSyncAt.toDate();
+
+        if (!latestSync || syncDate > latestSync) {
+          latestSync = syncDate;
+        }
+      }
+    }
+
+    return latestSync;
   }
 }

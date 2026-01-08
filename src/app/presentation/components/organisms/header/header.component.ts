@@ -154,19 +154,24 @@ export class HeaderComponent {
 
     this.isTestingConnection.set(true);
     try {
-      // TODO: Implementar test de conexión real con Cloud Functions
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await this.workspaceService.testConnection(workspace.id);
 
       this.messageService.add({
         severity: 'success',
         summary: 'Test exitoso',
-        detail: 'Conexión a Hostinger API verificada correctamente',
+        detail: `El token de "${workspace.name}" es válido`,
       });
-    } catch (_error) {
+
+      // Reload workspaces to update status
+      await this.loadWorkspaces();
+
+      // Update context with refreshed workspace
+      await this.refreshSelectedWorkspace();
+    } catch (error) {
       this.messageService.add({
         severity: 'error',
         summary: 'Test fallido',
-        detail: 'No se pudo conectar con la API de Hostinger',
+        detail: error instanceof Error ? error.message : 'No se pudo conectar con la API de Hostinger',
       });
     } finally {
       this.isTestingConnection.set(false);
@@ -179,22 +184,41 @@ export class HeaderComponent {
 
     this.isSyncing.set(true);
     try {
-      // TODO: Implementar sincronización real con Cloud Functions
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await this.workspaceService.syncNow(workspace.id);
 
       this.messageService.add({
         severity: 'success',
         summary: 'Sincronización completada',
-        detail: 'Datos actualizados desde Hostinger',
+        detail: `El workspace "${workspace.name}" se ha sincronizado correctamente`,
       });
-    } catch (_error) {
+
+      // Reload workspaces to update lastSyncAt
+      await this.loadWorkspaces();
+
+      // Update context with refreshed workspace
+      await this.refreshSelectedWorkspace();
+    } catch (error) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error al sincronizar',
-        detail: 'No se pudieron actualizar los datos',
+        detail: error instanceof Error ? error.message : 'No se pudieron actualizar los datos',
       });
     } finally {
       this.isSyncing.set(false);
+    }
+  }
+
+  /**
+   * Refresh the selected workspace in context after an operation
+   */
+  private async refreshSelectedWorkspace(): Promise<void> {
+    const currentWorkspace = this.selectedWorkspace();
+    if (!currentWorkspace) return;
+
+    // Find the updated workspace in the list
+    const updatedWorkspace = this.workspaces().find(ws => ws.id === currentWorkspace.id);
+    if (updatedWorkspace) {
+      this.workspaceContext.selectWorkspace(updatedWorkspace);
     }
   }
 
