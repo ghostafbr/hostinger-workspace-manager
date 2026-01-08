@@ -1,5 +1,5 @@
 import { initializeApp, FirebaseApp } from 'firebase/app';
-import { getAuth, Auth } from 'firebase/auth';
+import { getAuth, Auth, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { getFirestore, Firestore } from 'firebase/firestore';
 import { environment } from '../../../environments/environment.development';
 
@@ -43,6 +43,10 @@ export class FirebaseAdapter {
   static getAuth(): Auth {
     if (!this.authInstance) {
       this.authInstance = getAuth(this.getApp());
+      // Configurar persistencia LOCAL (por defecto, pero aseguramos explícitamente)
+      setPersistence(this.authInstance, browserLocalPersistence).catch((error) => {
+        console.error('Error setting auth persistence:', error);
+      });
     }
     return this.authInstance;
   }

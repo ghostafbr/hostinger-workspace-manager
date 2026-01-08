@@ -31,7 +31,15 @@ export class AuthService {
   // Authentication state
   readonly isAuthenticated = signal<boolean>(false);
 
+  // Promise that resolves when auth state is initialized
+  private authInitialized: Promise<void>;
+  private authInitializedResolver!: () => void;
+
   constructor() {
+    // Create promise that resolves when auth is initialized
+    this.authInitialized = new Promise((resolve) => {
+      this.authInitializedResolver = resolve;
+    });
     this.initAuthListener();
   }
 
@@ -43,6 +51,12 @@ export class AuthService {
       this.currentUser.set(user);
       this.isAuthenticated.set(!!user);
       this.isLoading.set(false);
+
+      // Resolver la promesa en la primera ejecución
+      if (this.authInitializedResolver) {
+        this.authInitializedResolver();
+        this.authInitializedResolver = null as any;
+      }
     });
   }
 
@@ -132,5 +146,14 @@ export class AuthService {
   getUserDisplayName(): string {
     const user = this.getCurrentUser();
     return user?.displayName || user?.email || 'Usuario';
+  }
+
+  /**
+   * Wait for auth state to be initialized
+   *
+   * @returns Promise that resolves when auth state is known
+   */
+  async waitForAuthInit(): Promise<void> {
+    return this.authInitialized;
   }
 }

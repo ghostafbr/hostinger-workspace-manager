@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './application/guards/auth.guard';
+import { loginGuard } from './application/guards/login.guard';
 import { workspaceGuard } from './application/guards/workspace.guard';
 import { MainLayoutComponent } from './presentation/layouts/main-layout/main-layout.component';
 
@@ -7,6 +8,7 @@ export const routes: Routes = [
   // Public routes (without layout)
   {
     path: 'login',
+    canActivate: [loginGuard],
     loadComponent: () => import('./presentation/pages/login/login.page'),
   },
 

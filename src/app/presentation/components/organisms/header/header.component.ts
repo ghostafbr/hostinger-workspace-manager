@@ -124,8 +124,8 @@ export class HeaderComponent implements OnDestroy {
   ];
 
   constructor() {
-    // Load workspaces on init
-    this.loadWorkspaces();
+    // Wait for auth to initialize, then load workspaces
+    this.initializeComponent();
 
     // Sync selected workspace ID with context
     effect(() => {
@@ -136,6 +136,16 @@ export class HeaderComponent implements OnDestroy {
         this.selectedWorkspaceId = null;
       }
     });
+  }
+
+  private async initializeComponent(): Promise<void> {
+    // Esperar a que Firebase Auth determine el estado de autenticación
+    await this.authService.waitForAuthInit();
+
+    // Solo cargar workspaces si el usuario está autenticado
+    if (this.authService.isAuthenticated()) {
+      await this.loadWorkspaces();
+    }
   }
 
   async loadWorkspaces(): Promise<void> {

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TagModule } from 'primeng/tag';
 import { environment } from '@app/../environments/environment';
 import { WorkspaceService } from '@app/application/services/workspace.service';
+import { AuthService } from '@app/application/services/auth.service';
 
 interface HealthStatus {
   label: string;
@@ -23,13 +24,17 @@ interface HealthStatus {
 })
 export class FooterComponent implements OnInit {
   private readonly workspaceService = inject(WorkspaceService);
+  private readonly authService = inject(AuthService);
 
   readonly currentYear = new Date().getFullYear();
   readonly appVersion = environment.version || '1.0.0';
 
   async ngOnInit(): Promise<void> {
-    // Load workspaces only if not already loaded
-    if (this.workspaceService.workspaces().length === 0) {
+    // Esperar a que Firebase Auth determine el estado de autenticación
+    await this.authService.waitForAuthInit();
+
+    // Solo cargar workspaces si el usuario está autenticado y no hay workspaces cargados
+    if (this.authService.isAuthenticated() && this.workspaceService.workspaces().length === 0) {
       await this.loadWorkspaces();
     }
   }
