@@ -1,0 +1,82 @@
+rules_version = '2';
+
+/**
+ * Firestore Security Rules
+ *
+ * IMPORTANT: This is for a PERSONAL project with a SINGLE OWNER
+ * Replace 'YOUR_UID_HERE' with your actual Firebase Auth UID
+ *
+ * To get your UID:
+ * 1. Create a user in Firebase Authentication
+ * 2. Go to Firebase Console > Authentication > Users
+ * 3. Copy the UID of your user
+ * 4. Replace 'YOUR_UID_HERE' below with that UID
+ */
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper function to check if user is the owner
+    function isOwner() {
+      return request.auth != null && request.auth.uid == 'HnIKbU4OUoWQurj03y8pRrgxeMl2';
+    }
+
+    // Helper function to validate workspace data
+    function isValidWorkspace() {
+      return request.resource.data.keys().hasAll(['name', 'status', 'createdAt']) &&
+             request.resource.data.name is string &&
+             request.resource.data.name.size() > 0 &&
+             request.resource.data.status is string;
+    }
+
+    // Workspaces collection - Only owner can read/write
+    match /workspaces/{workspaceId} {
+      allow read, write: if isOwner();
+    }
+
+    // Domains collection - Only owner can read/write
+    match /domains/{domainId} {
+      allow read, write: if isOwner();
+    }
+
+    // Subscriptions collection - Only owner can read/write
+    match /subscriptions/{subscriptionId} {
+      allow read, write: if isOwner();
+    }
+
+    // Sync runs collection - Only owner can read/write
+    match /sync_runs/{syncRunId} {
+      allow read, write: if isOwner();
+    }
+
+    // Alert rules collection - Only owner can read/write
+    match /alert_rules/{alertRuleId} {
+      allow read, write: if isOwner();
+    }
+
+    // Alert logs collection - Only owner can read/write
+    match /alert_logs/{alertLogId} {
+      allow read, write: if isOwner();
+    }
+
+    // Audit logs collection - Only owner can read/write
+    match /audit_logs/{auditLogId} {
+      allow read, write: if isOwner();
+    }
+
+    // DNS snapshots collection (future) - Only owner can read/write
+    match /dns_snapshots/{snapshotId} {
+      allow read, write: if isOwner();
+    }
+
+    // DNS validations collection (future) - Only owner can read/write
+    match /dns_validations/{validationId} {
+      allow read, write: if isOwner();
+    }
+
+    // Deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

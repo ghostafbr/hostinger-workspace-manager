@@ -41,3 +41,14 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Firebase
+.firebase/
+.firebaserc
+firebase-debug.log
+firebase-debug.*.log
+*.cache
+
+# Environment files (never commit credentials)
+src/environments/environment.ts
+src/environments/environment.development.ts
