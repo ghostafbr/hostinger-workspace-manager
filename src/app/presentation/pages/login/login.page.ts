@@ -68,6 +68,13 @@ export default class LoginPage {
 
     const { email, password } = this.loginForm.value;
 
+    // Validate that email and password are not null/undefined
+    if (!email || !password) {
+      this.errorMessage.set('Email y contraseña son requeridos');
+      this.isLoading.set(false);
+      return;
+    }
+
     try {
       await this.authService.signIn(email, password);
       // Redirect to dashboard on success
