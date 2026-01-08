@@ -20,26 +20,68 @@
 
   <!-- Navigation Menu -->
   <nav class="sidebar-nav">
-    <ul class="menu-list">
-      <li
-        *ngFor="let item of menuItems"
-        class="menu-item"
-        [class.active]="isActiveRoute(item.route)"
-      >
-        <a
-          class="menu-link"
-          [routerLink]="item.route"
-          [pTooltip]="collapsed ? item.label : ''"
-          tooltipPosition="right"
+    <!-- GLOBAL SECTION -->
+    <div class="menu-section">
+      <div class="section-header" *ngIf="!collapsed">
+        <span class="section-title">Global</span>
+      </div>
+      <ul class="menu-list">
+        <li
+          *ngFor="let item of globalMenuItems"
+          class="menu-item"
+          [class.active]="isActiveRoute(item.route)"
         >
-          <i [class]="item.icon"></i>
-          <span class="menu-label" *ngIf="!collapsed">{{ item.label }}</span>
-          <span class="badge" *ngIf="item.badge && !collapsed">{{
-            item.badge
-          }}</span>
-        </a>
-      </li>
-    </ul>
+          <a
+            class="menu-link"
+            [routerLink]="item.route"
+            [pTooltip]="collapsed ? item.label : ''"
+            tooltipPosition="right"
+          >
+            <i [class]="item.icon"></i>
+            <span class="menu-label" *ngIf="!collapsed">{{ item.label }}</span>
+            <span class="badge" *ngIf="item.badge && !collapsed">{{
+              item.badge
+            }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- WORKSPACE SECTION -->
+    <div class="menu-section workspace-section">
+      <div class="section-header" *ngIf="!collapsed">
+        <span class="section-title">Workspace</span>
+      </div>
+
+      <!-- Empty state when no workspace selected -->
+      <div class="empty-workspace" *ngIf="!hasWorkspaceSelected() && !collapsed">
+        <i class="pi pi-info-circle"></i>
+        <p class="empty-message">Selecciona un workspace para acceder a sus recursos</p>
+      </div>
+
+      <!-- Workspace menu when workspace is selected -->
+      <ul class="menu-list" *ngIf="hasWorkspaceSelected()">
+        <li
+          *ngFor="let item of workspaceMenuItems"
+          class="menu-item"
+          [class.active]="isActiveRoute(item.route)"
+          [class.disabled]="item.disabled"
+        >
+          <a
+            class="menu-link"
+            [routerLink]="item.disabled ? null : getWorkspaceRoute(item.route)"
+            [pTooltip]="collapsed ? item.label : ''"
+            tooltipPosition="right"
+          >
+            <i [class]="item.icon"></i>
+            <span class="menu-label" *ngIf="!collapsed">{{ item.label }}</span>
+            <span class="badge" *ngIf="item.badge && !collapsed">{{
+              item.badge
+            }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </nav>
 
   <!-- Logout -->

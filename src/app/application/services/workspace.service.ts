@@ -1,4 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
+import { Observable, from } from 'rxjs';
 import {
   Firestore,
   collection,
@@ -83,9 +84,9 @@ export class WorkspaceService {
   }
 
   /**
-   * Get workspace by ID
+   * Get workspace by ID (async version)
    */
-  async getWorkspaceById(id: string): Promise<Workspace | null> {
+  async getWorkspaceByIdAsync(id: string): Promise<Workspace | null> {
     try {
       this.isLoading.set(true);
       this.error.set(null);
@@ -107,6 +108,13 @@ export class WorkspaceService {
     } finally {
       this.isLoading.set(false);
     }
+  }
+
+  /**
+   * Get workspace by ID (Observable version for guards/resolvers)
+   */
+  getWorkspaceById(id: string): Observable<Workspace | null> {
+    return from(this.getWorkspaceByIdAsync(id));
   }
 
   /**
@@ -261,7 +269,7 @@ export class WorkspaceService {
       this.isLoading.set(true);
       this.error.set(null);
 
-      const workspace = await this.getWorkspaceById(id);
+      const workspace = await this.getWorkspaceByIdAsync(id);
       if (!workspace) {
         throw new Error('Workspace not found');
       }
@@ -310,7 +318,7 @@ export class WorkspaceService {
       this.isLoading.set(true);
       this.error.set(null);
 
-      const workspace = await this.getWorkspaceById(id);
+      const workspace = await this.getWorkspaceByIdAsync(id);
       if (!workspace) {
         throw new Error('Workspace not found');
       }

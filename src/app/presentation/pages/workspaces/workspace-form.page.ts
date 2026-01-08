@@ -104,7 +104,7 @@ export default class WorkspaceFormPage implements OnInit {
   private async loadWorkspace(id: string): Promise<void> {
     try {
       this.isLoading = true;
-      const workspace = await this.workspaceService.getWorkspaceById(id);
+      const workspace = await this.workspaceService.getWorkspaceByIdAsync(id);
 
       if (!workspace) {
         this.messageService.add({
@@ -116,11 +116,13 @@ export default class WorkspaceFormPage implements OnInit {
         return;
       }
 
-      this.workspaceForm.patchValue({
-        name: workspace.name,
-        description: workspace.description || '',
-        status: workspace.status,
-      });
+      if (workspace) {
+        this.workspaceForm.patchValue({
+          name: workspace.name,
+          description: workspace.description || '',
+          status: workspace.status,
+        });
+      }
     } catch (error) {
       this.messageService.add({
         severity: 'error',

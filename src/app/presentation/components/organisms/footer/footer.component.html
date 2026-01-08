@@ -1,12 +1,33 @@
 <footer class="footer">
   <div class="footer-content">
-    <span class="copyright">
-      © {{ currentYear }} Hostinger Workspace Manager. Todos los derechos reservados.
-    </span>
-    <div class="footer-links">
-      <a href="#" class="footer-link">Documentación</a>
-      <a href="#" class="footer-link">Soporte</a>
-      <a href="#" class="footer-link">Acerca de</a>
+    <div class="footer-left">
+      <span class="version">
+        <i class="pi pi-code"></i>
+        v{{ appVersion }}
+      </span>
+      <span class="separator">|</span>
+      <span class="last-sync">
+        <i class="pi pi-refresh"></i>
+        Última sync: {{ lastGlobalSync() || 'Nunca' }}
+      </span>
+    </div>
+
+    <div class="footer-center">
+      <span class="copyright">
+        © {{ currentYear }} Hostinger Workspace Manager
+      </span>
+    </div>
+
+    <div class="footer-right">
+      <p-tag
+        [value]="healthStatus().label"
+        [severity]="healthStatus().severity"
+        icon="pi pi-circle-fill"
+      ></p-tag>
+      <div class="footer-links">
+        <a href="#" class="footer-link">Docs</a>
+        <a href="#" class="footer-link">Soporte</a>
+      </div>
     </div>
   </div>
 </footer>

@@ -1,0 +1,63 @@
+// Breakpoints
+$breakpoint-xs: 576px;
+$breakpoint-sm: 768px;
+$breakpoint-md: 992px;
+$breakpoint-lg: 1200px;
+$breakpoint-xl: 1400px;
+$breakpoint-xxl: 1920px;
+$breakpoint-xxxl: 2560px;
+
+// Media query mixins
+@mixin media-max-xs {
+  @media screen and (max-width: #{$breakpoint-xs - 1}) {
+    @content;
+  }
+}
+
+@mixin media-max-sm {
+  @media screen and (max-width: #{$breakpoint-sm - 1}) {
+    @content;
+  }
+}
+
+@mixin media-max-md {
+  @media screen and (max-width: #{$breakpoint-md - 1}) {
+    @content;
+  }
+}
+
+@mixin media-max-lg {
+  @media screen and (max-width: #{$breakpoint-lg - 1}) {
+    @content;
+  }
+}
+
+@mixin media-max-xl {
+  @media screen and (max-width: #{$breakpoint-xl - 1}) {
+    @content;
+  }
+}
+
+@mixin media-max-xxl {
+  @media screen and (max-width: #{$breakpoint-xxl - 1}) {
+    @content;
+  }
+}
+
+@mixin media-xl {
+  @media screen and (min-width: $breakpoint-xl) {
+    @content;
+  }
+}
+
+@mixin media-xxl {
+  @media screen and (min-width: $breakpoint-xxl) {
+    @content;
+  }
+}
+
+@mixin media-xxxl {
+  @media screen and (min-width: $breakpoint-xxxl) {
+    @content;
+  }
+}

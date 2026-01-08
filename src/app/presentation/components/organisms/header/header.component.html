@@ -1,11 +1,74 @@
 <header class="header">
   <div class="header-left">
+    <!-- Toggle Sidebar (mobile) -->
     <button
       pButton
       icon="pi pi-bars"
       class="p-button-text p-button-rounded toggle-sidebar-btn"
       (click)="onToggleSidebar()"
+      pTooltip="Toggle menu"
+      tooltipPosition="bottom"
     ></button>
+
+    <!-- Workspace Selector -->
+    <div class="workspace-selector">
+      <p-select
+        [options]="workspaceOptions()"
+        [(ngModel)]="selectedWorkspaceId"
+        (onChange)="onWorkspaceChange($event)"
+        placeholder="Selecciona un workspace"
+        [showClear]="false"
+        styleClass="workspace-dropdown"
+        [style]="{ 'min-width': '250px' }"
+      >
+        <ng-template let-workspace pTemplate="selectedItem">
+          <div class="workspace-item" *ngIf="workspace">
+            <span class="workspace-name">{{ workspace.label }}</span>
+            <p-tag
+              *ngIf="workspace.status"
+              [value]="workspace.status"
+              [severity]="getStatusSeverity(workspace.status)"
+              styleClass="workspace-status-tag"
+            ></p-tag>
+          </div>
+        </ng-template>
+        <ng-template let-workspace pTemplate="item">
+          <div class="workspace-item">
+            <span class="workspace-name">{{ workspace.label }}</span>
+            <p-tag
+              [value]="workspace.status"
+              [severity]="getStatusSeverity(workspace.status)"
+            ></p-tag>
+          </div>
+        </ng-template>
+      </p-select>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions" *ngIf="hasWorkspaceSelected()">
+      <button
+        pButton
+        icon="pi pi-link"
+        label="Test"
+        class="p-button-outlined p-button-sm"
+        (click)="onTestConnection()"
+        [loading]="isTestingConnection()"
+        [disabled]="!canTestConnection()"
+        pTooltip="Test connection to Hostinger API"
+        tooltipPosition="bottom"
+      ></button>
+      <button
+        pButton
+        icon="pi pi-refresh"
+        label="Sync"
+        class="p-button-outlined p-button-sm"
+        (click)="onSyncNow()"
+        [loading]="isSyncing()"
+        [disabled]="!canSync()"
+        pTooltip="Sync data from Hostinger"
+        tooltipPosition="bottom"
+      ></button>
+    </div>
   </div>
 
   <div class="header-right">
@@ -16,6 +79,8 @@
       class="p-button-text p-button-rounded notification-btn"
       badge="3"
       badgeClass="p-badge-danger"
+      pTooltip="Notifications"
+      tooltipPosition="bottom"
     ></button>
 
     <!-- User Menu -->

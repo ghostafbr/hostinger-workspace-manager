@@ -1,3 +1,5 @@
+@use '../../../../../styles/variables';
+
 .sidebar {
   position: fixed;
   top: 0;
@@ -92,6 +94,7 @@
     text-decoration: none;
     transition: all 0.2s;
     border-radius: 0;
+    cursor: pointer;
 
     &:hover {
       background: var(--surface-hover);
@@ -101,6 +104,11 @@
       font-size: 1.25rem;
       color: var(--text-color-secondary);
       min-width: 1.5rem;
+
+      @include variables.media-xxxl {
+        font-size: 1.5rem;
+        min-width: 2rem;
+      }
     }
 
     .menu-label {
@@ -116,6 +124,54 @@
       font-size: 0.75rem;
       font-weight: 600;
     }
+  }
+
+  .menu-item.disabled .menu-link {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// Menu sections
+.menu-section {
+  margin-bottom: 1.5rem;
+
+  .section-header {
+    padding: 0.75rem 1.5rem 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-color-secondary);
+  }
+
+  &.workspace-section {
+    border-top: 2px solid var(--surface-border);
+    padding-top: 1rem;
+  }
+}
+
+// Empty workspace state
+.empty-workspace {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: var(--text-color-secondary);
+
+  i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.5;
+  }
+
+  .empty-message {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    margin: 0;
   }
 }
 

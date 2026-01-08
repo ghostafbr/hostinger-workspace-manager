@@ -1,3 +1,5 @@
+@use '../../../../../styles/variables';
+
 .header {
   height: 80px;
   background: var(--surface-card);
@@ -16,9 +18,47 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex: 1;
 
   .toggle-sidebar-btn {
     display: none;
+
+    @include variables.media-max-md {
+      display: flex;
+    }
+  }
+
+  .workspace-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    @include variables.media-max-md {
+      flex: 1;
+
+      ::ng-deep .workspace-dropdown {
+        width: 100%;
+        min-width: auto !important;
+      }
+    }
+
+    @include variables.media-xxxl {
+      gap: 1rem;
+    }
+  }
+
+  .quick-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    @include variables.media-max-md {
+      display: none;
+    }
+
+    @include variables.media-xxxl {
+      gap: 1rem;
+    }
   }
 }
 
@@ -36,9 +76,17 @@
     align-items: center;
     gap: 0.75rem;
 
+    @include variables.media-xxxl {
+      gap: 1.5rem;
+    }
+
     .user-avatar {
       cursor: pointer;
       transition: transform 0.2s;
+
+      @include variables.media-xxxl {
+        font-size: 1.5rem;
+      }
 
       &:hover {
         transform: scale(1.05);
@@ -47,14 +95,27 @@
   }
 }
 
-@media screen and (max-width: 768px) {
-  .header {
-    padding: 0 1rem;
+// Workspace item styles (for dropdown)
+.workspace-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 200px;
+
+  .workspace-name {
+    flex: 1;
+    font-weight: 500;
   }
 
-  .header-left {
-    .toggle-sidebar-btn {
-      display: flex;
-    }
+  .workspace-status-tag {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+  }
+}
+
+@include variables.media-max-md {
+  .header {
+    padding: 0 1rem;
   }
 }
