@@ -1,0 +1,99 @@
+<div class="dashboard-container">
+  <!-- Toolbar -->
+  <p-toolbar class="dashboard-toolbar">
+    <ng-template pTemplate="start">
+      <div class="toolbar-brand">
+        <i class="pi pi-home" style="font-size: 1.5rem"></i>
+        <span class="brand-text">Hostinger Workspace Manager</span>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="end">
+      <div class="toolbar-user">
+        <p-avatar
+          [label]="userDisplayName.charAt(0).toUpperCase()"
+          shape="circle"
+          styleClass="mr-2"
+        />
+        <div class="user-info">
+          <span class="user-name">{{ userDisplayName }}</span>
+          <span class="user-email">{{ userEmail }}</span>
+        </div>
+        <p-button
+          icon="pi pi-sign-out"
+          [text]="true"
+          [rounded]="true"
+          severity="danger"
+          (onClick)="onLogout()"
+          pTooltip="Cerrar Sesión"
+          tooltipPosition="left"
+        />
+      </div>
+    </ng-template>
+  </p-toolbar>
+
+  <!-- Main Content -->
+  <div class="dashboard-content">
+    <div class="welcome-section">
+      <p-card>
+        <ng-template pTemplate="header">
+          <div class="card-header">
+            <i class="pi pi-check-circle" style="font-size: 3rem; color: var(--green-500)"></i>
+          </div>
+        </ng-template>
+
+        <div class="welcome-content">
+          <h1>¡Bienvenido, {{ userDisplayName }}!</h1>
+          <p>
+            Has iniciado sesión exitosamente en Hostinger Workspace Manager.
+          </p>
+          <p class="info-message">
+            <i class="pi pi-info-circle"></i>
+            Este es un placeholder del dashboard. Las funcionalidades de gestión de
+            workspaces, dominios y suscripciones se implementarán en los próximos issues.
+          </p>
+        </div>
+
+        <ng-template pTemplate="footer">
+          <div class="card-footer">
+            <p-button
+              label="Cerrar Sesión"
+              icon="pi pi-sign-out"
+              severity="secondary"
+              (onClick)="onLogout()"
+            />
+          </div>
+        </ng-template>
+      </p-card>
+    </div>
+
+    <!-- User Info Card -->
+    <div class="user-info-section">
+      <p-card>
+        <ng-template pTemplate="header">
+          <h3 class="section-title">
+            <i class="pi pi-user"></i>
+            Información del Usuario
+          </h3>
+        </ng-template>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Email:</label>
+            <span>{{ userEmail }}</span>
+          </div>
+          <div class="info-item">
+            <label>UID:</label>
+            <span class="monospace">{{ currentUser()?.uid }}</span>
+          </div>
+          @if (currentUser()?.metadata?.lastSignInTime) {
+            <div class="info-item">
+              <label>Última autenticación:</label>
+              <span>{{ currentUser()?.metadata?.lastSignInTime }}</span>
+            </div>
+          }
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>
