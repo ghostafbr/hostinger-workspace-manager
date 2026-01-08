@@ -20,7 +20,7 @@ export class EncryptionService {
    */
   encrypt(text: string): string {
     if (!text) return '';
-    
+
     try {
       const encrypted = CryptoJS.AES.encrypt(text, this.encryptionKey).toString();
       return encrypted;
@@ -35,7 +35,7 @@ export class EncryptionService {
    */
   decrypt(encryptedText: string): string {
     if (!encryptedText) return '';
-    
+
     try {
       const bytes = CryptoJS.AES.decrypt(encryptedText, this.encryptionKey);
       const decrypted = bytes.toString(CryptoJS.enc.Utf8);
@@ -51,7 +51,7 @@ export class EncryptionService {
    */
   hash(text: string): string {
     if (!text) return '';
-    
+
     try {
       return CryptoJS.SHA256(text).toString();
     } catch (error) {

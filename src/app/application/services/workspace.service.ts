@@ -118,9 +118,9 @@ export class WorkspaceService {
       }
 
       const now = Timestamp.now();
-      
+
       // Encrypt token if provided
-      const encryptedToken = data.token 
+      const encryptedToken = data.token
         ? this.encryptionService.encrypt(data.token)
         : undefined;
 
@@ -168,7 +168,7 @@ export class WorkspaceService {
       this.error.set(null);
 
       const docRef = doc(this.firestore, this.collectionName, id);
-      
+
       // Encrypt token if provided
       const updateData: Record<string, unknown> = {
         updatedAt: Timestamp.now(),
@@ -177,7 +177,7 @@ export class WorkspaceService {
       if (data.name !== undefined) updateData['name'] = data.name;
       if (data.description !== undefined) updateData['description'] = data.description;
       if (data.status !== undefined) updateData['status'] = data.status;
-      
+
       if (data.token) {
         updateData['encryptedToken'] = this.encryptionService.encrypt(data.token);
       }
