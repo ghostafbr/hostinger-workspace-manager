@@ -89,9 +89,12 @@
         styleClass="user-avatar"
         shape="circle"
         [style]="{ 'background-color': '#2196F3', color: '#ffffff', cursor: 'pointer' }"
-        (click)="menu.toggle($event)"
+        (click)="userPopover.toggle($event)"
       ></p-avatar>
-      <p-menu #menu [model]="userMenuItems" [popup]="true" appendTo="body"></p-menu>
+
+      <p-popover #userPopover>
+        <p-menu [model]="userMenuItems" styleClass="user-dropdown-menu" />
+      </p-popover>
     </div>
   </div>
 </header>

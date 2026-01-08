@@ -1,15 +1,27 @@
-import { Component, EventEmitter, Output, inject, computed, signal, effect } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  inject,
+  computed,
+  signal,
+  effect,
+  ViewChild,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { AvatarModule } from 'primeng/avatar';
+import { PopoverModule } from 'primeng/popover';
 import { MenuModule } from 'primeng/menu';
 import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/api';
+import { Popover } from 'primeng/popover';
 import { AuthService } from '@app/application/services/auth.service';
 import { WorkspaceService } from '@app/application/services/workspace.service';
 import { WorkspaceContextService } from '@app/application/services/workspace-context.service';
@@ -34,6 +46,7 @@ interface WorkspaceOption {
     FormsModule,
     ButtonModule,
     AvatarModule,
+    PopoverModule,
     MenuModule,
     SelectModule,
     TagModule,
@@ -42,8 +55,9 @@ interface WorkspaceOption {
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnDestroy {
   @Output() toggleSidebar = new EventEmitter<void>();
+  @ViewChild('userPopover') userPopover!: Popover;
 
   private readonly authService = inject(AuthService);
   private readonly workspaceService = inject(WorkspaceService);
@@ -92,12 +106,12 @@ export class HeaderComponent {
     {
       label: 'Perfil',
       icon: 'pi pi-user',
-      command: () => this.router.navigate(['/settings']),
+      command: () => this.navigateToSettings(),
     },
     {
       label: 'Configuración',
       icon: 'pi pi-cog',
-      command: () => this.router.navigate(['/settings']),
+      command: () => this.navigateToSettings(),
     },
     {
       separator: true,
@@ -243,9 +257,20 @@ export class HeaderComponent {
     this.toggleSidebar.emit();
   }
 
+  navigateToSettings(): void {
+    this.userPopover.hide();
+    this.router.navigate(['/settings']);
+  }
+
   async logout(): Promise<void> {
+    this.userPopover.hide();
     this.workspaceContext.clearWorkspace();
     await this.authService.signOut();
     this.router.navigate(['/login']);
+  }
+
+  ngOnDestroy(): void {
+    // Cerrar el popover cuando el componente se destruye
+    this.userPopover?.hide();
   }
 }

@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom, timeout } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 
 /**
  * Hostinger API Service
@@ -14,12 +15,10 @@ import { firstValueFrom, timeout } from 'rxjs';
   providedIn: 'root',
 })
 export class HostingerApiService {
-  // Use proxy in development to avoid CORS issues
-  // In production, this should be replaced with a Cloud Function or proper backend
-  private readonly BASE_URL = 'https://developers.hostinger.com/api';
-  private readonly REQUEST_TIMEOUT = 10000; // 10 seconds
+  private readonly http = inject(HttpClient);
 
-  constructor(private readonly http: HttpClient) {}
+  private readonly BASE_URL = environment.api.hostinger.baseUrl;
+  private readonly REQUEST_TIMEOUT = environment.api.hostinger.timeout;
 
   /**
    * Test connection to Hostinger API

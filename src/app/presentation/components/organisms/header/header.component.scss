@@ -144,6 +144,24 @@
   }
 }
 
+// User dropdown menu styles
+::ng-deep .user-dropdown-menu {
+  border: none !important;
+
+  .p-menu-list {
+    border: none !important;
+  }
+
+  .p-menuitem {
+    border: none !important;
+  }
+
+  .p-menu-separator {
+    border-top: 1px solid var(--surface-border);
+    margin: 0.25rem 0;
+  }
+}
+
 // Workspace item styles (for dropdown)
 .workspace-item {
   display: flex;
