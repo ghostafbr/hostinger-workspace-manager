@@ -4,6 +4,7 @@
  */
 export interface Environment {
   production: boolean;
+  encryptionKey: string;
   firebase: {
     apiKey: string;
     authDomain: string;

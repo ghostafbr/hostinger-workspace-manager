@@ -1,0 +1,152 @@
+<div class="workspace-form-container">
+  <p-toast />
+
+  <div class="mb-4">
+    <p-button
+      icon="pi pi-arrow-left"
+      label="Volver"
+      [text]="true"
+      (onClick)="onCancel()"
+    />
+  </div>
+
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <h2>{{ isEditMode ? 'Editar Workspace' : 'Nuevo Workspace' }}</h2>
+      </div>
+    </ng-template>
+
+    <form [formGroup]="workspaceForm" (ngSubmit)="onSubmit()">
+      <!-- Name Field -->
+      <div class="field mb-4">
+        <label for="name" class="block mb-2 font-semibold">
+          Nombre <span class="text-red-500">*</span>
+        </label>
+        <input
+          id="name"
+          type="text"
+          pInputText
+          formControlName="name"
+          placeholder="Ingrese el nombre del workspace"
+          [class.ng-invalid]="isFieldInvalid('name')"
+          [class.ng-dirty]="isFieldInvalid('name')"
+          class="w-full"
+        />
+        <small
+          *ngIf="isFieldInvalid('name')"
+          class="text-red-500"
+        >
+          {{ getErrorMessage('name') }}
+        </small>
+      </div>
+
+      <!-- Description Field -->
+      <div class="field mb-4">
+        <label for="description" class="block mb-2 font-semibold">
+          Descripción
+        </label>
+        <textarea
+          id="description"
+          pTextarea
+          formControlName="description"
+          placeholder="Descripción del workspace (opcional)"
+          [rows]="4"
+          class="w-full"
+        ></textarea>
+      </div>
+
+      <!-- Token Field -->
+      <div class="field mb-4">
+        <label for="token" class="block mb-2 font-semibold">
+          Token Hostinger
+          <span class="text-red-500" *ngIf="!isEditMode || showTokenField">*</span>
+        </label>
+
+        <!-- Modo creación o token visible en edición -->
+        <div *ngIf="!isEditMode || showTokenField">
+          <p-password
+            id="token"
+            formControlName="token"
+            placeholder="Pegue aquí su token de Hostinger"
+            [toggleMask]="true"
+            [feedback]="false"
+            [class.ng-invalid]="isFieldInvalid('token')"
+            [class.ng-dirty]="isFieldInvalid('token')"
+            styleClass="w-full"
+            inputStyleClass="w-full"
+          />
+          <small
+            *ngIf="isFieldInvalid('token')"
+            class="text-red-500"
+          >
+            {{ getErrorMessage('token') }}
+          </small>
+          <small class="block mt-2 text-gray-600">
+            <i class="pi pi-info-circle"></i>
+            El token se cifra y almacena de forma segura. Nunca se muestra en la interfaz.
+          </small>
+        </div>
+
+        <!-- Modo edición sin token visible -->
+        <div *ngIf="isEditMode && !showTokenField">
+          <p-button
+            label="Pegar nuevo token"
+            icon="pi pi-key"
+            severity="secondary"
+            [outlined]="true"
+            (onClick)="onPasteNewToken()"
+            type="button"
+          />
+          <small class="block mt-2 text-gray-600">
+            <i class="pi pi-info-circle"></i>
+            Por seguridad, el token actual no se muestra. Haga clic para pegar uno nuevo.
+          </small>
+        </div>
+      </div>
+
+      <!-- Status Field -->
+      <div class="field mb-4">
+        <label for="status" class="block mb-2 font-semibold">
+          Estado <span class="text-red-500">*</span>
+        </label>
+        <p-select
+          id="status"
+          formControlName="status"
+          [options]="statusOptions"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccione un estado"
+          [class.ng-invalid]="isFieldInvalid('status')"
+          [class.ng-dirty]="isFieldInvalid('status')"
+          styleClass="w-full"
+        />
+        <small
+          *ngIf="isFieldInvalid('status')"
+          class="text-red-500"
+        >
+          {{ getErrorMessage('status') }}
+        </small>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="flex gap-3 justify-content-end mt-5">
+        <p-button
+          label="Cancelar"
+          severity="secondary"
+          [outlined]="true"
+          (onClick)="onCancel()"
+          type="button"
+          [disabled]="isLoading"
+        />
+        <p-button
+          [label]="isEditMode ? 'Actualizar' : 'Crear'"
+          icon="pi pi-check"
+          type="submit"
+          [loading]="isLoading"
+          [disabled]="workspaceForm.invalid"
+        />
+      </div>
+    </form>
+  </p-card>
+</div>

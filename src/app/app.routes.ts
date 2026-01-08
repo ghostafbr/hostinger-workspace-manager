@@ -15,17 +15,35 @@ export const routes: Routes = [
       import('./presentation/pages/dashboard/dashboard.page'),
     canActivate: [authGuard],
   },
+  {
+    path: 'workspaces',
+    loadComponent: () =>
+      import('./presentation/pages/workspaces/workspaces.page'),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'workspaces/create',
+    loadComponent: () =>
+      import('./presentation/pages/workspaces/workspace-form.page'),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'workspaces/edit/:id',
+    loadComponent: () =>
+      import('./presentation/pages/workspaces/workspace-form.page'),
+    canActivate: [authGuard],
+  },
 
   // Default redirect
   {
     path: '',
-    redirectTo: '/dashboard',
+    redirectTo: '/workspaces',
     pathMatch: 'full',
   },
 
-  // Wildcard - redirect to dashboard
+  // Wildcard - redirect to workspaces
   {
     path: '**',
-    redirectTo: '/dashboard',
+    redirectTo: '/workspaces',
   },
 ];

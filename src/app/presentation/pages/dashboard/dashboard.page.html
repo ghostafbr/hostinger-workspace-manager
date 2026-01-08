@@ -49,20 +49,27 @@
           </p>
           <p class="info-message">
             <i class="pi pi-info-circle"></i>
-            Este es un placeholder del dashboard. Las funcionalidades de gestión de
-            workspaces, dominios y suscripciones se implementarán en los próximos issues.
+            Gestiona tus workspaces de Hostinger desde un solo lugar.
           </p>
-        </div>
 
-        <ng-template pTemplate="footer">
-          <div class="card-footer">
+          <div class="actions mt-4">
+            <p-button
+              label="Ver Workspaces"
+              icon="pi pi-briefcase"
+              (onClick)="navigateToWorkspaces()"
+              styleClass="mr-2"
+            />
             <p-button
               label="Cerrar Sesión"
               icon="pi pi-sign-out"
               severity="secondary"
+              [outlined]="true"
               (onClick)="onLogout()"
             />
           </div>
+        </div>
+
+        <ng-template pTemplate="footer">
         </ng-template>
       </p-card>
     </div>

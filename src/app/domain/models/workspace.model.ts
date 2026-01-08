@@ -11,6 +11,7 @@ export class Workspace implements WorkspaceInterface {
   id: string;
   name: string;
   description?: string;
+  encryptedToken?: string;
   status: WorkspaceStatus;
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -24,6 +25,7 @@ export class Workspace implements WorkspaceInterface {
     this.id = data.id;
     this.name = data.name;
     this.description = data.description;
+    this.encryptedToken = data.encryptedToken;
     this.status = data.status;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
@@ -96,6 +98,7 @@ export class Workspace implements WorkspaceInterface {
     return {
       name: this.name,
       description: this.description,
+      encryptedToken: this.encryptedToken,
       status: this.status,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
@@ -115,6 +118,7 @@ export class Workspace implements WorkspaceInterface {
       id,
       name: data['name'] as string,
       description: data['description'] as string | undefined,
+      encryptedToken: data['encryptedToken'] as string | undefined,
       status: data['status'] as WorkspaceStatus,
       createdAt: data['createdAt'] as Timestamp,
       updatedAt: data['updatedAt'] as Timestamp,

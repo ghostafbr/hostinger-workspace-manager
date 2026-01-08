@@ -17,6 +17,9 @@ export interface Workspace {
   /** Optional description */
   description?: string;
 
+  /** Encrypted Hostinger API token (never exposed to UI after save) */
+  encryptedToken?: string;
+
   /** Current operational status */
   status: WorkspaceStatus;
 

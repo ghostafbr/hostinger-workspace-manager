@@ -48,6 +48,13 @@ export default class DashboardPage {
   }
 
   /**
+   * Navigate to workspaces
+   */
+  navigateToWorkspaces(): void {
+    this.router.navigate(['/workspaces']);
+  }
+
+  /**
    * Handle logout
    */
   async onLogout(): Promise<void> {
