@@ -49,6 +49,7 @@ export class HostingerApiService {
 
           const response = await firstValueFrom(
             this.http
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               .get<any>(`${this.BASE_URL}${endpoint}`, {
                 headers,
                 observe: 'response',
@@ -79,6 +80,7 @@ export class HostingerApiService {
   /**
    * Fetch all domains from Hostinger API
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async getDomains(token: string): Promise<any[]> {
     try {
       const headers = new HttpHeaders({
@@ -88,6 +90,7 @@ export class HostingerApiService {
 
       const response = await firstValueFrom(
         this.http
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .get<any>(`${this.BASE_URL}/domains/v1/portfolio`, { headers })
           .pipe(timeout(this.REQUEST_TIMEOUT))
       );
@@ -102,6 +105,7 @@ export class HostingerApiService {
   /**
    * Fetch all subscriptions from Hostinger API
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async getSubscriptions(token: string): Promise<any[]> {
     try {
       const headers = new HttpHeaders({
@@ -111,6 +115,7 @@ export class HostingerApiService {
 
       const response = await firstValueFrom(
         this.http
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .get<any>(`${this.BASE_URL}/billing/v1/subscriptions`, { headers })
           .pipe(timeout(this.REQUEST_TIMEOUT))
       );

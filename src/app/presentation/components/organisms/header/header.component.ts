@@ -8,6 +8,7 @@ import {
   effect,
   ViewChild,
   OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -54,7 +55,7 @@ interface WorkspaceOption {
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent implements OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy {
   toggleSidebar = output<void>();
   @ViewChild('userPopover') userPopover!: Popover;
 
@@ -122,19 +123,19 @@ export class HeaderComponent implements OnDestroy {
     },
   ];
 
-  constructor() {
+  // Sync selected workspace ID with context
+  private readonly syncWorkspaceIdEffect = effect(() => {
+    const workspace = this.selectedWorkspace();
+    if (workspace) {
+      this.selectedWorkspaceId = workspace.id;
+    } else {
+      this.selectedWorkspaceId = null;
+    }
+  });
+
+  ngOnInit(): void {
     // Wait for auth to initialize, then load workspaces
     this.initializeComponent();
-
-    // Sync selected workspace ID with context
-    effect(() => {
-      const workspace = this.selectedWorkspace();
-      if (workspace) {
-        this.selectedWorkspaceId = workspace.id;
-      } else {
-        this.selectedWorkspaceId = null;
-      }
-    });
   }
 
   private async initializeComponent(): Promise<void> {

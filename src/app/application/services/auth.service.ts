@@ -33,7 +33,7 @@ export class AuthService {
 
   // Promise that resolves when auth state is initialized
   private authInitialized: Promise<void>;
-  private authInitializedResolver!: () => void;
+  private authInitializedResolver: (() => void) | undefined;
 
   constructor() {
     // Create promise that resolves when auth is initialized
@@ -55,7 +55,7 @@ export class AuthService {
       // Resolver la promesa en la primera ejecución
       if (this.authInitializedResolver) {
         this.authInitializedResolver();
-        this.authInitializedResolver = null as any;
+        this.authInitializedResolver = undefined;
       }
     });
   }

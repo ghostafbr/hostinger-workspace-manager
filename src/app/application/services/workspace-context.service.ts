@@ -14,7 +14,7 @@ import { WorkspaceStatus } from '../../domain/enums/workspace-status.enum';
 })
 export class WorkspaceContextService {
   // Estado privado del workspace seleccionado
-  private readonly selectedWorkspaceSignal = signal<Workspace | null>(null);
+  private readonly selectedWorkspaceSignal = signal<Workspace | null>(this.getInitialWorkspace());
 
   // Estado público de solo lectura
   readonly selectedWorkspace = this.selectedWorkspaceSignal.asReadonly();
@@ -28,11 +28,6 @@ export class WorkspaceContextService {
     const status = this.workspaceStatus();
     return status === WorkspaceStatus.ACTIVE || status === WorkspaceStatus.INVALID_TOKEN;
   });
-
-  constructor() {
-    // Intentar recuperar workspace del localStorage al iniciar
-    this.loadFromStorage();
-  }
 
   /**
    * Selecciona un workspace y lo guarda en el contexto
@@ -83,18 +78,21 @@ export class WorkspaceContextService {
   /**
    * Carga el workspace desde localStorage
    */
-  private loadFromStorage(): void {
+  private getInitialWorkspace(): Workspace | null {
     try {
+      if (typeof localStorage === 'undefined') return null;
       const stored = localStorage.getItem('selected_workspace');
       if (stored) {
         const data = JSON.parse(stored);
         // Nota: En producción, deberías validar/recargar el workspace
         // desde Firestore para asegurar que sigue existiendo y tiene permisos
-        this.selectedWorkspaceSignal.set(data as Workspace);
+        return data as Workspace;
       }
+      return null;
     } catch (error) {
       console.error('Error loading workspace from storage:', error);
       this.clearStorage();
+      return null;
     }
   }
 

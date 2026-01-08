@@ -122,7 +122,7 @@ export default class WorkspaceFormPage implements OnInit {
           status: workspace.status,
         });
       }
-    } catch (_error) {
+    } catch {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -168,7 +168,7 @@ export default class WorkspaceFormPage implements OnInit {
       setTimeout(() => {
         this.router.navigate(['/workspaces']);
       }, 1000);
-    } catch (_error) {
+    } catch {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',

@@ -66,7 +66,7 @@ export default class WorkspacesPage implements OnInit {
   async loadWorkspaces(): Promise<void> {
     try {
       await this.workspaceService.getAllWorkspaces();
-    } catch (_error) {
+    } catch {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -127,7 +127,7 @@ export default class WorkspacesPage implements OnInit {
             detail: `El workspace "${workspace.name}" ha sido desactivado`,
           });
           await this.loadWorkspaces();
-        } catch (_error) {
+        } catch {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
@@ -223,7 +223,7 @@ export default class WorkspacesPage implements OnInit {
             summary: 'Workspace Eliminado',
             detail: `El workspace "${workspace.name}" ha sido eliminado`,
           });
-        } catch (_error) {
+        } catch {
           this.messageService.add({
             severity: 'error',
             summary: 'Error',

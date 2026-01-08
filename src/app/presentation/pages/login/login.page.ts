@@ -1,7 +1,6 @@
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import {
   FormBuilder,
-  FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -47,16 +46,13 @@ export default class LoginPage {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  readonly loginForm: FormGroup;
+  readonly loginForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+  });
+
   readonly isLoading = signal<boolean>(false);
   readonly errorMessage = signal<string | null>(null);
-
-  constructor() {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-    });
-  }
 
   /**
    * Handle form submission
