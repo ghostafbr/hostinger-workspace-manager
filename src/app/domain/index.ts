@@ -34,3 +34,6 @@ export { Workspace } from './models/workspace.model';
 export { Domain } from './models/domain.model';
 export { Subscription } from './models/subscription.model';
 export { SyncRun } from './models/sync-run.model';
+export { AlertLogModel } from './models/alert-log.model';
+export { AlertRuleModel } from './models/alert-rule.model';
+export { AuditLogModel } from './models/audit-log.model';

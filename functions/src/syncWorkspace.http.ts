@@ -1,6 +1,7 @@
 import * as admin from 'firebase-admin';
 import { onRequest, HttpsOptions } from 'firebase-functions/v2/https';
 import * as cryptoJs from 'crypto-js';
+import { AuditAction, logSuccess, logFailure } from './utils/auditLog';
 
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || '';
 const HOSTINGER_API_BASE = 'https://developers.hostinger.com';
@@ -226,11 +227,13 @@ export const syncWorkspace = onRequest(httpOptions, async (req, res) => {
   }
 
   const idToken = authHeader.split('Bearer ')[1];
+  let userId: string;
 
   try {
     // Verify Firebase ID token
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    console.log('Authenticated user:', decodedToken.uid);
+    userId = decodedToken.uid;
+    console.log('Authenticated user:', userId);
   } catch (error) {
     console.error('Token verification failed:', error);
     res.status(401).json({ error: 'Unauthorized: Invalid token' });
@@ -305,6 +308,18 @@ export const syncWorkspace = onRequest(httpOptions, async (req, res) => {
       subscriptions: subscriptions.length,
     });
 
+    // Log successful sync to audit logs
+    await logSuccess(
+      AuditAction.SYNC_MANUAL,
+      userId,
+      workspaceId,
+      {
+        domainsProcessed: domains.length,
+        subscriptionsProcessed: subscriptions.length,
+        syncRunId,
+      }
+    );
+
     res.status(200).json({
       success: true,
       syncRunId,
@@ -331,6 +346,19 @@ export const syncWorkspace = onRequest(httpOptions, async (req, res) => {
       lastSyncStatus: 'failed',
       lastError: errorMessage,
     });
+
+    // Log failed sync to audit logs
+    try {
+      await logFailure(
+        AuditAction.SYNC_MANUAL,
+        userId,
+        errorMessage,
+        workspaceId,
+        { syncRunId: syncRunId || 'none' }
+      );
+    } catch (auditError) {
+      console.error('Failed to log audit entry:', auditError);
+    }
 
     res.status(500).json({ error: errorMessage });
   }

@@ -11,6 +11,9 @@ export { syncAllWorkspaces } from './syncAllWorkspaces';
 // Scheduled sync function (Cloud Scheduler)
 export { syncAllWorkspacesScheduled } from './syncAllWorkspaces';
 
+// Alert generation function (Cloud Scheduler)
+export { generateAlerts } from './generateAlerts';
+
 /*
  * Example functions commented out - not needed for MVP
  *

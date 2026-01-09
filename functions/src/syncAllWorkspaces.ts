@@ -2,6 +2,7 @@ import * as admin from 'firebase-admin';
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { onRequest, HttpsOptions } from 'firebase-functions/v2/https';
 import * as cryptoJs from 'crypto-js';
+import { AuditAction, logSuccess, logFailure, logPartial } from './utils/auditLog';
 
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || '';
 const HOSTINGER_API_BASE = 'https://developers.hostinger.com';
@@ -469,6 +470,33 @@ export const syncAllWorkspacesScheduled = onSchedule(
         skippedCount: result.skippedCount,
         disabledCount: result.disabledCount,
       });
+
+      // Log audit entry based on results
+      const auditUserId = 'system';
+      if (result.failureCount === 0) {
+        await logSuccess(AuditAction.SYNC_SCHEDULED, auditUserId, undefined, {
+          totalWorkspaces: result.totalWorkspaces,
+          successCount: result.successCount,
+          skippedCount: result.skippedCount,
+          trigger: 'scheduled',
+        });
+      } else if (result.successCount > 0) {
+        await logPartial(AuditAction.SYNC_SCHEDULED, auditUserId, undefined, {
+          totalWorkspaces: result.totalWorkspaces,
+          successCount: result.successCount,
+          failureCount: result.failureCount,
+          skippedCount: result.skippedCount,
+          trigger: 'scheduled',
+        });
+      } else {
+        await logFailure(
+          AuditAction.SYNC_SCHEDULED,
+          auditUserId,
+          `All ${result.totalWorkspaces} workspaces failed to sync`,
+          undefined,
+          { totalWorkspaces: result.totalWorkspaces, failureCount: result.failureCount }
+        );
+      }
     } catch (error: unknown) {
       console.error('Scheduled sync failed', error);
 
@@ -481,6 +509,16 @@ export const syncAllWorkspacesScheduled = onSchedule(
         status: 'failed',
         error: error instanceof Error ? error.message : 'Unknown error',
       });
+
+      // Log audit failure
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      await logFailure(
+        AuditAction.SYNC_SCHEDULED,
+        'system',
+        errorMessage,
+        undefined,
+        { trigger: 'scheduled' }
+      );
 
       throw error;
     }
@@ -630,6 +668,33 @@ export const syncAllWorkspaces = onRequest(httpOptions, async (req, res) => {
     });
 
     console.log('\n✅ Manual sync completed', result);
+
+    // Log audit entry based on results
+    const auditUserId = 'system'; // Manual sync triggered by system/admin
+    if (result.failureCount === 0) {
+      await logSuccess(AuditAction.SYNC_SCHEDULED, auditUserId, undefined, {
+        totalWorkspaces: result.totalWorkspaces,
+        successCount: result.successCount,
+        skippedCount: result.skippedCount,
+        trigger: 'manual',
+      });
+    } else if (result.successCount > 0) {
+      await logPartial(AuditAction.SYNC_SCHEDULED, auditUserId, undefined, {
+        totalWorkspaces: result.totalWorkspaces,
+        successCount: result.successCount,
+        failureCount: result.failureCount,
+        skippedCount: result.skippedCount,
+        trigger: 'manual',
+      });
+    } else {
+      await logFailure(
+        AuditAction.SYNC_SCHEDULED,
+        auditUserId,
+        `All ${result.totalWorkspaces} workspaces failed to sync`,
+        undefined,
+        { totalWorkspaces: result.totalWorkspaces, failureCount: result.failureCount }
+      );
+    }
 
     res.status(200).json({
       success: true,

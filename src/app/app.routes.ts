@@ -45,7 +45,7 @@ export const routes: Routes = [
       {
         path: 'audit',
         loadComponent: () =>
-          import('./presentation/pages/dashboard/dashboard.page'), // Temporal
+          import('./presentation/pages/audit-logs/audit-logs.page'),
       },
       {
         path: 'settings',
@@ -78,12 +78,17 @@ export const routes: Routes = [
           {
             path: 'alerts',
             loadComponent: () =>
-              import('./presentation/pages/dashboard/dashboard.page'), // Temporal
+              import('./presentation/pages/alerts/alerts.page'),
           },
           {
             path: 'logs',
             loadComponent: () =>
-              import('./presentation/pages/dashboard/dashboard.page'), // Temporal
+              import('./presentation/pages/sync-runs/sync-runs.page'),
+          },
+          {
+            path: 'audit',
+            loadComponent: () =>
+              import('./presentation/pages/audit-logs/audit-logs.page'),
           },
           {
             path: '',
