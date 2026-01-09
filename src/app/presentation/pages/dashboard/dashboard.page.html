@@ -1,73 +1,169 @@
 <div class="dashboard-container">
+  <!-- Toast Notifications -->
+  <p-toast />
+  <p-confirmDialog />
+
+  <!-- Toolbar -->
+  <p-toolbar styleClass="dashboard-toolbar">
+    <div class="p-toolbar-group-start">
+      <h1 class="dashboard-title">
+        <i class="pi pi-chart-line"></i>
+        Dashboard
+      </h1>
+    </div>
+
+    <div class="p-toolbar-group-end">
+      <p-button
+        label="Sincronizar Todos"
+        icon="pi pi-sync"
+        severity="secondary"
+        [outlined]="true"
+        [loading]="isSyncingAll()"
+        (onClick)="syncAllWorkspaces()"
+        pTooltip="Sincronizar todos los workspaces activos"
+        tooltipPosition="bottom"
+      />
+      <p-button
+        label="Ver Workspaces"
+        icon="pi pi-briefcase"
+        styleClass="ml-2"
+        (onClick)="navigateToWorkspaces()"
+      />
+      <p-button
+        label="Salir"
+        icon="pi pi-sign-out"
+        severity="secondary"
+        [outlined]="true"
+        styleClass="ml-2"
+        (onClick)="onLogout()"
+      />
+    </div>
+  </p-toolbar>
+
   <!-- Main Content -->
   <div class="dashboard-content">
-    <div class="welcome-section">
+    <!-- Loading State -->
+    @if (isLoading()) {
+      <div class="stats-grid">
+        <p-card>
+          <ng-template pTemplate="header">
+            <p-skeleton width="60%" height="2rem" />
+          </ng-template>
+          <p-skeleton height="10rem" />
+        </p-card>
+        <p-card>
+          <ng-template pTemplate="header">
+            <p-skeleton width="60%" height="2rem" />
+          </ng-template>
+          <p-skeleton height="10rem" />
+        </p-card>
+      </div>
+    }
+
+    <!-- Error State -->
+    @if (error() && !isLoading()) {
       <p-card>
-        <ng-template pTemplate="header">
-          <div class="card-header">
-            <i class="pi pi-check-circle" style="font-size: 3rem; color: var(--green-500)"></i>
-          </div>
-        </ng-template>
-
-        <div class="welcome-content">
-          <h1>¡Bienvenido, {{ userDisplayName }}!</h1>
-          <p>
-            Has iniciado sesión exitosamente en Hostinger Workspace Manager.
-          </p>
-          <p class="info-message">
-            <i class="pi pi-info-circle"></i>
-            Gestiona tus workspaces de Hostinger desde un solo lugar.
-          </p>
-
-          <div class="actions mt-4">
-            <p-button
-              label="Ver Workspaces"
-              icon="pi pi-briefcase"
-              (onClick)="navigateToWorkspaces()"
-              styleClass="mr-2"
-            />
-            <p-button
-              label="Cerrar Sesión"
-              icon="pi pi-sign-out"
-              severity="secondary"
-              [outlined]="true"
-              (onClick)="onLogout()"
-            />
-          </div>
+        <div class="error-state">
+          <i class="pi pi-exclamation-triangle" style="font-size: 3rem; color: var(--red-500)"></i>
+          <h2>Error al cargar el dashboard</h2>
+          <p>{{ error() }}</p>
+          <p-button
+            label="Reintentar"
+            icon="pi pi-refresh"
+            (onClick)="loadDashboard()"
+          />
         </div>
-
-        <ng-template pTemplate="footer">
-        </ng-template>
       </p-card>
-    </div>
+    }
 
-    <!-- User Info Card -->
-    <div class="user-info-section">
-      <p-card>
-        <ng-template pTemplate="header">
-          <h3 class="section-title">
-            <i class="pi pi-user"></i>
-            Información del Usuario
-          </h3>
-        </ng-template>
+    <!-- Data Loaded -->
+    @if (stats() && !isLoading()) {
+      <!-- Welcome Message -->
+      <div class="welcome-banner">
+        <h2>¡Hola, {{ userDisplayName() }}! 👋</h2>
+        @if (hasIssues()) {
+          <p class="warning-text">
+            <i class="pi pi-exclamation-circle"></i>
+            Tienes {{ stats()!.domainsExpiring7Days + stats()!.subscriptionsExpiring7Days }} vencimientos próximos
+            @if (stats()!.workspacesInError.length > 0) {
+              y {{ stats()!.workspacesInError.length }} workspace(s) con problemas
+            }
+          </p>
+        } @else {
+          <p class="success-text">
+            <i class="pi pi-check-circle"></i>
+            Todo está bajo control
+          </p>
+        }
+      </div>
 
-        <div class="info-grid">
-          <div class="info-item">
-            <label>Email:</label>
-            <span>{{ userEmail }}</span>
-          </div>
-          <div class="info-item">
-            <label>UID:</label>
-            <span class="monospace">{{ currentUser()?.uid }}</span>
-          </div>
-          @if (currentUser()?.metadata?.lastSignInTime) {
-            <div class="info-item">
-              <label>Última autenticación:</label>
-              <span>{{ currentUser()?.metadata?.lastSignInTime }}</span>
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <!-- Domains Expiration Card -->
+        <app-expiration-card
+          title="Dominios Próximos a Vencer"
+          icon="pi pi-globe"
+          [count7Days]="stats()!.domainsExpiring7Days"
+          [count15Days]="stats()!.domainsExpiring15Days"
+          [count30Days]="stats()!.domainsExpiring30Days"
+          [count60Days]="stats()!.domainsExpiring60Days"
+          [totalCount]="stats()!.totalDomains"
+        />
+
+        <!-- Subscriptions Expiration Card -->
+        <app-expiration-card
+          title="Suscripciones Próximas a Vencer"
+          icon="pi pi-ticket"
+          [count7Days]="stats()!.subscriptionsExpiring7Days"
+          [count15Days]="stats()!.subscriptionsExpiring15Days"
+          [count30Days]="stats()!.subscriptionsExpiring30Days"
+          [count60Days]="stats()!.subscriptionsExpiring60Days"
+          [totalCount]="stats()!.totalSubscriptions"
+        />
+      </div>
+
+      <!-- Workspaces Alert Panel -->
+      @if (stats()!.workspacesInError.length > 0) {
+        <div class="alert-section">
+          <app-workspaces-alert-panel
+            [workspaces]="stats()!.workspacesInError"
+          />
+        </div>
+      }
+
+      <!-- Quick Stats Summary -->
+      <div class="quick-stats">
+        <p-card>
+          <ng-template pTemplate="header">
+            <h3 class="section-title">
+              <i class="pi pi-info-circle"></i>
+              Resumen General
+            </h3>
+          </ng-template>
+
+          <div class="summary-grid">
+            <div class="summary-item">
+              <label>Total Workspaces:</label>
+              <p-chip [label]="stats()!.totalWorkspaces.toString()" styleClass="summary-chip" />
             </div>
-          }
-        </div>
-      </p-card>
-    </div>
+            <div class="summary-item">
+              <label>Total Dominios:</label>
+              <p-chip [label]="stats()!.totalDomains.toString()" styleClass="summary-chip" />
+            </div>
+            <div class="summary-item">
+              <label>Total Suscripciones:</label>
+              <p-chip [label]="stats()!.totalSubscriptions.toString()" styleClass="summary-chip" />
+            </div>
+            <div class="summary-item">
+              <label>Workspaces Activos:</label>
+              <p-chip
+                [label]="(stats()!.totalWorkspaces - stats()!.workspacesInError.length).toString()"
+                styleClass="summary-chip success"
+              />
+            </div>
+          </div>
+        </p-card>
+      </div>
+    }
   </div>
 </div>
