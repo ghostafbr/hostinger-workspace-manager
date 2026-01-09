@@ -1,22 +1,19 @@
 import * as admin from 'firebase-admin';
-import * as functions from 'firebase-functions';
 
 // Initialize Firebase Admin
 admin.initializeApp();
 
-/**
- * Example HTTP Function
- * This is a placeholder for actual Cloud Functions
- */
+// Export Cloud Functions (HTTP version with manual CORS)
+export { syncWorkspace } from './syncWorkspace.http';
+
+/*
+ * Example functions commented out - not needed for MVP
+ *
 export const helloWorld = functions.https.onRequest((request, response) => {
   functions.logger.info('Hello logs!', { structuredData: true });
   response.send('Hello from Firebase!');
 });
 
-/**
- * Example Firestore Trigger
- * Logs when a workspace is created
- */
 export const onWorkspaceCreated = functions.firestore
   .document('workspaces/{workspaceId}')
   .onCreate((snap, context) => {
@@ -26,6 +23,7 @@ export const onWorkspaceCreated = functions.firestore
       name: workspace.name,
     });
   });
+*/
 
 // TODO: Add actual Cloud Functions based on requirements:
 // - workspaces.createOrUpdate

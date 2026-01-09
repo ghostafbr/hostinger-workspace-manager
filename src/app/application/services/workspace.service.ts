@@ -1,5 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Observable, from } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, from, firstValueFrom } from 'rxjs';
 import {
   Firestore,
   collection,
@@ -13,6 +14,7 @@ import {
   where,
   Timestamp,
 } from 'firebase/firestore';
+import { Auth } from 'firebase/auth';
 import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
 import { Workspace, WorkspaceStatus, type IWorkspace } from '@app/domain';
 import { AuthService } from './auth.service';
@@ -29,10 +31,13 @@ import { HostingerApiService } from '@app/infrastructure/adapters/hostinger-api.
 })
 export class WorkspaceService {
   private readonly firestore: Firestore = FirebaseAdapter.getFirestore();
+  private readonly auth: Auth = FirebaseAdapter.getAuth();
+  private readonly http = inject(HttpClient);
   private readonly authService = inject(AuthService);
   private readonly encryptionService = inject(EncryptionService);
   private readonly hostingerApi = inject(HostingerApiService);
   private readonly collectionName = 'workspaces';
+  private readonly cloudFunctionUrl = 'https://us-central1-hostinger-workspace-manager.cloudfunctions.net/syncWorkspace';
 
   // Signals for reactive state
   readonly workspaces = signal<Workspace[]>([]);
@@ -263,7 +268,7 @@ export class WorkspaceService {
 
   /**
    * Synchronize workspace now
-   * Updates lastSyncAt and fetches data from Hostinger API
+   * Calls Cloud Function to sync domains and subscriptions from Hostinger API
    */
   async syncNow(id: string): Promise<void> {
     try {
@@ -275,30 +280,50 @@ export class WorkspaceService {
         throw new Error('Workspace not found');
       }
 
-      // TODO: Implement actual Hostinger API sync
-      // For now, just update timestamp
-      const docRef = doc(this.firestore, this.collectionName, id);
-      const updateData = {
-        lastSyncAt: Timestamp.now(),
-        lastSyncStatus: 'success',
-        updatedAt: Timestamp.now(),
-      };
+      console.log('🔄 Calling syncWorkspace function...', {
+        workspaceId: id,
+        cloudFunctionUrl: this.cloudFunctionUrl,
+      });
 
-      await updateDoc(docRef, updateData as Record<string, unknown>);
+      // Get current user's ID token
+      const currentUser = this.auth.currentUser;
+      if (!currentUser) {
+        throw new Error('User not authenticated');
+      }
 
-      // Update local state
-      this.workspaces.update((workspaces) =>
-        workspaces.map((ws) => {
-          if (ws.id === id) {
-            return Workspace.fromFirestore(id, {
-              ...ws,
-              ...updateData,
-            });
+      const idToken = await currentUser.getIdToken();
+
+      // Call HTTP Cloud Function with Authorization header
+      const response = await firstValueFrom(
+        this.http.post<{
+          success: boolean;
+          syncRunId?: string;
+          domainsProcessed?: number;
+          subscriptionsProcessed?: number;
+          error?: string;
+        }>(
+          this.cloudFunctionUrl,
+          { workspaceId: id },
+          {
+            headers: new HttpHeaders({
+              'Authorization': `Bearer ${idToken}`,
+              'Content-Type': 'application/json',
+            }),
           }
-          return ws;
-        }),
+        )
       );
+
+      console.log('✅ Function response:', response);
+
+      if (!response.success) {
+        throw new Error(response.error || 'Sync failed');
+      }
+
+      // Refresh workspace from Firestore to get updated lastSyncAt
+      await this.getAllWorkspaces();
+
     } catch (error) {
+      console.error('❌ Sync error:', error);
       const errorMessage =
         error instanceof Error ? error.message : 'Failed to sync workspace';
       this.error.set(errorMessage);

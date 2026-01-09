@@ -1,6 +1,40 @@
 # HostingerWorkspaceManager
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.2.
+Aplicación Angular 21 para gestión centralizada de múltiples cuentas Hostinger con sincronización automática de dominios y suscripciones.
+
+## 🚀 Quick Start
+
+### Prerrequisitos
+- Node.js 20+ 
+- Angular CLI 21+
+- Cuenta Firebase configurada
+- (Opcional) Cuenta Hostinger con API token
+
+### Desarrollo Local
+
+```bash
+# 1. Instalar dependencias
+npm install
+
+# 2. Configurar Firebase (ver FIREBASE_SETUP.md)
+# Crear src/environments/environment.development.ts con tu config
+
+# 3. Iniciar servidor de desarrollo
+npm run start
+# → http://localhost:4200
+
+# 4. (Si modificas Cloud Functions)
+cd functions
+npm run build
+firebase deploy --only functions
+```
+
+## 📚 Documentación
+
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Clean Architecture + Atomic Design
+- **[DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md)** - Ejemplos de código detallados
+- **[FIREBASE_SETUP.md](FIREBASE_SETUP.md)** - Configuración Firebase paso a paso
+- **[CLOUD_FUNCTIONS.md](CLOUD_FUNCTIONS.md)** - Cloud Functions sin emulador (producción directa)
 
 ## Development server
 

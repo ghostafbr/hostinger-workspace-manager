@@ -15,26 +15,9 @@
         "firebase-debug.*.log"
       ],
       "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint",
         "npm --prefix \"$RESOURCE_DIR\" run build"
       ],
       "source": "functions"
-    },
-    {
-      "source": "hostinger-workspace-manager",
-      "codebase": "hostinger-workspace-manager",
-      "disallowLegacyRuntimeConfig": true,
-      "ignore": [
-        "node_modules",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "*.local"
-      ],
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint",
-        "npm --prefix \"$RESOURCE_DIR\" run build"
-      ]
     }
   ],
   "hosting": {
@@ -66,7 +49,7 @@
     },
     "ui": {
       "enabled": true,
-      "port": 4000
+      "port": 4005
     },
     "singleProjectMode": true
   }
