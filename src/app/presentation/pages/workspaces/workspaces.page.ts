@@ -58,6 +58,7 @@ export default class WorkspacesPage implements OnInit {
   readonly searchTerm = signal<string>('');
   readonly isTestingConnection = signal<string | null>(null);
   readonly isSyncing = signal<string | null>(null);
+  readonly isSyncingAll = signal<boolean>(false); // TEMP: For testing batch sync
 
   ngOnInit(): void {
     this.loadWorkspaces();
@@ -286,5 +287,60 @@ export default class WorkspacesPage implements OnInit {
       return new Date(timestamp.seconds * 1000).toLocaleDateString('es-ES');
     }
     return timestamp.toLocaleDateString('es-ES');
+  }
+
+  /**
+   * TEMP: Sync All Workspaces (for testing)
+   *
+   * This is a temporary method to test the batch sync functionality.
+   * Production uses automatic Cloud Scheduler at 03:00 AM.
+   *
+   * TODO: Remove this method after testing is complete
+   */
+  async syncAllWorkspaces(): Promise<void> {
+    this.confirmationService.confirm({
+      message: '¿Deseas sincronizar TODOS los workspaces activos? Esto puede tomar varios minutos.',
+      header: 'Confirmar Sincronización Batch',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sí, sincronizar',
+      rejectLabel: 'Cancelar',
+      accept: async () => {
+        try {
+          this.isSyncingAll.set(true);
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Sincronización Iniciada',
+            detail: 'Sincronizando todos los workspaces activos...',
+            life: 3000,
+          });
+
+          const result = await this.workspaceService.syncAllWorkspaces();
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Sincronización Completada',
+            detail: `
+              Total: ${result.totalWorkspaces} workspaces
+              ✅ Éxitos: ${result.successCount}
+              ❌ Fallos: ${result.failureCount}
+              ⏭️ Saltados: ${result.skippedCount}
+              🚫 Deshabilitados: ${result.disabledCount}
+            `,
+            life: 8000,
+          });
+
+          await this.loadWorkspaces();
+        } catch (error) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error en Sincronización',
+            detail: error instanceof Error ? error.message : 'Error desconocido',
+            life: 5000,
+          });
+        } finally {
+          this.isSyncingAll.set(false);
+        }
+      },
+    });
   }
 }

@@ -6,11 +6,24 @@
     <ng-template pTemplate="header">
       <div class="page-header">
         <h2 class="m-0">Workspaces</h2>
-        <p-button
-          label="Nuevo Workspace"
-          icon="pi pi-plus"
-          (onClick)="createWorkspace()"
-        />
+        <div class="flex gap-2">
+          <!-- TEMP: Batch Sync Button (remove after testing) -->
+          <p-button
+            label="🧪 Sincronizar Todos"
+            icon="pi pi-sync"
+            severity="secondary"
+            [outlined]="true"
+            [loading]="isSyncingAll()"
+            (onClick)="syncAllWorkspaces()"
+            pTooltip="TEMP: Test batch sync (producción usa cron job a las 03:00 AM)"
+            tooltipPosition="bottom"
+          />
+          <p-button
+            label="Nuevo Workspace"
+            icon="pi pi-plus"
+            (onClick)="createWorkspace()"
+          />
+        </div>
       </div>
     </ng-template>
 

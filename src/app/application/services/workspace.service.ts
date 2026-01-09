@@ -38,6 +38,7 @@ export class WorkspaceService {
   private readonly hostingerApi = inject(HostingerApiService);
   private readonly collectionName = 'workspaces';
   private readonly cloudFunctionUrl = 'https://us-central1-hostinger-workspace-manager.cloudfunctions.net/syncWorkspace';
+  private readonly syncAllUrl = 'https://us-central1-hostinger-workspace-manager.cloudfunctions.net/syncAllWorkspaces';
 
   // Signals for reactive state
   readonly workspaces = signal<Workspace[]>([]);
@@ -338,6 +339,92 @@ export class WorkspaceService {
    */
   clearError(): void {
     this.error.set(null);
+  }
+
+  /**
+   * Sync All Workspaces (Manual Trigger)
+   *
+   * Executes batch synchronization for all active workspaces.
+   * This is a temporary testing method - production uses scheduled Cloud Function.
+   *
+   * @returns Summary with counts of success/failure/skipped workspaces
+   */
+  async syncAllWorkspaces(): Promise<{
+    success: boolean;
+    totalWorkspaces: number;
+    successCount: number;
+    failureCount: number;
+    skippedCount: number;
+    disabledCount: number;
+  }> {
+    try {
+      this.isLoading.set(true);
+      this.error.set(null);
+
+      console.log('🔄 Starting batch sync for all workspaces...');
+
+      // Get current user's ID token
+      const currentUser = this.auth.currentUser;
+      if (!currentUser) {
+        throw new Error('User not authenticated');
+      }
+
+      const idToken = await currentUser.getIdToken();
+
+      // Call syncAllWorkspaces HTTP endpoint
+      const response = await firstValueFrom(
+        this.http.post<{
+          success: boolean;
+          totalWorkspaces: number;
+          successCount: number;
+          failureCount: number;
+          skippedCount: number;
+          disabledCount: number;
+          details: Array<{
+            workspaceId: string;
+            status: 'success' | 'failed' | 'skipped' | 'disabled';
+            domainsProcessed?: number;
+            subscriptionsProcessed?: number;
+            error?: string;
+          }>;
+        }>(
+          this.syncAllUrl,
+          {},
+          {
+            headers: new HttpHeaders({
+              'Authorization': `Bearer ${idToken}`,
+              'Content-Type': 'application/json',
+            }),
+          }
+        )
+      );
+
+      console.log('✅ Batch sync response:', response);
+
+      if (!response.success) {
+        throw new Error('Batch sync failed');
+      }
+
+      // Refresh workspaces to show updated sync times
+      await this.getAllWorkspaces();
+
+      return {
+        success: response.success,
+        totalWorkspaces: response.totalWorkspaces,
+        successCount: response.successCount,
+        failureCount: response.failureCount,
+        skippedCount: response.skippedCount,
+        disabledCount: response.disabledCount,
+      };
+    } catch (error) {
+      console.error('❌ Batch sync error:', error);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Failed to sync all workspaces';
+      this.error.set(errorMessage);
+      throw error;
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 
   /**

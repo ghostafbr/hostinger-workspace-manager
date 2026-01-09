@@ -3,8 +3,13 @@ import * as admin from 'firebase-admin';
 // Initialize Firebase Admin
 admin.initializeApp();
 
-// Export Cloud Functions (HTTP version with manual CORS)
+// Export Cloud Functions
+// Manual sync functions (HTTP with CORS)
 export { syncWorkspace } from './syncWorkspace.http';
+export { syncAllWorkspaces } from './syncAllWorkspaces';
+
+// Scheduled sync function (Cloud Scheduler)
+export { syncAllWorkspacesScheduled } from './syncAllWorkspaces';
 
 /*
  * Example functions commented out - not needed for MVP

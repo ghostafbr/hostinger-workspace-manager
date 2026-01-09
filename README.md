@@ -35,6 +35,67 @@ firebase deploy --only functions
 - **[DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md)** - Ejemplos de código detallados
 - **[FIREBASE_SETUP.md](FIREBASE_SETUP.md)** - Configuración Firebase paso a paso
 - **[CLOUD_FUNCTIONS.md](CLOUD_FUNCTIONS.md)** - Cloud Functions sin emulador (producción directa)
+- **[SYNC_AUDIT_LOGS.md](SYNC_AUDIT_LOGS.md)** - Logs, métricas y auditoría de sincronización
+
+## ✨ Funcionalidades
+
+### Sincronización de Workspaces
+
+#### 🔄 Sincronización Individual (Manual)
+Desde la UI, ejecuta sync de un workspace específico:
+- Dominios desde Hostinger API
+- Suscripciones activas
+- Registro en `sync_runs` collection
+
+#### 🤖 Sincronización Automática Diaria
+Cloud Scheduler ejecuta **todos los días a las 03:00 AM** (America/Bogota):
+- Sincroniza TODOS los workspaces activos
+- Circuit breaker: deshabilita workspaces con 3+ errores consecutivos
+- Rate limiting: 2 segundos entre cada workspace
+- Logs detallados en Firebase Console
+
+#### 📊 Circuit Breaker
+Protección automática contra workspaces problemáticos:
+- **Umbral**: 3 errores consecutivos
+- **Acción**: Status → `REQUIRES_ATTENTION`
+- **Prevención**: Se salta en próximas sincronizaciones
+- **Reset**: Automático al tener sync exitoso
+
+### Cloud Functions Desplegadas
+
+1. **`syncWorkspace`** (HTTPS)
+   - URL: `https://us-central1-hostinger-workspace-manager.cloudfunctions.net/syncWorkspace`
+   - Sincroniza workspace individual
+   - Requiere: Authorization header con Firebase ID token
+
+2. **`syncAllWorkspaces`** (HTTPS)
+   - URL: `https://us-central1-hostinger-workspace-manager.cloudfunctions.net/syncAllWorkspaces`
+   - Sincroniza todos los workspaces (ejecución manual)
+   - Requiere: Authorization header
+
+3. **`syncAllWorkspacesScheduled`** (Scheduled)
+   - Cron: `0 3 * * *` (03:00 AM diario)
+   - Zona: America/Bogota
+   - Ejecución automática sin intervención
+
+## 🔍 Monitoreo y Logs
+
+Ver logs en tiempo real:
+```bash
+# Logs de todas las funciones
+firebase functions:log
+
+# Logs de función específica
+firebase functions:log --only syncAllWorkspacesScheduled
+```
+
+Consultar `sync_runs` en Firestore para métricas detalladas:
+- Total de workspaces procesados
+- Conteos de éxitos/fallos
+- Workspaces deshabilitados
+- Errores específicos
+
+Ver [SYNC_AUDIT_LOGS.md](SYNC_AUDIT_LOGS.md) para detalles completos.
 
 ## Development server
 
