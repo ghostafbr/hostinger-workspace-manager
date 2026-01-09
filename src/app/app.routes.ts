@@ -68,12 +68,12 @@ export const routes: Routes = [
           {
             path: 'domains',
             loadComponent: () =>
-              import('./presentation/pages/dashboard/dashboard.page'), // Temporal
+              import('./presentation/pages/domains/domains.page'),
           },
           {
             path: 'subscriptions',
             loadComponent: () =>
-              import('./presentation/pages/dashboard/dashboard.page'), // Temporal
+              import('./presentation/pages/subscriptions/subscriptions.page'),
           },
           {
             path: 'alerts',

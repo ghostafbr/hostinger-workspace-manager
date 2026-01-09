@@ -76,7 +76,22 @@ async function fetchDomains(apiToken: string): Promise<HostingerDomainResponse[]
   }
 
   const data = await response.json();
-  return data.data || [];
+
+  // Handle different response formats from Hostinger API
+  if (Array.isArray(data)) {
+    return data;
+  }
+  if (data.data && Array.isArray(data.data)) {
+    return data.data;
+  }
+  if (data.results && Array.isArray(data.results)) {
+    return data.results;
+  }
+  if (data.domains && Array.isArray(data.domains)) {
+    return data.domains;
+  }
+
+  return [];
 }
 
 /**
@@ -98,7 +113,22 @@ async function fetchSubscriptions(apiToken: string): Promise<HostingerSubscripti
   }
 
   const data = await response.json();
-  return data.data || [];
+
+  // Handle different response formats from Hostinger API
+  if (Array.isArray(data)) {
+    return data;
+  }
+  if (data.data && Array.isArray(data.data)) {
+    return data.data;
+  }
+  if (data.results && Array.isArray(data.results)) {
+    return data.results;
+  }
+  if (data.subscriptions && Array.isArray(data.subscriptions)) {
+    return data.subscriptions;
+  }
+
+  return [];
 }
 
 /**
@@ -155,13 +185,13 @@ async function upsertSubscription(
   const subscriptionData = {
     workspaceId,
     subscriptionId: subscription.id,
-    productName: subscription.product_name,
+    productName: subscription.product_name || subscription.id || 'Unknown Product',
     expiresAt: admin.firestore.Timestamp.fromDate(new Date(subscription.expires_at)),
     nextBillingAt: subscription.next_billing_at
       ? admin.firestore.Timestamp.fromDate(new Date(subscription.next_billing_at))
       : null,
     autoRenew: subscription.auto_renew || false,
-    status: subscription.status,
+    status: subscription.status || 'unknown',
     raw: subscription,
     syncedAt: new Date(),
   };
@@ -306,7 +336,7 @@ async function syncSingleWorkspace(
 
     // Circuit breaker: disable workspace if too many errors
     if (currentErrors >= MAX_CONSECUTIVE_ERRORS) {
-      console.warn(`⚠️ Circuit breaker triggered for workspace ${workspaceId}`, {
+      console.warn(`Circuit breaker triggered for workspace ${workspaceId}`, {
         consecutiveErrors: currentErrors,
       });
       updateData.status = 'REQUIRES_ATTENTION';
@@ -337,7 +367,7 @@ export const syncAllWorkspacesScheduled = onSchedule(
     region: 'us-central1',
   },
   async (event) => {
-    console.log('🕐 Starting scheduled sync for all workspaces', {
+    console.log('Starting scheduled sync for all workspaces', {
       timestamp: new Date().toISOString(),
       trigger: 'scheduled',
     });
@@ -367,12 +397,12 @@ export const syncAllWorkspacesScheduled = onSchedule(
         const workspaceId = doc.id;
         const workspaceData = doc.data();
 
-        console.log(`\n🔄 Processing workspace: ${workspaceId}`);
+        console.log(`\nProcessing workspace: ${workspaceId}`);
 
         // Check circuit breaker - skip if too many consecutive errors
         const consecutiveErrors = workspaceData.consecutiveErrors || 0;
         if (consecutiveErrors >= MAX_CONSECUTIVE_ERRORS) {
-          console.warn(`⏭️ Skipping workspace ${workspaceId} (circuit breaker)`, {
+          console.warn(`Skipping workspace ${workspaceId} (circuit breaker)`, {
             consecutiveErrors,
           });
           result.skippedCount++;
@@ -412,13 +442,13 @@ export const syncAllWorkspacesScheduled = onSchedule(
 
         // Rate limiting: wait between workspaces
         if (workspacesSnapshot.docs.indexOf(doc) < workspacesSnapshot.size - 1) {
-          console.log(`⏳ Waiting ${RATE_LIMIT_DELAY_MS}ms before next workspace...`);
+          console.log(`Waiting ${RATE_LIMIT_DELAY_MS}ms before next workspace...`);
           await new Promise((resolve) => setTimeout(resolve, RATE_LIMIT_DELAY_MS));
         }
       }
 
       // Log final summary
-      console.log('\n✅ Scheduled sync completed', {
+      console.log('\nScheduled sync completed', {
         totalWorkspaces: result.totalWorkspaces,
         successCount: result.successCount,
         failureCount: result.failureCount,
@@ -440,7 +470,7 @@ export const syncAllWorkspacesScheduled = onSchedule(
         disabledCount: result.disabledCount,
       });
     } catch (error: unknown) {
-      console.error('❌ Scheduled sync failed', error);
+      console.error('Scheduled sync failed', error);
 
       // Log global failure
       await db.collection('sync_runs').add({
@@ -504,7 +534,7 @@ export const syncAllWorkspaces = onRequest(httpOptions, async (req, res) => {
     return;
   }
 
-  console.log('🔄 Starting manual sync for all workspaces', {
+  console.log('Starting manual sync for all workspaces', {
     timestamp: new Date().toISOString(),
     trigger: 'manual',
   });
@@ -535,12 +565,12 @@ export const syncAllWorkspaces = onRequest(httpOptions, async (req, res) => {
       const workspaceId = doc.id;
       const workspaceData = doc.data();
 
-      console.log(`\n🔄 Processing workspace: ${workspaceId}`);
+      console.log(`\nProcessing workspace: ${workspaceId}`);
 
       // Check circuit breaker
       const consecutiveErrors = workspaceData.consecutiveErrors || 0;
       if (consecutiveErrors >= MAX_CONSECUTIVE_ERRORS) {
-        console.warn(`⏭️ Skipping workspace ${workspaceId} (circuit breaker)`, {
+        console.warn(`Skipping workspace ${workspaceId} (circuit breaker)`, {
           consecutiveErrors,
         });
         result.skippedCount++;

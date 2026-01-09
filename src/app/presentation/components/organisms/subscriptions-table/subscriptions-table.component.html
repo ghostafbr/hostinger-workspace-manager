@@ -1,0 +1,145 @@
+<div class="subscriptions-table-container">
+  <!-- Search and Filters Header -->
+  <div class="table-header">
+    <div class="search-container">
+      <p-iconfield iconPosition="left">
+        <p-inputicon styleClass="pi pi-search" />
+        <input
+          type="text"
+          pInputText
+          placeholder="Buscar por producto..."
+          [(ngModel)]="searchText"
+          class="search-input"
+        />
+      </p-iconfield>
+    </div>
+
+    <p-select
+      [options]="autoRenewFilterOptions"
+      [(ngModel)]="selectedAutoRenewFilter"
+      (ngModelChange)="onAutoRenewFilterChange($event)"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Filtrar por renovación"
+      styleClass="autorenew-filter"
+    />
+  </div>
+
+  <!-- Table -->
+  <p-table
+    [value]="filteredSubscriptions()"
+    [loading]="isLoading()"
+    [paginator]="true"
+    [rows]="rowsPerPage()"
+    [rowsPerPageOptions]="[10, 20, 50]"
+    [totalRecords]="filteredSubscriptions().length"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} suscripciones"
+    styleClass="subscriptions-table"
+    responsiveLayout="scroll"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Estado</th>
+        <th pSortableColumn="productName">
+          Producto
+          <p-sortIcon field="productName" />
+        </th>
+        <th pSortableColumn="expiresAt">
+          Vence
+          <p-sortIcon field="expiresAt" />
+        </th>
+        <th>Próxima Facturación</th>
+        <th>Auto-Renew</th>
+        <th>Status</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-subscription>
+      <tr class="subscription-row" (click)="onRowClick(subscription)">
+        <!-- Expiration Semaphore -->
+        <td class="semaphore-cell">
+          <app-expiration-semaphore [expiresAt]="subscription.expiresAt" />
+        </td>
+
+        <!-- Product Name -->
+        <td class="product-name">
+          <strong>{{ subscription.productName }}</strong>
+          <div class="subscription-id">{{ subscription.subscriptionId }}</div>
+        </td>
+
+        <!-- Expires At -->
+        <td>
+          <span class="expiration-date">
+            {{ subscription.expiresAt.toDate() | date: 'dd/MM/yyyy HH:mm' }}
+          </span>
+        </td>
+
+        <!-- Next Billing At -->
+        <td>
+          @if (subscription.nextBillingAt) {
+            <span class="billing-date">
+              {{ subscription.nextBillingAt.toDate() | date: 'dd/MM/yyyy' }}
+            </span>
+          } @else {
+            <span class="no-billing">N/A</span>
+          }
+        </td>
+
+        <!-- Auto-Renew (disabled toggle button - read-only) -->
+        <td class="autorenew-cell">
+          <p-toggleButton
+            [(ngModel)]="subscription.autoRenew"
+            [disabled]="true"
+            onLabel="Sí"
+            offLabel="No"
+            onIcon="pi pi-check"
+            offIcon="pi pi-times"
+            styleClass="autorenew-toggle"
+          />
+        </td>
+
+        <!-- Status -->
+        <td>
+          <p-tag
+            [value]="subscription.status"
+            [severity]="getStatusSeverity(subscription.status)"
+          />
+        </td>
+
+        <!-- Actions -->
+        <td class="actions-cell">
+          <p-button
+            icon="pi pi-eye"
+            [rounded]="true"
+            [text]="true"
+            severity="info"
+            size="small"
+            pTooltip="Ver detalles"
+            tooltipPosition="left"
+            (onClick)="onRowClick(subscription); $event.stopPropagation()"
+          />
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" class="empty-message">
+          <div class="empty-state">
+            <i class="pi pi-inbox empty-icon"></i>
+            <p class="empty-text">No se encontraron suscripciones</p>
+            <p class="empty-hint">
+              @if (searchText() || selectedAutoRenewFilter() !== null) {
+                Intenta cambiar los filtros de búsqueda
+              } @else {
+                No hay suscripciones sincronizadas para este workspace
+              }
+            </p>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

@@ -1,0 +1,111 @@
+<p-dialog
+  [visible]="visible()"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '90vw', maxWidth: '800px' }"
+  [breakpoints]="{ '960px': '95vw', '640px': '100vw' }"
+  (onHide)="onClose()"
+>
+  @if (subscription()) {
+    <ng-template pTemplate="header">
+      <div class="dialog-header">
+        <div class="subscription-header">
+          <div class="subscription-title">
+            <app-expiration-semaphore [expiresAt]="subscription()!.expiresAt" />
+            <h2>{{ subscription()!.productName }}</h2>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <div class="subscription-details">
+      <!-- Main Information Grid -->
+      <div class="details-grid">
+        <div class="detail-item">
+          <label class="detail-label">ID de Suscripción</label>
+          <div class="detail-value">
+            <code>{{ subscription()!.subscriptionId }}</code>
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <label class="detail-label">Fecha de Vencimiento</label>
+          <div class="detail-value">
+            <strong>{{ subscription()!.expiresAt.toDate() | date: 'dd/MM/yyyy HH:mm' }}</strong>
+          </div>
+        </div>
+
+        @if (subscription()!.nextBillingAt) {
+          <div class="detail-item">
+            <label class="detail-label">Próxima Facturación</label>
+            <div class="detail-value">
+              {{ subscription()!.nextBillingAt!.toDate() | date: 'dd/MM/yyyy HH:mm' }}
+            </div>
+          </div>
+        }
+
+        <!-- Status -->
+        <div class="detail-item">
+          <label class="detail-label">Estado</label>
+          <div class="detail-value">
+            <p-tag
+              [value]="subscription()!.status"
+              [severity]="getStatusSeverity(subscription()!.status)"
+            />
+          </div>
+        </div>
+
+        <!-- Auto-Renew -->
+        <div class="detail-item">
+          <label class="detail-label">Renovación Automática</label>
+          <div class="detail-value">
+            <p-tag
+              [value]="subscription()!.autoRenew ? 'Activada' : 'Desactivada'"
+              [severity]="getTagSeverity(subscription()!.autoRenew)"
+              [icon]="subscription()!.autoRenew ? 'pi pi-check' : 'pi pi-times'"
+            />
+          </div>
+        </div>
+
+        @if (subscription()!.syncedAt) {
+          <div class="detail-item">
+            <label class="detail-label">Última Sincronización</label>
+            <div class="detail-value synced-at">
+              <i class="pi pi-sync"></i>
+              {{ subscription()!.syncedAt.toDate() | date: 'dd/MM/yyyy HH:mm' }}
+            </div>
+          </div>
+        }
+      </div>
+
+      <p-divider />
+
+      <!-- Raw Data Section (Collapsible) -->
+      <div class="raw-data-section">
+        <p-accordion [value]="['0']">
+          <p-accordionpanel value="0">
+            <p-accordionheader>
+              <div class="accordion-header">
+                <i class="pi pi-code"></i>
+                <span>Datos Raw (JSON)</span>
+              </div>
+            </p-accordionheader>
+            <p-accordioncontent>
+              <pre class="raw-data-content">{{ subscription() | json }}</pre>
+            </p-accordioncontent>
+          </p-accordionpanel>
+        </p-accordion>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        label="Cerrar"
+        icon="pi pi-times"
+        (onClick)="onClose()"
+        severity="secondary"
+      />
+    </ng-template>
+  }
+</p-dialog>

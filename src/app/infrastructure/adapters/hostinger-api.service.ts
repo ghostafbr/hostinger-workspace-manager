@@ -59,7 +59,6 @@ export class HostingerApiService {
           );
 
           if (response.status === 200 || response.status === 201) {
-            console.log(`✓ Success with endpoint: ${endpoint}`);
             return { success: true };
           }
         } catch (err) {

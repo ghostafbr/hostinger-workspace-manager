@@ -1,0 +1,189 @@
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+// Header
+.domain-header {
+  .domain-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+  }
+}
+
+// Details Grid
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .detail-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-color-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .detail-value {
+    font-size: 1rem;
+    color: var(--text-color);
+  }
+}
+
+// Nameservers
+.nameservers-section {
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+
+    i {
+      color: var(--primary-color);
+    }
+  }
+
+  .nameservers-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .nameserver-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #f9fafb;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+
+    i {
+      color: var(--primary-color);
+      font-size: 0.85rem;
+    }
+
+    code {
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: #374151;
+    }
+  }
+
+  .no-data {
+    color: var(--text-color-secondary);
+    font-style: italic;
+    margin: 0;
+  }
+}
+
+// Raw Data
+.raw-data-section {
+  ::ng-deep {
+    .p-accordion {
+      .p-accordion-header {
+        .accordion-header {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-weight: 600;
+
+          i {
+            color: var(--primary-color);
+          }
+        }
+      }
+
+      .p-accordion-content {
+        padding: 0;
+      }
+    }
+  }
+
+  .raw-data-content {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 1.5rem;
+    margin: 0;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    max-height: 400px;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #0f172a;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 4px;
+
+      &:hover {
+        background: #64748b;
+      }
+    }
+  }
+}
+
+// Dialog Customization
+::ng-deep {
+  .domain-details-dialog {
+    .p-dialog-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+
+      .p-dialog-title {
+        font-weight: 700;
+      }
+
+      .p-dialog-header-icon {
+        color: white;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+
+    .p-divider {
+      margin: 1rem 0;
+    }
+  }
+}

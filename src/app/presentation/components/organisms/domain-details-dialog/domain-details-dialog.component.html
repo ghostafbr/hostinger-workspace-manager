@@ -1,0 +1,117 @@
+<p-dialog
+  [header]="'Detalles del Dominio'"
+  [visible]="visible()"
+  (visibleChange)="onClose()"
+  [modal]="true"
+  [style]="{ width: '700px', maxWidth: '95vw' }"
+  [dismissableMask]="true"
+  styleClass="domain-details-dialog"
+>
+  @if (domain()) {
+    <div class="dialog-content">
+      <!-- Header Section -->
+      <div class="domain-header">
+        <div class="domain-title">
+          <app-expiration-semaphore [expiresAt]="domain()!.expiresAt" />
+          <h2>{{ domain()!.domainName }}</h2>
+        </div>
+      </div>
+
+      <p-divider />
+
+      <!-- Details Grid -->
+      <div class="details-grid">
+        <!-- Expiration Date -->
+        <div class="detail-item">
+          <label class="detail-label">Fecha de Vencimiento</label>
+          <div class="detail-value">
+            <strong>{{ domain()!.expiresAt.toDate() | date: 'dd/MM/yyyy HH:mm' }}</strong>
+          </div>
+        </div>
+
+        <!-- Creation Date -->
+        @if (domain()!.createdAt) {
+          <div class="detail-item">
+            <label class="detail-label">Fecha de Creación</label>
+            <div class="detail-value">
+              {{ domain()!.createdAt.toDate() | date: 'dd/MM/yyyy HH:mm' }}
+            </div>
+          </div>
+        }
+
+        <!-- Domain Lock -->
+        <div class="detail-item">
+          <label class="detail-label">Domain Lock</label>
+          <div class="detail-value">
+            <p-tag
+              [value]="domain()!.domainLock ? 'Activado' : 'Desactivado'"
+              [severity]="getTagSeverity(domain()!.domainLock || false)"
+            />
+          </div>
+        </div>
+
+        <!-- Privacy Protection -->
+        <div class="detail-item">
+          <label class="detail-label">Privacidad WHOIS</label>
+          <div class="detail-value">
+            <p-tag
+              [value]="domain()!.privacyProtection ? 'Activada' : 'Desactivada'"
+              [severity]="getTagSeverity(domain()!.privacyProtection || false)"
+            />
+          </div>
+        </div>
+      </div>
+
+      <p-divider />
+
+      <!-- Nameservers Section -->
+      <div class="nameservers-section">
+        <h3 class="section-title">
+          <i class="pi pi-server"></i>
+          Nameservers
+        </h3>
+        @if (domain()!.nameservers && domain()!.nameservers!.length > 0) {
+          <ul class="nameservers-list">
+            @for (ns of domain()!.nameservers; track ns) {
+              <li class="nameserver-item">
+                <i class="pi pi-angle-right"></i>
+                <code>{{ ns }}</code>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="no-data">No hay nameservers configurados</p>
+        }
+      </div>
+
+      <p-divider />
+
+      <!-- Raw Data Section (Collapsible) -->
+      <div class="raw-data-section">
+        <p-accordion [value]="['0']">
+          <p-accordionpanel value="0">
+            <p-accordionheader>
+              <div class="accordion-header">
+                <i class="pi pi-code"></i>
+                <span>Datos Raw (JSON)</span>
+              </div>
+            </p-accordionheader>
+            <p-accordioncontent>
+              <pre class="raw-data-content">{{ domain() | json }}</pre>
+            </p-accordioncontent>
+          </p-accordionpanel>
+        </p-accordion>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <ng-template pTemplate="footer">
+      <p-button
+        label="Cerrar"
+        icon="pi pi-times"
+        (onClick)="onClose()"
+        severity="secondary"
+      />
+    </ng-template>
+  }
+</p-dialog>
