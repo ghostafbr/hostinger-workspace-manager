@@ -23,38 +23,51 @@ import { ChipModule } from 'primeng/chip';
       </ng-template>
 
       <div class="expiration-content">
-        <div class="expiration-row">
-          <span class="period-label">7 días</span>
+        <div class="expiration-row" [class.has-items]="count7Days() > 0">
+          <span class="period-label">
+            <i class="pi pi-clock"></i>
+            7 días
+          </span>
           <p-chip
             [label]="count7Days().toString()"
-            [styleClass]="getChipClass(count7Days())"
+            [styleClass]="getChipClass(count7Days(), '7d')"
           />
         </div>
-        <div class="expiration-row">
-          <span class="period-label">15 días</span>
+        <div class="expiration-row" [class.has-items]="count15Days() > 0">
+          <span class="period-label">
+            <i class="pi pi-clock"></i>
+            15 días
+          </span>
           <p-chip
             [label]="count15Days().toString()"
-            [styleClass]="getChipClass(count15Days())"
+            [styleClass]="getChipClass(count15Days(), '15d')"
           />
         </div>
-        <div class="expiration-row">
-          <span class="period-label">30 días</span>
+        <div class="expiration-row" [class.has-items]="count30Days() > 0">
+          <span class="period-label">
+            <i class="pi pi-clock"></i>
+            30 días
+          </span>
           <p-chip
             [label]="count30Days().toString()"
-            [styleClass]="getChipClass(count30Days())"
+            [styleClass]="getChipClass(count30Days(), '30d')"
           />
         </div>
-        <div class="expiration-row">
-          <span class="period-label">60 días</span>
+        <div class="expiration-row" [class.has-items]="count60Days() > 0">
+          <span class="period-label">
+            <i class="pi pi-clock"></i>
+            60 días
+          </span>
           <p-chip
             [label]="count60Days().toString()"
-            [styleClass]="getChipClass(count60Days())"
+            [styleClass]="getChipClass(count60Days(), '60d')"
           />
         </div>
       </div>
 
       <ng-template pTemplate="footer">
         <div class="total-count">
+          <i class="pi pi-list"></i>
           Total: <strong>{{ totalCount() }}</strong>
         </div>
       </ng-template>
@@ -96,8 +109,16 @@ import { ChipModule } from 'primeng/chip';
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.5rem 0;
+      padding: 0.75rem 0;
       border-bottom: 1px solid var(--surface-200);
+      transition: background-color 0.2s ease;
+    }
+
+    .expiration-row.has-items {
+      background-color: var(--surface-50);
+      padding: 0.75rem 1rem;
+      margin: 0 -1rem;
+      border-radius: 6px;
     }
 
     .expiration-row:last-child {
@@ -107,40 +128,66 @@ import { ChipModule } from 'primeng/chip';
     .period-label {
       font-weight: 500;
       color: var(--text-color-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .period-label i {
+      font-size: 0.9rem;
+      color: var(--primary-color);
     }
 
     .total-count {
-      text-align: right;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      justify-content: flex-end;
       font-size: 1.1rem;
       color: var(--text-color-secondary);
       padding-top: 0.5rem;
       border-top: 2px solid var(--surface-300);
     }
 
+    .total-count i {
+      color: var(--primary-color);
+    }
+
     :host ::ng-deep {
       .chip-critical {
-        background-color: var(--red-500);
-        color: white;
+        background-color: var(--red-600) !important;
+        color: white !important;
+        font-weight: 600;
+        border: 2px solid var(--red-700);
       }
 
       .chip-warning {
-        background-color: var(--orange-500);
-        color: white;
+        background-color: var(--orange-600) !important;
+        color: white !important;
+        font-weight: 600;
+        border: 2px solid var(--orange-700);
       }
 
       .chip-info {
-        background-color: var(--blue-500);
-        color: white;
+        background-color: var(--blue-600) !important;
+        color: white !important;
+        font-weight: 600;
+        border: 2px solid var(--blue-700);
       }
 
       .chip-success {
-        background-color: var(--green-500);
-        color: white;
+        background-color: var(--green-600) !important;
+        color: white !important;
+        font-weight: 600;
+        border: 2px solid var(--green-700);
       }
 
-      .chip-neutral {
-        background-color: var(--surface-300);
-        color: var(--text-color);
+      .chip-zero {
+        background-color: transparent !important;
+        color: var(--text-color) !important;
+        border: 2px dashed var(--surface-400);
+        font-weight: 600;
+        opacity: 0.8;
       }
     }
   `],
@@ -155,13 +202,31 @@ export class ExpirationCardComponent {
   readonly totalCount = input.required<number>();
 
   /**
-   * Get chip style class based on count
+   * Get chip class based on count and period
+   * - 7d: critical (red) - most urgent
+   * - 15d: warning (orange) - needs attention
+   * - 30d: info (blue) - moderate urgency
+   * - 60d: success (green) - least urgent
+   * - 0: zero (outlined) - no items
    */
-  getChipClass(count: number | undefined): string {
-    if (!count || count === 0) return 'chip-neutral';
-    if (count >= 10) return 'chip-critical';
-    if (count >= 5) return 'chip-warning';
-    if (count >= 1) return 'chip-info';
-    return 'chip-success';
+  getChipClass(count: number | undefined, period: '7d' | '15d' | '30d' | '60d'): string {
+    // Zero count - show as outlined/muted
+    if (!count || count === 0) {
+      return 'chip-zero';
+    }
+
+    // Period-based colors for better visibility
+    switch (period) {
+      case '7d':
+        return 'chip-critical'; // Red - most urgent
+      case '15d':
+        return 'chip-warning'; // Orange - needs attention
+      case '30d':
+        return 'chip-info'; // Blue - moderate
+      case '60d':
+        return 'chip-success'; // Green - least urgent
+      default:
+        return 'chip-info';
+    }
   }
 }
