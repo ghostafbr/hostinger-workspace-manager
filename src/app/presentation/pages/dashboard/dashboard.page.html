@@ -83,9 +83,7 @@
               <p class="warning-text">
                 <i class="pi pi-exclamation-circle"></i>
                 Tienes
-                {{
-                  stats()!.domainsExpiring7Days + stats()!.subscriptionsExpiring7Days
-                }}
+                {{ stats()!.domainsExpiring7Days + stats()!.subscriptionsExpiring7Days }}
                 vencimientos próximos
                 @if (stats()!.workspacesInError.length > 0) {
                   y {{ stats()!.workspacesInError.length }} workspace(s) con problemas
