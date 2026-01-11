@@ -12,7 +12,7 @@ jobs:
   build-and-publish:
     name: Build & Publish
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
