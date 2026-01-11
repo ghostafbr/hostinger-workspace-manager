@@ -5,10 +5,9 @@
   "compilerOptions": {
     "outDir": "./out-tsc/app",
     "types": [],
-    "baseUrl": "./",
+    "baseUrl": "src",
     "paths": {
-      "@app/*": ["src/app/*"],
-      "@environments/*": ["src/environments/*"]
+      "@app/*": ["app/*"]
     }
   },
   "include": [
