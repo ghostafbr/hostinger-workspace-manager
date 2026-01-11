@@ -23,34 +23,28 @@ export const routes: Routes = [
       // ============================================
       {
         path: 'home',
-        loadComponent: () =>
-          import('./presentation/pages/dashboard/dashboard.page'),
+        loadComponent: () => import('./presentation/pages/dashboard/dashboard.page'),
       },
       {
         path: 'workspaces',
-        loadComponent: () =>
-          import('./presentation/pages/workspaces/workspaces.page'),
+        loadComponent: () => import('./presentation/pages/workspaces/workspaces.page'),
       },
       {
         path: 'workspaces/create',
-        loadComponent: () =>
-          import('./presentation/pages/workspaces/workspace-form.page'),
+        loadComponent: () => import('./presentation/pages/workspaces/workspace-form.page'),
       },
       {
         path: 'workspaces/edit/:id',
-        loadComponent: () =>
-          import('./presentation/pages/workspaces/workspace-form.page'),
+        loadComponent: () => import('./presentation/pages/workspaces/workspace-form.page'),
       },
       // Placeholder for future global routes
       {
         path: 'audit',
-        loadComponent: () =>
-          import('./presentation/pages/audit-logs/audit-logs.page'),
+        loadComponent: () => import('./presentation/pages/audit-logs/audit-logs.page'),
       },
       {
         path: 'settings',
-        loadComponent: () =>
-          import('./presentation/pages/dashboard/dashboard.page'), // Temporal
+        loadComponent: () => import('./presentation/pages/dashboard/dashboard.page'), // Temporal
       },
 
       // ============================================
@@ -62,33 +56,27 @@ export const routes: Routes = [
         children: [
           {
             path: 'dashboard',
-            loadComponent: () =>
-              import('./presentation/pages/dashboard/dashboard.page'),
+            loadComponent: () => import('./presentation/pages/dashboard/dashboard.page'),
           },
           {
             path: 'domains',
-            loadComponent: () =>
-              import('./presentation/pages/domains/domains.page'),
+            loadComponent: () => import('./presentation/pages/domains/domains.page'),
           },
           {
             path: 'subscriptions',
-            loadComponent: () =>
-              import('./presentation/pages/subscriptions/subscriptions.page'),
+            loadComponent: () => import('./presentation/pages/subscriptions/subscriptions.page'),
           },
           {
             path: 'alerts',
-            loadComponent: () =>
-              import('./presentation/pages/alerts/alerts.page'),
+            loadComponent: () => import('./presentation/pages/alerts/alerts.page'),
           },
           {
             path: 'logs',
-            loadComponent: () =>
-              import('./presentation/pages/sync-runs/sync-runs.page'),
+            loadComponent: () => import('./presentation/pages/sync-runs/sync-runs.page'),
           },
           {
             path: 'audit',
-            loadComponent: () =>
-              import('./presentation/pages/audit-logs/audit-logs.page'),
+            loadComponent: () => import('./presentation/pages/audit-logs/audit-logs.page'),
           },
           {
             path: '',

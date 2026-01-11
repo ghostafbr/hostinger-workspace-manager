@@ -31,16 +31,16 @@ export class HostingerApiService {
 
     try {
       const headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json'
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
       });
 
       // Test with real Hostinger API endpoints based on official docs
       // https://developers.hostinger.com/
       const endpoints = [
-        '/domains/v1/portfolio',      // List domains
-        '/billing/v1/subscriptions',  // List subscriptions
-        '/hosting/v1/websites'        // List websites
+        '/domains/v1/portfolio', // List domains
+        '/billing/v1/subscriptions', // List subscriptions
+        '/hosting/v1/websites', // List websites
       ];
 
       for (const endpoint of endpoints) {
@@ -53,9 +53,9 @@ export class HostingerApiService {
               .get<any>(`${this.BASE_URL}${endpoint}`, {
                 headers,
                 observe: 'response',
-                withCredentials: false
+                withCredentials: false,
               })
-              .pipe(timeout(this.REQUEST_TIMEOUT))
+              .pipe(timeout(this.REQUEST_TIMEOUT)),
           );
 
           if (response.status === 200 || response.status === 201) {
@@ -68,7 +68,10 @@ export class HostingerApiService {
         }
       }
 
-      return { success: false, error: 'Ningún endpoint respondió correctamente. Verifica que el token sea válido.' };
+      return {
+        success: false,
+        error: 'Ningún endpoint respondió correctamente. Verifica que el token sea válido.',
+      };
     } catch (error) {
       // Log detallado para debugging
       console.error('Hostinger API Error:', error);
@@ -83,15 +86,15 @@ export class HostingerApiService {
   async getDomains(token: string): Promise<any[]> {
     try {
       const headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json'
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
       });
 
       const response = await firstValueFrom(
         this.http
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .get<any>(`${this.BASE_URL}/domains/v1/portfolio`, { headers })
-          .pipe(timeout(this.REQUEST_TIMEOUT))
+          .pipe(timeout(this.REQUEST_TIMEOUT)),
       );
 
       return response.data || response || [];
@@ -108,15 +111,15 @@ export class HostingerApiService {
   async getSubscriptions(token: string): Promise<any[]> {
     try {
       const headers = new HttpHeaders({
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json'
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
       });
 
       const response = await firstValueFrom(
         this.http
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           .get<any>(`${this.BASE_URL}/billing/v1/subscriptions`, { headers })
-          .pipe(timeout(this.REQUEST_TIMEOUT))
+          .pipe(timeout(this.REQUEST_TIMEOUT)),
       );
 
       return response.data || response || [];
@@ -137,12 +140,13 @@ export class HostingerApiService {
           message: error.message,
           error: error.error,
           url: error.url,
-          statusText: error.statusText
+          statusText: error.statusText,
         });
 
         return {
           success: false,
-          error: 'Error de CORS: Hostinger API no permite peticiones desde el navegador. Considera usar un proxy o Cloud Function.',
+          error:
+            'Error de CORS: Hostinger API no permite peticiones desde el navegador. Considera usar un proxy o Cloud Function.',
         };
       }
 
@@ -157,7 +161,10 @@ export class HostingerApiService {
         case 502:
         case 503:
         case 530:
-          return { success: false, error: `Error del servidor de Hostinger (${error.status}). El endpoint puede no existir o el token no es válido.` };
+          return {
+            success: false,
+            error: `Error del servidor de Hostinger (${error.status}). El endpoint puede no existir o el token no es válido.`,
+          };
         default:
           // Log error details for debugging
           console.error('HTTP Error Details:', {
@@ -165,7 +172,7 @@ export class HostingerApiService {
             statusText: error.statusText,
             message: error.message,
             error: error.error,
-            url: error.url
+            url: error.url,
           });
           return { success: false, error: `Error HTTP ${error.status}: ${error.message}` };
       }

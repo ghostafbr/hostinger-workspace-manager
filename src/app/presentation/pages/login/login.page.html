@@ -10,7 +10,7 @@
 
       <!-- Error Message -->
       @if (errorMessage()) {
-      <p-message severity="error" [text]="errorMessage()!" />
+        <p-message severity="error" [text]="errorMessage()!" />
       }
 
       <!-- Login Form -->
@@ -29,7 +29,7 @@
             autocomplete="email"
           />
           @if (hasFieldError('email')) {
-          <small class="field-error">{{ getFieldError('email') }}</small>
+            <small class="field-error">{{ getFieldError('email') }}</small>
           }
         </div>
 
@@ -47,7 +47,7 @@
             autocomplete="current-password"
           />
           @if (hasFieldError('password')) {
-          <small class="field-error">{{ getFieldError('password') }}</small>
+            <small class="field-error">{{ getFieldError('password') }}</small>
           }
         </div>
 

@@ -73,124 +73,126 @@ import { ChipModule } from 'primeng/chip';
       </ng-template>
     </p-card>
   `,
-  styles: [`
-    .expiration-card {
-      height: 100%;
-    }
-
-    .card-header-custom {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 1.25rem;
-      background: var(--surface-100);
-    }
-
-    .card-icon {
-      font-size: 2rem;
-      color: var(--primary-color);
-    }
-
-    .card-header-custom h3 {
-      margin: 0;
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--text-color);
-    }
-
-    .expiration-content {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      padding: 0.5rem 0;
-    }
-
-    .expiration-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid var(--surface-200);
-      transition: background-color 0.2s ease;
-    }
-
-    .expiration-row.has-items {
-      background-color: var(--surface-50);
-      padding: 0.75rem 1rem;
-      margin: 0 -1rem;
-      border-radius: 6px;
-    }
-
-    .expiration-row:last-child {
-      border-bottom: none;
-    }
-
-    .period-label {
-      font-weight: 500;
-      color: var(--text-color-secondary);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .period-label i {
-      font-size: 0.9rem;
-      color: var(--primary-color);
-    }
-
-    .total-count {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      justify-content: flex-end;
-      font-size: 1.1rem;
-      color: var(--text-color-secondary);
-      padding-top: 0.5rem;
-      border-top: 2px solid var(--surface-300);
-    }
-
-    .total-count i {
-      color: var(--primary-color);
-    }
-
-    :host ::ng-deep {
-      .chip-critical {
-        background-color: var(--red-600) !important;
-        color: white !important;
-        font-weight: 600;
-        border: 2px solid var(--red-700);
+  styles: [
+    `
+      .expiration-card {
+        height: 100%;
       }
 
-      .chip-warning {
-        background-color: var(--orange-600) !important;
-        color: white !important;
-        font-weight: 600;
-        border: 2px solid var(--orange-700);
+      .card-header-custom {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1.25rem;
+        background: var(--surface-100);
       }
 
-      .chip-info {
-        background-color: var(--blue-600) !important;
-        color: white !important;
-        font-weight: 600;
-        border: 2px solid var(--blue-700);
+      .card-icon {
+        font-size: 2rem;
+        color: var(--primary-color);
       }
 
-      .chip-success {
-        background-color: var(--green-600) !important;
-        color: white !important;
+      .card-header-custom h3 {
+        margin: 0;
+        font-size: 1.25rem;
         font-weight: 600;
-        border: 2px solid var(--green-700);
+        color: var(--text-color);
       }
 
-      .chip-zero {
-        background-color: transparent !important;
-        color: var(--text-color) !important;
-        border: 2px dashed var(--surface-400);
-        font-weight: 600;
-        opacity: 0.8;
+      .expiration-content {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0.5rem 0;
       }
-    }
-  `],
+
+      .expiration-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--surface-200);
+        transition: background-color 0.2s ease;
+      }
+
+      .expiration-row.has-items {
+        background-color: var(--surface-50);
+        padding: 0.75rem 1rem;
+        margin: 0 -1rem;
+        border-radius: 6px;
+      }
+
+      .expiration-row:last-child {
+        border-bottom: none;
+      }
+
+      .period-label {
+        font-weight: 500;
+        color: var(--text-color-secondary);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .period-label i {
+        font-size: 0.9rem;
+        color: var(--primary-color);
+      }
+
+      .total-count {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        justify-content: flex-end;
+        font-size: 1.1rem;
+        color: var(--text-color-secondary);
+        padding-top: 0.5rem;
+        border-top: 2px solid var(--surface-300);
+      }
+
+      .total-count i {
+        color: var(--primary-color);
+      }
+
+      :host ::ng-deep {
+        .chip-critical {
+          background-color: var(--red-600) !important;
+          color: white !important;
+          font-weight: 600;
+          border: 2px solid var(--red-700);
+        }
+
+        .chip-warning {
+          background-color: var(--orange-600) !important;
+          color: white !important;
+          font-weight: 600;
+          border: 2px solid var(--orange-700);
+        }
+
+        .chip-info {
+          background-color: var(--blue-600) !important;
+          color: white !important;
+          font-weight: 600;
+          border: 2px solid var(--blue-700);
+        }
+
+        .chip-success {
+          background-color: var(--green-600) !important;
+          color: white !important;
+          font-weight: 600;
+          border: 2px solid var(--green-700);
+        }
+
+        .chip-zero {
+          background-color: transparent !important;
+          color: var(--text-color) !important;
+          border: 2px dashed var(--surface-400);
+          font-weight: 600;
+          opacity: 0.8;
+        }
+      }
+    `,
+  ],
 })
 export class ExpirationCardComponent {
   readonly title = input.required<string>();

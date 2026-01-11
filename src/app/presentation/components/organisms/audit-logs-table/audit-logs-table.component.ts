@@ -1,10 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  input,
-  output,
-  signal,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output, signal } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
@@ -244,20 +238,20 @@ export class AuditLogsTableComponent {
   readonly selectedStatus = signal<AuditStatus | null>(null);
 
   readonly actionOptions = [
-    { label: 'Crear Workspace', value: AuditAction.workspaceCreate },
-    { label: 'Actualizar Workspace', value: AuditAction.workspaceUpdate },
-    { label: 'Deshabilitar Workspace', value: AuditAction.workspaceDisable },
-    { label: 'Guardar Token', value: AuditAction.tokenSave },
-    { label: 'Probar Conexión', value: AuditAction.tokenTest },
-    { label: 'Sincronización Manual', value: AuditAction.syncManual },
-    { label: 'Sincronización Programada', value: AuditAction.syncScheduled },
-    { label: 'Generar Alertas', value: AuditAction.alertGenerate },
+    { label: 'Crear Workspace', value: AuditAction.WORKSPACE_CREATE },
+    { label: 'Actualizar Workspace', value: AuditAction.WORKSPACE_UPDATE },
+    { label: 'Deshabilitar Workspace', value: AuditAction.WORKSPACE_DISABLE },
+    { label: 'Guardar Token', value: AuditAction.TOKEN_SAVE },
+    { label: 'Probar Conexión', value: AuditAction.TOKEN_TEST },
+    { label: 'Sincronización Manual', value: AuditAction.SYNC_MANUAL },
+    { label: 'Sincronización Programada', value: AuditAction.SYNC_SCHEDULED },
+    { label: 'Generar Alertas', value: AuditAction.ALERT_GENERATE },
   ];
 
   readonly statusOptions = [
-    { label: 'Éxito', value: AuditStatus.success },
-    { label: 'Fallo', value: AuditStatus.failed },
-    { label: 'Parcial', value: AuditStatus.partial },
+    { label: 'Éxito', value: AuditStatus.SUCCESS },
+    { label: 'Fallo', value: AuditStatus.FAILED },
+    { label: 'Parcial', value: AuditStatus.PARTIAL },
   ];
 
   onActionFilter(event: { value: AuditAction | null }): void {

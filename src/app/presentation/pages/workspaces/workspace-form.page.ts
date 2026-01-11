@@ -77,7 +77,9 @@ export default class WorkspaceFormPage implements OnInit {
 
     // En modo creación, el token es obligatorio
     if (!this.isEditMode) {
-      this.workspaceForm.get('token')?.setValidators([Validators.required, Validators.minLength(10)]);
+      this.workspaceForm
+        .get('token')
+        ?.setValidators([Validators.required, Validators.minLength(10)]);
       this.showTokenField = true;
     }
   }
@@ -139,7 +141,7 @@ export default class WorkspaceFormPage implements OnInit {
    */
   async onSubmit(): Promise<void> {
     if (this.workspaceForm.invalid) {
-      Object.keys(this.workspaceForm.controls).forEach(key => {
+      Object.keys(this.workspaceForm.controls).forEach((key) => {
         this.workspaceForm.get(key)?.markAsTouched();
       });
       return;

@@ -1,9 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  input,
-  output,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
@@ -94,10 +89,7 @@ import { SyncRun } from '@app/domain';
           <!-- Duration -->
           <td>
             @if (run.getDuration()) {
-              <p-chip
-                [label]="formatDuration(run.getDuration()!)"
-                styleClass="duration-chip"
-              />
+              <p-chip [label]="formatDuration(run.getDuration()!)" styleClass="duration-chip" />
             } @else {
               <span class="text-muted">En progreso...</span>
             }

@@ -35,21 +35,21 @@ export class AuditLogModel implements AuditLog {
    * Check if this audit log represents a successful action
    */
   isSuccess(): boolean {
-    return this.status === AuditStatus.success;
+    return this.status === AuditStatus.SUCCESS;
   }
 
   /**
    * Check if this audit log represents a failed action
    */
   isFailure(): boolean {
-    return this.status === AuditStatus.failed;
+    return this.status === AuditStatus.FAILED;
   }
 
   /**
    * Check if this audit log represents a partially successful action
    */
   isPartial(): boolean {
-    return this.status === AuditStatus.partial;
+    return this.status === AuditStatus.PARTIAL;
   }
 
   /**
@@ -57,11 +57,11 @@ export class AuditLogModel implements AuditLog {
    */
   getSeverity(): 'success' | 'info' | 'warn' | 'danger' {
     switch (this.status) {
-      case AuditStatus.success:
+      case AuditStatus.SUCCESS:
         return 'success';
-      case AuditStatus.failed:
+      case AuditStatus.FAILED:
         return 'danger';
-      case AuditStatus.partial:
+      case AuditStatus.PARTIAL:
         return 'warn';
       default:
         return 'info';

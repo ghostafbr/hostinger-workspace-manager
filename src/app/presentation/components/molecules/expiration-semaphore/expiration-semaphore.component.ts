@@ -21,66 +21,69 @@ import { CommonModule } from '@angular/common';
       </div>
     </div>
   `,
-  styles: [`
-    .semaphore {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .semaphore-circle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 0.75rem;
-      cursor: help;
-      transition: transform 0.2s ease;
-    }
-
-    .semaphore-circle:hover {
-      transform: scale(1.1);
-    }
-
-    .semaphore-text {
-      color: white;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Status colors */
-    .critical .semaphore-circle {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
-    }
-
-    .warning .semaphore-circle {
-      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
-    }
-
-    .ok .semaphore-circle {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
-    }
-
-    .expired .semaphore-circle {
-      background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
-      box-shadow: 0 2px 8px rgba(127, 29, 29, 0.4);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 1;
+  styles: [
+    `
+      .semaphore {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
-      50% {
-        opacity: 0.7;
+
+      .semaphore-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.75rem;
+        cursor: help;
+        transition: transform 0.2s ease;
       }
-    }
-  `],
+
+      .semaphore-circle:hover {
+        transform: scale(1.1);
+      }
+
+      .semaphore-text {
+        color: white;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Status colors */
+      .critical .semaphore-circle {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+      }
+
+      .warning .semaphore-circle {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+      }
+
+      .ok .semaphore-circle {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+      }
+
+      .expired .semaphore-circle {
+        background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+        box-shadow: 0 2px 8px rgba(127, 29, 29, 0.4);
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+    `,
+  ],
 })
 export class ExpirationSemaphoreComponent {
   readonly expiresAt = input.required<Date | string | unknown>();

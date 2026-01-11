@@ -1,0 +1,42 @@
+name: Deploy to Hostinger
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    name: Build & Publish
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Angular Application
+        run: npm run build
+
+      - name: Prepare Deployment (Copy .htaccess)
+        run: |
+          cp -f deploy/.htaccess dist/hostinger-workspace-manager/browser/.htaccess
+
+      - name: Publish to hostinger-deploy branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: hostinger-deploy
+          publish_dir: dist/hostinger-workspace-manager/browser
+          commit_message: "deploy: ${{ github.sha }}"

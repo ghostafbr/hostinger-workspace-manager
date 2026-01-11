@@ -1,6 +1,6 @@
 /**
  * Audit Log Utility for Cloud Functions
- * 
+ *
  * Provides centralized audit logging for all Cloud Functions.
  * Creates audit_logs documents with standardized structure.
  */
@@ -16,18 +16,18 @@ export enum AuditAction {
   CREATE_WORKSPACE = 'workspace.create',
   UPDATE_WORKSPACE = 'workspace.update',
   DELETE_WORKSPACE = 'workspace.delete',
-  
+
   // Token actions
   TEST_CONNECTION = 'token.test',
   SAVE_TOKEN = 'token.save',
-  
+
   // Sync actions
   SYNC_MANUAL = 'sync.manual',
   SYNC_SCHEDULED = 'sync.scheduled',
-  
+
   // Alert actions
   GENERATE_ALERTS = 'alert.generate',
-  
+
   // DNS actions
   UPDATE_DNS = 'dns.update',
 }
@@ -55,14 +55,14 @@ export interface AuditLogData {
 
 /**
  * Creates an audit log entry in Firestore
- * 
+ *
  * @param data - Audit log data
  * @returns Promise resolving to the created document ID
  */
 export async function createAuditLog(data: AuditLogData): Promise<string> {
   const firestore = getFirestore();
   const auth = getAuth();
-  
+
   try {
     // Get actor email from UID
     let actorEmail = 'system';
@@ -72,7 +72,7 @@ export async function createAuditLog(data: AuditLogData): Promise<string> {
     } catch (error) {
       console.warn(`Failed to get user email for UID ${data.actorUid}:`, error);
     }
-    
+
     // Create audit log document
     const auditLog = {
       action: data.action,
@@ -84,11 +84,11 @@ export async function createAuditLog(data: AuditLogData): Promise<string> {
       error: data.error || null,
       createdAt: new Date(),
     };
-    
+
     const docRef = await firestore.collection('audit_logs').add(auditLog);
-    
+
     console.log(`Audit log created: ${docRef.id} - ${data.action} (${data.status})`);
-    
+
     return docRef.id;
   } catch (error) {
     console.error('Failed to create audit log:', error);
@@ -98,7 +98,7 @@ export async function createAuditLog(data: AuditLogData): Promise<string> {
 
 /**
  * Creates a success audit log
- * 
+ *
  * @param action - Audit action
  * @param actorUid - User UID
  * @param workspaceId - Optional workspace ID
@@ -122,7 +122,7 @@ export async function logSuccess(
 
 /**
  * Creates a failure audit log
- * 
+ *
  * @param action - Audit action
  * @param actorUid - User UID
  * @param error - Error message
@@ -149,7 +149,7 @@ export async function logFailure(
 
 /**
  * Creates a partial success audit log
- * 
+ *
  * @param action - Audit action
  * @param actorUid - User UID
  * @param workspaceId - Optional workspace ID

@@ -1,12 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import {
-  Firestore,
-  collection,
-  getDocs,
-  query,
-  where,
-  Timestamp,
-} from 'firebase/firestore';
+import { Firestore, collection, getDocs, query, where, Timestamp } from 'firebase/firestore';
 import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
 import { AuthService } from './auth.service';
 import { Workspace, WorkspaceStatus, IDomain, ISubscription } from '@app/domain';
@@ -67,7 +60,7 @@ export class DashboardService {
 
       // Get all user's workspaces
       const workspacesSnapshot = await getDocs(
-        query(collection(this.firestore, 'workspaces'), where('userId', '==', userId))
+        query(collection(this.firestore, 'workspaces'), where('userId', '==', userId)),
       );
 
       const workspaces = workspacesSnapshot.docs.map((doc) => {
@@ -195,7 +188,7 @@ export class DashboardService {
     for (let i = 0; i < workspaceIds.length; i += batchSize) {
       const batch = workspaceIds.slice(i, i + batchSize);
       const snapshot = await getDocs(
-        query(collection(this.firestore, 'domains'), where('workspaceId', 'in', batch))
+        query(collection(this.firestore, 'domains'), where('workspaceId', 'in', batch)),
       );
       snapshot.docs.forEach((doc) => allDomains.push(doc.data() as IDomain));
     }
@@ -213,7 +206,7 @@ export class DashboardService {
     for (let i = 0; i < workspaceIds.length; i += batchSize) {
       const batch = workspaceIds.slice(i, i + batchSize);
       const snapshot = await getDocs(
-        query(collection(this.firestore, 'subscriptions'), where('workspaceId', 'in', batch))
+        query(collection(this.firestore, 'subscriptions'), where('workspaceId', 'in', batch)),
       );
       snapshot.docs.forEach((doc) => allSubscriptions.push(doc.data() as ISubscription));
     }

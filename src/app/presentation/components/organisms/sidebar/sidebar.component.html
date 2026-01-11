@@ -33,10 +33,7 @@
       }
       <ul class="menu-list">
         @for (item of globalMenuItems; track item.route) {
-          <li
-            class="menu-item"
-            [class.active]="isActiveRoute(item.route)"
-          >
+          <li class="menu-item" [class.active]="isActiveRoute(item.route)">
             <a
               class="menu-link"
               [routerLink]="item.route"

@@ -1,80 +1,379 @@
 rules_version = '2';
 
 /**
- * Firestore Security Rules
+ * Firestore Security Rules - Hostinger Workspace Manager
  *
- * IMPORTANT: This is for a PERSONAL project with a SINGLE OWNER
- * Replace 'YOUR_UID_HERE' with your actual Firebase Auth UID
+ * Architecture:
+ * - Single owner application (personal use)
+ * - Owner UID hardcoded for simplicity
+ * - Cloud Functions bypass rules using Admin SDK
+ * - Data validation on all writes
+ * - Immutable fields protected
  *
- * To get your UID:
- * 1. Create a user in Firebase Authentication
- * 2. Go to Firebase Console > Authentication > Users
- * 3. Copy the UID of your user
- * 4. Replace 'YOUR_UID_HERE' below with that UID
+ * Security Principles:
+ * 1. Deny by default (fail-closed)
+ * 2. Validate all incoming data
+ * 3. Protect immutable fields from updates
+ * 4. Prevent privilege escalation
+ * 5. Limit query scope to workspace context
+ *
+ * Last updated: 2026-01-09
  */
 
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Helper function to check if user is the owner
+    // ============================================================
+    // HELPER FUNCTIONS
+    // ============================================================
+
+    /**
+     * Check if the user is authenticated and is the owner
+     * Owner UID: HnIKbU4OUoWQurj03y8pRrgxeMl2
+     */
     function isOwner() {
-      return request.auth != null && request.auth.uid == 'HnIKbU4OUoWQurj03y8pRrgxeMl2';
+      return request.auth != null &&
+             request.auth.uid == 'HnIKbU4OUoWQurj03y8pRrgxeMl2';
     }
 
-    // Helper function to validate workspace data
-    function isValidWorkspace() {
-      return request.resource.data.keys().hasAll(['name', 'status', 'createdAt']) &&
-             request.resource.data.name is string &&
-             request.resource.data.name.size() > 0 &&
-             request.resource.data.status is string;
+    /**
+     * Check if this is a create operation
+     */
+    function isCreating() {
+      return request.method == 'create';
     }
 
-    // Workspaces collection - Only owner can read/write
+    /**
+     * Check if this is an update operation
+     */
+    function isUpdating() {
+      return request.method == 'update';
+    }
+
+    /**
+     * Check if this is a delete operation
+     */
+    function isDeleting() {
+      return request.method == 'delete';
+    }
+
+    /**
+     * Check if a field is being modified
+     */
+    function isFieldModified(field) {
+      return isUpdating() &&
+             request.resource.data[field] != resource.data[field];
+    }
+
+    /**
+     * Validate that immutable fields are not changed
+     */
+    function immutableFieldsValid(fields) {
+      return !isUpdating() ||
+             fields.toSet().intersection(
+               request.resource.data.diff(resource.data).affectedKeys()
+             ).size() == 0;
+    }
+
+    /**
+     * Validate timestamp field
+     */
+    function isValidTimestamp(field) {
+      return request.resource.data[field] is timestamp;
+    }
+
+    /**
+     * Validate string field (non-empty)
+     */
+    function isValidString(field) {
+      return request.resource.data[field] is string &&
+             request.resource.data[field].size() > 0;
+    }
+
+    /**
+     * Validate optional string field
+     */
+    function isValidOptionalString(field) {
+      return !request.resource.data.keys().hasAny([field]) ||
+             (request.resource.data[field] is string &&
+              request.resource.data[field].size() > 0);
+    }
+
+    /**
+     * Validate boolean field
+     */
+    function isValidBoolean(field) {
+      return request.resource.data[field] is bool;
+    }
+
+    /**
+     * Validate number field
+     */
+    function isValidNumber(field) {
+      return request.resource.data[field] is number;
+    }
+
+    // ============================================================
+    // WORKSPACES COLLECTION
+    // ============================================================
+
     match /workspaces/{workspaceId} {
-      allow read, write: if isOwner();
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create: Owner only, with valid data
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'name', 'status', 'createdAt', 'disabled'
+        ]) &&
+        isValidString('name') &&
+        request.resource.data.name.size() <= 100 &&
+        request.resource.data.status in ['ACTIVE', 'REQUIRES_ATTENTION', 'INACTIVE'] &&
+        isValidBoolean('disabled') &&
+        isValidTimestamp('createdAt') &&
+        // Optional fields validation
+        isValidOptionalString('encryptedToken') &&
+        isValidOptionalString('lastError');
+
+      // Update: Owner only, immutable fields protected
+      allow update: if isOwner() &&
+        immutableFieldsValid(['createdAt', 'id']) &&
+        // Validate updated fields
+        (!isFieldModified('name') ||
+         (isValidString('name') && request.resource.data.name.size() <= 100)) &&
+        (!isFieldModified('status') ||
+         request.resource.data.status in ['ACTIVE', 'REQUIRES_ATTENTION', 'INACTIVE']) &&
+        (!isFieldModified('disabled') || isValidBoolean('disabled'));
+
+      // Delete: Owner only
+      allow delete: if isOwner();
     }
 
-    // Domains collection - Only owner can read/write
+    // ============================================================
+    // DOMAINS COLLECTION
+    // ============================================================
+
     match /domains/{domainId} {
-      allow read, write: if isOwner();
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create: Owner only (Cloud Functions create these)
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'workspaceId', 'domainName', 'expiresAt', 'syncedAt'
+        ]) &&
+        isValidString('workspaceId') &&
+        isValidString('domainName') &&
+        isValidTimestamp('expiresAt') &&
+        isValidTimestamp('syncedAt');
+
+      // Update: Owner only, workspaceId immutable
+      allow update: if isOwner() &&
+        immutableFieldsValid(['workspaceId', 'domainName']);
+
+      // Delete: Owner only
+      allow delete: if isOwner();
     }
 
-    // Subscriptions collection - Only owner can read/write
+    // ============================================================
+    // SUBSCRIPTIONS COLLECTION
+    // ============================================================
+
     match /subscriptions/{subscriptionId} {
-      allow read, write: if isOwner();
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create: Owner only (Cloud Functions create these)
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'workspaceId', 'subscriptionId', 'productName', 'expiresAt', 'syncedAt'
+        ]) &&
+        isValidString('workspaceId') &&
+        isValidString('subscriptionId') &&
+        isValidString('productName') &&
+        isValidTimestamp('expiresAt') &&
+        isValidTimestamp('syncedAt');
+
+      // Update: Owner only, workspaceId and subscriptionId immutable
+      allow update: if isOwner() &&
+        immutableFieldsValid(['workspaceId', 'subscriptionId']);
+
+      // Delete: Owner only
+      allow delete: if isOwner();
     }
 
-    // Sync runs collection - Only owner can read/write
-    match /sync_runs/{syncRunId} {
-      allow read, write: if isOwner();
-    }
+    // ============================================================
+    // ALERT_RULES COLLECTION
+    // ============================================================
 
-    // Alert rules collection - Only owner can read/write
     match /alert_rules/{alertRuleId} {
-      allow read, write: if isOwner();
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create: Owner only
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'workspaceId', 'daysBefore', 'channel', 'enabled', 'createdAt'
+        ]) &&
+        isValidString('workspaceId') &&
+        isValidNumber('daysBefore') &&
+        request.resource.data.daysBefore > 0 &&
+        request.resource.data.channel in ['EMAIL', 'SLACK', 'WEBHOOK', 'LOG_ONLY'] &&
+        isValidBoolean('enabled') &&
+        isValidTimestamp('createdAt');
+
+      // Update: Owner only, immutable fields protected
+      allow update: if isOwner() &&
+        immutableFieldsValid(['workspaceId', 'createdAt']);
+
+      // Delete: Owner only
+      allow delete: if isOwner();
     }
 
-    // Alert logs collection - Only owner can read/write
+    // ============================================================
+    // ALERT_LOGS COLLECTION
+    // ============================================================
+
     match /alert_logs/{alertLogId} {
-      allow read, write: if isOwner();
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create: Owner only (Cloud Functions create these)
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'workspaceId', 'entityType', 'entityId', 'daysBefore', 'createdAt'
+        ]) &&
+        isValidString('workspaceId') &&
+        request.resource.data.entityType in ['domain', 'subscription'] &&
+        isValidString('entityId') &&
+        isValidNumber('daysBefore') &&
+        isValidTimestamp('createdAt');
+
+      // Update: Owner only (for marking as processed)
+      allow update: if isOwner() &&
+        immutableFieldsValid(['workspaceId', 'entityType', 'entityId', 'daysBefore', 'createdAt']);
+
+      // Delete: Owner only
+      allow delete: if isOwner();
     }
 
-    // Audit logs collection - Only owner can read/write
+    // ============================================================
+    // AUDIT_LOGS COLLECTION
+    // ============================================================
+
     match /audit_logs/{auditLogId} {
-      allow read, write: if isOwner();
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create: Owner only (Cloud Functions create these)
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'action', 'actorUid', 'actorEmail', 'status', 'createdAt'
+        ]) &&
+        isValidString('action') &&
+        request.resource.data.action.matches('^(workspace|token|sync|alert|dns)\\..*$') &&
+        isValidString('actorUid') &&
+        isValidString('actorEmail') &&
+        request.resource.data.status in ['success', 'failed', 'partial'] &&
+        isValidTimestamp('createdAt') &&
+        // Optional workspaceId validation
+        isValidOptionalString('workspaceId');
+
+      // Update: Not allowed (audit logs are immutable)
+      allow update: if false;
+
+      // Delete: Owner only (for cleanup/GDPR)
+      allow delete: if isOwner();
     }
 
-    // DNS snapshots collection (future) - Only owner can read/write
+    // ============================================================
+    // SYNC_RUNS COLLECTION
+    // ============================================================
+
+    match /sync_runs/{syncRunId} {
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create: Owner only (Cloud Functions create these)
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'workspaceId', 'startAt', 'status'
+        ]) &&
+        isValidString('workspaceId') &&
+        isValidTimestamp('startAt') &&
+        request.resource.data.status in ['running', 'completed', 'failed', 'partial'];
+
+      // Update: Owner only (Cloud Functions update status/metrics)
+      allow update: if isOwner() &&
+        immutableFieldsValid(['workspaceId', 'startAt']) &&
+        // Status can only transition forward
+        (!isFieldModified('status') ||
+         request.resource.data.status in ['completed', 'failed', 'partial']);
+
+      // Delete: Owner only
+      allow delete: if isOwner();
+    }
+
+    // ============================================================
+    // DNS SNAPSHOTS COLLECTION (Future)
+    // ============================================================
+
     match /dns_snapshots/{snapshotId} {
-      allow read, write: if isOwner();
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create: Owner only
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'workspaceId', 'domainId', 'recordType', 'createdAt'
+        ]) &&
+        isValidString('workspaceId') &&
+        isValidString('domainId') &&
+        request.resource.data.recordType in ['A', 'AAAA', 'CNAME', 'MX', 'TXT', 'NS', 'SOA'] &&
+        isValidTimestamp('createdAt');
+
+      // Update: Owner only, immutable fields protected
+      allow update: if isOwner() &&
+        immutableFieldsValid(['workspaceId', 'domainId', 'createdAt']);
+
+      // Delete: Owner only
+      allow delete: if isOwner();
     }
 
-    // DNS validations collection (future) - Only owner can read/write
+    // ============================================================
+    // DNS VALIDATIONS COLLECTION (Future)
+    // ============================================================
+
     match /dns_validations/{validationId} {
-      allow read, write: if isOwner();
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create: Owner only
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'workspaceId', 'domainId', 'status', 'createdAt'
+        ]) &&
+        isValidString('workspaceId') &&
+        isValidString('domainId') &&
+        request.resource.data.status in ['pending', 'valid', 'invalid', 'error'] &&
+        isValidTimestamp('createdAt');
+
+      // Update: Owner only
+      allow update: if isOwner() &&
+        immutableFieldsValid(['workspaceId', 'domainId', 'createdAt']);
+
+      // Delete: Owner only
+      allow delete: if isOwner();
     }
 
-    // Deny all other access
+    // ============================================================
+    // DEFAULT DENY RULE
+    // ============================================================
+
+    /**
+     * Deny all access to any other collection not explicitly defined
+     * This prevents accidental data leakage
+     */
     match /{document=**} {
       allow read, write: if false;
     }

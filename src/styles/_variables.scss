@@ -1,13 +1,13 @@
 // Breakpoints (Mobile-first approach)
-$breakpoint-xs: 375px;    // Small phones
-$breakpoint-sm: 576px;    // Phones
-$breakpoint-md: 768px;    // Tablets
-$breakpoint-lg: 992px;    // Small desktops
-$breakpoint-xl: 1200px;   // Desktops
-$breakpoint-xxl: 1400px;  // Large desktops
+$breakpoint-xs: 375px; // Small phones
+$breakpoint-sm: 576px; // Phones
+$breakpoint-md: 768px; // Tablets
+$breakpoint-lg: 992px; // Small desktops
+$breakpoint-xl: 1200px; // Desktops
+$breakpoint-xxl: 1400px; // Large desktops
 $breakpoint-xxxl: 1920px; // Full HD
-$breakpoint-2k: 2560px;   // 2K monitors
-$breakpoint-4k: 3840px;   // 4K monitors
+$breakpoint-2k: 2560px; // 2K monitors
+$breakpoint-4k: 3840px; // 4K monitors
 
 // Media query mixins - Max Width (for mobile-first)
 @mixin media-max-xs {

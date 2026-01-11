@@ -1,10 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  input,
-  output,
-  signal,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output, signal } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
@@ -54,10 +48,7 @@ import { AlertLogModel, EntityType } from '@app/domain';
         <div class="table-header">
           <div class="header-left">
             <h2><i class="pi pi-bell"></i> Alertas</h2>
-            <p-chip
-              [label]="alerts().length.toString()"
-              styleClass="ml-2"
-            />
+            <p-chip [label]="alerts().length.toString()" styleClass="ml-2" />
           </div>
           <div class="header-right">
             <!-- Search -->
@@ -195,71 +186,73 @@ import { AlertLogModel, EntityType } from '@app/domain';
       </ng-template>
     </p-table>
   `,
-  styles: [`
-    .table-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem;
-      background: var(--surface-100);
-      border-radius: 8px;
-      margin-bottom: 1rem;
-    }
+  styles: [
+    `
+      .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background: var(--surface-100);
+        border-radius: 8px;
+        margin-bottom: 1rem;
+      }
 
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-
-      h2 {
-        margin: 0;
-        font-size: 1.5rem;
+      .header-left {
         display: flex;
         align-items: center;
         gap: 0.5rem;
 
-        i {
-          color: var(--primary-color);
+        h2 {
+          margin: 0;
+          font-size: 1.5rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          i {
+            color: var(--primary-color);
+          }
         }
       }
-    }
 
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    :host ::ng-deep {
-      .chip-critical {
-        background-color: var(--red-600) !important;
-        color: white !important;
-        font-weight: 600;
-        border: 2px solid var(--red-700);
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
       }
 
-      .chip-warning {
-        background-color: var(--orange-600) !important;
-        color: white !important;
-        font-weight: 600;
-        border: 2px solid var(--orange-700);
-      }
+      :host ::ng-deep {
+        .chip-critical {
+          background-color: var(--red-600) !important;
+          color: white !important;
+          font-weight: 600;
+          border: 2px solid var(--red-700);
+        }
 
-      .chip-info {
-        background-color: var(--blue-600) !important;
-        color: white !important;
-        font-weight: 600;
-        border: 2px solid var(--blue-700);
-      }
+        .chip-warning {
+          background-color: var(--orange-600) !important;
+          color: white !important;
+          font-weight: 600;
+          border: 2px solid var(--orange-700);
+        }
 
-      .chip-success {
-        background-color: var(--green-600) !important;
-        color: white !important;
-        font-weight: 600;
-        border: 2px solid var(--green-700);
+        .chip-info {
+          background-color: var(--blue-600) !important;
+          color: white !important;
+          font-weight: 600;
+          border: 2px solid var(--blue-700);
+        }
+
+        .chip-success {
+          background-color: var(--green-600) !important;
+          color: white !important;
+          font-weight: 600;
+          border: 2px solid var(--green-700);
+        }
       }
-    }
-  `],
+    `,
+  ],
 })
 export class AlertsTableComponent {
   readonly alerts = input.required<AlertLogModel[]>();

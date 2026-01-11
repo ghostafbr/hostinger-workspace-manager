@@ -2,12 +2,7 @@
   <p-toast />
 
   <div class="mb-4">
-    <p-button
-      icon="pi pi-arrow-left"
-      label="Volver"
-      [text]="true"
-      (onClick)="onCancel()"
-    />
+    <p-button icon="pi pi-arrow-left" label="Volver" [text]="true" (onClick)="onCancel()" />
   </div>
 
   <p-card>
@@ -42,9 +37,7 @@
 
       <!-- Description Field -->
       <div class="field mb-4">
-        <label for="description" class="block mb-2 font-semibold">
-          Descripción
-        </label>
+        <label for="description" class="block mb-2 font-semibold"> Descripción </label>
         <textarea
           id="description"
           pTextarea

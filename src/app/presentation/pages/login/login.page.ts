@@ -1,9 +1,5 @@
 import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/core';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/application/services/auth.service';
 import { FirebaseError } from 'firebase/app';
@@ -100,27 +96,19 @@ export default class LoginPage {
           );
           break;
         case 'auth/user-disabled':
-          this.errorMessage.set(
-            'Esta cuenta ha sido deshabilitada. Contacta al administrador.',
-          );
+          this.errorMessage.set('Esta cuenta ha sido deshabilitada. Contacta al administrador.');
           break;
         case 'auth/too-many-requests':
-          this.errorMessage.set(
-            'Demasiados intentos fallidos. Por favor, intenta más tarde.',
-          );
+          this.errorMessage.set('Demasiados intentos fallidos. Por favor, intenta más tarde.');
           break;
         case 'auth/network-request-failed':
-          this.errorMessage.set(
-            'Error de conexión. Verifica tu conexión a internet.',
-          );
+          this.errorMessage.set('Error de conexión. Verifica tu conexión a internet.');
           break;
         case 'auth/invalid-email':
           this.errorMessage.set('El formato del email no es válido.');
           break;
         default:
-          this.errorMessage.set(
-            'Error al iniciar sesión. Por favor, intenta de nuevo.',
-          );
+          this.errorMessage.set('Error al iniciar sesión. Por favor, intenta de nuevo.');
           console.error('Auth error:', error);
       }
     } else {

@@ -1,8 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
-import {
-  SyncRun as SyncRunInterface,
-  SyncError,
-} from '../interfaces/sync-run.interface';
+import { SyncRun as SyncRunInterface, SyncError } from '../interfaces/sync-run.interface';
 import { SyncRunStatus } from '../enums/sync-run-status.enum';
 
 /**

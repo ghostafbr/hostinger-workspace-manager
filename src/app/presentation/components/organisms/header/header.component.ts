@@ -81,7 +81,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   selectedWorkspaceId: string | null = null;
 
   readonly workspaceOptions = computed<WorkspaceOption[]>(() => {
-    return this.workspaces().map(ws => ({
+    return this.workspaces().map((ws) => ({
       label: ws.name,
       value: ws.id,
       status: ws.status,
@@ -163,7 +163,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onWorkspaceChange(event: { value: string }): void {
     const workspaceId = event.value;
-    const workspace = this.workspaces().find(ws => ws.id === workspaceId);
+    const workspace = this.workspaces().find((ws) => ws.id === workspaceId);
 
     if (workspace) {
       this.workspaceContext.selectWorkspace(workspace);
@@ -195,7 +195,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.messageService.add({
         severity: 'error',
         summary: 'Test fallido',
-        detail: error instanceof Error ? error.message : 'No se pudo conectar con la API de Hostinger',
+        detail:
+          error instanceof Error ? error.message : 'No se pudo conectar con la API de Hostinger',
       });
     } finally {
       this.isTestingConnection.set(false);
@@ -240,7 +241,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (!currentWorkspace) return;
 
     // Find the updated workspace in the list
-    const updatedWorkspace = this.workspaces().find(ws => ws.id === currentWorkspace.id);
+    const updatedWorkspace = this.workspaces().find((ws) => ws.id === currentWorkspace.id);
     if (updatedWorkspace) {
       this.workspaceContext.selectWorkspace(updatedWorkspace);
     }

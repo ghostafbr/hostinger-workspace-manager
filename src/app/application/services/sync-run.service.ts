@@ -29,10 +29,7 @@ export class SyncRunService {
   /**
    * Get sync runs for a workspace
    */
-  async getSyncRunsByWorkspace(
-    workspaceId: string,
-    limitCount = 50
-  ): Promise<SyncRun[]> {
+  async getSyncRunsByWorkspace(workspaceId: string, limitCount = 50): Promise<SyncRun[]> {
     this.isLoading.set(true);
     this.error.set(null);
 
@@ -42,7 +39,7 @@ export class SyncRunService {
         syncRunsRef,
         where('workspaceId', '==', workspaceId),
         orderBy('startedAt', 'desc'),
-        limit(limitCount)
+        limit(limitCount),
       );
 
       const snapshot = await getDocs(q);
@@ -55,8 +52,7 @@ export class SyncRunService {
       this.syncRuns.set(runs);
       return runs;
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Error al cargar sync runs';
+      const errorMessage = error instanceof Error ? error.message : 'Error al cargar sync runs';
       this.error.set(errorMessage);
       console.error('Error fetching sync runs:', error);
       throw error;
@@ -74,11 +70,7 @@ export class SyncRunService {
 
     try {
       const syncRunsRef = collection(this.firestore, 'sync_runs');
-      const q = query(
-        syncRunsRef,
-        orderBy('startedAt', 'desc'),
-        limit(limitCount)
-      );
+      const q = query(syncRunsRef, orderBy('startedAt', 'desc'), limit(limitCount));
 
       const snapshot = await getDocs(q);
 
@@ -90,8 +82,7 @@ export class SyncRunService {
       this.syncRuns.set(runs);
       return runs;
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Error al cargar sync runs';
+      const errorMessage = error instanceof Error ? error.message : 'Error al cargar sync runs';
       this.error.set(errorMessage);
       console.error('Error fetching sync runs:', error);
       throw error;
@@ -103,10 +94,7 @@ export class SyncRunService {
   /**
    * Get failed sync runs
    */
-  async getFailedSyncRuns(
-    workspaceId?: string,
-    limitCount = 50
-  ): Promise<SyncRun[]> {
+  async getFailedSyncRuns(workspaceId?: string, limitCount = 50): Promise<SyncRun[]> {
     this.isLoading.set(true);
     this.error.set(null);
 
@@ -162,18 +150,11 @@ export class SyncRunService {
       successfulRuns: runs.filter((r) => r.isSuccess()).length,
       failedRuns: runs.filter((r) => r.isFailed()).length,
       partialRuns: runs.filter((r) => r.isPartialSuccess && r.isPartialSuccess()).length,
-      totalDomains: runs.reduce(
-        (sum, r) => sum + (r.domainsProcessed || 0),
-        0
-      ),
-      totalSubscriptions: runs.reduce(
-        (sum, r) => sum + (r.subscriptionsProcessed || 0),
-        0
-      ),
+      totalDomains: runs.reduce((sum, r) => sum + (r.domainsProcessed || 0), 0),
+      totalSubscriptions: runs.reduce((sum, r) => sum + (r.subscriptionsProcessed || 0), 0),
       averageDuration:
         runs.length > 0
-          ? runs.reduce((sum, r) => sum + (r.getDurationMs() || 0), 0) /
-            runs.length
+          ? runs.reduce((sum, r) => sum + (r.getDurationMs() || 0), 0) / runs.length
           : 0,
       lastSyncDate: runs.length > 0 ? runs[0].startAt.toDate() : null,
     };

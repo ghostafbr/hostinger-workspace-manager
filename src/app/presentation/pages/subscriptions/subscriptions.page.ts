@@ -94,7 +94,8 @@ export default class SubscriptionsPage implements OnInit {
         this.messageService.add({
           severity: 'info',
           summary: 'Sin suscripciones',
-          detail: 'No se encontraron suscripciones para este workspace. Asegúrate de haber ejecutado la sincronización.',
+          detail:
+            'No se encontraron suscripciones para este workspace. Asegúrate de haber ejecutado la sincronización.',
           life: 5000,
         });
       }
@@ -105,7 +106,8 @@ export default class SubscriptionsPage implements OnInit {
 
       // Check for index error
       if (error instanceof Error && error.message.includes('index')) {
-        errorDetail = 'El índice de Firestore está construyéndose. Espera unos minutos y recarga la página.';
+        errorDetail =
+          'El índice de Firestore está construyéndose. Espera unos minutos y recarga la página.';
       }
 
       this.messageService.add({

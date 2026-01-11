@@ -124,7 +124,10 @@
             </div>
           } @else {
             <div class="no-data">
-              <i class="pi pi-inbox" style="font-size: 3rem; color: var(--text-color-secondary)"></i>
+              <i
+                class="pi pi-inbox"
+                style="font-size: 3rem; color: var(--text-color-secondary)"
+              ></i>
               <p>No se encontraron dominios</p>
               @if (searchText() || selectedDaysFilter() !== null) {
                 <p class="hint">Intenta cambiar los filtros de búsqueda</p>

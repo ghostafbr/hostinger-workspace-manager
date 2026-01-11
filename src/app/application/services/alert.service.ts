@@ -35,7 +35,7 @@ export class AlertService {
       entityType?: EntityType;
       daysBefore?: number;
       processed?: boolean;
-    }
+    },
   ): Promise<AlertLogModel[]> {
     this.isLoading.set(true);
     this.error.set(null);
@@ -69,8 +69,7 @@ export class AlertService {
       this.alerts.set(alertsList);
       return alertsList;
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Error al cargar alertas';
+      const errorMessage = error instanceof Error ? error.message : 'Error al cargar alertas';
       this.error.set(errorMessage);
       console.error('Error fetching alerts:', error);
       throw error;
@@ -85,7 +84,7 @@ export class AlertService {
   async getAlertsByEntity(
     workspaceId: string,
     entityId: string,
-    entityType: EntityType
+    entityType: EntityType,
   ): Promise<AlertLogModel[]> {
     this.isLoading.set(true);
     this.error.set(null);
@@ -97,7 +96,7 @@ export class AlertService {
         where('workspaceId', '==', workspaceId),
         where('entityId', '==', entityId),
         where('entityType', '==', entityType),
-        orderBy('createdAt', 'desc')
+        orderBy('createdAt', 'desc'),
       );
 
       const snapshot = await getDocs(q);
@@ -126,9 +125,7 @@ export class AlertService {
     this.error.set(null);
 
     try {
-      const sevenDaysAgo = Timestamp.fromDate(
-        new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-      );
+      const sevenDaysAgo = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
 
       const alertsRef = collection(this.firestore, 'alert_logs');
       const q = query(
@@ -136,7 +133,7 @@ export class AlertService {
         where('workspaceId', '==', workspaceId),
         where('daysBefore', '<=', 7),
         where('createdAt', '>=', sevenDaysAgo),
-        orderBy('createdAt', 'desc')
+        orderBy('createdAt', 'desc'),
       );
 
       const snapshot = await getDocs(q);
@@ -176,8 +173,7 @@ export class AlertService {
       infoAlerts: alerts.filter((a) => a.isInfo()).length,
       byEntityType: {
         domains: alerts.filter((a) => a.entityType === EntityType.DOMAIN).length,
-        subscriptions: alerts.filter((a) => a.entityType === EntityType.SUBSCRIPTION)
-          .length,
+        subscriptions: alerts.filter((a) => a.entityType === EntityType.SUBSCRIPTION).length,
       },
     };
 

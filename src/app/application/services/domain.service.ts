@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import {
   Firestore,
   collection,
@@ -55,9 +55,7 @@ export class DomainService {
       this.isLoading.set(true);
       this.error.set(null);
 
-      const constraints: QueryConstraint[] = [
-        where('workspaceId', '==', filters.workspaceId),
-      ];
+      const constraints: QueryConstraint[] = [where('workspaceId', '==', filters.workspaceId)];
 
       // Date filter: domains expiring in < X days
       if (filters.daysToExpire !== undefined) {
@@ -127,7 +125,7 @@ export class DomainService {
       const domainsQuery = query(
         collection(this.firestore, 'domains'),
         where('workspaceId', '==', workspaceId),
-        orderBy('expiresAt', 'asc')
+        orderBy('expiresAt', 'asc'),
       );
 
       const snapshot = await getDocs(domainsQuery);

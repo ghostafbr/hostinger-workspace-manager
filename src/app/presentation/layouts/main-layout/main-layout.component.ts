@@ -13,14 +13,9 @@ import { FooterComponent } from '../../components/organisms/footer/footer.compon
   selector: 'app-main-layout',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    RouterOutlet,
-    SidebarComponent,
-    HeaderComponent,
-    FooterComponent,
-  ],
+  imports: [RouterOutlet, SidebarComponent, HeaderComponent, FooterComponent],
   host: {
-    '(window:resize)': 'onWindowResize()'
+    '(window:resize)': 'onWindowResize()',
   },
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',

@@ -1,13 +1,18 @@
-# HostingerWorkspaceManager
+# Hostinger Workspace Manager
+
+![CI Status](https://github.com/[usuario]/hostinger-workspace-manager/workflows/CI/badge.svg)
+![Node Version](https://img.shields.io/badge/node-22.x-brightgreen)
+![Angular Version](https://img.shields.io/badge/angular-21.x-red)
+![License](https://img.shields.io/badge/license-MIT-blue)
 
 Aplicación Angular 21 para gestión centralizada de múltiples cuentas Hostinger con sincronización automática de dominios y suscripciones.
 
 ## 🚀 Quick Start
 
 ### Prerrequisitos
-- Node.js 20+ 
+- Node.js 22+ 
 - Angular CLI 21+
-- Cuenta Firebase configurada
+- Firebase project configurado
 - (Opcional) Cuenta Hostinger con API token
 
 ### Desarrollo Local
@@ -29,13 +34,67 @@ npm run build
 firebase deploy --only functions
 ```
 
+## 🏗️ Arquitectura
+
+Este proyecto sigue **Clean Architecture** + **Atomic Design**:
+
+```
+Presentation → Application → Domain ← Infrastructure
+```
+
+- **Domain:** Entidades, interfaces y lógica de negocio pura
+- **Application:** Servicios, guards, interceptors
+- **Infrastructure:** Adaptadores (Firebase, Hostinger API)
+- **Presentation:** UI con Atomic Design (Atoms → Molecules → Organisms → Pages)
+
+Ver [ARCHITECTURE.md](ARCHITECTURE.md) para detalles completos.
+
+## 🛠️ Tech Stack
+
+- **Framework:** Angular 21 (Standalone Components)
+- **UI Library:** PrimeNG (Lara theme)
+- **Backend:** Firebase (Firestore + Authentication)
+- **Cloud Functions:** Node.js con TypeScript
+- **State Management:** Angular Signals
+- **Styling:** SCSS
+- **Linting:** ESLint + Prettier
+- **Testing:** Vitest
+- **CI/CD:** GitHub Actions
+- **Hosting:** Hostinger
+
+## 📁 Estructura del Proyecto
+
+```
+src/app/
+├── domain/          # Entidades, interfaces, enums (puro TypeScript)
+├── application/     # Servicios, guards, interceptors
+├── infrastructure/  # Adaptadores (Firebase, Hostinger API)
+└── presentation/    # UI Components (Atomic Design)
+    ├── components/
+    │   ├── atoms/
+    │   ├── molecules/
+    │   └── organisms/
+    ├── layouts/
+    └── pages/
+```
+
 ## 📚 Documentación
 
+### Guías Principales
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** - Clean Architecture + Atomic Design
 - **[DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md)** - Ejemplos de código detallados
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - CI/CD y despliegue en Hostinger
+- **[CONTRIBUTING.md](.github/CONTRIBUTING.md)** - Guía de contribución
+
+### Documentación Técnica
 - **[FIREBASE_SETUP.md](FIREBASE_SETUP.md)** - Configuración Firebase paso a paso
-- **[CLOUD_FUNCTIONS.md](CLOUD_FUNCTIONS.md)** - Cloud Functions sin emulador (producción directa)
-- **[SYNC_AUDIT_LOGS.md](SYNC_AUDIT_LOGS.md)** - Logs, métricas y auditoría de sincronización
+- **[CLOUD_FUNCTIONS.md](CLOUD_FUNCTIONS.md)** - Cloud Functions documentación
+- **[SYNC_AUDIT_LOGS.md](SYNC_AUDIT_LOGS.md)** - Sistema de auditoría
+- **[SECURITY_RULES.md](SECURITY_RULES.md)** - Reglas de seguridad Firestore
+
+### Issues de Desarrollo
+- **[Issue #14](.github/ISSUE_14_CICD.md)** - CI/CD Setup
+- **[Issue #26](.github/ISSUE_26_DOCUMENTATION.md)** - Documentación
 
 ## ✨ Funcionalidades
 
@@ -97,58 +156,140 @@ Consultar `sync_runs` en Firestore para métricas detalladas:
 
 Ver [SYNC_AUDIT_LOGS.md](SYNC_AUDIT_LOGS.md) para detalles completos.
 
-## Development server
+## 🚢 CI/CD y Despliegue
 
-To start a local development server, run:
+Este proyecto usa **GitHub Actions** para CI/CD y se despliega en **Hostinger**.
 
+### Workflows Automatizados
+
+#### CI (Continuous Integration)
+Se ejecuta en cada push y PR:
 ```bash
-ng serve
+✓ Lint (ESLint)
+✓ Format check (Prettier)
+✓ Build (producción)
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+#### Deploy (Continuous Deployment)
+Se ejecuta en push a `main`:
+```bash
+✓ Build de producción
+✓ Copia .htaccess
+✓ Publica a branch hostinger-deploy
+✓ Hostinger sincroniza automáticamente
+```
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Comandos de Desarrollo
 
 ```bash
+# Desarrollo
+npm run start              # Dev server → http://localhost:4200
+
+# Calidad de código
+npm run lint               # Ejecutar linter
+npm run lint:fix           # Auto-fix linting
+npm run format             # Formatear código
+npm run format:check       # Verificar formato
+
+# Build
+npm run build              # Build de producción
+npm run watch              # Build con watch mode
+
+# Testing
+npm run test               # Ejecutar tests con Vitest
+```
+
+### Despliegue Manual
+
+```bash
+# Build local
+npm run build
+
+# Los archivos están en:
+# dist/hostinger-workspace-manager/browser/
+
+# El deploy automático se hace via GitHub Actions
+# pero puedes forzar un deploy con:
+git push origin main
+```
+
+Ver [DEPLOYMENT.md](DEPLOYMENT.md) para configuración completa.
+
+## 🔧 Code Scaffolding
+
+Angular CLI incluye herramientas de generación de código:
+
+```bash
+# Generar componente
 ng generate component component-name
-```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
+# Ver todas las opciones
 ng generate --help
 ```
 
-## Building
+## 🧪 Testing
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Ejecutar tests unitarios con Vitest:
 
 ```bash
-ng test
+npm run test
 ```
 
-## Running end-to-end tests
+## 🤝 Contribuir
 
-For end-to-end (e2e) testing, run:
+Ver [CONTRIBUTING.md](.github/CONTRIBUTING.md) para guías de contribución.
 
-```bash
-ng e2e
+### Branch Strategy
+
+- `main` - Producción (protegida)
+- `develop` - Desarrollo (futuro)
+- `feature/*` - Nuevas funcionalidades
+- `fix/*` - Bug fixes
+
+### Commit Messages
+
+Usar formato convencional:
+```
+feat: add new feature
+fix: correct bug
+docs: update documentation
+style: format code
+refactor: refactor code
+test: add tests
+chore: update dependencies
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## 📄 Licencia
 
-## Additional Resources
+Este proyecto es privado y propietario.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 📞 Soporte
+
+- **Issues:** Reportar bugs o sugerencias en GitHub Issues
+- **Documentación:** Ver carpeta `/docs` para más guías
+- **Cloud Functions:** Ver logs en Firebase Console
+
+## 🎯 Roadmap
+
+Ver [Issues](../../issues) en GitHub para el roadmap completo.
+
+### MVP Completado
+- ✅ #1 + #2 - Dashboards
+- ✅ #16 - Sistema de Alertas
+- ✅ #11 - Audit Logs
+- ✅ #21 - Security Rules
+
+### En Progreso
+- 🚧 #14 - CI/CD
+- 🚧 #26 - Documentación
+
+## 🙏 Agradecimientos
+
+- Angular Team por el excelente framework
+- PrimeNG por la librería de componentes UI
+- Firebase por la infraestructura backend
+- Hostinger por el hosting
+
+---
+
+**Última actualización:** 11 de enero de 2026

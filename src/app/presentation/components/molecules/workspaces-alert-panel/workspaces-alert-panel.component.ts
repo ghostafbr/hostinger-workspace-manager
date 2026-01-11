@@ -35,7 +35,9 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
             <div class="workspace-item">
               <div class="workspace-info">
                 <div class="workspace-name">{{ workspace.name }}</div>
-                <div class="workspace-description">{{ workspace.description || 'Sin descripción' }}</div>
+                <div class="workspace-description">
+                  {{ workspace.description || 'Sin descripción' }}
+                </div>
               </div>
               <div class="workspace-actions">
                 <p-tag
@@ -56,87 +58,89 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
       }
     </p-card>
   `,
-  styles: [`
-    .alert-panel {
-      height: 100%;
-    }
+  styles: [
+    `
+      .alert-panel {
+        height: 100%;
+      }
 
-    .card-header-custom {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 1.25rem;
-      background: var(--orange-50);
-    }
+      .card-header-custom {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1.25rem;
+        background: var(--orange-50);
+      }
 
-    .card-icon {
-      font-size: 2rem;
-      color: var(--orange-500);
-    }
+      .card-icon {
+        font-size: 2rem;
+        color: var(--orange-500);
+      }
 
-    .card-header-custom h3 {
-      margin: 0;
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--text-color);
-    }
+      .card-header-custom h3 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-color);
+      }
 
-    .no-issues {
-      text-align: center;
-      padding: 2rem;
-      color: var(--text-color-secondary);
-    }
+      .no-issues {
+        text-align: center;
+        padding: 2rem;
+        color: var(--text-color-secondary);
+      }
 
-    .no-issues p {
-      margin-top: 1rem;
-      font-size: 1.1rem;
-    }
+      .no-issues p {
+        margin-top: 1rem;
+        font-size: 1.1rem;
+      }
 
-    .workspaces-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
+      .workspaces-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
 
-    .workspace-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem;
-      border: 1px solid var(--surface-200);
-      border-radius: var(--border-radius);
-      background: var(--surface-card);
-      transition: all 0.2s ease;
-    }
+      .workspace-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        border: 1px solid var(--surface-200);
+        border-radius: var(--border-radius);
+        background: var(--surface-card);
+        transition: all 0.2s ease;
+      }
 
-    .workspace-item:hover {
-      background: var(--surface-100);
-      border-color: var(--primary-color);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+      .workspace-item:hover {
+        background: var(--surface-100);
+        border-color: var(--primary-color);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
 
-    .workspace-info {
-      flex: 1;
-    }
+      .workspace-info {
+        flex: 1;
+      }
 
-    .workspace-name {
-      font-weight: 600;
-      font-size: 1.05rem;
-      color: var(--text-color);
-      margin-bottom: 0.25rem;
-    }
+      .workspace-name {
+        font-weight: 600;
+        font-size: 1.05rem;
+        color: var(--text-color);
+        margin-bottom: 0.25rem;
+      }
 
-    .workspace-description {
-      font-size: 0.9rem;
-      color: var(--text-color-secondary);
-    }
+      .workspace-description {
+        font-size: 0.9rem;
+        color: var(--text-color-secondary);
+      }
 
-    .workspace-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-  `],
+      .workspace-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+    `,
+  ],
 })
 export class WorkspacesAlertPanelComponent {
   readonly workspaces = input.required<Workspace[]>();

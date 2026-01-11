@@ -10,7 +10,7 @@ import { WorkspaceStatus } from '../../domain/enums/workspace-status.enum';
  * métodos para seleccionar, limpiar y consultar el workspace actual.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WorkspaceContextService {
   // Estado privado del workspace seleccionado
@@ -64,12 +64,15 @@ export class WorkspaceContextService {
    */
   private saveToStorage(workspace: Workspace): void {
     try {
-      localStorage.setItem('selected_workspace', JSON.stringify({
-        id: workspace.id,
-        name: workspace.name,
-        status: workspace.status,
-        // Solo guardamos campos esenciales
-      }));
+      localStorage.setItem(
+        'selected_workspace',
+        JSON.stringify({
+          id: workspace.id,
+          name: workspace.name,
+          status: workspace.status,
+          // Solo guardamos campos esenciales
+        }),
+      );
     } catch (error) {
       console.error('Error saving workspace to storage:', error);
     }

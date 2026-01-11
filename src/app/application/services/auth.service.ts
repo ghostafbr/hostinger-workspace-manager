@@ -71,11 +71,7 @@ export class AuthService {
   async signIn(email: string, password: string): Promise<UserCredential> {
     try {
       this.isLoading.set(true);
-      const credential = await signInWithEmailAndPassword(
-        this.auth,
-        email,
-        password,
-      );
+      const credential = await signInWithEmailAndPassword(this.auth, email, password);
       return credential;
     } finally {
       this.isLoading.set(false);

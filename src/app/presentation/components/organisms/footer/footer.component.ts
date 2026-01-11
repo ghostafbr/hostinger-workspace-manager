@@ -82,12 +82,12 @@ export class FooterComponent implements OnInit {
       };
     }
 
-    const hasErrors = workspaces.some(ws =>
-      ws.status === 'ERROR' || ws.status === 'INVALID_TOKEN'
+    const hasErrors = workspaces.some(
+      (ws) => ws.status === 'ERROR' || ws.status === 'INVALID_TOKEN',
     );
 
-    const hasWarnings = workspaces.some(ws =>
-      ws.status === 'RATE_LIMITED' || ws.status === 'DISABLED'
+    const hasWarnings = workspaces.some(
+      (ws) => ws.status === 'RATE_LIMITED' || ws.status === 'DISABLED',
     );
 
     if (hasErrors) {

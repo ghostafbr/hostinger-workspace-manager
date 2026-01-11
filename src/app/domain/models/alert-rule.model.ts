@@ -68,7 +68,7 @@ export class AlertRuleModel implements AlertRule {
       workspaceId,
       entityType,
       daysBefore: [45, 30, 15, 7, 3, 1],
-      channel: AlertChannel.logOnly,
+      channel: AlertChannel.LOG_ONLY,
       enabled: true,
     });
   }

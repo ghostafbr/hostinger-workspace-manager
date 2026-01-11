@@ -5,28 +5,28 @@
  */
 export enum AuditAction {
   // Workspace actions
-  workspaceCreate = 'workspace.create',
-  workspaceUpdate = 'workspace.update',
-  workspaceDisable = 'workspace.disable',
-  workspaceDelete = 'workspace.delete',
+  WORKSPACE_CREATE = 'workspace.create',
+  WORKSPACE_UPDATE = 'workspace.update',
+  WORKSPACE_DISABLE = 'workspace.disable',
+  WORKSPACE_DELETE = 'workspace.delete',
 
   // Token actions
-  tokenSave = 'token.save',
-  tokenTest = 'token.test',
+  TOKEN_SAVE = 'token.save',
+  TOKEN_TEST = 'token.test',
 
   // Sync actions
-  syncManual = 'sync.manual',
-  syncScheduled = 'sync.scheduled',
+  SYNC_MANUAL = 'sync.manual',
+  SYNC_SCHEDULED = 'sync.scheduled',
 
   // Alert actions
-  alertGenerate = 'alert.generate',
+  ALERT_GENERATE = 'alert.generate',
 
   // DNS actions (future)
-  dnsView = 'dns.view',
-  dnsValidate = 'dns.validate',
-  dnsSnapshot = 'dns.snapshot',
-  dnsRollback = 'dns.rollback',
+  DNS_VIEW = 'dns.view',
+  DNS_VALIDATE = 'dns.validate',
+  DNS_SNAPSHOT = 'dns.snapshot',
+  DNS_ROLLBACK = 'dns.rollback',
 
   // Auto-renew actions (future)
-  autoRenewToggle = 'auto_renew.toggle',
+  AUTO_RENEW_TOGGLE = 'auto_renew.toggle',
 }

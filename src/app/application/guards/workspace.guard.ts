@@ -35,7 +35,7 @@ export const workspaceGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => 
 
   // Cargar el workspace desde Firestore
   return workspaceService.getWorkspaceById(workspaceId).pipe(
-    map(workspace => {
+    map((workspace) => {
       if (workspace) {
         // Workspace válido, actualizar contexto y permitir acceso
         workspaceContext.selectWorkspace(workspace);
@@ -47,10 +47,10 @@ export const workspaceGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => 
         return false;
       }
     }),
-    catchError(error => {
+    catchError((error) => {
       console.error('WorkspaceGuard: Error loading workspace:', error);
       router.navigate(['/workspaces']);
       return of(false);
-    })
+    }),
   );
 };

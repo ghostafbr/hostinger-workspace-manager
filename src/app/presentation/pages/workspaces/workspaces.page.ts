@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal, computed } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  inject,
+  signal,
+  computed,
+} from '@angular/core';
 import { Router } from '@angular/router';
 
 // PrimeNG Imports
@@ -86,9 +93,7 @@ export default class WorkspacesPage implements OnInit {
     }
 
     return this.workspaces().filter(
-      (ws) =>
-        ws.name.toLowerCase().includes(term) ||
-        ws.description?.toLowerCase().includes(term),
+      (ws) => ws.name.toLowerCase().includes(term) || ws.description?.toLowerCase().includes(term),
     );
   });
 
@@ -195,7 +200,9 @@ export default class WorkspacesPage implements OnInit {
       case WorkspaceStatus.ACTIVE:
         return 'Workspace activo y funcionando correctamente';
       case WorkspaceStatus.INVALID_TOKEN:
-        return lastError || 'El token de Hostinger es inválido o ha expirado. Por favor, actualícelo.';
+        return (
+          lastError || 'El token de Hostinger es inválido o ha expirado. Por favor, actualícelo.'
+        );
       case WorkspaceStatus.RATE_LIMITED:
         return 'Se ha excedido el límite de solicitudes a la API. Intente más tarde.';
       case WorkspaceStatus.ERROR:
@@ -238,9 +245,7 @@ export default class WorkspacesPage implements OnInit {
   /**
    * Get severity for status tag
    */
-  getStatusSeverity(
-    status: WorkspaceStatus,
-  ): 'success' | 'warn' | 'danger' | 'info' {
+  getStatusSeverity(status: WorkspaceStatus): 'success' | 'warn' | 'danger' | 'info' {
     switch (status) {
       case WorkspaceStatus.ACTIVE:
         return 'success';

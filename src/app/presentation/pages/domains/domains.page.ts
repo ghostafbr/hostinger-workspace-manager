@@ -14,7 +14,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
 // Services
-import { DomainService, DomainFilters } from '@app/application/services/domain.service';
+import { DomainService } from '@app/application/services/domain.service';
 import { WorkspaceContextService } from '@app/application/services/workspace-context.service';
 
 // Domain
@@ -33,12 +33,7 @@ import { DomainDetailsDialogComponent } from '@app/presentation/components/organ
   selector: 'app-domains',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CardModule,
-    ToastModule,
-    DomainsTableComponent,
-    DomainDetailsDialogComponent,
-  ],
+  imports: [CardModule, ToastModule, DomainsTableComponent, DomainDetailsDialogComponent],
   providers: [MessageService],
   templateUrl: './domains.page.html',
   styleUrl: './domains.page.scss',
@@ -94,7 +89,8 @@ export default class DomainsPage implements OnInit {
         this.messageService.add({
           severity: 'info',
           summary: 'Sin dominios',
-          detail: 'No se encontraron dominios para este workspace. Asegúrate de haber ejecutado la sincronización.',
+          detail:
+            'No se encontraron dominios para este workspace. Asegúrate de haber ejecutado la sincronización.',
           life: 5000,
         });
       }
@@ -105,7 +101,8 @@ export default class DomainsPage implements OnInit {
 
       // Check for index error
       if (error instanceof Error && error.message.includes('index')) {
-        errorDetail = 'El índice de Firestore está construyéndose. Espera unos minutos y recarga la página.';
+        errorDetail =
+          'El índice de Firestore está construyéndose. Espera unos minutos y recarga la página.';
       }
 
       this.messageService.add({

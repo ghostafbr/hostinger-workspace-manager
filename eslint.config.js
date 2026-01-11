@@ -40,6 +40,10 @@ module.exports = tseslint.config(
           format: ["PascalCase"],
         },
         {
+          selector: "enumMember",
+          format: ["UPPER_CASE"],
+        },
+        {
           selector: "property",
           format: null,
         },

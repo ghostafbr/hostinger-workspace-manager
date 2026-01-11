@@ -18,11 +18,7 @@
             pTooltip="TEMP: Test batch sync (producción usa cron job a las 03:00 AM)"
             tooltipPosition="bottom"
           />
-          <p-button
-            label="Nuevo Workspace"
-            icon="pi pi-plus"
-            (onClick)="createWorkspace()"
-          />
+          <p-button label="Nuevo Workspace" icon="pi pi-plus" (onClick)="createWorkspace()" />
         </div>
       </div>
     </ng-template>
@@ -57,18 +53,10 @@
     >
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="name">
-            Nombre <p-sortIcon field="name" />
-          </th>
-          <th pSortableColumn="status">
-            Estado <p-sortIcon field="status" />
-          </th>
-          <th pSortableColumn="lastSyncAt">
-            Última Sync <p-sortIcon field="lastSyncAt" />
-          </th>
-          <th pSortableColumn="createdAt">
-            Creado <p-sortIcon field="createdAt" />
-          </th>
+          <th pSortableColumn="name">Nombre <p-sortIcon field="name" /></th>
+          <th pSortableColumn="status">Estado <p-sortIcon field="status" /></th>
+          <th pSortableColumn="lastSyncAt">Última Sync <p-sortIcon field="lastSyncAt" /></th>
+          <th pSortableColumn="createdAt">Creado <p-sortIcon field="createdAt" /></th>
           <th>Acciones</th>
         </tr>
       </ng-template>
@@ -77,7 +65,9 @@
         <tr>
           <td>
             <strong>{{ workspace.name }}</strong>
-            <div class="text-sm text-gray-500">{{ workspace.description || 'Sin descripción' }}</div>
+            <div class="text-sm text-gray-500">
+              {{ workspace.description || 'Sin descripción' }}
+            </div>
           </td>
           <td>
             <p-tag

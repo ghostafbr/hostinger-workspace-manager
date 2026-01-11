@@ -227,7 +227,7 @@ export const syncWorkspace = onRequest(httpOptions, async (req, res) => {
   }
 
   const idToken = authHeader.split('Bearer ')[1];
-  let userId: string;
+  let userId = '';
 
   try {
     // Verify Firebase ID token

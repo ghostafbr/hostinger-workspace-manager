@@ -120,8 +120,7 @@ export default class DashboardPage implements OnInit {
    */
   async syncAllWorkspaces(): Promise<void> {
     this.confirmationService.confirm({
-      message:
-        '¿Deseas sincronizar TODOS los workspaces activos? Esto puede tomar varios minutos.',
+      message: '¿Deseas sincronizar TODOS los workspaces activos? Esto puede tomar varios minutos.',
       header: 'Confirmar Sincronización Global',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Sí, sincronizar',

@@ -1,10 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  OnInit,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -85,11 +79,7 @@ import { AuditLogModel } from '@app/domain';
               <i class="pi pi-exclamation-triangle"></i>
               <h2>Error al cargar audit logs</h2>
               <p>{{ error() }}</p>
-              <p-button
-                label="Reintentar"
-                icon="pi pi-refresh"
-                (onClick)="loadAuditLogs()"
-              />
+              <p-button label="Reintentar" icon="pi pi-refresh" (onClick)="loadAuditLogs()" />
             </div>
           </p-card>
         }
@@ -105,70 +95,72 @@ import { AuditLogModel } from '@app/domain';
       </div>
     </div>
   `,
-  styles: [`
-    .audit-logs-container {
-      min-height: 100vh;
-      background-color: var(--surface-50);
-    }
-
-    .audit-logs-toolbar {
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-      margin-bottom: 2rem;
-      background: white;
-      border-bottom: 1px solid var(--surface-200);
-    }
-
-    .page-title {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-weight: 700;
-      font-size: 1.5rem;
-      color: var(--text-color);
-      margin: 0;
-
-      i {
-        color: var(--primary-color);
-      }
-    }
-
-    .audit-logs-content {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 2rem 2rem;
-    }
-
-    .error-state {
-      text-align: center;
-      padding: 3rem;
-
-      i {
-        font-size: 4rem;
-        color: var(--red-500);
-        margin-bottom: 1rem;
+  styles: [
+    `
+      .audit-logs-container {
+        min-height: 100vh;
+        background-color: var(--surface-50);
       }
 
-      h2 {
-        color: var(--text-color);
-        margin-bottom: 0.5rem;
-      }
-
-      p {
-        color: var(--text-color-secondary);
+      .audit-logs-toolbar {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
         margin-bottom: 2rem;
+        background: white;
+        border-bottom: 1px solid var(--surface-200);
       }
-    }
 
-    @media (max-width: 768px) {
       .page-title {
-        font-size: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: var(--text-color);
+        margin: 0;
+
+        i {
+          color: var(--primary-color);
+        }
       }
 
       .audit-logs-content {
-        padding: 0 1rem 1rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem 2rem;
       }
-    }
-  `],
+
+      .error-state {
+        text-align: center;
+        padding: 3rem;
+
+        i {
+          font-size: 4rem;
+          color: var(--red-500);
+          margin-bottom: 1rem;
+        }
+
+        h2 {
+          color: var(--text-color);
+          margin-bottom: 0.5rem;
+        }
+
+        p {
+          color: var(--text-color-secondary);
+          margin-bottom: 2rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .page-title {
+          font-size: 1.25rem;
+        }
+
+        .audit-logs-content {
+          padding: 0 1rem 1rem;
+        }
+      }
+    `,
+  ],
 })
 export default class AuditLogsPage implements OnInit {
   private readonly auditLogService = inject(AuditLogService);

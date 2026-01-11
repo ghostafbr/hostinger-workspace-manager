@@ -5,11 +5,11 @@
  */
 export enum AuditStatus {
   /** Action completed successfully */
-  success = 'success',
+  SUCCESS = 'success',
 
   /** Action failed completely */
-  failed = 'failed',
+  FAILED = 'failed',
 
   /** Action completed partially with some errors */
-  partial = 'partial',
+  PARTIAL = 'partial',
 }

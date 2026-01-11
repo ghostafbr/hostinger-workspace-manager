@@ -57,7 +57,7 @@ export class SubscriptionService {
         collection(this.firestore, 'subscriptions'),
         where('workspaceId', '==', filters.workspaceId),
         orderBy('expiresAt', 'asc'),
-        limit(pageSize)
+        limit(pageSize),
       );
 
       // Add pagination
@@ -76,7 +76,7 @@ export class SubscriptionService {
       if (filters.searchText) {
         const searchLower = filters.searchText.toLowerCase();
         subscriptions = subscriptions.filter((s: ISubscription) =>
-          s.productName?.toLowerCase().includes(searchLower)
+          s.productName?.toLowerCase().includes(searchLower),
         );
       }
 
@@ -110,7 +110,7 @@ export class SubscriptionService {
       const subscriptionsQuery = query(
         collection(this.firestore, 'subscriptions'),
         where('workspaceId', '==', workspaceId),
-        orderBy('expiresAt', 'asc')
+        orderBy('expiresAt', 'asc'),
       );
 
       const snapshot = await getDocs(subscriptionsQuery);

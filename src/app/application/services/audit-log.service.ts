@@ -60,14 +60,10 @@ export class AuditLogService {
         constraints.push(where('status', '==', filters.status));
       }
       if (filters?.startDate) {
-        constraints.push(
-          where('createdAt', '>=', Timestamp.fromDate(filters.startDate))
-        );
+        constraints.push(where('createdAt', '>=', Timestamp.fromDate(filters.startDate)));
       }
       if (filters?.endDate) {
-        constraints.push(
-          where('createdAt', '<=', Timestamp.fromDate(filters.endDate))
-        );
+        constraints.push(where('createdAt', '<=', Timestamp.fromDate(filters.endDate)));
       }
       if (filters?.limitCount) {
         constraints.push(limit(filters.limitCount));
@@ -84,8 +80,7 @@ export class AuditLogService {
       this.auditLogs.set(logs);
       return logs;
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Error al cargar audit logs';
+      const errorMessage = error instanceof Error ? error.message : 'Error al cargar audit logs';
       this.error.set(errorMessage);
       console.error('Error fetching audit logs:', error);
       throw error;
@@ -97,10 +92,7 @@ export class AuditLogService {
   /**
    * Get audit logs for a specific workspace
    */
-  async getWorkspaceAuditLogs(
-    workspaceId: string,
-    limitCount = 50
-  ): Promise<AuditLogModel[]> {
+  async getWorkspaceAuditLogs(workspaceId: string, limitCount = 50): Promise<AuditLogModel[]> {
     return this.getAuditLogs({ workspaceId, limitCount });
   }
 
@@ -115,13 +107,10 @@ export class AuditLogService {
   /**
    * Get failed audit logs
    */
-  async getFailedAuditLogs(
-    workspaceId?: string,
-    limitCount = 50
-  ): Promise<AuditLogModel[]> {
+  async getFailedAuditLogs(workspaceId?: string, limitCount = 50): Promise<AuditLogModel[]> {
     return this.getAuditLogs({
       workspaceId,
-      status: AuditStatus.failed,
+      status: AuditStatus.FAILED,
       limitCount,
     });
   }

@@ -37,8 +37,10 @@ export class WorkspaceService {
   private readonly encryptionService = inject(EncryptionService);
   private readonly hostingerApi = inject(HostingerApiService);
   private readonly collectionName = 'workspaces';
-  private readonly cloudFunctionUrl = 'https://us-central1-hostinger-workspace-manager.cloudfunctions.net/syncWorkspace';
-  private readonly syncAllUrl = 'https://us-central1-hostinger-workspace-manager.cloudfunctions.net/syncAllWorkspaces';
+  private readonly cloudFunctionUrl =
+    'https://us-central1-hostinger-workspace-manager.cloudfunctions.net/syncWorkspace';
+  private readonly syncAllUrl =
+    'https://us-central1-hostinger-workspace-manager.cloudfunctions.net/syncAllWorkspaces';
 
   // Signals for reactive state
   readonly workspaces = signal<Workspace[]>([]);
@@ -59,10 +61,7 @@ export class WorkspaceService {
       }
 
       const workspacesRef = collection(this.firestore, this.collectionName);
-      const q = query(
-        workspacesRef,
-        where('userId', '==', userId),
-      );
+      const q = query(workspacesRef, where('userId', '==', userId));
 
       const querySnapshot = await getDocs(q);
       const workspaces = querySnapshot.docs.map((doc) => {
@@ -80,8 +79,7 @@ export class WorkspaceService {
       this.workspaces.set(workspaces);
       return workspaces;
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to fetch workspaces';
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch workspaces';
       this.error.set(errorMessage);
       console.error('Error loading workspaces:', error);
       throw error;
@@ -108,8 +106,7 @@ export class WorkspaceService {
       const data = docSnap.data() as Record<string, unknown>;
       return Workspace.fromFirestore(docSnap.id, data);
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to fetch workspace';
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch workspace';
       this.error.set(errorMessage);
       throw error;
     } finally {
@@ -142,9 +139,7 @@ export class WorkspaceService {
       const now = Timestamp.now();
 
       // Encrypt token if provided
-      const encryptedToken = data.token
-        ? this.encryptionService.encrypt(data.token)
-        : undefined;
+      const encryptedToken = data.token ? this.encryptionService.encrypt(data.token) : undefined;
 
       const workspaceData = {
         name: data.name,
@@ -159,18 +154,14 @@ export class WorkspaceService {
       const workspacesRef = collection(this.firestore, this.collectionName);
       const docRef = await addDoc(workspacesRef, workspaceData);
 
-      const newWorkspace = Workspace.fromFirestore(
-        docRef.id,
-        workspaceData,
-      );
+      const newWorkspace = Workspace.fromFirestore(docRef.id, workspaceData);
 
       // Update local state
       this.workspaces.update((workspaces) => [newWorkspace, ...workspaces]);
 
       return newWorkspace;
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to create workspace';
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create workspace';
       this.error.set(errorMessage);
       throw error;
     } finally {
@@ -217,8 +208,7 @@ export class WorkspaceService {
         }),
       );
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to update workspace';
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update workspace';
       this.error.set(errorMessage);
       throw error;
     } finally {
@@ -247,12 +237,9 @@ export class WorkspaceService {
       await deleteDoc(docRef);
 
       // Update local state
-      this.workspaces.update((workspaces) =>
-        workspaces.filter((ws) => ws.id !== id),
-      );
+      this.workspaces.update((workspaces) => workspaces.filter((ws) => ws.id !== id));
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to delete workspace';
+      const errorMessage = error instanceof Error ? error.message : 'Failed to delete workspace';
       this.error.set(errorMessage);
       throw error;
     } finally {
@@ -307,11 +294,11 @@ export class WorkspaceService {
           { workspaceId: id },
           {
             headers: new HttpHeaders({
-              'Authorization': `Bearer ${idToken}`,
+              Authorization: `Bearer ${idToken}`,
               'Content-Type': 'application/json',
             }),
-          }
-        )
+          },
+        ),
       );
 
       console.log('✅ Function response:', response);
@@ -322,11 +309,9 @@ export class WorkspaceService {
 
       // Refresh workspace from Firestore to get updated lastSyncAt
       await this.getAllWorkspaces();
-
     } catch (error) {
       console.error('❌ Sync error:', error);
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to sync workspace';
+      const errorMessage = error instanceof Error ? error.message : 'Failed to sync workspace';
       this.error.set(errorMessage);
       throw error;
     } finally {
@@ -380,23 +365,23 @@ export class WorkspaceService {
           failureCount: number;
           skippedCount: number;
           disabledCount: number;
-          details: Array<{
+          details: {
             workspaceId: string;
             status: 'success' | 'failed' | 'skipped' | 'disabled';
             domainsProcessed?: number;
             subscriptionsProcessed?: number;
             error?: string;
-          }>;
+          }[];
         }>(
           this.syncAllUrl,
           {},
           {
             headers: new HttpHeaders({
-              'Authorization': `Bearer ${idToken}`,
+              Authorization: `Bearer ${idToken}`,
               'Content-Type': 'application/json',
             }),
-          }
-        )
+          },
+        ),
       );
 
       console.log('✅ Batch sync response:', response);
@@ -418,8 +403,7 @@ export class WorkspaceService {
       };
     } catch (error) {
       console.error('❌ Batch sync error:', error);
-      const errorMessage =
-        error instanceof Error ? error.message : 'Failed to sync all workspaces';
+      const errorMessage = error instanceof Error ? error.message : 'Failed to sync all workspaces';
       this.error.set(errorMessage);
       throw error;
     } finally {
@@ -439,9 +423,10 @@ export class WorkspaceService {
     for (const workspace of workspaces) {
       if (workspace.lastSyncAt) {
         // Convert Firestore Timestamp to Date
-        const syncDate = workspace.lastSyncAt instanceof Date
-          ? workspace.lastSyncAt
-          : workspace.lastSyncAt.toDate();
+        const syncDate =
+          workspace.lastSyncAt instanceof Date
+            ? workspace.lastSyncAt
+            : workspace.lastSyncAt.toDate();
 
         if (!latestSync || syncDate > latestSync) {
           latestSync = syncDate;
@@ -501,8 +486,7 @@ export class WorkspaceService {
 
       return result;
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Error al probar conexión';
+      const errorMessage = error instanceof Error ? error.message : 'Error al probar conexión';
       this.error.set(errorMessage);
       return { success: false, error: errorMessage };
     } finally {

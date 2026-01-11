@@ -1,10 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  OnInit,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -85,11 +79,7 @@ import { SyncRun } from '@app/domain';
               <i class="pi pi-exclamation-triangle"></i>
               <h2>Error al cargar historial</h2>
               <p>{{ error() }}</p>
-              <p-button
-                label="Reintentar"
-                icon="pi pi-refresh"
-                (onClick)="loadSyncRuns()"
-              />
+              <p-button label="Reintentar" icon="pi pi-refresh" (onClick)="loadSyncRuns()" />
             </div>
           </p-card>
         }
@@ -106,70 +96,72 @@ import { SyncRun } from '@app/domain';
       </div>
     </div>
   `,
-  styles: [`
-    .sync-runs-container {
-      min-height: 100vh;
-      background-color: var(--surface-50);
-    }
-
-    .sync-runs-toolbar {
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-      margin-bottom: 2rem;
-      background: white;
-      border-bottom: 1px solid var(--surface-200);
-    }
-
-    .page-title {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-weight: 700;
-      font-size: 1.5rem;
-      color: var(--text-color);
-      margin: 0;
-
-      i {
-        color: var(--primary-color);
-      }
-    }
-
-    .sync-runs-content {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 2rem 2rem;
-    }
-
-    .error-state {
-      text-align: center;
-      padding: 3rem;
-
-      i {
-        font-size: 4rem;
-        color: var(--red-500);
-        margin-bottom: 1rem;
+  styles: [
+    `
+      .sync-runs-container {
+        min-height: 100vh;
+        background-color: var(--surface-50);
       }
 
-      h2 {
-        color: var(--text-color);
-        margin-bottom: 0.5rem;
-      }
-
-      p {
-        color: var(--text-color-secondary);
+      .sync-runs-toolbar {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
         margin-bottom: 2rem;
+        background: white;
+        border-bottom: 1px solid var(--surface-200);
       }
-    }
 
-    @media (max-width: 768px) {
       .page-title {
-        font-size: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: var(--text-color);
+        margin: 0;
+
+        i {
+          color: var(--primary-color);
+        }
       }
 
       .sync-runs-content {
-        padding: 0 1rem 1rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem 2rem;
       }
-    }
-  `],
+
+      .error-state {
+        text-align: center;
+        padding: 3rem;
+
+        i {
+          font-size: 4rem;
+          color: var(--red-500);
+          margin-bottom: 1rem;
+        }
+
+        h2 {
+          color: var(--text-color);
+          margin-bottom: 0.5rem;
+        }
+
+        p {
+          color: var(--text-color-secondary);
+          margin-bottom: 2rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .page-title {
+          font-size: 1.25rem;
+        }
+
+        .sync-runs-content {
+          padding: 0 1rem 1rem;
+        }
+      }
+    `,
+  ],
 })
 export default class SyncRunsPage implements OnInit {
   private readonly syncRunService = inject(SyncRunService);
@@ -217,9 +209,7 @@ export default class SyncRunsPage implements OnInit {
    */
   onViewDetails(run: SyncRun): void {
     const duration = run.getDurationMs();
-    const durationStr = duration
-      ? `${Math.floor(duration / 1000)}s`
-      : 'En progreso';
+    const durationStr = duration ? `${Math.floor(duration / 1000)}s` : 'En progreso';
 
     this.messageService.add({
       severity: 'info',
