@@ -2,7 +2,7 @@ import { initializeApp, FirebaseApp } from 'firebase/app';
 import { getAuth, Auth, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { getFirestore, Firestore } from 'firebase/firestore';
 import { getFunctions, Functions } from 'firebase/functions';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 /**
  * Firebase Service Adapter

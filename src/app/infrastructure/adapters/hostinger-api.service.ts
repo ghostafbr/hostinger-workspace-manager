@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom, timeout } from 'rxjs';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 /**
  * Hostinger API Service
@@ -49,8 +49,7 @@ export class HostingerApiService {
 
           const response = await firstValueFrom(
             this.http
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              .get<any>(`${this.BASE_URL}${endpoint}`, {
+              .get<unknown>(`${this.BASE_URL}${endpoint}`, {
                 headers,
                 observe: 'response',
                 withCredentials: false,
