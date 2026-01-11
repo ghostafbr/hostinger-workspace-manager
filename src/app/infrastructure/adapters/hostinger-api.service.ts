@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom, timeout } from 'rxjs';
-import { environment } from '@environments/environment';
+import { environment } from '../../../environments/environment';
 
 /**
  * Hostinger API Service
@@ -47,11 +47,11 @@ export class HostingerApiService {
         try {
           console.log(`Testing endpoint: ${this.BASE_URL}${endpoint}`);
 
-          const response: HttpResponse<unknown> = await firstValueFrom(
+          const response = await firstValueFrom(
             this.http
               .get<unknown>(`${this.BASE_URL}${endpoint}`, {
                 headers,
-                observe: 'response',
+                observe: 'response' as const,
                 withCredentials: false,
               })
               .pipe(timeout(this.REQUEST_TIMEOUT)),

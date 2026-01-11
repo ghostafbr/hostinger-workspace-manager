@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, computed, inject, OnInit } from '@angular/core';
 import { TagModule } from 'primeng/tag';
-import { environment } from '@environments/environment';
+import { environment } from '../../../../../environments/environment';
 import { WorkspaceService } from '@app/application/services/workspace.service';
 import { AuthService } from '@app/application/services/auth.service';
 
