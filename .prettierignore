@@ -1,7 +1,0 @@
-node_modules/
-dist/
-.angular/
-coverage/
-*.min.js
-*.bundle.js
-package-lock.json
