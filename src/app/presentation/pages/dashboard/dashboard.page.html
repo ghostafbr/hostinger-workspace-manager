@@ -24,6 +24,16 @@
         tooltipPosition="bottom"
       />
       <p-button
+        label="Exportar CSV"
+        icon="pi pi-download"
+        severity="secondary"
+        [outlined]="true"
+        styleClass="ml-2"
+        (onClick)="exportToCSV()"
+        pTooltip="Exportar vencimientos a CSV"
+        tooltipPosition="bottom"
+      />
+      <p-button
         label="Ver Workspaces"
         icon="pi pi-briefcase"
         styleClass="ml-2"
@@ -109,11 +119,11 @@
         </div>
       </div>
 
-      <!-- Stats Grid -->
-      <div class="stats-grid">
+      <!-- Compact Stats Grid - 3 cards per row -->
+      <div class="compact-stats-grid">
         <!-- Domains Expiration Card -->
         <app-expiration-card
-          title="Dominios Próximos a Vencer"
+          title="Dominios"
           icon="pi pi-globe"
           [count7Days]="stats()!.domainsExpiring7Days"
           [count15Days]="stats()!.domainsExpiring15Days"
@@ -124,7 +134,7 @@
 
         <!-- Subscriptions Expiration Card -->
         <app-expiration-card
-          title="Suscripciones Próximas a Vencer"
+          title="Suscripciones"
           icon="pi pi-ticket"
           [count7Days]="stats()!.subscriptionsExpiring7Days"
           [count15Days]="stats()!.subscriptionsExpiring15Days"
@@ -132,6 +142,34 @@
           [count60Days]="stats()!.subscriptionsExpiring60Days"
           [totalCount]="stats()!.totalSubscriptions"
         />
+
+        <!-- Quick Summary Card -->
+        <p-card styleClass="summary-card">
+          <ng-template pTemplate="header">
+            <div class="card-header-compact">
+              <i class="pi pi-briefcase"></i>
+              <h3>Resumen</h3>
+            </div>
+          </ng-template>
+          <div class="summary-compact">
+            <div class="stat-row">
+              <span class="stat-label">Workspaces:</span>
+              <span class="stat-value">{{ stats()!.totalWorkspaces }}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Activos:</span>
+              <span class="stat-value success">{{ stats()!.totalWorkspaces - stats()!.workspacesInError.length }}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Total Dominios:</span>
+              <span class="stat-value">{{ stats()!.totalDomains }}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Total Suscripciones:</span>
+              <span class="stat-value">{{ stats()!.totalSubscriptions }}</span>
+            </div>
+          </div>
+        </p-card>
       </div>
 
       <!-- Workspaces Alert Panel -->
@@ -141,38 +179,27 @@
         </div>
       }
 
-      <!-- Quick Stats Summary -->
-      <div class="quick-stats">
-        <p-card>
-          <ng-template pTemplate="header">
-            <h3 class="section-title">
-              <i class="pi pi-info-circle"></i>
-              Resumen General
-            </h3>
-          </ng-template>
+      <!-- Expiration Trends Chart (Full Width) -->
+      <div class="chart-section-full">
+        <app-expiration-trends-chart
+          [data]="expirationTrends()"
+          title="Tendencias de Vencimientos"
+        />
+      </div>
 
-          <div class="summary-grid">
-            <div class="summary-item">
-              <label>Total Workspaces:</label>
-              <p-chip [label]="stats()!.totalWorkspaces.toString()" styleClass="summary-chip" />
-            </div>
-            <div class="summary-item">
-              <label>Total Dominios:</label>
-              <p-chip [label]="stats()!.totalDomains.toString()" styleClass="summary-chip" />
-            </div>
-            <div class="summary-item">
-              <label>Total Suscripciones:</label>
-              <p-chip [label]="stats()!.totalSubscriptions.toString()" styleClass="summary-chip" />
-            </div>
-            <div class="summary-item">
-              <label>Workspaces Activos:</label>
-              <p-chip
-                [label]="(stats()!.totalWorkspaces - stats()!.workspacesInError.length).toString()"
-                styleClass="summary-chip success"
-              />
-            </div>
-          </div>
-        </p-card>
+      <!-- Timeline of Upcoming Events -->
+      <div class="timeline-section">
+        @if (isLoadingEvents()) {
+          <p-card>
+            <p-skeleton height="300px" />
+          </p-card>
+        } @else {
+          <app-upcoming-events-timeline
+            [events]="upcomingEvents()"
+            title="Próximos Vencimientos"
+            [maxEvents]="10"
+          />
+        }
       </div>
     }
   </div>

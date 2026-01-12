@@ -1,0 +1,23 @@
+.chart-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--surface-border);
+
+  i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+}
+
+.chart-container {
+  padding: 1rem;
+  min-height: 300px;
+}

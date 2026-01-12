@@ -8,14 +8,12 @@ import { AuthService } from '../services/auth.service';
  * Protects routes from unauthenticated access.
  * Redirects to /login if user is not authenticated.
  */
-export const authGuard: CanActivateFn = () => {
+export const authGuard: CanActivateFn = async () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  // If still loading, allow navigation (will be handled by auth state listener)
-  if (authService.isLoading()) {
-    return true;
-  }
+  // Wait for auth to initialize
+  await authService.waitForAuthInit();
 
   // Check if user is authenticated
   if (authService.isAuthenticated()) {

@@ -1,0 +1,52 @@
+<p-card>
+  <ng-template pTemplate="header">
+    <div class="timeline-header">
+      <i class="pi pi-calendar"></i>
+      <h3>{{ title() }}</h3>
+      <p-chip [label]="sortedEvents().length + ' eventos'" styleClass="ml-2" />
+    </div>
+  </ng-template>
+
+  @if (sortedEvents().length === 0) {
+    <div class="empty-state">
+      <i class="pi pi-check-circle"></i>
+      <p>No hay vencimientos próximos</p>
+    </div>
+  } @else {
+    <p-timeline [value]="sortedEvents()" align="alternate" styleClass="custom-timeline">
+      <ng-template #marker let-event>
+        <div
+          class="timeline-marker"
+          [style.background-color]="getColor(event.status)"
+          [pTooltip]="event.daysUntilExpiration + ' días'"
+          tooltipPosition="top"
+        >
+          <i [class]="getIcon(event.type)"></i>
+        </div>
+      </ng-template>
+
+      <ng-template #content let-event>
+        <div class="timeline-content">
+          <div class="timeline-title">
+            {{ event.title }}
+          </div>
+          <div class="timeline-meta">
+            <p-chip
+              [label]="event.type === 'domain' ? 'Dominio' : 'Suscripción'"
+              [icon]="getIcon(event.type)"
+              styleClass="timeline-chip"
+            />
+            <p-chip [label]="event.workspaceName" icon="pi pi-briefcase" styleClass="timeline-chip" />
+          </div>
+          <div class="timeline-date">
+            <i class="pi pi-clock"></i>
+            Vence: {{ event.expirationDate | date: 'dd/MM/yyyy' }}
+            <span class="days-badge" [ngClass]="'status-' + event.status">
+              {{ event.daysUntilExpiration }} días
+            </span>
+          </div>
+        </div>
+      </ng-template>
+    </p-timeline>
+  }
+</p-card>

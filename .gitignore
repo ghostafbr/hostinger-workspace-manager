@@ -50,5 +50,6 @@ firebase-debug.*.log
 *.cache
 
 # Environment files (never commit credentials)
+.env
 src/environments/environment.ts
 src/environments/environment.development.ts

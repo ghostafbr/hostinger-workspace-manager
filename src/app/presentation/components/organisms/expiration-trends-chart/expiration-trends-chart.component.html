@@ -1,0 +1,12 @@
+<p-card>
+  <ng-template pTemplate="header">
+    <div class="chart-header">
+      <i class="pi pi-chart-bar"></i>
+      <h3>{{ title() }}</h3>
+    </div>
+  </ng-template>
+
+  <div class="chart-container">
+    <p-chart type="bar" [data]="chartData()" [options]="chartOptions" height="300px" />
+  </div>
+</p-card>

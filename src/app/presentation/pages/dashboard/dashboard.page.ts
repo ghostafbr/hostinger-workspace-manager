@@ -21,11 +21,18 @@ import { ChipModule } from 'primeng/chip';
 import { DashboardService } from '@app/application/services/dashboard.service';
 import { WorkspaceService } from '@app/application/services/workspace.service';
 import { AuthService } from '@app/application/services/auth.service';
+import { ExportService } from '@app/application';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 // Components
 import { ExpirationCardComponent } from '@app/presentation/components/molecules/expiration-card/expiration-card.component';
 import { WorkspacesAlertPanelComponent } from '@app/presentation/components/molecules/workspaces-alert-panel/workspaces-alert-panel.component';
+import {
+  ExpirationTrendsChartComponent,
+  UpcomingEventsTimelineComponent,
+  type TimelineEvent,
+  type ExpirationTrendData,
+} from '@app/presentation/components/organisms';
 
 /**
  * Dashboard Page Component
@@ -49,6 +56,8 @@ import { WorkspacesAlertPanelComponent } from '@app/presentation/components/mole
     ChipModule,
     ExpirationCardComponent,
     WorkspacesAlertPanelComponent,
+    ExpirationTrendsChartComponent,
+    UpcomingEventsTimelineComponent,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './dashboard.page.html',
@@ -58,6 +67,7 @@ export default class DashboardPage implements OnInit {
   private readonly dashboardService = inject(DashboardService);
   private readonly workspaceService = inject(WorkspaceService);
   private readonly authService = inject(AuthService);
+  private readonly exportService = inject(ExportService);
   private readonly router = inject(Router);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly messageService = inject(MessageService);
@@ -68,6 +78,11 @@ export default class DashboardPage implements OnInit {
   readonly isSyncingAll = signal<boolean>(false);
 
   readonly currentUser = this.authService.currentUser;
+
+  // New signals for dashboard enhancements
+  readonly upcomingEvents = signal<TimelineEvent[]>([]);
+  readonly expirationTrends = signal<ExpirationTrendData[]>([]);
+  readonly isLoadingEvents = signal<boolean>(false);
 
   /**
    * Get user display name
@@ -89,6 +104,7 @@ export default class DashboardPage implements OnInit {
 
   ngOnInit(): void {
     this.loadDashboard();
+    this.loadEnhancedData();
   }
 
   /**
@@ -97,12 +113,29 @@ export default class DashboardPage implements OnInit {
   async loadDashboard(): Promise<void> {
     try {
       await this.dashboardService.loadDashboardStats();
+      // Update trends when stats are loaded
+      this.expirationTrends.set(this.dashboardService.getExpirationTrends());
     } catch {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
         detail: 'No se pudieron cargar las estadísticas del dashboard',
       });
+    }
+  }
+
+  /**
+   * Load enhanced data (timeline events)
+   */
+  async loadEnhancedData(): Promise<void> {
+    try {
+      this.isLoadingEvents.set(true);
+      const events = await this.dashboardService.getUpcomingEvents(10);
+      this.upcomingEvents.set(events);
+    } catch (error) {
+      console.error('Error loading upcoming events:', error);
+    } finally {
+      this.isLoadingEvents.set(false);
     }
   }
 
@@ -140,18 +173,13 @@ export default class DashboardPage implements OnInit {
           this.messageService.add({
             severity: 'success',
             summary: 'Sincronización Completada',
-            detail: `
-              Total: ${result.totalWorkspaces} workspaces
-              ✅ Éxitos: ${result.successCount}
-              ❌ Fallos: ${result.failureCount}
-              ⏭️ Saltados: ${result.skippedCount}
-              🚫 Deshabilitados: ${result.disabledCount}
-            `,
+            detail: `Total: ${result.totalWorkspaces} - Éxitos: ${result.successCount} - Fallos: ${result.failureCount}`,
             life: 8000,
           });
 
           // Refresh dashboard stats
           await this.loadDashboard();
+          await this.loadEnhancedData();
         } catch (error) {
           this.messageService.add({
             severity: 'error',
@@ -163,6 +191,41 @@ export default class DashboardPage implements OnInit {
           this.isSyncingAll.set(false);
         }
       },
+    });
+  }
+
+  /**
+   * Export dashboard data to CSV
+   */
+  exportToCSV(): void {
+    const events = this.upcomingEvents();
+    if (events.length === 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Sin datos',
+        detail: 'No hay eventos para exportar',
+        life: 3000,
+      });
+      return;
+    }
+
+    const exportData = events.map((event) => ({
+      Título: event.title,
+      Tipo: event.type === 'domain' ? 'Dominio' : 'Suscripción',
+      Workspace: event.workspaceName,
+      'Fecha de Vencimiento': event.expirationDate.toLocaleDateString('es-ES'),
+      'Días Restantes': event.daysUntilExpiration,
+      Estado: event.status === 'critical' ? 'Crítico' : event.status === 'warning' ? 'Advertencia' : 'Info',
+    }));
+
+    const filename = `dashboard-vencimientos-${new Date().toISOString().split('T')[0]}.csv`;
+    this.exportService.exportToCSV(exportData, filename);
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Exportado',
+      detail: `Datos exportados a ${filename}`,
+      life: 3000,
     });
   }
 

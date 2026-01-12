@@ -3,6 +3,11 @@ import { Firestore, collection, getDocs, query, where, Timestamp } from 'firebas
 import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
 import { AuthService } from './auth.service';
 import { Workspace, WorkspaceStatus, IDomain, ISubscription } from '@app/domain';
+import type {
+  ExpirationTrendData,
+  TimelineEvent,
+  StatComparison,
+} from '@app/presentation/components/organisms';
 
 /**
  * Dashboard Statistics
@@ -232,5 +237,152 @@ export class DashboardService {
    */
   clearError(): void {
     this.error.set(null);
+  }
+
+  /**
+   * Get expiration trends data for chart
+   */
+  getExpirationTrends(): ExpirationTrendData[] {
+    const stats = this.stats();
+    if (!stats) return [];
+
+    return [
+      {
+        label: '7 días',
+        domains: stats.domainsExpiring7Days,
+        subscriptions: stats.subscriptionsExpiring7Days,
+      },
+      {
+        label: '15 días',
+        domains: stats.domainsExpiring15Days,
+        subscriptions: stats.subscriptionsExpiring15Days,
+      },
+      {
+        label: '30 días',
+        domains: stats.domainsExpiring30Days,
+        subscriptions: stats.subscriptionsExpiring30Days,
+      },
+      {
+        label: '60 días',
+        domains: stats.domainsExpiring60Days,
+        subscriptions: stats.subscriptionsExpiring60Days,
+      },
+    ];
+  }
+
+  /**
+   * Get upcoming events for timeline
+   * This requires fetching full domain/subscription data
+   */
+  async getUpcomingEvents(limit = 10): Promise<TimelineEvent[]> {
+    try {
+      const userId = this.authService.getCurrentUserUid();
+      if (!userId) return [];
+
+      // Get all user's workspaces
+      const workspacesSnapshot = await getDocs(
+        query(collection(this.firestore, 'workspaces'), where('userId', '==', userId)),
+      );
+
+      const workspaces = workspacesSnapshot.docs.map((doc) => {
+        const data = doc.data() as Record<string, unknown>;
+        return Workspace.fromFirestore(doc.id, data);
+      });
+
+      const workspaceIds = workspaces.map((w) => w.id);
+      if (workspaceIds.length === 0) return [];
+
+      // Create workspace map for quick lookup
+      const workspaceMap = new Map(workspaces.map((w) => [w.id, w.name]));
+
+      // Get domains and subscriptions
+      const domainsData = await this.getDomainsForWorkspaces(workspaceIds);
+      const subscriptionsData = await this.getSubscriptionsForWorkspaces(workspaceIds);
+
+      const now = new Date();
+      const events: TimelineEvent[] = [];
+
+      // Process domains
+      domainsData.forEach((domain: IDomain) => {
+        const expiresAt = this.toDate(domain.expiresAt);
+        if (!expiresAt || expiresAt <= now) return;
+
+        const daysUntilExpiration = Math.ceil(
+          (expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+        );
+
+        events.push({
+          id: domain.id,
+          title: domain.domainName,
+          type: 'domain',
+          expirationDate: expiresAt,
+          workspaceName: workspaceMap.get(domain.workspaceId) || 'Unknown',
+          daysUntilExpiration,
+          status: daysUntilExpiration <= 7 ? 'critical' : daysUntilExpiration <= 15 ? 'warning' : 'info',
+        });
+      });
+
+      // Process subscriptions
+      subscriptionsData.forEach((sub: ISubscription) => {
+        const expiresAt = this.toDate(sub.expiresAt);
+        if (!expiresAt || expiresAt <= now) return;
+
+        const daysUntilExpiration = Math.ceil(
+          (expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+        );
+
+        events.push({
+          id: sub.id,
+          title: sub.productName,
+          type: 'subscription',
+          expirationDate: expiresAt,
+          workspaceName: workspaceMap.get(sub.workspaceId) || 'Unknown',
+          daysUntilExpiration,
+          status: daysUntilExpiration <= 7 ? 'critical' : daysUntilExpiration <= 15 ? 'warning' : 'info',
+        });
+      });
+
+      // Sort by expiration date and limit
+      return events.sort((a, b) => a.daysUntilExpiration - b.daysUntilExpiration).slice(0, limit);
+    } catch (error) {
+      console.error('Error getting upcoming events:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Get stats comparison data
+   * Note: This is a placeholder - you'll need to implement historical data tracking
+   */
+  getStatsComparison(): StatComparison[] {
+    const stats = this.stats();
+    if (!stats) return [];
+
+    // Placeholder: using current values with simulated previous values
+    // In a real implementation, you'd fetch historical data from Firestore
+    return [
+      {
+        label: 'Total Workspaces',
+        current: stats.totalWorkspaces,
+        previous: Math.max(0, stats.totalWorkspaces - 1),
+      },
+      {
+        label: 'Dominios',
+        current: stats.totalDomains,
+        previous: Math.max(0, stats.totalDomains - Math.floor(Math.random() * 5)),
+      },
+      {
+        label: 'Suscripciones',
+        current: stats.totalSubscriptions,
+        previous: Math.max(0, stats.totalSubscriptions - Math.floor(Math.random() * 3)),
+      },
+      {
+        label: 'Vencimientos (7d)',
+        current: stats.domainsExpiring7Days + stats.subscriptionsExpiring7Days,
+        previous: Math.floor(
+          (stats.domainsExpiring7Days + stats.subscriptionsExpiring7Days) * (0.8 + Math.random() * 0.4),
+        ),
+      },
+    ];
   }
 }
