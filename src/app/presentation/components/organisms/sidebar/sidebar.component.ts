@@ -50,6 +50,11 @@ export class SidebarComponent {
       route: '/workspaces',
     },
     {
+      label: 'System Health',
+      icon: 'pi pi-heart-fill',
+      route: '/system-health',
+    },
+    {
       label: 'Auditoría',
       icon: 'pi pi-history',
       route: '/audit',

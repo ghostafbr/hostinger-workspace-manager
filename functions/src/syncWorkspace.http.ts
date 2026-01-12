@@ -25,6 +25,45 @@ interface HostingerSubscriptionResponse {
   status: string;
 }
 
+interface RateLimitInfo {
+  requests: number;
+  remaining: number;
+  limit: number;
+  resetTime: Date;
+  percentage: number;
+}
+
+/**
+ * Extract rate limit information from response headers
+ */
+function extractRateLimitHeaders(headers: Headers): RateLimitInfo | null {
+  try {
+    // Standard rate limit headers from Hostinger API
+    const limit = parseInt(headers.get('x-ratelimit-limit') || headers.get('ratelimit-limit') || '1000', 10);
+    const remaining = parseInt(headers.get('x-ratelimit-remaining') || headers.get('ratelimit-remaining') || '1000', 10);
+    const reset = parseInt(headers.get('x-ratelimit-reset') || headers.get('ratelimit-reset') || '0', 10);
+
+    if (!limit || !remaining) {
+      return null;
+    }
+
+    const requests = limit - remaining;
+    const percentage = Math.round((requests / limit) * 100);
+    const resetTime = reset > 0 ? new Date(reset * 1000) : new Date(Date.now() + 3600000); // Default 1 hour
+
+    return {
+      requests,
+      remaining,
+      limit,
+      resetTime,
+      percentage,
+    };
+  } catch (error) {
+    console.error('Error extracting rate limit headers:', error);
+    return null;
+  }
+}
+
 /**
  * Decrypt Hostinger API token
  */
@@ -39,9 +78,11 @@ function decryptToken(encryptedToken: string): string {
 }
 
 /**
- * Fetch domains from Hostinger API
+ * Fetch domains from Hostinger API and capture rate limit headers
  */
-async function fetchDomains(apiToken: string): Promise<HostingerDomainResponse[]> {
+async function fetchDomains(
+  apiToken: string
+): Promise<{ data: HostingerDomainResponse[]; rateLimit: RateLimitInfo | null }> {
   const response = await fetch(`${HOSTINGER_API_BASE}/api/domains/v1/portfolio`, {
     method: 'GET',
     headers: {
@@ -57,13 +98,17 @@ async function fetchDomains(apiToken: string): Promise<HostingerDomainResponse[]
   }
 
   const data = await response.json();
-  return data.data || [];
+  const rateLimit = extractRateLimitHeaders(response.headers);
+
+  return { data: data.data || [], rateLimit };
 }
 
 /**
- * Fetch subscriptions from Hostinger API
+ * Fetch subscriptions from Hostinger API and capture rate limit headers
  */
-async function fetchSubscriptions(apiToken: string): Promise<HostingerSubscriptionResponse[]> {
+async function fetchSubscriptions(
+  apiToken: string
+): Promise<{ data: HostingerSubscriptionResponse[]; rateLimit: RateLimitInfo | null }> {
   const response = await fetch(`${HOSTINGER_API_BASE}/api/billing/v1/subscriptions`, {
     method: 'GET',
     headers: {
@@ -79,7 +124,9 @@ async function fetchSubscriptions(apiToken: string): Promise<HostingerSubscripti
   }
 
   const data = await response.json();
-  return data.data || [];
+  const rateLimit = extractRateLimitHeaders(response.headers);
+
+  return { data: data.data || [], rateLimit };
 }
 
 /**
@@ -189,6 +236,29 @@ async function updateSyncRun(
 }
 
 /**
+ * Save rate limit info to Firestore
+ */
+async function saveRateLimitInfo(workspaceId: string, rateLimit: RateLimitInfo): Promise<void> {
+  const db = admin.firestore();
+  const rateLimitRef = db.collection('rateLimits').doc(workspaceId);
+
+  await rateLimitRef.set(
+    {
+      workspaceId,
+      requests: rateLimit.requests,
+      remaining: rateLimit.remaining,
+      limit: rateLimit.limit,
+      resetTime: admin.firestore.Timestamp.fromDate(rateLimit.resetTime),
+      percentage: rateLimit.percentage,
+      lastUpdated: admin.firestore.FieldValue.serverTimestamp(),
+    },
+    { merge: true }
+  );
+
+  console.log('Rate limit saved:', { workspaceId, ...rateLimit });
+}
+
+/**
  * Sync Workspace (HTTP Function)
  *
  * HTTP endpoint to synchronize domains and subscriptions
@@ -271,28 +341,33 @@ export const syncWorkspace = onRequest(httpOptions, async (req, res) => {
     // Decrypt token
     const apiToken = decryptToken(workspace.encryptedToken);
 
-    // Fetch and sync domains
+    // Fetch and sync domains (capture rate limits)
     console.log('Fetching domains...', { workspaceId });
-    const domains = await fetchDomains(apiToken);
+    const domainsResult = await fetchDomains(apiToken);
 
-    for (const domain of domains) {
+    for (const domain of domainsResult.data) {
       await upsertDomain(workspaceId, domain);
     }
 
-    // Fetch and sync subscriptions
+    // Fetch and sync subscriptions (capture rate limits)
     console.log('Fetching subscriptions...', { workspaceId });
-    const subscriptions = await fetchSubscriptions(apiToken);
+    const subscriptionsResult = await fetchSubscriptions(apiToken);
 
-    for (const subscription of subscriptions) {
+    for (const subscription of subscriptionsResult.data) {
       await upsertSubscription(workspaceId, subscription);
+    }
+
+    // Save rate limit info (use the latest from subscriptions call)
+    if (subscriptionsResult.rateLimit) {
+      await saveRateLimitInfo(workspaceId, subscriptionsResult.rateLimit);
     }
 
     // Update sync run - success
     await updateSyncRun(syncRunId, {
       status: 'completed',
       endAt: new Date(),
-      domainsProcessed: domains.length,
-      subscriptionsProcessed: subscriptions.length,
+      domainsProcessed: domainsResult.data.length,
+      subscriptionsProcessed: subscriptionsResult.data.length,
     });
 
     // Update workspace
@@ -304,8 +379,8 @@ export const syncWorkspace = onRequest(httpOptions, async (req, res) => {
 
     console.log('Sync completed', {
       workspaceId,
-      domains: domains.length,
-      subscriptions: subscriptions.length,
+      domains: domainsResult.data.length,
+      subscriptions: subscriptionsResult.data.length,
     });
 
     // Log successful sync to audit logs
@@ -314,8 +389,8 @@ export const syncWorkspace = onRequest(httpOptions, async (req, res) => {
       userId,
       workspaceId,
       {
-        domainsProcessed: domains.length,
-        subscriptionsProcessed: subscriptions.length,
+        domainsProcessed: domainsResult.data.length,
+        subscriptionsProcessed: subscriptionsResult.data.length,
         syncRunId,
       }
     );
@@ -323,8 +398,8 @@ export const syncWorkspace = onRequest(httpOptions, async (req, res) => {
     res.status(200).json({
       success: true,
       syncRunId,
-      domainsProcessed: domains.length,
-      subscriptionsProcessed: subscriptions.length,
+      domainsProcessed: domainsResult.data.length,
+      subscriptionsProcessed: subscriptionsResult.data.length,
     });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';

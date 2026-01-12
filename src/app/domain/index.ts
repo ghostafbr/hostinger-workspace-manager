@@ -18,6 +18,7 @@ export * from './enums/entity-type.enum';
 export * from './enums/audit-action.enum';
 export * from './enums/audit-status.enum';
 export * from './enums/dns-record-type.enum';
+export * from './enums/health-status.enum';
 
 // Interfaces (exported with 'I' prefix to avoid naming conflicts with models)
 export type { Workspace as IWorkspace } from './interfaces/workspace.interface';
@@ -30,6 +31,17 @@ export type { AuditLog as IAuditLog } from './interfaces/audit-log.interface';
 export type { DnsRecord as IDnsRecord } from './interfaces/dns-record.interface';
 export type { SavedFilter as ISavedFilter, FilterCriteria } from './interfaces/saved-filter.interface';
 export type { DashboardSnapshot as IDashboardSnapshot } from './interfaces/dashboard-snapshot.interface';
+export type {
+  HealthMetricsInterface as IHealthMetrics,
+  SystemHealthSummaryInterface as ISystemHealthSummary,
+  HealthHistoryInterface as IHealthHistory,
+} from './interfaces/health-metrics.interface';
+export type { RateLimitInfoInterface as IRateLimitInfo } from './interfaces/rate-limit-info.interface';
+export type {
+  WebhookConfig as IWebhookConfig,
+  WebhookEvent,
+  WebhookPayload,
+} from './interfaces/webhook-config.interface';
 
 // Models (classes with business logic)
 export { Workspace } from './models/workspace.model';
@@ -39,3 +51,4 @@ export { SyncRun } from './models/sync-run.model';
 export { AlertLogModel } from './models/alert-log.model';
 export { AlertRuleModel } from './models/alert-rule.model';
 export { AuditLogModel } from './models/audit-log.model';
+export { HealthMetrics, SystemHealthSummary, HealthHistory } from './models/health-metrics.model';

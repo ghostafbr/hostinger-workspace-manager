@@ -367,6 +367,102 @@ service cloud.firestore {
     }
 
     // ============================================================
+    // SYNC RUNS COLLECTION
+    // ============================================================
+
+    match /sync_runs/{syncRunId} {
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create: Owner and Cloud Functions only
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'workspaceId', 'status', 'startedAt'
+        ]) &&
+        isValidString('workspaceId') &&
+        request.resource.data.status in ['pending', 'success', 'failed'] &&
+        isValidTimestamp('startedAt');
+
+      // Update: Owner only (Cloud Functions update these)
+      allow update: if isOwner() &&
+        immutableFieldsValid(['workspaceId', 'startedAt']);
+
+      // Delete: Owner only
+      allow delete: if isOwner();
+    }
+
+    // ============================================================
+    // HEALTH HISTORY COLLECTION
+    // ============================================================
+
+    match /healthHistory/{historyId} {
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create: Owner and Cloud Functions only
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'timestamp', 'workspaceId', 'healthScore'
+        ]) &&
+        isValidTimestamp('timestamp') &&
+        isValidString('workspaceId') &&
+        isValidNumber('healthScore');
+
+      // Delete: Owner only (for cleanup)
+      allow delete: if isOwner();
+    }
+
+    // ============================================================
+    // HEALTH ALERTS COLLECTION
+    // ============================================================
+
+    match /healthAlerts/{alertId} {
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create: Owner and Cloud Functions only
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'workspaceId', 'workspaceName', 'severity', 'title', 'message', 'isRead', 'createdAt'
+        ]) &&
+        isValidString('workspaceId') &&
+        isValidString('workspaceName') &&
+        request.resource.data.severity in ['warning', 'critical'] &&
+        isValidString('title') &&
+        isValidString('message') &&
+        isValidBoolean('isRead') &&
+        isValidTimestamp('createdAt');
+
+      // Update: Owner only (mark as read)
+      allow update: if isOwner() &&
+        immutableFieldsValid(['workspaceId', 'workspaceName', 'severity', 'title', 'message', 'createdAt']);
+
+      // Delete: Owner only
+      allow delete: if isOwner();
+    }
+
+    // ============================================================
+    // RATE LIMITS COLLECTION
+    // ============================================================
+
+    match /rateLimits/{workspaceId} {
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create/Update: Owner and Cloud Functions only
+      allow write: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'workspaceId', 'requests', 'remaining', 'limit', 'percentage', 'lastUpdated'
+        ]) &&
+        isValidString('workspaceId') &&
+        isValidNumber('requests') &&
+        isValidNumber('remaining') &&
+        isValidNumber('limit') &&
+        isValidNumber('percentage') &&
+        isValidTimestamp('lastUpdated');
+    }
+
+    // ============================================================
     // DEFAULT DENY RULE
     // ============================================================
 

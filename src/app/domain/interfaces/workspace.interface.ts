@@ -1,5 +1,6 @@
 import { Timestamp } from 'firebase/firestore';
 import { WorkspaceStatus } from '../enums/workspace-status.enum';
+import { WebhookConfig } from './webhook-config.interface';
 
 /**
  * Workspace Entity Interface
@@ -58,4 +59,7 @@ export interface Workspace {
 
   /** Favorite flag for quick access */
   isFavorite?: boolean;
+
+  /** Webhook configuration for health alerts */
+  webhookConfig?: WebhookConfig;
 }

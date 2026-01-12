@@ -14,6 +14,9 @@ export { syncAllWorkspacesScheduled } from './syncAllWorkspaces';
 // Alert generation function (Cloud Scheduler)
 export { generateAlerts } from './generateAlerts';
 
+// Health metrics calculation function (Cloud Scheduler - every 15 minutes)
+export { calculateHealthMetrics } from './calculateHealthMetrics';
+
 /*
  * Example functions commented out - not needed for MVP
  *

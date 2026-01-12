@@ -43,6 +43,10 @@ export const routes: Routes = [
         loadComponent: () => import('./presentation/pages/audit-logs/audit-logs.page'),
       },
       {
+        path: 'system-health',
+        loadComponent: () => import('./presentation/pages/system-health/system-health.page'),
+      },
+      {
         path: 'settings',
         loadComponent: () => import('./presentation/pages/dashboard/dashboard.page'), // Temporal
       },
