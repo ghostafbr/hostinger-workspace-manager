@@ -57,8 +57,8 @@ export class StatsComparisonComponent {
    */
   getTrendColor(current: number, previous: number): string {
     const change = current - previous;
-    if (change > 0) return 'var(--red-500)'; // More items expiring is bad
-    if (change < 0) return 'var(--green-500)'; // Fewer items expiring is good
+    if (change > 0) return 'var(--gray-700)'; // Neutral gray for increase
+    if (change < 0) return 'var(--gray-500)'; // Lighter gray for decrease
     return 'var(--text-color-secondary)';
   }
 

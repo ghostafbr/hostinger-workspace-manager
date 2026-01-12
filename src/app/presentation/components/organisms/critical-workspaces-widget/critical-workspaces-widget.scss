@@ -56,57 +56,57 @@
   }
 
   &.critical {
-    border-left-color: var(--red-500);
-    background: var(--red-50);
+    border-left-color: var(--gray-700);
+    background: var(--gray-100);
 
     &:hover {
-      background: var(--red-100);
+      background: var(--gray-200);
     }
 
     .score-badge {
-      background: var(--red-500);
+      background: var(--gray-700);
       color: white;
     }
   }
 
   &.high {
-    border-left-color: var(--orange-500);
-    background: var(--orange-50);
+    border-left-color: var(--gray-600);
+    background: var(--gray-100);
 
     &:hover {
-      background: var(--orange-100);
+      background: var(--gray-200);
     }
 
     .score-badge {
-      background: var(--orange-500);
+      background: var(--gray-600);
       color: white;
     }
   }
 
   &.medium {
-    border-left-color: var(--yellow-500);
-    background: var(--yellow-50);
+    border-left-color: var(--gray-500);
+    background: var(--gray-50);
 
     &:hover {
-      background: var(--yellow-100);
+      background: var(--gray-100);
     }
 
     .score-badge {
-      background: var(--yellow-500);
+      background: var(--gray-500);
       color: white;
     }
   }
 
   &.low {
-    border-left-color: var(--blue-500);
-    background: var(--blue-50);
+    border-left-color: var(--gray-400);
+    background: var(--gray-50);
 
     &:hover {
-      background: var(--blue-100);
+      background: var(--gray-100);
     }
 
     .score-badge {
-      background: var(--blue-500);
+      background: var(--gray-400);
       color: white;
     }
   }
@@ -140,13 +140,13 @@
   text-transform: uppercase;
 
   &.status-active {
-    background: var(--green-100);
-    color: var(--green-700);
+    background: var(--gray-200);
+    color: var(--gray-700);
   }
 
   &.status-error {
-    background: var(--red-100);
-    color: var(--red-700);
+    background: var(--gray-300);
+    color: var(--gray-800);
   }
 }
 

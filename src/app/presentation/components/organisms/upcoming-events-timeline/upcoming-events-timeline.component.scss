@@ -28,7 +28,7 @@
 
   i {
     font-size: 3rem;
-    color: var(--green-500);
+    color: var(--gray-400);
     margin-bottom: 1rem;
   }
 
@@ -98,18 +98,18 @@
       margin-left: 0.5rem;
 
       &.status-critical {
-        background-color: #fee2e2;
-        color: #991b1b;
+        background-color: #e5e7eb;
+        color: #374151;
       }
 
       &.status-warning {
-        background-color: #fef3c7;
-        color: #92400e;
+        background-color: #f3f4f6;
+        color: #4b5563;
       }
 
       &.status-info {
-        background-color: #dbeafe;
-        color: #1e40af;
+        background-color: #f9fafb;
+        color: #6b7280;
       }
     }
   }

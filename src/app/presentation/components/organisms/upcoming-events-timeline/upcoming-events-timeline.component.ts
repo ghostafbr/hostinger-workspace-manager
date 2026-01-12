@@ -81,11 +81,11 @@ export class UpcomingEventsTimelineComponent {
   getColor(status: 'critical' | 'warning' | 'info'): string {
     switch (status) {
       case 'critical':
-        return '#ef4444'; // red
+        return '#374151'; // dark gray
       case 'warning':
-        return '#f59e0b'; // orange
+        return '#4b5563'; // medium gray
       default:
-        return '#3b82f6'; // blue
+        return '#6b7280'; // light gray
     }
   }
 }

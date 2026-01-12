@@ -44,15 +44,15 @@ export class ExpirationTrendsChartComponent {
         {
           label: 'Dominios',
           data: trends.map((t) => t.domains),
-          backgroundColor: 'rgba(59, 130, 246, 0.8)', // Blue
-          borderColor: 'rgb(59, 130, 246)',
+          backgroundColor: 'rgba(100, 116, 139, 0.8)', // Neutral gray
+          borderColor: 'rgb(100, 116, 139)',
           borderWidth: 1,
         },
         {
           label: 'Suscripciones',
           data: trends.map((t) => t.subscriptions),
-          backgroundColor: 'rgba(168, 85, 247, 0.8)', // Purple
-          borderColor: 'rgb(168, 85, 247)',
+          backgroundColor: 'rgba(71, 85, 105, 0.8)', // Neutral gray-blue
+          borderColor: 'rgb(71, 85, 105)',
           borderWidth: 1,
         },
       ],
