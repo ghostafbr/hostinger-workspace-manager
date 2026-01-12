@@ -97,18 +97,23 @@
 
 // Compact Stats Grid (3 columns)
 .compact-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
   margin-bottom: 2rem;
 
-  @media (max-width: 1200px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  &.collapsible-section {
+    .stats-grid-content {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+      @media (max-width: 1200px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
   }
 }
 
@@ -218,7 +223,98 @@
   }
 }
 
+// Alert Section
+.alert-section {
+  margin-bottom: 2rem;
+}
+
+// Critical Section
+.critical-section {
+  margin-bottom: 2rem;
+}
+
+// Search Section
+.search-section {
+  margin-bottom: 2rem;
+}
+
+// Chart Section
+.chart-section-full {
+  margin-bottom: 2rem;
+}
+
 // Timeline Section
 .timeline-section {
   margin-top: 2rem;
+}
+
+// Collapsible Sections
+.collapsible-section {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  margin-bottom: 2rem;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: linear-gradient(135deg, #5568d3 0%, #65408b 100%);
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      i {
+        font-size: 1.25rem;
+      }
+    }
+
+    > i {
+      color: white;
+      font-size: 1.25rem;
+      transition: transform 0.3s ease;
+    }
+  }
+
+  .section-content {
+    padding: 1.5rem;
+    animation: slideDown 0.3s ease-out;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Alert, Critical, Search, Chart, Timeline sections
+.alert-section,
+.critical-section,
+.search-section,
+.chart-section-full,
+.timeline-section {
+  &:not(.collapsible-section) {
+    margin-bottom: 2rem;
+  }
 }

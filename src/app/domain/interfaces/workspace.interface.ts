@@ -46,4 +46,16 @@ export interface Workspace {
 
   /** When the last error occurred */
   lastErrorAt?: Timestamp;
+
+  /** User ID who owns this workspace */
+  userId: string;
+
+  /** Custom tags for organization and filtering */
+  tags?: string[];
+
+  /** Priority level (1-5, 5 being highest priority) */
+  priority?: number;
+
+  /** Favorite flag for quick access */
+  isFavorite?: boolean;
 }

@@ -28,6 +28,8 @@ export type { AlertRule as IAlertRule } from './interfaces/alert-rule.interface'
 export type { AlertLog as IAlertLog } from './interfaces/alert-log.interface';
 export type { AuditLog as IAuditLog } from './interfaces/audit-log.interface';
 export type { DnsRecord as IDnsRecord } from './interfaces/dns-record.interface';
+export type { SavedFilter as ISavedFilter, FilterCriteria } from './interfaces/saved-filter.interface';
+export type { DashboardSnapshot as IDashboardSnapshot } from './interfaces/dashboard-snapshot.interface';
 
 // Models (classes with business logic)
 export { Workspace } from './models/workspace.model';

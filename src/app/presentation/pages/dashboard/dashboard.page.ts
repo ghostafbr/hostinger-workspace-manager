@@ -29,10 +29,16 @@ import { ExpirationCardComponent } from '@app/presentation/components/molecules/
 import { WorkspacesAlertPanelComponent } from '@app/presentation/components/molecules/workspaces-alert-panel/workspaces-alert-panel.component';
 import {
   ExpirationTrendsChartComponent,
+  type ExpirationTrendData,
+} from '@app/presentation/components/organisms/expiration-trends-chart/expiration-trends-chart.component';
+import {
   UpcomingEventsTimelineComponent,
   type TimelineEvent,
-  type ExpirationTrendData,
-} from '@app/presentation/components/organisms';
+} from '@app/presentation/components/organisms/upcoming-events-timeline/upcoming-events-timeline.component';
+import {
+  CriticalWorkspacesWidgetComponent,
+  AdvancedSearchComponent,
+} from '@app/presentation';
 
 /**
  * Dashboard Page Component
@@ -58,6 +64,8 @@ import {
     WorkspacesAlertPanelComponent,
     ExpirationTrendsChartComponent,
     UpcomingEventsTimelineComponent,
+    CriticalWorkspacesWidgetComponent,
+    AdvancedSearchComponent,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './dashboard.page.html',
@@ -83,6 +91,15 @@ export default class DashboardPage implements OnInit {
   readonly upcomingEvents = signal<TimelineEvent[]>([]);
   readonly expirationTrends = signal<ExpirationTrendData[]>([]);
   readonly isLoadingEvents = signal<boolean>(false);
+  readonly allWorkspaces = this.workspaceService.workspaces;
+
+  // Collapse states for dashboard sections
+  readonly isStatsCollapsed = signal<boolean>(false);
+  readonly isAlertsCollapsed = signal<boolean>(false);
+  readonly isCriticalCollapsed = signal<boolean>(false);
+  readonly isSearchCollapsed = signal<boolean>(true); // Colapsado por defecto
+  readonly isChartsCollapsed = signal<boolean>(false);
+  readonly isTimelineCollapsed = signal<boolean>(false);
 
   /**
    * Get user display name
@@ -113,6 +130,8 @@ export default class DashboardPage implements OnInit {
   async loadDashboard(): Promise<void> {
     try {
       await this.dashboardService.loadDashboardStats();
+      // Load all workspaces for critical widget
+      await this.workspaceService.getAllWorkspaces();
       // Update trends when stats are loaded
       this.expirationTrends.set(this.dashboardService.getExpirationTrends());
     } catch {
@@ -239,5 +258,64 @@ export default class DashboardPage implements OnInit {
     } catch (error) {
       console.error('Error during logout:', error);
     }
+  }
+
+  /**
+   * Navigate to specific workspace
+   */
+  navigateToWorkspace(workspace: any): void {
+    this.router.navigate(['/workspaces', workspace.id]);
+  }
+
+  /**
+   * Handle search applied
+   */
+  onSearchApplied(criteria: any): void {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Filtro Aplicado',
+      detail: 'Búsqueda aplicada correctamente',
+      life: 3000,
+    });
+    this.navigateToWorkspaces();
+  }
+
+  /**
+   * Handle search cleared
+   */
+  onSearchCleared(): void {
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Filtros Limpiados',
+      detail: 'Todos los filtros han sido removidos',
+      life: 3000,
+    });
+  }
+
+  /**
+   * Toggle collapse states
+   */
+  toggleStats(): void {
+    this.isStatsCollapsed.update((v) => !v);
+  }
+
+  toggleAlerts(): void {
+    this.isAlertsCollapsed.update((v) => !v);
+  }
+
+  toggleCritical(): void {
+    this.isCriticalCollapsed.update((v) => !v);
+  }
+
+  toggleSearch(): void {
+    this.isSearchCollapsed.update((v) => !v);
+  }
+
+  toggleCharts(): void {
+    this.isChartsCollapsed.update((v) => !v);
+  }
+
+  toggleTimeline(): void {
+    this.isTimelineCollapsed.update((v) => !v);
   }
 }

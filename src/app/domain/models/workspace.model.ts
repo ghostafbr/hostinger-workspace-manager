@@ -10,6 +10,7 @@ import { WorkspaceStatus } from '../enums/workspace-status.enum';
 export class Workspace implements WorkspaceInterface {
   id: string;
   name: string;
+  userId: string;
   description?: string;
   encryptedToken?: string;
   status: WorkspaceStatus;
@@ -21,10 +22,14 @@ export class Workspace implements WorkspaceInterface {
   lastSyncStatus?: string;
   lastError?: string;
   lastErrorAt?: Timestamp;
+  tags?: string[];
+  priority?: number;
+  isFavorite?: boolean;
 
   constructor(data: WorkspaceInterface) {
     this.id = data.id;
     this.name = data.name;
+    this.userId = data.userId;
     this.description = data.description;
     this.encryptedToken = data.encryptedToken;
     this.status = data.status;
@@ -36,6 +41,9 @@ export class Workspace implements WorkspaceInterface {
     this.lastSyncStatus = data.lastSyncStatus;
     this.lastError = data.lastError;
     this.lastErrorAt = data.lastErrorAt;
+    this.tags = data.tags;
+    this.priority = data.priority;
+    this.isFavorite = data.isFavorite;
   }
 
   /**
@@ -99,6 +107,7 @@ export class Workspace implements WorkspaceInterface {
   toFirestore(): Omit<WorkspaceInterface, 'id'> {
     return {
       name: this.name,
+      userId: this.userId,
       description: this.description,
       encryptedToken: this.encryptedToken,
       status: this.status,
@@ -110,6 +119,9 @@ export class Workspace implements WorkspaceInterface {
       lastSyncStatus: this.lastSyncStatus,
       lastError: this.lastError,
       lastErrorAt: this.lastErrorAt,
+      tags: this.tags,
+      priority: this.priority,
+      isFavorite: this.isFavorite,
     };
   }
 
@@ -120,6 +132,7 @@ export class Workspace implements WorkspaceInterface {
     return new Workspace({
       id,
       name: data['name'] as string,
+      userId: data['userId'] as string,
       description: data['description'] as string | undefined,
       encryptedToken: data['encryptedToken'] as string | undefined,
       status: data['status'] as WorkspaceStatus,
@@ -131,6 +144,9 @@ export class Workspace implements WorkspaceInterface {
       lastSyncStatus: data['lastSyncStatus'] as string | undefined,
       lastError: data['lastError'] as string | undefined,
       lastErrorAt: data['lastErrorAt'] as Timestamp | undefined,
+      tags: data['tags'] as string[] | undefined,
+      priority: data['priority'] as number | undefined,
+      isFavorite: data['isFavorite'] as boolean | undefined,
     });
   }
 }

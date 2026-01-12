@@ -1,0 +1,63 @@
+<p-card>
+  <ng-template pTemplate="header">
+    <div class="widget-header">
+      <i class="pi pi-exclamation-triangle"></i>
+      <span>Workspaces Más Críticos</span>
+    </div>
+  </ng-template>
+
+  <div class="critical-list">
+    @if (criticalWorkspaces().length === 0) {
+      <div class="no-data">
+        <i class="pi pi-check-circle"></i>
+        <p>No hay workspaces críticos</p>
+      </div>
+    } @else {
+      @for (item of criticalWorkspaces(); track item.workspace.id) {
+        <div
+          class="critical-item"
+          [class]="getSeverityClass(item.criticalityScore)"
+          (click)="onWorkspaceClick(item.workspace)"
+        >
+          <div class="item-header">
+            <div class="workspace-info">
+              <h4>{{ item.workspace.name }}</h4>
+              <span
+                class="status-badge"
+                [class]="getStatusClass(item.workspace.status)"
+              >
+                {{ item.workspace.status }}
+              </span>
+            </div>
+            <div class="score-badge" [pTooltip]="'Puntuación de criticidad'">
+              {{ item.criticalityScore }}
+            </div>
+          </div>
+
+          <div class="item-reasons">
+            @for (reason of item.reasons; track $index) {
+              <div class="reason">
+                <i class="pi pi-angle-right"></i>
+                <span>{{ reason }}</span>
+              </div>
+            }
+          </div>
+
+          @if (item.workspace.tags && item.workspace.tags.length > 0) {
+            <div class="item-tags">
+              @for (tag of item.workspace.tags; track tag) {
+                <p-chip [label]="tag" styleClass="tag-chip" />
+              }
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="widget-footer">
+      <small>Actualizado hace {{ 'moments ago' }}</small>
+    </div>
+  </ng-template>
+</p-card>
