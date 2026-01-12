@@ -47,6 +47,10 @@ export const routes: Routes = [
         loadComponent: () => import('./presentation/pages/system-health/system-health.page'),
       },
       {
+        path: 'email-config',
+        loadComponent: () => import('./presentation/pages/email-config/email-config.page').then(m => m.EmailConfigPage),
+      },
+      {
         path: 'settings',
         loadComponent: () => import('./presentation/pages/dashboard/dashboard.page'), // Temporal
       },

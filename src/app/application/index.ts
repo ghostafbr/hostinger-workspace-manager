@@ -9,6 +9,7 @@ export { FilterService } from './services/filter.service';
 export { SnapshotService } from './services/snapshot.service';
 export { HealthService } from './services/health.service';
 export { WebhookService } from './services/webhook.service';
+export { EmailService } from './services/email.service';
 // export * from './services';
 // export * from './guards';
 // export * from './interceptors';

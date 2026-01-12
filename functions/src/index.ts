@@ -17,6 +17,14 @@ export { generateAlerts } from './generateAlerts';
 // Health metrics calculation function (Cloud Scheduler - every 15 minutes)
 export { calculateHealthMetrics } from './calculateHealthMetrics';
 
+// Email sending functions
+export { sendEmail, retryFailedEmails } from './sendEmail';
+export { sendEmailNow } from './sendEmailNow';
+
+// Test functions
+export { createTestAlert } from './createTestAlert';
+export { runGenerateAlerts } from './runGenerateAlerts';
+
 /*
  * Example functions commented out - not needed for MVP
  *

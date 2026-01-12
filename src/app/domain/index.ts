@@ -18,6 +18,7 @@ export * from './enums/entity-type.enum';
 export * from './enums/audit-action.enum';
 export * from './enums/audit-status.enum';
 export * from './enums/dns-record-type.enum';
+export * from './enums/email-provider.enum';
 export * from './enums/health-status.enum';
 
 // Interfaces (exported with 'I' prefix to avoid naming conflicts with models)
@@ -42,6 +43,13 @@ export type {
   WebhookEvent,
   WebhookPayload,
 } from './interfaces/webhook-config.interface';
+export type { EmailConfigInterface as IEmailConfig } from './interfaces/email-config.interface';
+export type { EmailLogInterface as IEmailLog } from './interfaces/email-log.interface';
+export type {
+  EmailTemplateDataInterface as IEmailTemplateData,
+  SendEmailRequestInterface as ISendEmailRequest,
+  SendEmailResponseInterface as ISendEmailResponse,
+} from './interfaces/email-template.interface';
 
 // Models (classes with business logic)
 export { Workspace } from './models/workspace.model';

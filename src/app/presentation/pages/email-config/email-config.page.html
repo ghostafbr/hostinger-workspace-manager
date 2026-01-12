@@ -1,0 +1,395 @@
+<div class="email-config-container">
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <h2>📧 Configuración de Emails</h2>
+        <p class="subtitle">Configure el envío de notificaciones por email para {{ currentWorkspace()?.name }}</p>
+      </div>
+    </ng-template>
+
+    @if (error()) {
+      <p-message severity="error" [text]="error()!" styleClass="mb-4 block" />
+    }
+
+    @if (success()) {
+      <p-message severity="success" [text]="success()!" styleClass="mb-4 block" />
+    }
+
+    @if (isLoading()) {
+      <div class="loading-container">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        <p>Cargando configuración...</p>
+      </div>
+    } @else {
+      <form class="form-grid">
+        <!-- Enable/Disable Toggle -->
+        <div class="field col-12">
+          <label class="toggle-label">
+            <input type="checkbox" [(ngModel)]="enabled" name="enabled" class="toggle-checkbox" />
+            <span>Activar notificaciones por email</span>
+          </label>
+        </div>
+
+        <!-- Recipient Email -->
+        <div class="field col-12 md:col-6">
+          <label for="recipientEmail">Email destinatario <span class="required">*</span></label>
+          <input
+            id="recipientEmail"
+            pInputText
+            type="email"
+            [(ngModel)]="recipientEmail"
+            name="recipientEmail"
+            placeholder="notificaciones@example.com"
+            class="w-full"
+            [disabled]="!enabled()"
+          />
+          <small>Email principal que recibirá las notificaciones</small>
+        </div>
+
+        <!-- CC Emails -->
+        <div class="field col-12 md:col-6">
+          <label for="ccEmails">Emails CC (opcional)</label>
+          <textarea
+            id="ccEmails"
+            pInputText
+            rows="3"
+            name="ccEmails"
+            [value]="ccEmails().join(', ')"
+            (blur)="onCCEmailsChange($event)"
+            placeholder="email1@example.com, email2@example.com"
+            class="w-full"
+            [disabled]="!enabled()"
+          ></textarea>
+          <small>Destinatarios adicionales separados por comas</small>
+        </div>
+
+        <!-- Sender Configuration -->
+        <div class="col-12">
+          <h3 class="section-title">Configuración del Remitente</h3>
+        </div>
+
+        <!-- Provider Selection -->
+        <div class="field col-12">
+          <label for="providerType">Proveedor de email <span class="required">*</span></label>
+          <p-select
+            id="providerType"
+            [(ngModel)]="providerType"
+            name="providerType"
+            [options]="providerOptions"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Selecciona un proveedor"
+            styleClass="w-full"
+            [disabled]="!enabled()"
+          />
+          <small>Usa SMTP para Hostinger, Gmail, Outlook, etc. o SendGrid API</small>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="fromEmail">Email remitente <span class="required">*</span></label>
+          <input
+            id="fromEmail"
+            pInputText
+            type="email"
+            [(ngModel)]="fromEmail"
+            name="fromEmail"
+            [placeholder]="providerType() === EmailProvider.SMTP ? 'tu-email@andres-bolanos.dev' : 'noreply@yourdomain.com'"
+            class="w-full"
+            [disabled]="!enabled()"
+          />
+          <small>
+            @if (providerType() === EmailProvider.SMTP) {
+              Tu email de Hostinger (debe existir en tu panel)
+            } @else {
+              Email verificado en SendGrid
+            }
+          </small>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="fromName">Nombre remitente <span class="required">*</span></label>
+          <input
+            id="fromName"
+            pInputText
+            [(ngModel)]="fromName"
+            name="fromName"
+            placeholder="Hostinger Workspace Manager"
+            class="w-full"
+            [disabled]="!enabled()"
+          />
+        </div>
+
+        <!-- Conditional: SMTP Configuration -->
+        @if (providerType() === EmailProvider.SMTP) {
+          <div class="col-12">
+            <h3 class="section-title">Configuración SMTP</h3>
+          </div>
+
+          <div class="field col-12 md:col-6">
+            <label for="smtpHost">Servidor SMTP <span class="required">*</span></label>
+            <input
+              id="smtpHost"
+              pInputText
+              [(ngModel)]="smtpHost"
+              name="smtpHost"
+              placeholder="smtp.hostinger.com"
+              class="w-full"
+              [disabled]="!enabled()"
+            />
+            <small>Para Hostinger: smtp.hostinger.com</small>
+          </div>
+
+          <div class="field col-12 md:col-3">
+            <label for="smtpPort">Puerto <span class="required">*</span></label>
+            <p-inputNumber
+              id="smtpPort"
+              [(ngModel)]="smtpPort"
+              name="smtpPort"
+              [min]="1"
+              [max]="65535"
+              styleClass="w-full"
+              [disabled]="!enabled()"
+            />
+            <small>465 (SSL) o 587 (TLS)</small>
+          </div>
+
+          <div class="field col-12 md:col-3">
+            <label for="smtpSecure">Conexión segura</label>
+            <p-toggleButton
+              id="smtpSecure"
+              [(ngModel)]="smtpSecure"
+              name="smtpSecure"
+              onLabel="SSL/TLS"
+              offLabel="Sin SSL"
+              styleClass="w-full"
+              [disabled]="!enabled()"
+            />
+          </div>
+
+          <div class="field col-12 md:col-6">
+            <label for="smtpUsername">Usuario SMTP <span class="required">*</span></label>
+            <input
+              id="smtpUsername"
+              pInputText
+              type="email"
+              [(ngModel)]="smtpUsername"
+              name="smtpUsername"
+              placeholder="tu-email@andres-bolanos.dev"
+              class="w-full"
+              [disabled]="!enabled()"
+            />
+            <small>Normalmente es tu email completo</small>
+          </div>
+
+          <div class="field col-12 md:col-6">
+            <label for="smtpPassword">
+              Contraseña SMTP
+              @if (config() && config()!.providerType === EmailProvider.SMTP) {
+                <span class="optional">(dejar en blanco para mantener la actual)</span>
+              } @else {
+                <span class="required">*</span>
+              }
+            </label>
+            <div class="p-inputgroup">
+              <input
+                id="smtpPassword"
+                pPassword
+                [(ngModel)]="smtpPassword"
+                name="smtpPassword"
+                placeholder="Tu contraseña de email"
+                class="w-full"
+                [feedback]="false"
+                [disabled]="!enabled()"
+              />
+            </div>
+            <small>Contraseña de tu cuenta de email</small>
+          </div>
+        }
+
+        <!-- Conditional: SendGrid API Key -->
+        @if (providerType() === EmailProvider.SENDGRID) {
+          <div class="col-12">
+            <h3 class="section-title">Configuración SendGrid</h3>
+          </div>
+
+          <div class="field col-12">
+            <label for="apiKey">
+              SendGrid API Key
+              @if (config() && config()!.providerType === EmailProvider.SENDGRID) {
+                <span class="optional">(dejar en blanco para mantener la actual)</span>
+              } @else {
+                <span class="required">*</span>
+              }
+            </label>
+            <div class="p-inputgroup">
+              <input
+                id="apiKey"
+                pPassword
+                [(ngModel)]="apiKey"
+                name="apiKey"
+                placeholder="SG.xxxxxxxxxxxxxxxxxxxx"
+                class="w-full"
+                [feedback]="false"
+                [disabled]="!enabled()"
+              />
+            </div>
+            <small>
+              Obtén tu API key en <a href="https://app.sendgrid.com/settings/api_keys" target="_blank">SendGrid Dashboard</a>
+            </small>
+          </div>
+        }
+
+        <!-- Rate Limits -->
+        <div class="col-12">
+          <h3 class="section-title">Límites de Envío</h3>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="maxPerHour">Máximo por hora</label>
+          <p-inputNumber
+            id="maxPerHour"
+            [(ngModel)]="maxPerHour"
+            name="maxPerHour"
+            [min]="1"
+            [max]="100"
+            styleClass="w-full"
+            [disabled]="!enabled()"
+          />
+          <small>Límite de emails por hora</small>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="maxPerDay">Máximo por día</label>
+          <p-inputNumber
+            id="maxPerDay"
+            [(ngModel)]="maxPerDay"
+            name="maxPerDay"
+            [min]="1"
+            [max]="1000"
+            styleClass="w-full"
+            [disabled]="!enabled()"
+          />
+          <small>Límite de emails por día</small>
+        </div>
+
+        <!-- Retry Configuration -->
+        <div class="col-12">
+          <h3 class="section-title">Configuración de Reintentos</h3>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="maxRetryAttempts">Intentos máximos</label>
+          <p-inputNumber
+            id="maxRetryAttempts"
+            [(ngModel)]="maxRetryAttempts"
+            name="maxRetryAttempts"
+            [min]="0"
+            [max]="10"
+            styleClass="w-full"
+            [disabled]="!enabled()"
+          />
+          <small>Número de reintentos en caso de fallo</small>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="retryDelayMinutes">Delay entre reintentos (minutos)</label>
+          <p-inputNumber
+            id="retryDelayMinutes"
+            [(ngModel)]="retryDelayMinutes"
+            name="retryDelayMinutes"
+            [min]="1"
+            [max]="60"
+            styleClass="w-full"
+            [disabled]="!enabled()"
+          />
+          <small>Tiempo de espera entre reintentos</small>
+        </div>
+      </form>
+
+      <!-- Action Buttons -->
+      <div class="actions">
+        <p-button
+          label="Cancelar"
+          icon="pi pi-times"
+          severity="secondary"
+          (onClick)="onCancel()"
+          [outlined]="true"
+        />
+
+        @if (config()) {
+          <p-button
+            label="Eliminar"
+            icon="pi pi-trash"
+            severity="danger"
+            (onClick)="onDelete()"
+            [outlined]="true"
+          />
+        }
+
+        @if (config() && enabled()) {
+          <p-button
+            label="Enviar Email de Prueba"
+            icon="pi pi-send"
+            severity="info"
+            (onClick)="onSendTestEmail()"
+            [disabled]="isSendingTest()"
+            [loading]="isSendingTest()"
+          />
+        }
+
+        <p-button
+          label="Guardar"
+          icon="pi pi-save"
+          severity="success"
+          (onClick)="onSave()"
+          [disabled]="!canSave() || isSaving()"
+          [loading]="isSaving()"
+        />
+      </div>
+    }
+  </p-card>
+
+  <!-- Email History Table -->
+  @if (emailLogs().length > 0) {
+    <p-card styleClass="mt-4">
+      <ng-template pTemplate="header">
+        <div class="card-header">
+          <h3>📬 Historial de Emails</h3>
+          <p class="subtitle">Últimos 20 emails enviados</p>
+        </div>
+      </ng-template>
+
+      <p-table [value]="emailLogs()" [paginator]="true" [rows]="10" styleClass="p-datatable-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Fecha</th>
+            <th>Destinatario</th>
+            <th>Asunto</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Reintentos</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-log>
+          <tr>
+            <td>{{ formatDate(log.createdAt) }}</td>
+            <td>{{ log.recipientEmail }}</td>
+            <td>{{ log.subject }}</td>
+            <td>
+              <p-tag [value]="log.templateType" severity="info" />
+            </td>
+            <td>
+              <p-tag [value]="log.status" [severity]="getStatusSeverity(log.status)" />
+            </td>
+            <td>{{ log.retryCount }} / {{ log.maxRetries }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="6" class="text-center">No hay emails en el historial</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  }
+</div>

@@ -463,6 +463,66 @@ service cloud.firestore {
     }
 
     // ============================================================
+    // EMAIL CONFIGS COLLECTION
+    // ============================================================
+
+    match /emailConfigs/{configId} {
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create: Owner only
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'workspaceId', 'enabled', 'recipientEmail', 'providerType', 'provider', 'createdAt'
+        ]) &&
+        isValidString('workspaceId') &&
+        request.resource.data.enabled is bool &&
+        isValidString('recipientEmail') &&
+        isValidString('providerType') &&
+        request.resource.data.providerType in ['smtp', 'sendgrid'] &&
+        request.resource.data.provider is map &&
+        request.resource.data.provider.keys().hasAll(['fromEmail', 'fromName']) &&
+        isValidTimestamp('createdAt');
+
+      // Update: Owner only
+      allow update: if isOwner() &&
+        immutableFieldsValid(['workspaceId', 'createdAt']);
+
+      // Delete: Owner only
+      allow delete: if isOwner();
+    }
+
+    // ============================================================
+    // EMAIL LOGS COLLECTION
+    // ============================================================
+
+    match /emailLogs/{logId} {
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create: Owner and Cloud Functions only
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'workspaceId', 'recipientEmail', 'subject', 'templateType', 'status', 'retryCount', 'maxRetries', 'createdAt'
+        ]) &&
+        isValidString('workspaceId') &&
+        isValidString('recipientEmail') &&
+        isValidString('subject') &&
+        request.resource.data.templateType in ['domain_expiring', 'subscription_expiring', 'health_alert', 'custom'] &&
+        request.resource.data.status in ['pending', 'sent', 'failed', 'retrying'] &&
+        isValidNumber('retryCount') &&
+        isValidNumber('maxRetries') &&
+        isValidTimestamp('createdAt');
+
+      // Update: Owner and Cloud Functions only (for retry logic)
+      allow update: if isOwner() &&
+        immutableFieldsValid(['workspaceId', 'recipientEmail', 'subject', 'templateType', 'createdAt']);
+
+      // Delete: Owner only
+      allow delete: if isOwner();
+    }
+
+    // ============================================================
     // DEFAULT DENY RULE
     // ============================================================
 
