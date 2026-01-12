@@ -29,13 +29,17 @@ jobs:
       - name: Create environment files
         run: npm run create-env
         env:
+          PRODUCTION: ${{ secrets.PRODUCTION }}
+          APP_VERSION: ${{ secrets.APP_VERSION }}
+          ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
           FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
           FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
-          # Add other secrets as needed
+          FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+          HOSTINGER_API_URL: ${{ secrets.HOSTINGER_API_URL }}
 
       - name: Build Angular Application
         run: npm run build
