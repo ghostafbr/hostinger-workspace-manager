@@ -5,7 +5,7 @@ import {getFirestore, Timestamp} from 'firebase-admin/firestore';
 // Initialize Firebase Admin (if not already initialized)
 try {
   initializeApp();
-} catch (error) {
+} catch {
   // App already initialized
 }
 
@@ -75,7 +75,7 @@ export const generateAlerts = onSchedule(
     timeoutSeconds: 540,
     memory: '512MiB',
   },
-  async (event) => {
+  async (_event) => {
     const startTime = Date.now();
     console.log('🔔 Starting generateAlerts job...');
 
