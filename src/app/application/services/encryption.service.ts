@@ -48,7 +48,7 @@ export class EncryptionService {
   }
 
   /**
-   * Hash text using SHA256 (one-way, for validation)
+   * Hash text using SHA256
    */
   hash(text: string): string {
     if (!text) return '';

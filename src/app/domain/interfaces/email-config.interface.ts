@@ -1,4 +1,5 @@
 import { EmailProvider } from '../enums/email-provider.enum';
+import { PaymentOptions } from './payment-options.interface';
 
 /**
  * Email Configuration Interface
@@ -71,6 +72,9 @@ export interface EmailConfigInterface {
     /** Delay between retries in minutes */
     delayMinutes: number;
   };
+
+  /** Payment options for renewal emails */
+  paymentOptions?: PaymentOptions;
 
   /** Firestore timestamps */
   createdAt: unknown; // Timestamp from @angular/fire/firestore

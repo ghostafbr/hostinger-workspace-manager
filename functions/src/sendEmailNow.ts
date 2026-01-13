@@ -111,13 +111,44 @@ export const sendEmailNow = onRequest(
           });
 
           // Send email
-          const info = await transporter.sendMail({
+          const mailOptions: any = {
             from: `"${emailConfig.provider.fromName}" <${emailConfig.provider.fromEmail}>`,
             to: emailLog.recipientEmail,
             subject: emailLog.subject,
-            html: emailLog.htmlContent,
-            text: emailLog.textContent,
+          };
+
+          // Agregar CC si existen (backward compatibility)
+          if (emailLog.ccEmails && emailLog.ccEmails.length > 0) {
+            mailOptions.cc = emailLog.ccEmails.join(',');
+          }
+
+          // Agregar BCC (copia oculta) si existen
+          if (emailLog.bccEmails && emailLog.bccEmails.length > 0) {
+            mailOptions.bcc = emailLog.bccEmails.join(',');
+          }
+
+          // Usar htmlBody/textBody si existen, sino usar htmlContent/textContent (backward compatibility)
+          console.log('📧 Email content check:', {
+            hasHtmlBody: !!emailLog.htmlBody,
+            hasTextBody: !!emailLog.textBody,
+            hasHtmlContent: !!emailLog.htmlContent,
+            hasTextContent: !!emailLog.textContent,
+            htmlBodyLength: emailLog.htmlBody?.length || 0,
+            textBodyLength: emailLog.textBody?.length || 0,
           });
+
+          if (emailLog.htmlBody) {
+            mailOptions.html = emailLog.htmlBody;
+            mailOptions.text = emailLog.textBody || emailLog.subject; // Fallback a subject si no hay texto
+          } else if (emailLog.htmlContent) {
+            mailOptions.html = emailLog.htmlContent;
+            mailOptions.text = emailLog.textContent || emailLog.subject;
+          } else {
+            // Si no hay HTML, enviar como texto plano
+            mailOptions.text = emailLog.textBody || emailLog.textContent || emailLog.subject;
+          }
+
+          const info = await transporter.sendMail(mailOptions);
 
           console.log(`✅ Email sent successfully: ${info.messageId}`);
 

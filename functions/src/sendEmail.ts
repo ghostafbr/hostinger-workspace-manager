@@ -418,8 +418,8 @@ import {onSchedule} from 'firebase-functions/v2/scheduler';
 
 export const retryFailedEmails = onSchedule(
   {
-    schedule: 'every 10 minutes',
-    timeZone: 'America/Chicago',
+    schedule: 'every 15 minutes',
+    timeZone: 'America/Bogota',
     region: 'us-central1',
     timeoutSeconds: 300,
     memory: '256MiB',
@@ -428,63 +428,123 @@ export const retryFailedEmails = onSchedule(
     console.log('🔄 Starting retryFailedEmails job...');
 
     try {
-      const now = Timestamp.now();
-
-      // Get emails that need retry
-      const retrySnapshot = await db
+      // Get pending emails (not just retrying)
+      const pendingSnapshot = await db
         .collection('emailLogs')
-        .where('status', '==', 'retrying')
-        .where('nextRetryAt', '<=', now)
+        .where('status', '==', 'pending')
         .limit(50)
         .get();
 
-      console.log(`Found ${retrySnapshot.size} emails to retry`);
+      console.log(`Found ${pendingSnapshot.size} pending emails to send`);
 
-      const successCount = 0;
+      let successCount = 0;
       let failureCount = 0;
 
-      for (const emailLog of retrySnapshot.docs) {
-        const data = emailLog.data();
+      for (const emailLogDoc of pendingSnapshot.docs) {
+        const emailLog = emailLogDoc.data();
+        const emailLogId = emailLogDoc.id;
 
-        // Skip if max retries exceeded
-        if (data.retryCount >= data.maxRetries) {
-          await emailLog.ref.update({
-            status: 'failed',
+        try {
+          // Skip if max retries exceeded
+          const retryCount = emailLog.retryCount || 0;
+          const maxRetries = emailLog.maxRetries || 3;
+
+          if (retryCount >= maxRetries) {
+            await emailLogDoc.ref.update({
+              status: 'failed',
+              error: 'Max retries exceeded',
+              updatedAt: Timestamp.now(),
+            });
+            failureCount++;
+            continue;
+          }
+
+          // Get email config
+          const configSnapshot = await db
+            .collection('emailConfigs')
+            .where('workspaceId', '==', emailLog.workspaceId)
+            .where('enabled', '==', true)
+            .limit(1)
+            .get();
+
+          if (configSnapshot.empty) {
+            await emailLogDoc.ref.update({
+              status: 'failed',
+              error: 'Email config not found or disabled',
+              updatedAt: Timestamp.now(),
+            });
+            failureCount++;
+            continue;
+          }
+
+          const emailConfig = configSnapshot.docs[0].data();
+          const providerType = emailConfig.providerType || 'smtp';
+
+          // Prepare credentials
+          let credentials: any;
+          if (providerType === 'smtp') {
+            const smtpConfig = emailConfig.provider?.smtp;
+            if (!smtpConfig?.password) {
+              throw new Error('SMTP password not found');
+            }
+
+            const decryptedPassword = cryptoJS.AES.decrypt(smtpConfig.password, ENCRYPTION_KEY).toString(cryptoJS.enc.Utf8);
+            if (!decryptedPassword) {
+              throw new Error('Failed to decrypt SMTP password');
+            }
+
+            credentials = {
+              type: 'smtp' as const,
+              smtp: {
+                ...smtpConfig,
+                password: decryptedPassword,
+              },
+            };
+          } else {
+            // SendGrid not fully supported in retry yet
+            throw new Error('Only SMTP provider supported in retry');
+          }
+
+          // Send email using stored content
+          const htmlContent = emailLog.htmlBody || emailLog.htmlContent || `<p>${emailLog.subject}</p>`;
+          const textContent = emailLog.textBody || emailLog.textContent || emailLog.subject;
+
+          const result = await sendViaSMTP({
+            smtp: credentials.smtp,
+            to: emailLog.recipientEmail,
+            from: emailConfig.provider.fromEmail,
+            fromName: emailConfig.provider.fromName,
+            subject: emailLog.subject,
+            htmlContent,
+            textContent,
+            cc: emailLog.ccEmails || [],
+          });
+
+          // Update success
+          await emailLogDoc.ref.update({
+            status: 'sent',
+            sentAt: Timestamp.now(),
+            messageId: result.messageId,
             updatedAt: Timestamp.now(),
           });
-          failureCount++;
-          continue;
-        }
 
-        // Get email config
-        const configSnapshot = await db
-          .collection('emailConfigs')
-          .where('workspaceId', '==', data.workspaceId)
-          .limit(1)
-          .get();
+          console.log(`✅ Email ${emailLogId} sent successfully`);
+          successCount++;
+        } catch (error: unknown) {
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          console.error(`❌ Error sending email ${emailLogId}:`, errorMessage);
 
-        if (configSnapshot.empty || !configSnapshot.docs[0].data().enabled) {
-          await emailLog.ref.update({
-            status: 'failed',
-            errorMessage: 'Email config not found or disabled',
+          // Update retry count
+          const newRetryCount = (emailLog.retryCount || 0) + 1;
+          await emailLogDoc.ref.update({
+            retryCount: newRetryCount,
+            lastError: errorMessage,
+            lastRetryAt: Timestamp.now(),
             updatedAt: Timestamp.now(),
           });
+
           failureCount++;
-          continue;
         }
-
-        // Get email config (would be needed for actual retry with API key)
-        // const emailConfig = configSnapshot.docs[0].data();
-        // const apiKey = cryptoJS.AES.decrypt(emailConfig.provider.apiKey, ENCRYPTION_KEY).toString(cryptoJS.enc.Utf8);
-
-        // Attempt to resend (would need to reconstruct HTML/text content from alert log)
-        // For now, just mark as failed - in production, store content in email log
-        await emailLog.ref.update({
-          status: 'failed',
-          errorMessage: 'Retry not fully implemented - content not stored',
-          updatedAt: Timestamp.now(),
-        });
-        failureCount++;
       }
 
       console.log(`✅ Retry job complete. Success: ${successCount}, Failed: ${failureCount}`);

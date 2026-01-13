@@ -30,6 +30,12 @@ export interface Domain {
   /** Whether privacy protection is enabled */
   privacyProtection: boolean;
 
+  /** Contact email for domain notifications */
+  contactEmail?: string;
+
+  /** Renewal price in COP (Colombian Pesos) */
+  renewalPrice?: number;
+
   /** Raw API response for debugging */
   raw: Record<string, unknown>;
 

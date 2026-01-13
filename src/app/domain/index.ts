@@ -50,6 +50,7 @@ export type {
   SendEmailRequestInterface as ISendEmailRequest,
   SendEmailResponseInterface as ISendEmailResponse,
 } from './interfaces/email-template.interface';
+export type { PaymentOptions as IPaymentOptions } from './interfaces/payment-options.interface';
 
 // Models (classes with business logic)
 export { Workspace } from './models/workspace.model';

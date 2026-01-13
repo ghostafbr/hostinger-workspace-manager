@@ -45,6 +45,30 @@ export const createTestAlert = functions.https.onRequest(
       const timestamp = Date.now();
       const domainName = `test-domain-${timestamp}.com`;
 
+      // Crear el dominio en Firestore con los campos necesarios
+      const expiresAt = admin.firestore.Timestamp.fromDate(
+        new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+      );
+
+      const domainData = {
+        domainName: domainName,
+        workspaceId: workspaceId,
+        contactEmail: testEmail, // Email al que se enviará
+        renewalPrice: 1500, // Precio de renovación en COP (para pruebas)
+        expiresAt: expiresAt,
+        status: 'active',
+        createdAt: admin.firestore.Timestamp.now(),
+        updatedAt: admin.firestore.Timestamp.now(),
+      };
+
+      await db.collection('domains').doc(domainName).set(domainData);
+
+      functions.logger.info('✅ Test domain created:', {
+        domainName,
+        contactEmail: testEmail,
+        renewalPrice: 1500
+      });
+
       // Crear alerta de prueba
       const testAlert = {
         workspaceId: workspaceId,
@@ -58,6 +82,7 @@ export const createTestAlert = functions.https.onRequest(
         status: 'pending' as const,
         createdAt: admin.firestore.Timestamp.now(),
         metadata: {
+          entityId: domainName, // ID del dominio para buscar en Firestore
           daysUntilExpiry: 7,
           expiryDate: admin.firestore.Timestamp.fromDate(
             new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
