@@ -24,10 +24,12 @@ export const routes: Routes = [
       {
         path: 'home',
         loadComponent: () => import('./presentation/pages/dashboard/dashboard.page'),
+        data: { preload: true, preloadDelay: 1000 }, // Preload dashboard after 1s
       },
       {
         path: 'workspaces',
         loadComponent: () => import('./presentation/pages/workspaces/workspaces.page'),
+        data: { preload: true, preloadDelay: 1500 }, // Preload workspaces after 1.5s
       },
       {
         path: 'workspaces/create',

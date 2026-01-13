@@ -1,12 +1,30 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
-    <title>HostingerWorkspaceManager</title>
+    <title>Hostinger Workspace Manager</title>
     <base href="/" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Gestión centralizada de workspaces de Hostinger - Monitorea dominios, suscripciones y alertas" />
+    <meta name="theme-color" content="#475569" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="manifest" href="manifest.webmanifest" />
+
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="HWM" />
+
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://firestore.googleapis.com" />
+    <link rel="preconnect" href="https://firebase.googleapis.com" />
+    <link rel="dns-prefetch" href="https://kit.fontawesome.com" />
+
     <script src="https://kit.fontawesome.com/9da558a76f.js" crossorigin="anonymous"></script>
+
+    <noscript>
+      <p>Esta aplicación requiere JavaScript para funcionar correctamente.</p>
+    </noscript>
   </head>
   <body>
     <app-root></app-root>
