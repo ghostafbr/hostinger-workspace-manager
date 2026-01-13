@@ -1,11 +1,11 @@
-<div class="domains-page">
+<div class="domains-page" @fadeIn role="main" aria-labelledby="domains-heading">
   <p-toast />
 
   <!-- Page Header -->
-  <div class="page-header">
+  <div class="page-header" role="banner">
     <div class="header-content">
-      <h1 class="page-title">
-        <i class="pi pi-globe"></i>
+      <h1 class="page-title" id="domains-heading">
+        <i class="pi pi-globe" aria-hidden="true"></i>
         Dominios - {{ workspaceName() }}
       </h1>
       <p class="page-subtitle">Gestiona y monitorea los dominios de este workspace</p>

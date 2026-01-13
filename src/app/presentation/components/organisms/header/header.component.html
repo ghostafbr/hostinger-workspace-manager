@@ -8,10 +8,12 @@
       (click)="onToggleSidebar()"
       pTooltip="Toggle menu"
       tooltipPosition="bottom"
+      aria-label="Abrir o cerrar menú lateral"
+      aria-controls="navigation"
     ></button>
 
     <!-- Workspace Selector -->
-    <div class="workspace-selector">
+    <div class="workspace-selector" role="region" aria-label="Selector de workspace">
       <p-select
         [options]="workspaceOptions()"
         [(ngModel)]="selectedWorkspaceId"
@@ -19,6 +21,7 @@
         placeholder="Selecciona un workspace"
         [showClear]="false"
         styleClass="workspace-dropdown"
+        aria-label="Seleccionar workspace activo"
       >
         <ng-template let-workspace pTemplate="selectedItem">
           @if (workspace) {
@@ -48,7 +51,7 @@
 
     <!-- Quick Actions -->
     @if (hasWorkspaceSelected()) {
-      <div class="quick-actions">
+      <div class="quick-actions" role="group" aria-label="Acciones rápidas">
         <button
           pButton
           icon="pi pi-link"
@@ -59,6 +62,7 @@
           [disabled]="!canTestConnection()"
           pTooltip="Test connection to Hostinger API"
           tooltipPosition="bottom"
+          aria-label="Probar conexión con la API de Hostinger"
         ></button>
         <button
           pButton
@@ -70,6 +74,7 @@
           [disabled]="!canSync()"
           pTooltip="Sync data from Hostinger"
           tooltipPosition="bottom"
+          aria-label="Sincronizar datos desde Hostinger"
         ></button>
       </div>
     }

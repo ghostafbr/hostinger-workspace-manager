@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/application/services/auth.service';
 import { FirebaseError } from 'firebase/app';
+import { fadeIn, slideUp, shake } from '@app/infrastructure';
 
 // PrimeNG Imports
 import { CardModule } from 'primeng/card';
@@ -34,6 +35,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
     InputGroupModule,
     InputGroupAddonModule,
   ],
+  animations: [fadeIn, slideUp, shake],
   templateUrl: './login.page.html',
   styleUrl: './login.page.scss',
 })
@@ -49,6 +51,7 @@ export default class LoginPage {
 
   readonly isLoading = signal<boolean>(false);
   readonly errorMessage = signal<string | null>(null);
+  readonly errorState = signal<'default' | 'error'>('default');
 
   /**
    * Handle form submission
@@ -76,6 +79,8 @@ export default class LoginPage {
       // Redirect to dashboard on success
       await this.router.navigate(['/dashboard']);
     } catch (error) {
+      this.errorState.set('error'); // Trigger shake animation
+      setTimeout(() => this.errorState.set('default'), 500); // Reset after animation
       this.handleAuthError(error);
     } finally {
       this.isLoading.set(false);

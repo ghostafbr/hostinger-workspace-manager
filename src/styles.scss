@@ -1,16 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
 
 // PrimeIcons (requerido)
-@import 'primeicons/primeicons.css';
+@use 'primeicons/primeicons.css';
+
+// UX Enhancement Utilities
+@use 'styles/micro-interactions';
+@use 'styles/accessibility';
+@use 'styles/responsive';
 
 // Custom variables - Neutral color scheme
 :root {
   --primary-color: #475569;
   --primary-color-text: #ffffff;
+  --primary-500: #475569;
+  --primary-500-rgb: 71, 85, 105; // For rgba() usage
   --surface-0: #ffffff;
   --surface-50: #fafafa;
   --surface-100: #f5f5f5;
   --surface-200: #e5e7eb;
+  --surface-300: #d1d5db;
+  --surface-ground: #f9fafb;
   --text-color: #1f2937;
   --text-color-secondary: #6b7280;
   --border-color: #d1d5db;

@@ -24,6 +24,9 @@ import { AuthService } from '@app/application/services/auth.service';
 import { ExportService } from '@app/application';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
+// Animations
+import { fadeIn, slideUp, listStagger } from '@app/infrastructure';
+
 // Components
 import { ExpirationCardComponent } from '@app/presentation/components/molecules/expiration-card/expiration-card.component';
 import { WorkspacesAlertPanelComponent } from '@app/presentation/components/molecules/workspaces-alert-panel/workspaces-alert-panel.component';
@@ -68,6 +71,7 @@ import {
     AdvancedSearchComponent,
   ],
   providers: [ConfirmationService, MessageService],
+  animations: [fadeIn, slideUp, listStagger],
   templateUrl: './dashboard.page.html',
   styleUrl: './dashboard.page.scss',
 })

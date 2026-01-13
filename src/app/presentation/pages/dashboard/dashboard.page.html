@@ -1,14 +1,14 @@
-<div class="dashboard-container">
+<div class="dashboard-container" @fadeIn role="main" aria-label="Dashboard principal">
   <!-- Toast Notifications -->
   <p-toast />
   <p-confirmDialog />
 
   <!-- Toolbar -->
-  <p-toolbar styleClass="dashboard-toolbar">
+  <p-toolbar styleClass="dashboard-toolbar" role="toolbar" aria-label="Barra de herramientas del dashboard">
     <div class="p-toolbar-group-start">
       <div class="toolbar-left-content">
-        <h1 class="dashboard-title">
-          <i class="pi pi-chart-line"></i>
+        <h1 class="dashboard-title" id="dashboard-heading">
+          <i class="pi pi-chart-line" aria-hidden="true"></i>
           Dashboard
         </h1>
         @if (stats() && !isLoading()) {
@@ -52,6 +52,7 @@
         (onClick)="syncAllWorkspaces()"
         pTooltip="Sincronizar todos los workspaces activos"
         tooltipPosition="bottom"
+        aria-label="Sincronizar todos los workspaces activos"
       />
       <p-button
         label="Exportar CSV"

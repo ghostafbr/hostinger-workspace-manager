@@ -27,6 +27,9 @@ import { WorkspaceService } from '@app/application/services/workspace.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Workspace, WorkspaceStatus } from '@app/domain';
 
+// Animations
+import { fadeIn, slideUp, listStagger } from '@app/infrastructure';
+
 /**
  * Workspaces List Page
  *
@@ -51,6 +54,7 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
     TooltipModule,
   ],
   providers: [ConfirmationService, MessageService],
+  animations: [fadeIn, slideUp, listStagger],
   templateUrl: './workspaces.page.html',
   styleUrl: './workspaces.page.scss',
 })

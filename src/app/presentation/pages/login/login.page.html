@@ -1,6 +1,9 @@
-<div class="login-container">
-  <div class="login-card-wrapper">
-    <p-card>
+<!-- Skip link for accessibility (WCAG 2.1 - 2.4.1) -->
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+<div class="login-container" id="main-content" role="main">
+  <div class="login-card-wrapper" @fadeIn>
+    <p-card @slideUp>
       <ng-template pTemplate="header">
         <div class="card-header">
           <h1 class="app-title">Hostinger Workspace Manager</h1>
@@ -8,16 +11,28 @@
         </div>
       </ng-template>
 
-      <!-- Error Message -->
+      <!-- Error Message with shake animation -->
       @if (errorMessage()) {
-        <p-message severity="error" [text]="errorMessage()!" />
+        <div [@shake]="errorState()" role="alert" aria-live="assertive">
+          <p-message severity="error" [text]="errorMessage()!" />
+        </div>
       }
 
       <!-- Login Form -->
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <form
+        [formGroup]="loginForm"
+        (ngSubmit)="onSubmit()"
+        class="login-form"
+        aria-labelledby="login-form-title"
+      >
+        <h2 id="login-form-title" class="sr-only">Formulario de inicio de sesión</h2>
+
         <!-- Email Field -->
         <div class="field">
-          <label for="email" class="field-label">Email</label>
+          <label for="email" class="field-label">
+            Email
+            <span class="required-indicator" aria-label="requerido">*</span>
+          </label>
           <input
             pInputText
             id="email"
@@ -27,15 +42,23 @@
             [invalid]="hasFieldError('email')"
             fluid
             autocomplete="email"
+            aria-required="true"
+            [attr.aria-invalid]="hasFieldError('email')"
+            [attr.aria-describedby]="hasFieldError('email') ? 'email-error' : null"
           />
           @if (hasFieldError('email')) {
-            <small class="field-error">{{ getFieldError('email') }}</small>
+            <small class="field-error error-message" id="email-error" role="alert">
+              {{ getFieldError('email') }}
+            </small>
           }
         </div>
 
         <!-- Password Field -->
         <div class="field">
-          <label for="password" class="field-label">Contraseña</label>
+          <label for="password" class="field-label">
+            Contraseña
+            <span class="required-indicator" aria-label="requerido">*</span>
+          </label>
           <p-password
             formControlName="password"
             inputId="password"
@@ -45,9 +68,14 @@
             [invalid]="hasFieldError('password')"
             fluid
             autocomplete="current-password"
+            aria-required="true"
+            [attr.aria-invalid]="hasFieldError('password')"
+            [attr.aria-describedby]="hasFieldError('password') ? 'password-error' : null"
           />
           @if (hasFieldError('password')) {
-            <small class="field-error">{{ getFieldError('password') }}</small>
+            <small class="field-error error-message" id="password-error" role="alert">
+              {{ getFieldError('password') }}
+            </small>
           }
         </div>
 
@@ -60,6 +88,8 @@
           [disabled]="loginForm.invalid || isLoading()"
           severity="primary"
           fluid
+          styleClass="hover-lift"
+          [attr.aria-busy]="isLoading()"
         />
       </form>
 
@@ -67,7 +97,7 @@
       <ng-template pTemplate="footer">
         <div class="card-footer">
           <p class="footer-note">
-            <i class="pi pi-info-circle"></i>
+            <i class="pi pi-info-circle" aria-hidden="true"></i>
             Solo usuarios autorizados pueden acceder a esta aplicación.
           </p>
         </div>

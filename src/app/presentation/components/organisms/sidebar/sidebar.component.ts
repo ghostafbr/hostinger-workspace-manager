@@ -96,7 +96,7 @@ export class SidebarComponent {
   ];
 
   onToggle(): void {
-    this.toggleSidebar.emit(!this.collapsed);
+    this.toggleSidebar.emit(!this.collapsed());
   }
 
   navigateTo(route: string): void {

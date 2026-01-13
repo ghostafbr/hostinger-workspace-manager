@@ -199,7 +199,6 @@
 // Collapsed state adjustments
 .sidebar.collapsed {
   .sidebar-header {
-    flex-direction: column;
     gap: 1rem;
 
     .toggle-btn {
@@ -273,7 +272,7 @@
 // Large screens
 @include variables.media-xxxl {
   .sidebar {
-    width: 320px;
+    width: 30 0px;
 
     &.collapsed {
       width: 100px;
@@ -288,11 +287,11 @@
       gap: 1rem;
 
       i {
-        font-size: 2rem;
+        font-size: 1.2rem;
       }
 
       .logo-text {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
       }
     }
   }
@@ -302,7 +301,7 @@
     gap: 1.25rem;
 
     .menu-label {
-      font-size: 1.125rem;
+      font-size: 0.9rem;
     }
   }
 }
@@ -322,11 +321,11 @@
 
     .logo {
       i {
-        font-size: 2.5rem;
+        font-size: 1.35rem;
       }
 
       .logo-text {
-        font-size: 1.75rem;
+        font-size: 1.35rem;
       }
     }
   }
@@ -335,12 +334,12 @@
     padding: 1.5rem 2.5rem;
 
     i {
-      font-size: 1.75rem;
+      font-size: 1.35rem;
       min-width: 2.5rem;
     }
 
     .menu-label {
-      font-size: 1.25rem;
+      font-size: 1rem;
     }
   }
 }
@@ -363,11 +362,11 @@
       gap: 1.5rem;
 
       i {
-        font-size: 3rem;
+        font-size: 2rem;
       }
 
       .logo-text {
-        font-size: 2rem;
+        font-size: 1.5rem;
       }
     }
   }
@@ -377,12 +376,12 @@
     gap: 1.5rem;
 
     i {
-      font-size: 2rem;
+      font-size: 1.5rem;
       min-width: 3rem;
     }
 
     .menu-label {
-      font-size: 1.5rem;
+      font-size: 1.125rem;
     }
 
     .badge {

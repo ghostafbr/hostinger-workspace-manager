@@ -1,12 +1,12 @@
-<div class="workspaces-container">
+<div class="workspaces-container" @fadeIn role="main" aria-label="Gestión de workspaces">
   <p-toast />
   <p-confirmDialog />
 
   <p-card>
     <ng-template pTemplate="header">
-      <div class="page-header">
-        <h2 class="m-0">Workspaces</h2>
-        <div class="flex gap-2">
+      <div class="page-header" role="banner">
+        <h2 class="m-0" id="workspaces-heading">Workspaces</h2>
+        <div class="flex gap-2" role="group" aria-label="Acciones principales">
           <!-- TEMP: Batch Sync Button (remove after testing) -->
           <p-button
             label="🧪 Sincronizar Todos"
@@ -17,14 +17,20 @@
             (onClick)="syncAllWorkspaces()"
             pTooltip="TEMP: Test batch sync (producción usa cron job a las 03:00 AM)"
             tooltipPosition="bottom"
+            aria-label="Sincronizar todos los workspaces (característica temporal de prueba)"
           />
-          <p-button label="Nuevo Workspace" icon="pi pi-plus" (onClick)="createWorkspace()" />
+          <p-button
+            label="Nuevo Workspace"
+            icon="pi pi-plus"
+            (onClick)="createWorkspace()"
+            aria-label="Crear nuevo workspace"
+          />
         </div>
       </div>
     </ng-template>
 
     <!-- Search Bar -->
-    <div class="search-container mb-4">
+    <div class="search-container mb-4" role="search">
       <p-iconField iconPosition="left">
         <p-inputIcon styleClass="pi pi-search" />
         <input
@@ -34,6 +40,7 @@
           [value]="searchTerm()"
           (input)="searchTerm.set($any($event.target).value)"
           class="w-full"
+          aria-label="Buscar workspaces por nombre o descripción"
         />
       </p-iconField>
     </div>

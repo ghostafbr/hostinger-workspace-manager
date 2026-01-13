@@ -2,12 +2,12 @@
   <div class="footer-content">
     <div class="footer-left">
       <span class="version">
-        <i class="pi pi-code"></i>
+        <i class="pi pi-code" aria-hidden="true"></i>
         v{{ appVersion }}
       </span>
-      <span class="separator">|</span>
+      <span class="separator" aria-hidden="true">|</span>
       <span class="last-sync">
-        <i class="pi pi-refresh"></i>
+        <i class="pi pi-refresh" aria-hidden="true"></i>
         Última sync: {{ lastGlobalSync() }}
       </span>
     </div>
@@ -23,8 +23,8 @@
         icon="pi pi-circle-fill"
       ></p-tag>
       <div class="footer-links">
-        <a href="#" class="footer-link">Docs</a>
-        <a href="#" class="footer-link">Soporte</a>
+        <a href="#" class="footer-link" aria-label="Ver documentación">Docs</a>
+        <a href="#" class="footer-link" aria-label="Contactar soporte">Soporte</a>
       </div>
     </div>
   </div>

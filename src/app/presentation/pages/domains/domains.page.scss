@@ -3,6 +3,11 @@
   background-color: #f9fafb;
   padding: 2rem;
 
+  // Soporte para animación fadeIn de Angular
+  &.ng-animating {
+    overflow: hidden;
+  }
+
   @media (max-width: 768px) {
     padding: 1rem;
   }
@@ -11,6 +16,7 @@
 // Page Header
 .page-header {
   margin-bottom: 2rem;
+  animation: slideDown 0.3s ease-out;
 
   .header-content {
     .page-title {
@@ -36,5 +42,17 @@
       color: #6b7280;
       font-size: 1rem;
     }
+  }
+}
+
+// Animaciones
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

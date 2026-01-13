@@ -25,6 +25,9 @@ import { DomainsTableComponent } from '@app/presentation/components/organisms/do
 import { DomainDetailsDialogComponent } from '@app/presentation/components/organisms/domain-details-dialog/domain-details-dialog.component';
 import { DomainEditDialogComponent } from '@app/presentation/components/organisms/domain-edit-dialog/domain-edit-dialog.component';
 
+// Animations
+import { fadeIn, slideUp } from '@app/infrastructure';
+
 /**
  * Domains Page
  *
@@ -36,6 +39,7 @@ import { DomainEditDialogComponent } from '@app/presentation/components/organism
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CardModule, ToastModule, DomainsTableComponent, DomainDetailsDialogComponent, DomainEditDialogComponent],
   providers: [MessageService],
+  animations: [fadeIn, slideUp],
   templateUrl: './domains.page.html',
   styleUrl: './domains.page.scss',
 })

@@ -1,6 +1,11 @@
 .dashboard-container {
   min-height: 100vh;
   background-color: #f9fafb;
+
+  // Soporte para animación fadeIn de Angular
+  &.ng-animating {
+    overflow: hidden;
+  }
 }
 
 .dashboard-toolbar {
@@ -10,9 +15,26 @@
   border-bottom: 1px solid #e5e7eb;
   padding: 1.25rem 2rem;
 
+  // Agregar animación de entrada
+  animation: slideDown 0.3s ease-out;
+
   .p-toolbar-group-end {
     display: flex;
     gap: 0.5rem;
+
+    // Aplicar hover-lift a botones
+    ::ng-deep .p-button {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      &:active:not(:disabled) {
+        transform: translateY(0);
+      }
+    }
   }
 
   .toolbar-left-content {
@@ -77,11 +99,22 @@
 }
 
 .dashboard-content {
-  max-width: 1400px;
   margin: 0 auto;
 
   @media (max-width: 768px) {
     padding: 0 1rem 1rem;
+  }
+}
+
+// Animaciones
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

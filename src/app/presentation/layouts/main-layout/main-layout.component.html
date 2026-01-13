@@ -1,25 +1,36 @@
+<!-- Skip Links for Accessibility (WCAG 2.1 - 2.4.1) -->
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+<a href="#navigation" class="skip-link">Saltar a navegación</a>
+
 <div class="layout-wrapper">
   <!-- Mobile backdrop (only on mobile) -->
   <div
     class="sidebar-backdrop"
     [class.show]="isMobile() && !sidebarCollapsed()"
     (click)="onSidebarToggle(true)"
+    role="presentation"
   ></div>
 
   <!-- Sidebar -->
-  <app-sidebar [collapsed]="sidebarCollapsed()" (toggleSidebar)="onSidebarToggle($event)" />
+  <nav id="navigation" aria-label="Navegación principal">
+    <app-sidebar [collapsed]="sidebarCollapsed()" (toggleSidebar)="onSidebarToggle($event)" />
+  </nav>
 
   <!-- Main Content Area -->
   <div class="layout-main" [class.sidebar-collapsed]="sidebarCollapsed()">
     <!-- Header -->
-    <app-header (toggleSidebar)="onSidebarToggle(!sidebarCollapsed())" />
+    <header role="banner">
+      <app-header (toggleSidebar)="onSidebarToggle(!sidebarCollapsed())" />
+    </header>
 
     <!-- Content -->
-    <div class="layout-content">
+    <main id="main-content" class="layout-content" role="main" tabindex="-1">
       <router-outlet />
-    </div>
+    </main>
 
     <!-- Footer -->
-    <app-footer />
+    <footer role="contentinfo">
+      <app-footer />
+    </footer>
   </div>
 </div>
