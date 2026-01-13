@@ -2,7 +2,7 @@
   <p-card>
     <ng-template pTemplate="header">
       <div class="card-header">
-        <h2>📧 Configuración de Emails</h2>
+        <h2><i class="fas fa-envelope"></i> Configuración de Emails</h2>
         <p class="subtitle">Configure el envío de notificaciones por email para {{ currentWorkspace()?.name }}</p>
       </div>
     </ng-template>
@@ -17,7 +17,7 @@
 
     @if (isLoading()) {
       <div class="loading-container">
-        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        <i class="fas fa-spinner fa-spin" style="font-size: 2rem"></i>
         <p>Cargando configuración...</p>
       </div>
     } @else {
@@ -241,7 +241,7 @@
 
         <!-- Payment Options -->
         <div class="col-12">
-          <h3 class="section-title">💳 Opciones de Pago para Renovaciones</h3>
+          <h3 class="section-title"><i class="fas fa-credit-card"></i> Opciones de Pago para Renovaciones</h3>
           <small class="text-muted">Configure los métodos de pago que aparecerán en los correos de renovación de dominios</small>
         </div>
 
@@ -448,7 +448,7 @@
       <div class="actions">
         <p-button
           label="Cancelar"
-          icon="pi pi-times"
+          icon="fas fa-times"
           severity="secondary"
           (onClick)="onCancel()"
           [outlined]="true"
@@ -457,7 +457,7 @@
         @if (config()) {
           <p-button
             label="Eliminar"
-            icon="pi pi-trash"
+            icon="fas fa-trash"
             severity="danger"
             (onClick)="onDelete()"
             [outlined]="true"
@@ -467,7 +467,7 @@
         @if (config() && enabled()) {
           <p-button
             label="Enviar Email de Prueba"
-            icon="pi pi-send"
+            icon="fas fa-paper-plane"
             severity="info"
             (onClick)="onSendTestEmail()"
             [disabled]="isSendingTest()"
@@ -477,7 +477,7 @@
 
         <p-button
           label="Guardar"
-          icon="pi pi-save"
+          icon="fas fa-save"
           severity="success"
           (onClick)="onSave()"
           [disabled]="!canSave() || isSaving()"
@@ -492,7 +492,7 @@
     <p-card styleClass="mt-4">
       <ng-template pTemplate="header">
         <div class="card-header">
-          <h3>📬 Historial de Emails</h3>
+          <h3><i class="fas fa-inbox"></i> Historial de Emails</h3>
           <p class="subtitle">Últimos 20 emails enviados</p>
         </div>
       </ng-template>

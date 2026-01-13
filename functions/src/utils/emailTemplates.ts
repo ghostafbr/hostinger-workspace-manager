@@ -109,7 +109,7 @@ export function generateRenewalEmailHTML(data: RenewalEmailData): string {
               <!-- Servicios Incluidos -->
               <div style="background-color: #F0FDF4; border-left: 4px solid #10B981; padding: 20px; border-radius: 4px; margin-bottom: 32px; text-align: left;">
                 <h4 style="margin: 0 0 16px; color: #065F46; font-size: 16px; font-weight: 600;">
-                  ✨ Servicios Incluidos en tu Renovación
+                  ★ Servicios Incluidos en tu Renovación
                 </h4>
                 <ul style="margin: 0; padding: 0 0 0 20px; color: #047857; font-size: 14px; line-height: 2;">
                   <li><strong>Renovación de hosting + dominio</strong></li>
@@ -175,7 +175,7 @@ export function generateRenewalEmailHTML(data: RenewalEmailData): string {
               <!-- Wompi Payment Button -->
               <div style="text-align: center; margin-bottom: 24px;">
                 <a href="${paymentLink}" style="display: inline-block; background-color: #8B5CF6; color: #FFFFFF; text-decoration: none; padding: 16px 32px; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);">
-                  💳 Pagar con Tarjeta (Wompi)
+                  ▶ Pagar con Tarjeta (Wompi)
                 </a>
                 <p style="margin: 8px 0 0; color: #6B7280; font-size: 12px;">
                   Pago seguro procesado por Wompi
@@ -190,7 +190,7 @@ export function generateRenewalEmailHTML(data: RenewalEmailData): string {
               <!-- Bancolombia Transfer -->
               <div style="background-color: #FEF3C7; border-radius: 8px; padding: 20px; margin-bottom: 16px;">
                 <h4 style="margin: 0 0 12px; color: #92400E; font-size: 16px; font-weight: 600;">
-                  🏦 Transferencia Bancolombia
+                  ■ Transferencia Bancolombia
                 </h4>
                 <table width="100%" style="color: #78350F; font-size: 14px;">
                   <tr>
@@ -217,7 +217,7 @@ export function generateRenewalEmailHTML(data: RenewalEmailData): string {
               <!-- Nequi Transfer -->
               <div style="background-color: #FCE7F3; border-radius: 8px; padding: 20px; margin-bottom: 16px;">
                 <h4 style="margin: 0 0 12px; color: #9F1239; font-size: 16px; font-weight: 600;">
-                  📱 Transferencia Nequi
+                  ☎ Transferencia Nequi
                 </h4>
                 <table width="100%" style="color: #881337; font-size: 14px;">
                   <tr>
@@ -249,7 +249,7 @@ export function generateRenewalEmailHTML(data: RenewalEmailData): string {
                 ¿Necesitas ayuda? Contáctanos
               </p>
               <p style="margin: 0; color: #111827; font-size: 14px; font-weight: 500;">
-                📧 afbolanos@andres-bolanos.dev
+                ✉ afbolanos@andres-bolanos.dev
               </p>
               <p style="margin: 16px 0 0; color: #9CA3AF; font-size: 12px;">
                 Este es un correo automático. Por favor no respondas a este mensaje.
@@ -308,7 +308,7 @@ TOTAL: $${renewalPrice.toLocaleString('es-CO')} COP
 
   if (paymentLink) {
     text += `
-💳 PAGAR CON TARJETA (WOMPI)
+[TARJETA] PAGAR CON TARJETA (WOMPI)
 ${paymentLink}
 
 `;
@@ -316,7 +316,7 @@ ${paymentLink}
 
   if (bancolombia) {
     text += `
-🏦 TRANSFERENCIA BANCOLOMBIA
+[BANCO] TRANSFERENCIA BANCOLOMBIA
 Tipo de cuenta: ${bancolombia.accountType === 'ahorros' ? 'Ahorros' : 'Corriente'}
 Número: ${bancolombia.accountNumber}
 Titular: ${bancolombia.ownerName}
@@ -327,7 +327,7 @@ Documento: ${bancolombia.ownerDocument}
 
   if (nequi) {
     text += `
-📱 TRANSFERENCIA NEQUI
+[NEQUI] TRANSFERENCIA NEQUI
 Número: ${nequi.phoneNumber}
 Titular: ${nequi.ownerName}
 
