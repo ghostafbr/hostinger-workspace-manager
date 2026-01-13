@@ -64,6 +64,17 @@
         background-color: #f9fafb;
       }
     }
+
+    // Fix paginator dropdown z-index to appear above footer
+    .p-paginator {
+      .p-select {
+        z-index: 100;
+      }
+
+      .p-select-overlay {
+        z-index: 100 !important;
+      }
+    }
   }
 }
 

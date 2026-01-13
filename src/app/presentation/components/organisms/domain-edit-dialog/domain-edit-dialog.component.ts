@@ -1,6 +1,7 @@
-import { Component, ChangeDetectionStrategy, input, output, inject, signal, effect } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output, inject, signal, effect, computed, LOCALE_ID } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
 
 // PrimeNG
 import { DialogModule } from 'primeng/dialog';
@@ -13,6 +14,9 @@ import { IDomain } from '@app/domain';
 
 // Services
 import { DomainService } from '@app/application';
+
+// Register Spanish locale
+registerLocaleData(localeEs);
 
 /**
  * Domain Edit Dialog Component
@@ -31,6 +35,9 @@ import { DomainService } from '@app/application';
     InputTextModule,
     InputNumberModule,
   ],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'es' }
+  ],
   templateUrl: './domain-edit-dialog.component.html',
   styleUrl: './domain-edit-dialog.component.scss',
 })
@@ -45,6 +52,7 @@ export class DomainEditDialogComponent {
   readonly domainUpdated = output<void>();
 
   readonly isSaving = signal<boolean>(false);
+  readonly totalPrice = signal<number>(0);
 
   readonly editForm: FormGroup = this.fb.group({
     contactEmail: ['', [Validators.email]],
@@ -62,8 +70,23 @@ export class DomainEditDialogComponent {
           hostingRenewalPrice: domain.hostingRenewalPrice || 0,
           domainRenewalPrice: domain.domainRenewalPrice || 0,
         });
+        this.updateTotalPrice();
       }
     });
+
+    // Update total price when form values change
+    this.editForm.valueChanges.subscribe(() => {
+      this.updateTotalPrice();
+    });
+  }
+
+  /**
+   * Update total price calculation
+   */
+  private updateTotalPrice(): void {
+    const hosting = this.editForm.value.hostingRenewalPrice || 0;
+    const domain = this.editForm.value.domainRenewalPrice || 0;
+    this.totalPrice.set(hosting + domain);
   }
 
   /**
@@ -101,14 +124,5 @@ export class DomainEditDialogComponent {
   onClose(): void {
     this.editForm.reset();
     this.visibleChange.emit(false);
-  }
-
-  /**
-   * Get total renewal price
-   */
-  getTotalPrice(): number {
-    const hosting = this.editForm.value.hostingRenewalPrice || 0;
-    const domain = this.editForm.value.domainRenewalPrice || 0;
-    return hosting + domain;
   }
 }

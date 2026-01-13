@@ -205,3 +205,13 @@ body {
 .w-full {
   width: 100%;
 }
+
+// Fix z-index for PrimeNG overlays to appear above sticky footer (z-index: 99)
+.p-component-overlay,
+.p-select-overlay,
+.p-dropdown-panel,
+.p-multiselect-panel,
+.p-autocomplete-panel,
+.p-calendar-panel {
+  z-index: 1000 !important;
+}

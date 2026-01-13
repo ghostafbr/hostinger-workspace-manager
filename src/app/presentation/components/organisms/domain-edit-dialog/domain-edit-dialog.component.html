@@ -32,7 +32,7 @@
         formControlName="hostingRenewalPrice"
         mode="currency"
         currency="COP"
-        locale="es-CO"
+        locale="es"
         [min]="0"
         class="w-full"
       />
@@ -46,7 +46,7 @@
         formControlName="domainRenewalPrice"
         mode="currency"
         currency="COP"
-        locale="es-CO"
+        locale="es"
         [min]="0"
         class="w-full"
       />
@@ -55,7 +55,7 @@
     <!-- Total Price Display -->
     <div class="total-price">
       <strong>Total Renovación:</strong>
-      <span class="price">{{ getTotalPrice() | currency:'COP':'symbol':'1.0-0':'es-CO' }}</span>
+      <span class="price">{{ totalPrice() | currency:'COP':'symbol':'1.0-0':'es' }}</span>
     </div>
   </form>
 
