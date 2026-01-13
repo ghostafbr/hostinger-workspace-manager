@@ -69,7 +69,15 @@ export const runGenerateAlerts = functions.https.onRequest(
         });
 
         // Obtener información del dominio si la alerta tiene entityId
-        let domainData: any = null;
+        interface DomainData {
+          domainName?: string;
+          contactEmail?: string;
+          expiresAt?: { toDate: () => Date };
+          renewalPrice?: number;
+          hostingRenewalPrice?: number;
+          domainRenewalPrice?: number;
+        }
+        let domainData: DomainData | null = null;
         let recipientEmail = emailConfig.recipientEmail; // Email por defecto (notificaciones)
         let htmlBody = '';
         let textBody = '';
@@ -86,15 +94,16 @@ export const runGenerateAlerts = functions.https.onRequest(
             });
 
             if (domainDoc.exists) {
-              domainData = domainDoc.data();
+              domainData = domainDoc.data() as DomainData;
 
-              // Si el dominio tiene email de contacto, enviamos ahí (email principal)
-              // Si no, usamos el recipientEmail de configuración
-              if (domainData.contactEmail) {
-                recipientEmail = domainData.contactEmail;
-              }
+              if (domainData && domainData.domainName) {
+                // Si el dominio tiene email de contacto, enviamos ahí (email principal)
+                // Si no, usamos el recipientEmail de configuración
+                if (domainData.contactEmail) {
+                  recipientEmail = domainData.contactEmail;
+                }
 
-              // Calcular días hasta expiración
+            // Calcular días hasta expiración
               const expiresAt = domainData.expiresAt?.toDate();
               const now = new Date();
               const daysUntilExpiration = expiresAt
@@ -140,7 +149,7 @@ export const runGenerateAlerts = functions.https.onRequest(
 
               // Generar HTML y texto del email
               const templateData = {
-                domainName: domainData.domainName,
+                domainName: domainData.domainName!,
                 expirationDate,
                 daysUntilExpiration,
                 renewalPrice: domainData.renewalPrice ||
@@ -168,6 +177,10 @@ export const runGenerateAlerts = functions.https.onRequest(
                 recipientEmail,
                 hasPaymentLink: !!paymentLink,
               });
+              } else {
+                // Domain data is null or missing domainName
+                functions.logger.warn('⚠️ Domain data not found or invalid:', { entityId: alert.metadata.entityId });
+              }
             }
           } catch (error) {
             functions.logger.error('Error fetching domain data:', error);
@@ -175,7 +188,7 @@ export const runGenerateAlerts = functions.https.onRequest(
         }
 
         // Crear emailLog para enviar
-        const emailLog: any = {
+        const emailLog: Record<string, unknown> = {
           workspaceId: alert.workspaceId,
           alertId: doc.id,
           recipientEmail,

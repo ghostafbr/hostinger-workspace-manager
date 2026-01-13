@@ -111,7 +111,7 @@ export const sendEmailNow = onRequest(
           });
 
           // Send email
-          const mailOptions: any = {
+          const mailOptions: Record<string, unknown> = {
             from: `"${emailConfig.provider.fromName}" <${emailConfig.provider.fromEmail}>`,
             to: emailLog.recipientEmail,
             subject: emailLog.subject,

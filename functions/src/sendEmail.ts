@@ -152,7 +152,7 @@ export const sendEmail = onCall(
 
       // 6. Send email via configured provider
       try {
-        const response = await sendEmail_internal({
+        const response = await sendEmailInternal({
           credentials,
           to,
           from: emailConfig.provider.fromEmail,
@@ -215,7 +215,7 @@ export const sendEmail = onCall(
 /**
  * Internal function to send email via configured provider
  */
-async function sendEmail_internal(params: {
+async function sendEmailInternal(params: {
   credentials:
     | {type: 'sendgrid'; apiKey: string}
     | {type: 'smtp'; smtp: {host: string; port: number; secure: boolean; username: string; password: string}};
@@ -481,7 +481,10 @@ export const retryFailedEmails = onSchedule(
           const providerType = emailConfig.providerType || 'smtp';
 
           // Prepare credentials
-          let credentials: any;
+          let credentials: {
+            type: 'smtp';
+            smtp: { host: string; port: number; secure: boolean; username: string; password: string };
+          };
           if (providerType === 'smtp') {
             const smtpConfig = emailConfig.provider?.smtp;
             if (!smtpConfig?.password) {
