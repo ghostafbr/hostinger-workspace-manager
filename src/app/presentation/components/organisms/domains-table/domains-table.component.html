@@ -101,12 +101,22 @@
         </td>
 
         <!-- Actions -->
-        <td class="text-center">
+        <td class="text-center action-buttons">
           <p-button
-            label="Detalles"
+            icon="pi pi-pencil"
+            [text]="true"
+            size="small"
+            severity="secondary"
+            [pTooltip]="'Editar'"
+            tooltipPosition="top"
+            (onClick)="onEditDomain(domain, $event)"
+          />
+          <p-button
             icon="pi pi-eye"
             [text]="true"
             size="small"
+            [pTooltip]="'Ver detalles'"
+            tooltipPosition="top"
             (onClick)="onDomainClick(domain)"
           />
         </td>

@@ -15,6 +15,10 @@ export class Domain implements DomainInterface {
   nameservers: string[];
   domainLock: boolean;
   privacyProtection: boolean;
+  contactEmail?: string;
+  renewalPrice?: number;
+  hostingRenewalPrice?: number;
+  domainRenewalPrice?: number;
   raw: Record<string, unknown>;
   syncedAt: Timestamp;
 
@@ -27,6 +31,10 @@ export class Domain implements DomainInterface {
     this.nameservers = data.nameservers;
     this.domainLock = data.domainLock;
     this.privacyProtection = data.privacyProtection;
+    this.contactEmail = data.contactEmail;
+    this.renewalPrice = data.renewalPrice;
+    this.hostingRenewalPrice = data.hostingRenewalPrice;
+    this.domainRenewalPrice = data.domainRenewalPrice;
     this.raw = data.raw;
     this.syncedAt = data.syncedAt;
   }
@@ -64,6 +72,14 @@ export class Domain implements DomainInterface {
   }
 
   /**
+   * Gets the total renewal price
+   */
+  getTotalRenewalPrice(): number {
+    if (this.renewalPrice) return this.renewalPrice;
+    return (this.hostingRenewalPrice || 0) + (this.domainRenewalPrice || 0);
+  }
+
+  /**
    * Gets a severity level based on days to expire
    */
   getSeverityLevel(): 'critical' | 'warning' | 'info' | 'expired' {
@@ -86,6 +102,10 @@ export class Domain implements DomainInterface {
       nameservers: this.nameservers,
       domainLock: this.domainLock,
       privacyProtection: this.privacyProtection,
+      contactEmail: this.contactEmail,
+      renewalPrice: this.renewalPrice,
+      hostingRenewalPrice: this.hostingRenewalPrice,
+      domainRenewalPrice: this.domainRenewalPrice,
       raw: this.raw,
       syncedAt: this.syncedAt,
     };
@@ -104,6 +124,10 @@ export class Domain implements DomainInterface {
       nameservers: (data['nameservers'] as string[]) || [],
       domainLock: (data['domainLock'] as boolean) || false,
       privacyProtection: (data['privacyProtection'] as boolean) || false,
+      contactEmail: data['contactEmail'] as string | undefined,
+      renewalPrice: data['renewalPrice'] as number | undefined,
+      hostingRenewalPrice: data['hostingRenewalPrice'] as number | undefined,
+      domainRenewalPrice: data['domainRenewalPrice'] as number | undefined,
       raw: (data['raw'] as Record<string, unknown>) || {},
       syncedAt: data['syncedAt'] as Timestamp,
     });

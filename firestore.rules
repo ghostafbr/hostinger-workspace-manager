@@ -523,6 +523,30 @@ service cloud.firestore {
     }
 
     // ============================================================
+    // PAYMENTS COLLECTION
+    // ============================================================
+
+    /**
+     * Payments - Payment records from Wompi webhook
+     * - Cloud Functions create via Admin SDK (bypass rules)
+     * - Owner can read
+     */
+    match /payments/{paymentId} {
+      // Read: Owner only
+      allow read: if isOwner();
+
+      // Create: Cloud Functions only (via Admin SDK bypass)
+      // We don't define create rule here because webhooks use Admin SDK
+      allow create: if false;
+
+      // Update: Not allowed (immutable records)
+      allow update: if false;
+
+      // Delete: Owner only (for cleanup)
+      allow delete: if isOwner();
+    }
+
+    // ============================================================
     // DEFAULT DENY RULE
     // ============================================================
 

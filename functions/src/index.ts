@@ -14,6 +14,9 @@ export { syncAllWorkspacesScheduled } from './syncAllWorkspaces';
 // Alert generation function (Cloud Scheduler)
 export { generateAlerts } from './generateAlerts';
 
+// Scheduled alert generation with escalating reminders (Cloud Scheduler)
+export { generateAlertsScheduled } from './generateAlertsScheduled';
+
 // Health metrics calculation function (Cloud Scheduler - every 15 minutes)
 export { calculateHealthMetrics } from './calculateHealthMetrics';
 
@@ -24,7 +27,8 @@ export { sendEmailNow } from './sendEmailNow';
 // Test functions
 export { createTestAlert } from './createTestAlert';
 export { runGenerateAlerts } from './runGenerateAlerts';
-
+// Webhooks
+export { wompiWebhook } from './wompiWebhook';
 /*
  * Example functions commented out - not needed for MVP
  *

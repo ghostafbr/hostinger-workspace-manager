@@ -1,0 +1,78 @@
+<p-dialog
+  [header]="'Editar Dominio - ' + (domain()?.domainName || '')"
+  [visible]="visible()"
+  (visibleChange)="visibleChange.emit($event)"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '600px' }"
+>
+  <form [formGroup]="editForm" (ngSubmit)="onSave()">
+    <!-- Contact Email -->
+    <div class="field">
+      <label for="contactEmail">Email de Contacto</label>
+      <input
+        pInputText
+        id="contactEmail"
+        formControlName="contactEmail"
+        type="email"
+        placeholder="cliente@ejemplo.com"
+        class="w-full"
+      />
+      @if (editForm.get('contactEmail')?.invalid && editForm.get('contactEmail')?.touched) {
+        <small class="p-error">Ingresa un email válido</small>
+      }
+    </div>
+
+    <!-- Hosting Renewal Price -->
+    <div class="field">
+      <label for="hostingPrice">Precio Renovación Hosting (COP)</label>
+      <p-inputNumber
+        inputId="hostingPrice"
+        formControlName="hostingRenewalPrice"
+        mode="currency"
+        currency="COP"
+        locale="es-CO"
+        [min]="0"
+        class="w-full"
+      />
+    </div>
+
+    <!-- Domain Renewal Price -->
+    <div class="field">
+      <label for="domainPrice">Precio Renovación Dominio (COP)</label>
+      <p-inputNumber
+        inputId="domainPrice"
+        formControlName="domainRenewalPrice"
+        mode="currency"
+        currency="COP"
+        locale="es-CO"
+        [min]="0"
+        class="w-full"
+      />
+    </div>
+
+    <!-- Total Price Display -->
+    <div class="total-price">
+      <strong>Total Renovación:</strong>
+      <span class="price">{{ getTotalPrice() | currency:'COP':'symbol':'1.0-0':'es-CO' }}</span>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Cancelar"
+      icon="pi pi-times"
+      severity="secondary"
+      (onClick)="onClose()"
+      [disabled]="isSaving()"
+    />
+    <p-button
+      label="Guardar"
+      icon="pi pi-check"
+      (onClick)="onSave()"
+      [loading]="isSaving()"
+      [disabled]="editForm.invalid"
+    />
+  </ng-template>
+</p-dialog>

@@ -23,6 +23,7 @@ import { IDomain } from '@app/domain';
 // Components
 import { DomainsTableComponent } from '@app/presentation/components/organisms/domains-table/domains-table.component';
 import { DomainDetailsDialogComponent } from '@app/presentation/components/organisms/domain-details-dialog/domain-details-dialog.component';
+import { DomainEditDialogComponent } from '@app/presentation/components/organisms/domain-edit-dialog/domain-edit-dialog.component';
 
 /**
  * Domains Page
@@ -33,7 +34,7 @@ import { DomainDetailsDialogComponent } from '@app/presentation/components/organ
   selector: 'app-domains',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CardModule, ToastModule, DomainsTableComponent, DomainDetailsDialogComponent],
+  imports: [CardModule, ToastModule, DomainsTableComponent, DomainDetailsDialogComponent, DomainEditDialogComponent],
   providers: [MessageService],
   templateUrl: './domains.page.html',
   styleUrl: './domains.page.scss',
@@ -50,6 +51,7 @@ export default class DomainsPage implements OnInit {
 
   readonly selectedDomain = signal<IDomain | null>(null);
   readonly showDetailsDialog = signal<boolean>(false);
+  readonly showEditDialog = signal<boolean>(false);
 
   /**
    * Workspace name for display
@@ -129,5 +131,35 @@ export default class DomainsPage implements OnInit {
     if (!visible) {
       this.selectedDomain.set(null);
     }
+  }
+
+  /**
+   * Open edit dialog for a domain
+   */
+  onEditDomain(domain: IDomain): void {
+    this.selectedDomain.set(domain);
+    this.showEditDialog.set(true);
+  }
+
+  /**
+   * Handle edit dialog visibility change
+   */
+  onEditDialogVisibilityChange(visible: boolean): void {
+    this.showEditDialog.set(visible);
+    if (!visible) {
+      this.selectedDomain.set(null);
+    }
+  }
+
+  /**
+   * Handle domain updated event
+   */
+  onDomainUpdated(): void {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Dominio actualizado',
+      detail: 'Los cambios se guardaron correctamente',
+    });
+    this.loadDomains(); // Refresh list
   }
 }

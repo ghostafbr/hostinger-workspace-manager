@@ -10,6 +10,7 @@ import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { TooltipModule } from 'primeng/tooltip';
 
 // Domain
 import { IDomain } from '@app/domain';
@@ -44,6 +45,7 @@ interface DaysFilterOption {
     TagModule,
     IconFieldModule,
     InputIconModule,
+    TooltipModule,
     ExpirationSemaphoreComponent,
   ],
   templateUrl: './domains-table.component.html',
@@ -55,6 +57,7 @@ export class DomainsTableComponent {
   readonly totalRecords = input<number>(0);
 
   readonly domainClicked = output<IDomain>();
+  readonly domainEditClicked = output<IDomain>();
   readonly pageChanged = output<{ first: number; rows: number }>();
 
   // Local state
@@ -133,6 +136,14 @@ export class DomainsTableComponent {
   formatNameservers(nameservers: string[] | undefined): string {
     if (!nameservers || nameservers.length === 0) return 'N/A';
     return nameservers.join(', ');
+  }
+
+  /**
+   * Emit domain edit event
+   */
+  onEditDomain(domain: IDomain, event: Event): void {
+    event.stopPropagation(); // Prevent row click
+    this.domainEditClicked.emit(domain);
   }
 
   /**

@@ -11,6 +11,9 @@ import {
   QueryConstraint,
   DocumentSnapshot,
   DocumentData,
+  doc,
+  getDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
 import { IDomain } from '@app/domain';
@@ -202,5 +205,144 @@ export class DomainService {
    */
   clearError(): void {
     this.error.set(null);
+  }
+
+  /**
+   * Get a single domain by ID
+   */
+  async getDomainById(domainId: string): Promise<IDomain | null> {
+    try {
+      this.isLoading.set(true);
+      this.error.set(null);
+
+      const domainRef = doc(this.firestore, 'domains', domainId);
+      const domainDoc = await getDoc(domainRef);
+
+      if (!domainDoc.exists()) {
+        return null;
+      }
+
+      return {
+        ...(domainDoc.data() as IDomain),
+        id: domainDoc.id,
+      };
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch domain';
+      this.error.set(errorMessage);
+      throw error;
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  /**
+   * Update domain contact email and pricing
+   */
+  async updateDomain(
+    domainId: string,
+    updates: {
+      contactEmail?: string;
+      renewalPrice?: number;
+      hostingRenewalPrice?: number;
+      domainRenewalPrice?: number;
+    }
+  ): Promise<void> {
+    try {
+      this.isLoading.set(true);
+      this.error.set(null);
+
+      const domainRef = doc(this.firestore, 'domains', domainId);
+      await updateDoc(domainRef, updates);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update domain';
+      this.error.set(errorMessage);
+      throw error;
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
+
+  /**
+   * Get domain statistics for dashboard
+   */
+  async getDomainStatistics(workspaceId: string): Promise<{
+    total: number;
+    expired: number;
+    critical: number;
+    warning: number;
+    active: number;
+    totalValue: number;
+  }> {
+    try {
+      const allDomains = await this.getAllDomains(workspaceId);
+
+      const stats = {
+        total: allDomains.length,
+        expired: 0,
+        critical: 0,
+        warning: 0,
+        active: 0,
+        totalValue: 0,
+      };
+
+      allDomains.forEach(domain => {
+        const status = this.getExpirationStatus(domain.expiresAt);
+        switch (status) {
+          case 'expired':
+            stats.expired++;
+            break;
+          case 'critical':
+            stats.critical++;
+            break;
+          case 'warning':
+            stats.warning++;
+            break;
+          case 'ok':
+            stats.active++;
+            break;
+        }
+
+        const renewalPrice = domain.renewalPrice ||
+          (domain.hostingRenewalPrice || 0) + (domain.domainRenewalPrice || 0);
+        stats.totalValue += renewalPrice;
+      });
+
+      return stats;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
+   * Get domains grouped by expiration month for charts
+   */
+  async getDomainsGroupedByMonth(workspaceId: string): Promise<
+    Array<{ month: string; count: number; domains: IDomain[] }>
+  > {
+    try {
+      const allDomains = await this.getAllDomains(workspaceId);
+      const groups = new Map<string, IDomain[]>();
+
+      allDomains.forEach(domain => {
+        const date = this.toDate(domain.expiresAt);
+        if (!date) return;
+
+        const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+        if (!groups.has(monthKey)) {
+          groups.set(monthKey, []);
+        }
+        groups.get(monthKey)!.push(domain);
+      });
+
+      return Array.from(groups.entries())
+        .map(([month, domains]) => ({
+          month,
+          count: domains.length,
+          domains,
+        }))
+        .sort((a, b) => a.month.localeCompare(b.month));
+    } catch (error) {
+      throw error;
+    }
   }
 }

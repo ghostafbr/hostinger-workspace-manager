@@ -19,6 +19,7 @@
       [isLoading]="isLoading()"
       [totalRecords]="totalDomains()"
       (domainClicked)="onDomainClicked($event)"
+      (domainEditClicked)="onEditDomain($event)"
     />
   </p-card>
 
@@ -27,5 +28,13 @@
     [domain]="selectedDomain()"
     [visible]="showDetailsDialog()"
     (visibleChange)="onDialogVisibilityChange($event)"
+  />
+
+  <!-- Domain Edit Dialog -->
+  <app-domain-edit-dialog
+    [domain]="selectedDomain()"
+    [visible]="showEditDialog()"
+    (visibleChange)="onEditDialogVisibilityChange($event)"
+    (domainUpdated)="onDomainUpdated()"
   />
 </div>
