@@ -166,7 +166,7 @@ describe('EncryptionService', () => {
     });
 
     it('should handle real-world API token example', () => {
-      const apiToken = 'sk_live_51H2K3jL4M5nO6pQ7rS8tU9vW0xY1zA2bC3dE4fG5hI6jK7lM8nO9pQ';
+      const apiToken = 'api_test_51x2x3xJ4x5xO6xQ7xS8xU9xW0xY1xA2xC3xE4xG5xI6xK7xM8xO9xQ';
       const encrypted = service.encrypt(apiToken);
       const decrypted = service.decrypt(encrypted);
 
