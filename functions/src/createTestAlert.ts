@@ -54,7 +54,9 @@ export const createTestAlert = functions.https.onRequest(
         domainName: domainName,
         workspaceId: workspaceId,
         contactEmail: testEmail, // Email al que se enviará
-        renewalPrice: 1500, // Precio de renovación en COP (para pruebas)
+        renewalPrice: 1500, // Total (backward compatibility)
+        hostingRenewalPrice: 1000, // Hosting: 1000 COP
+        domainRenewalPrice: 500, // Dominio: 500 COP
         expiresAt: expiresAt,
         status: 'active',
         createdAt: admin.firestore.Timestamp.now(),
@@ -66,7 +68,9 @@ export const createTestAlert = functions.https.onRequest(
       functions.logger.info('✅ Test domain created:', {
         domainName,
         contactEmail: testEmail,
-        renewalPrice: 1500
+        hostingRenewalPrice: 1000,
+        domainRenewalPrice: 500,
+        total: 1500
       });
 
       // Crear alerta de prueba

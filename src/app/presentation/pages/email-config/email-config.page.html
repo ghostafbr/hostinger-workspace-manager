@@ -239,6 +239,144 @@
           </div>
         }
 
+        <!-- Payment Options -->
+        <div class="col-12">
+          <h3 class="section-title">💳 Opciones de Pago para Renovaciones</h3>
+          <small class="text-muted">Configure los métodos de pago que aparecerán en los correos de renovación de dominios</small>
+        </div>
+
+        <!-- Wompi Payment Gateway -->
+        <div class="col-12">
+          <h4 class="subsection-title">Wompi (Pagos en línea)</h4>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="wompiPublicKey">Wompi Public Key</label>
+          <input
+            id="wompiPublicKey"
+            pInputText
+            type="text"
+            [(ngModel)]="wompiPublicKey"
+            name="wompiPublicKey"
+            placeholder="pub_prod_xxxxxxxxxxxx"
+            class="w-full"
+            [disabled]="!enabled()"
+          />
+          <small>Clave pública de Wompi para pagos en línea</small>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="wompiIntegrityKey">Wompi Integrity Key</label>
+          <input
+            id="wompiIntegrityKey"
+            pPassword
+            [(ngModel)]="wompiIntegrityKey"
+            name="wompiIntegrityKey"
+            placeholder="prod_integrity_xxxxxxxxxxxx"
+            class="w-full"
+            [feedback]="false"
+            [disabled]="!enabled()"
+          />
+          <small>Clave de integridad para firma de pagos</small>
+        </div>
+
+        <!-- Bancolombia Transfer -->
+        <div class="col-12">
+          <h4 class="subsection-title">Bancolombia (Transferencia)</h4>
+        </div>
+
+        <div class="field col-12 md:col-3">
+          <label for="bancolombiaAccountType">Tipo de cuenta</label>
+          <p-select
+            id="bancolombiaAccountType"
+            [(ngModel)]="bancolombiaAccountType"
+            name="bancolombiaAccountType"
+            [options]="[{label: 'Ahorros', value: 'ahorros'}, {label: 'Corriente', value: 'corriente'}]"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Selecciona tipo"
+            styleClass="w-full"
+            [disabled]="!enabled()"
+          />
+        </div>
+
+        <div class="field col-12 md:col-3">
+          <label for="bancolombiaAccountNumber">Número de cuenta</label>
+          <input
+            id="bancolombiaAccountNumber"
+            pInputText
+            type="text"
+            [(ngModel)]="bancolombiaAccountNumber"
+            name="bancolombiaAccountNumber"
+            placeholder="1234567890"
+            class="w-full"
+            [disabled]="!enabled()"
+          />
+        </div>
+
+        <div class="field col-12 md:col-3">
+          <label for="bancolombiaOwnerName">Nombre del titular</label>
+          <input
+            id="bancolombiaOwnerName"
+            pInputText
+            type="text"
+            [(ngModel)]="bancolombiaOwnerName"
+            name="bancolombiaOwnerName"
+            placeholder="Juan Pérez"
+            class="w-full"
+            [disabled]="!enabled()"
+          />
+        </div>
+
+        <div class="field col-12 md:col-3">
+          <label for="bancolombiaOwnerDocument">Cédula del titular</label>
+          <input
+            id="bancolombiaOwnerDocument"
+            pInputText
+            type="text"
+            [(ngModel)]="bancolombiaOwnerDocument"
+            name="bancolombiaOwnerDocument"
+            placeholder="1234567890"
+            class="w-full"
+            [disabled]="!enabled()"
+          />
+        </div>
+
+        <!-- Nequi Transfer -->
+        <div class="col-12">
+          <h4 class="subsection-title">Nequi (Transferencia)</h4>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="nequiPhoneNumber">Número Nequi</label>
+          <input
+            id="nequiPhoneNumber"
+            pInputText
+            type="tel"
+            [(ngModel)]="nequiPhoneNumber"
+            name="nequiPhoneNumber"
+            placeholder="3182609266"
+            class="w-full"
+            [disabled]="!enabled()"
+          />
+          <small>Número de celular asociado a Nequi</small>
+        </div>
+
+        <div class="field col-12 md:col-6">
+          <label for="nequiOwnerName">Nombre del titular Nequi</label>
+          <input
+            id="nequiOwnerName"
+            pInputText
+            type="text"
+            [(ngModel)]="nequiOwnerName"
+            name="nequiOwnerName"
+            placeholder="Juan Pérez"
+            class="w-full"
+            [disabled]="!enabled()"
+          />
+          <small>Nombre completo del titular de la cuenta Nequi</small>
+        </div>
+
         <!-- Rate Limits -->
         <div class="col-12">
           <h3 class="section-title">Límites de Envío</h3>

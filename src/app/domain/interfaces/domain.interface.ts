@@ -33,8 +33,14 @@ export interface Domain {
   /** Contact email for domain notifications */
   contactEmail?: string;
 
-  /** Renewal price in COP (Colombian Pesos) */
+  /** Renewal price in COP (Colombian Pesos) - DEPRECATED: Use hostingRenewalPrice + domainRenewalPrice */
   renewalPrice?: number;
+
+  /** Hosting renewal price in COP (Colombian Pesos) */
+  hostingRenewalPrice?: number;
+
+  /** Domain renewal price in COP (Colombian Pesos) */
+  domainRenewalPrice?: number;
 
   /** Raw API response for debugging */
   raw: Record<string, unknown>;

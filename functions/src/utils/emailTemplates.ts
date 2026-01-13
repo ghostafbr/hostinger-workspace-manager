@@ -8,7 +8,9 @@ interface RenewalEmailData {
   domainName: string;
   expirationDate: string;
   daysUntilExpiration: number;
-  renewalPrice: number;
+  renewalPrice: number; // Total price (backward compatibility)
+  hostingRenewalPrice?: number;
+  domainRenewalPrice?: number;
   paymentLink?: string;
   bancolombia?: {
     accountType: string;
@@ -103,6 +105,19 @@ export function generateRenewalEmailHTML(data: RenewalEmailData): string {
                   Si tu dominio vence, tu sitio web dejará de funcionar y podrías perder el control sobre tu dominio. ¡No dejes que eso suceda!
                 </p>
               </div>
+
+              <!-- Servicios Incluidos -->
+              <div style="background-color: #F0FDF4; border-left: 4px solid #10B981; padding: 20px; border-radius: 4px; margin-bottom: 32px; text-align: left;">
+                <h4 style="margin: 0 0 16px; color: #065F46; font-size: 16px; font-weight: 600;">
+                  ✨ Servicios Incluidos en tu Renovación
+                </h4>
+                <ul style="margin: 0; padding: 0 0 0 20px; color: #047857; font-size: 14px; line-height: 2;">
+                  <li><strong>Renovación de hosting + dominio</strong></li>
+                  <li>Actualizaciones (plugins/tema/core)</li>
+                  <li>Backups y verificación básica</li>
+                  <li>Revisión mensual rápida</li>
+                </ul>
+              </div>
             </td>
           </tr>
 
@@ -112,9 +127,49 @@ export function generateRenewalEmailHTML(data: RenewalEmailData): string {
               <h3 style="color: #111827; font-size: 20px; font-weight: 600; margin: 0 0 24px; text-align: center;">
                 Opciones de Pago
               </h3>
+
+              ${data.hostingRenewalPrice || data.domainRenewalPrice ? `
+              <!-- Desglose de Precios -->
+              <div style="background-color: #F9FAFB; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                  ${data.hostingRenewalPrice ? `
+                  <tr>
+                    <td style="padding: 8px 0; color: #374151; font-size: 16px;">
+                      <strong>Hosting:</strong>
+                    </td>
+                    <td style="padding: 8px 0; text-align: right; color: #059669; font-size: 16px; font-weight: 600;">
+                      $${data.hostingRenewalPrice.toLocaleString('es-CO')} COP
+                    </td>
+                  </tr>
+                  ` : ''}
+                  ${data.domainRenewalPrice ? `
+                  <tr>
+                    <td style="padding: 8px 0; color: #374151; font-size: 16px;">
+                      <strong>Dominio:</strong>
+                    </td>
+                    <td style="padding: 8px 0; text-align: right; color: #059669; font-size: 16px; font-weight: 600;">
+                      $${data.domainRenewalPrice.toLocaleString('es-CO')} COP
+                    </td>
+                  </tr>
+                  ` : ''}
+                  <tr>
+                    <td colspan="2" style="padding: 12px 0 8px; border-top: 2px solid #D1D5DB;"></td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #111827; font-size: 18px;">
+                      <strong>Total:</strong>
+                    </td>
+                    <td style="padding: 8px 0; text-align: right; color: #059669; font-size: 20px; font-weight: 700;">
+                      $${renewalPrice.toLocaleString('es-CO')} COP
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              ` : `
               <p style="text-align: center; color: #374151; font-size: 18px; font-weight: 600; margin: 0 0 24px;">
                 Valor de renovación: <span style="color: #059669;">$${renewalPrice.toLocaleString('es-CO')} COP</span>
               </p>
+              `}
 
               ${paymentLink ? `
               <!-- Wompi Payment Button -->
@@ -233,9 +288,20 @@ Fecha de vencimiento: ${expirationDate}
 ¿Por qué renovar ahora?
 Si tu dominio vence, tu sitio web dejará de funcionar y podrías perder el control sobre tu dominio.
 
+✨ SERVICIOS INCLUIDOS EN TU RENOVACIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• Renovación de hosting + dominio
+• Actualizaciones (plugins/tema/core)
+• Backups y verificación básica
+• Revisión mensual rápida
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 OPCIONES DE PAGO
-Valor de renovación: $${renewalPrice.toLocaleString('es-CO')} COP
+${data.hostingRenewalPrice || data.domainRenewalPrice ? `
+DESGLOSE:
+${data.hostingRenewalPrice ? `- Hosting: $${data.hostingRenewalPrice.toLocaleString('es-CO')} COP\n` : ''}${data.domainRenewalPrice ? `- Dominio: $${data.domainRenewalPrice.toLocaleString('es-CO')} COP\n` : ''}
+TOTAL: $${renewalPrice.toLocaleString('es-CO')} COP
+` : `Valor de renovación: $${renewalPrice.toLocaleString('es-CO')} COP`}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 `;

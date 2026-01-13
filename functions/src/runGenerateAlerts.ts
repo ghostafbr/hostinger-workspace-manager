@@ -143,7 +143,11 @@ export const runGenerateAlerts = functions.https.onRequest(
                 domainName: domainData.domainName,
                 expirationDate,
                 daysUntilExpiration,
-                renewalPrice: domainData.renewalPrice || 50000, // Precio por defecto si no está configurado
+                renewalPrice: domainData.renewalPrice ||
+                              (domainData.hostingRenewalPrice || 0) + (domainData.domainRenewalPrice || 0) ||
+                              50000, // Precio por defecto si no está configurado
+                hostingRenewalPrice: domainData.hostingRenewalPrice,
+                domainRenewalPrice: domainData.domainRenewalPrice,
                 paymentLink,
                 bancolombia: emailConfig.paymentOptions?.bancolombia,
                 nequi: emailConfig.paymentOptions?.nequi,

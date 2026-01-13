@@ -83,6 +83,16 @@ export class EmailConfigPage implements OnInit {
   readonly maxRetryAttempts = signal(3);
   readonly retryDelayMinutes = signal(5);
 
+  // Payment options signals
+  readonly wompiPublicKey = signal('');
+  readonly wompiIntegrityKey = signal('');
+  readonly bancolombiaAccountType = signal<'ahorros' | 'corriente'>('ahorros');
+  readonly bancolombiaAccountNumber = signal('');
+  readonly bancolombiaOwnerName = signal('');
+  readonly bancolombiaOwnerDocument = signal('');
+  readonly nequiPhoneNumber = signal('');
+  readonly nequiOwnerName = signal('');
+
   // Provider options
   readonly providerOptions = [
     { label: 'SMTP (Hostinger, Gmail, etc.)', value: EmailProvider.SMTP },
@@ -151,6 +161,19 @@ export class EmailConfigPage implements OnInit {
         this.maxPerDay.set(config.rateLimit?.maxPerDay || 50);
         this.maxRetryAttempts.set(config.retry?.maxAttempts || 3);
         this.retryDelayMinutes.set(config.retry?.delayMinutes || 5);
+
+        // Load payment options if available
+        if (config.paymentOptions) {
+          this.wompiPublicKey.set(config.paymentOptions.wompiPublicKey || '');
+          this.wompiIntegrityKey.set(config.paymentOptions.wompiIntegrityKey || '');
+          this.bancolombiaAccountType.set(config.paymentOptions.bancolombia?.accountType || 'ahorros');
+          this.bancolombiaAccountNumber.set(config.paymentOptions.bancolombia?.accountNumber || '');
+          this.bancolombiaOwnerName.set(config.paymentOptions.bancolombia?.ownerName || '');
+          this.bancolombiaOwnerDocument.set(config.paymentOptions.bancolombia?.ownerDocument || '');
+          this.nequiPhoneNumber.set(config.paymentOptions.nequi?.phoneNumber || '');
+          this.nequiOwnerName.set(config.paymentOptions.nequi?.ownerName || '');
+        }
+
         // Don't show actual API key/password for security
       }
 
@@ -236,6 +259,24 @@ export class EmailConfigPage implements OnInit {
             maxAttempts: this.maxRetryAttempts(),
             delayMinutes: this.retryDelayMinutes(),
           },
+          paymentOptions: {
+            wompiPublicKey: this.wompiPublicKey().trim() || undefined,
+            wompiIntegrityKey: this.wompiIntegrityKey().trim() || undefined,
+            bancolombia: this.bancolombiaAccountNumber().trim()
+              ? {
+                  accountType: this.bancolombiaAccountType(),
+                  accountNumber: this.bancolombiaAccountNumber(),
+                  ownerName: this.bancolombiaOwnerName(),
+                  ownerDocument: this.bancolombiaOwnerDocument(),
+                }
+              : undefined,
+            nequi: this.nequiPhoneNumber().trim()
+              ? {
+                  phoneNumber: this.nequiPhoneNumber(),
+                  ownerName: this.nequiOwnerName(),
+                }
+              : undefined,
+          },
         };
       } else {
         // SendGrid configuration
@@ -267,6 +308,24 @@ export class EmailConfigPage implements OnInit {
           retry: {
             maxAttempts: this.maxRetryAttempts(),
             delayMinutes: this.retryDelayMinutes(),
+          },
+          paymentOptions: {
+            wompiPublicKey: this.wompiPublicKey().trim() || undefined,
+            wompiIntegrityKey: this.wompiIntegrityKey().trim() || undefined,
+            bancolombia: this.bancolombiaAccountNumber().trim()
+              ? {
+                  accountType: this.bancolombiaAccountType(),
+                  accountNumber: this.bancolombiaAccountNumber(),
+                  ownerName: this.bancolombiaOwnerName(),
+                  ownerDocument: this.bancolombiaOwnerDocument(),
+                }
+              : undefined,
+            nequi: this.nequiPhoneNumber().trim()
+              ? {
+                  phoneNumber: this.nequiPhoneNumber(),
+                  ownerName: this.nequiOwnerName(),
+                }
+              : undefined,
           },
         };
       }
