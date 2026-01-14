@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions/v2';
 import * as admin from 'firebase-admin';
 import * as crypto from 'crypto';
-import { generateRenewalEmailHTML, generateRenewalEmailText } from './utils/emailTemplates';
+import { generateRenewalEmailHTML, generateRenewalEmailText } from '../../utils/emailTemplates';
 
 /**
  * Función HTTP para ejecutar generateAlerts manualmente

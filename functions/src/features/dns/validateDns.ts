@@ -7,12 +7,12 @@ import {
   validateSpfRecord,
   validateDmarcRecord,
   validateTtl
-} from './utils/dnsValidationUtils';
+} from '../../utils/dnsValidationUtils';
 import {
     DnsValidationStatus,
     DnsCheckStatus,
     DnsValidationResult
-} from './models/dns-validation.model';
+} from '../../models/dns-validation.model';
 
 // Import DnsRecordType enum from domain if possible, or define locally map
 // Since cloud functions builds often struggle with relative imports outside /src,

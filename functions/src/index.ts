@@ -4,35 +4,36 @@ import * as admin from 'firebase-admin';
 admin.initializeApp();
 
 // Export Cloud Functions
+// Export Cloud Functions
 // Manual sync functions (HTTP with CORS)
-export { syncWorkspace } from './syncWorkspace.http';
-export { syncAllWorkspaces } from './syncAllWorkspaces';
-export { syncDnsRecordsHttp } from './syncDnsRecords.http';
+export { syncWorkspace } from './features/sync/syncWorkspace.http';
+export { syncAllWorkspaces } from './features/sync/syncAllWorkspaces';
+export { syncDnsRecordsHttp } from './features/sync/syncDnsRecords.http';
 
 // Scheduled sync function (Cloud Scheduler)
-export { syncAllWorkspacesScheduled } from './syncAllWorkspaces';
+export { syncAllWorkspacesScheduled } from './features/sync/syncAllWorkspaces';
 
 // Alert generation function (Cloud Scheduler)
-export { generateAlerts } from './generateAlerts';
+export { generateAlerts } from './features/alerts/generateAlerts';
 
 // Scheduled alert generation with escalating reminders (Cloud Scheduler)
-export { generateAlertsScheduled } from './generateAlertsScheduled';
+export { generateAlertsScheduled } from './features/alerts/generateAlertsScheduled';
 
 // Health metrics calculation function (Cloud Scheduler - every 15 minutes)
-export { calculateHealthMetrics } from './calculateHealthMetrics';
+export { calculateHealthMetrics } from './features/health/calculateHealthMetrics';
 
 // Email sending functions
-export { sendEmail, retryFailedEmails } from './sendEmail';
-export { sendEmailNow } from './sendEmailNow';
+export { sendEmail, retryFailedEmails } from './features/alerts/sendEmail';
+export { sendEmailNow } from './features/alerts/sendEmailNow';
 
 // Test functions
-export { createTestAlert } from './createTestAlert';
-export { runGenerateAlerts } from './runGenerateAlerts';
+export { createTestAlert } from './features/alerts/createTestAlert';
+export { runGenerateAlerts } from './features/alerts/runGenerateAlerts';
 // Webhooks
-export { wompiWebhook } from './wompiWebhook';
+export { wompiWebhook } from './features/webhooks/wompiWebhook';
 
 // DNS Validation
-export { validateDns, validateDnsHttp } from './validateDns';
+export { validateDns, validateDnsHttp } from './features/dns/validateDns';
 /*
  * Example functions commented out - not needed for MVP
  *

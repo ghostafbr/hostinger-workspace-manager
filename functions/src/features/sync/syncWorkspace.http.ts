@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
 import { onRequest, HttpsOptions } from 'firebase-functions/v2/https';
 import * as cryptoJs from 'crypto-js';
-import { AuditAction, logSuccess, logFailure } from './utils/auditLog';
+import { AuditAction, logSuccess, logFailure } from '../../utils/auditLog';
 
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || '';
 const HOSTINGER_API_BASE = 'https://developers.hostinger.com';
