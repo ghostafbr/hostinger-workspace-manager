@@ -43,7 +43,7 @@ export class EncryptionService {
       return decrypted;
     } catch (error) {
       console.error('Error decrypting text:', error);
-      throw new Error('Failed to decrypt data');
+      return '';
     }
   }
 

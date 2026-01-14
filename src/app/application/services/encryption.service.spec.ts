@@ -230,14 +230,14 @@ describe('EncryptionService', () => {
       cryptoMock.mockRestore();
     });
 
-    it('should throw error when decryption fails', () => {
+    it('should return empty string when decryption fails', () => {
       vi.spyOn(console, 'error').mockImplementation(() => undefined);
       const cryptoMock = vi.spyOn(cryptoJs.AES, 'decrypt');
       cryptoMock.mockImplementation(() => {
         throw new Error('Decryption failed');
       });
 
-      expect(() => service.decrypt('invalid')).toThrow('Failed to decrypt data');
+      expect(service.decrypt('invalid')).toBe('');
       cryptoMock.mockRestore();
     });
   });
