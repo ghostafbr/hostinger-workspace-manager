@@ -267,14 +267,14 @@ export default class DashboardPage implements OnInit {
   /**
    * Navigate to specific workspace
    */
-  navigateToWorkspace(workspace: any): void {
+  navigateToWorkspace(workspace: { id: string }): void {
     this.router.navigate(['/workspaces', workspace.id]);
   }
 
   /**
    * Handle search applied
    */
-  onSearchApplied(criteria: any): void {
+  onSearchApplied(_criteria: any): void {
     this.messageService.add({
       severity: 'info',
       summary: 'Filtro Aplicado',

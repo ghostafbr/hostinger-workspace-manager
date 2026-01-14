@@ -1,6 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Firestore, collection, query, where, getDocs, addDoc, Timestamp } from 'firebase/firestore';
-import { Auth } from 'firebase/auth';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
@@ -17,7 +16,6 @@ import { WorkspaceContextService } from './workspace-context.service';
 })
 export class DnsService {
   private readonly firestore: Firestore = FirebaseAdapter.getFirestore();
-  private readonly auth: Auth = FirebaseAdapter.getAuth();
   private readonly workspaceContext = inject(WorkspaceContextService);
   private readonly http = inject(HttpClient);
 
@@ -205,18 +203,12 @@ export class DnsService {
         });
       }
 
-      const currentUser = this.auth.currentUser;
-      if (!currentUser) {
-        throw new Error('User not authenticated');
-      }
-
       const snapshotsRef = collection(this.firestore, 'dnsSnapshots');
       const docRef = await addDoc(snapshotsRef, {
         workspaceId,
         domainName,
         records: recordsData,
         createdAt: Timestamp.now(),
-        createdBy: currentUser.uid,
         note: note || undefined,
       });
 

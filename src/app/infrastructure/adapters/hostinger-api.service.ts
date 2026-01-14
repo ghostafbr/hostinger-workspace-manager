@@ -59,7 +59,7 @@ export class HostingerApiService {
           if (response.status === 200 || response.status === 201) {
             return { success: true };
           }
-        } catch (err) {
+        } catch {
           // Continue to next endpoint
           continue;
         }

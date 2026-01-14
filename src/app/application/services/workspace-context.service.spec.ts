@@ -63,7 +63,7 @@ describe('WorkspaceContextService', () => {
 
     it('should handle invalid JSON in localStorage gracefully', () => {
       localStorage.setItem('selected_workspace', 'invalid-json{');
-      vi.spyOn(console, 'error').mockImplementation(() => {});
+      vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
       // Service is already created, so we just verify it handles invalid data
       // by not throwing an error during initialization
@@ -101,7 +101,7 @@ describe('WorkspaceContextService', () => {
       vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
         throw new Error('Storage full');
       });
-      vi.spyOn(console, 'error').mockImplementation(() => {});
+      vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
       expect(() => service.selectWorkspace(mockWorkspace)).not.toThrow();
       expect(service.getCurrentWorkspace()).toEqual(mockWorkspace);
@@ -124,7 +124,7 @@ describe('WorkspaceContextService', () => {
       vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
         throw new Error('Storage error');
       });
-      vi.spyOn(console, 'error').mockImplementation(() => {});
+      vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
       expect(() => service.clearWorkspace()).not.toThrow();
       expect(service.getCurrentWorkspace()).toBeNull();

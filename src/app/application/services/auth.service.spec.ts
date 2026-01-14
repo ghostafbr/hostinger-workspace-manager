@@ -25,9 +25,7 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     // Import the mocked functions
-    const { signInWithEmailAndPassword, signOut, onAuthStateChanged } = await import(
-      'firebase/auth'
-    );
+    const { onAuthStateChanged } = await import('firebase/auth');
     onAuthStateChangedMock = onAuthStateChanged as Mock;
 
     // Setup mock auth

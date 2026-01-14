@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { EncryptionService } from './encryption.service';
 import { describe, it, expect, beforeEach } from 'vitest';
+import * as cryptoJs from 'crypto-js';
 
 describe('EncryptionService', () => {
   let service: EncryptionService;
@@ -206,21 +207,20 @@ describe('EncryptionService', () => {
     });
 
     it('should throw error when hashing fails', () => {
-      // Force error by mocking crypto-js
-      const originalHash = service.hash;
-      vi.spyOn(service as any, 'hash').mockImplementation(() => {
-        throw new Error('Hash error');
-      });
+        // Force error by mocking hash implementation
+        vi.spyOn(service as any, 'hash').mockImplementation(() => {
+          throw new Error('Hash error');
+        });
 
-      expect(() => service.hash('text')).toThrow('Hash error');
+        expect(() => service.hash('text')).toThrow('Hash error');
     });
   });
 
   describe('error handling', () => {
     it('should throw error when encryption fails', () => {
       // Mock crypto-js to throw error
-      vi.spyOn(console, 'error').mockImplementation(() => {});
-      const cryptoMock = vi.spyOn(require('crypto-js').AES, 'encrypt');
+      vi.spyOn(console, 'error').mockImplementation(() => undefined);
+      const cryptoMock = vi.spyOn(cryptoJs.AES, 'encrypt');
       cryptoMock.mockImplementation(() => {
         throw new Error('Encryption failed');
       });
@@ -230,8 +230,8 @@ describe('EncryptionService', () => {
     });
 
     it('should throw error when decryption fails', () => {
-      vi.spyOn(console, 'error').mockImplementation(() => {});
-      const cryptoMock = vi.spyOn(require('crypto-js').AES, 'decrypt');
+      vi.spyOn(console, 'error').mockImplementation(() => undefined);
+      const cryptoMock = vi.spyOn(cryptoJs.AES, 'decrypt');
       cryptoMock.mockImplementation(() => {
         throw new Error('Decryption failed');
       });

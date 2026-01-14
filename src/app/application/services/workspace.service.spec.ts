@@ -4,14 +4,14 @@ import { AuthService } from './auth.service';
 import { EncryptionService } from './encryption.service';
 import { HostingerApiService } from '@app/infrastructure/adapters/hostinger-api.service';
 import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
-import { Workspace, WorkspaceStatus } from '@app/domain';
+import { WorkspaceStatus } from '@app/domain';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { of, firstValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 // Mock Firestore functions
 vi.mock('firebase/firestore', async () => {
   const actual = await vi.importActual('firebase/firestore');
-  return {
+    return {
     ...actual,
     collection: vi.fn(),
     addDoc: vi.fn(),
@@ -22,7 +22,8 @@ vi.mock('firebase/firestore', async () => {
     getDoc: vi.fn(),
     query: vi.fn(),
     where: vi.fn(),
-    Timestamp: {
+
+      Timestamp: {
       now: vi.fn(() => ({ seconds: 1640000000, nanoseconds: 0 })),
       fromDate: vi.fn((date: Date) => ({ seconds: Math.floor(date.getTime() / 1000), nanoseconds: 0 })),
     },
@@ -36,16 +37,7 @@ describe('WorkspaceService', () => {
   let mockFirestore: any;
 
   const mockUserId = 'user-123';
-  const mockWorkspaceData = {
-    id: 'ws-123',
-    name: 'Test Workspace',
-    description: 'Test Description',
-    userId: mockUserId,
-    status: WorkspaceStatus.ACTIVE,
-    encryptedToken: 'encrypted-token',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
+  // mockWorkspaceData intentionally omitted (not used in tests)
 
   beforeEach(() => {
     // Mock Firestore instance
@@ -243,7 +235,7 @@ describe('WorkspaceService', () => {
 
   describe('createWorkspace', () => {
     it('should create new workspace with encrypted token', async () => {
-      const { addDoc, collection, Timestamp } = await import('firebase/firestore');
+      const { addDoc, collection } = await import('firebase/firestore');
       const newWorkspaceData = {
         name: 'New Workspace',
         description: 'Description',

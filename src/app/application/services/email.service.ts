@@ -2,7 +2,6 @@ import { Injectable, signal } from '@angular/core';
 import {
   collection,
   doc,
-  getDoc,
   getDocs,
   addDoc,
   updateDoc,
@@ -11,14 +10,11 @@ import {
   where,
   orderBy,
   Timestamp,
-  Firestore,
 } from 'firebase/firestore';
 import { FirebaseAdapter } from '@app/infrastructure';
 import type {
   IEmailConfig,
   IEmailLog,
-  ISendEmailRequest,
-  ISendEmailResponse,
 } from '@app/domain';
 
 /**

@@ -270,76 +270,68 @@ export class DomainService {
     active: number;
     totalValue: number;
   }> {
-    try {
-      const allDomains = await this.getAllDomains(workspaceId);
+    const allDomains = await this.getAllDomains(workspaceId);
 
-      const stats = {
-        total: allDomains.length,
-        expired: 0,
-        critical: 0,
-        warning: 0,
-        active: 0,
-        totalValue: 0,
-      };
+    const stats = {
+      total: allDomains.length,
+      expired: 0,
+      critical: 0,
+      warning: 0,
+      active: 0,
+      totalValue: 0,
+    };
 
-      allDomains.forEach(domain => {
-        const status = this.getExpirationStatus(domain.expiresAt);
-        switch (status) {
-          case 'expired':
-            stats.expired++;
-            break;
-          case 'critical':
-            stats.critical++;
-            break;
-          case 'warning':
-            stats.warning++;
-            break;
-          case 'ok':
-            stats.active++;
-            break;
-        }
+    allDomains.forEach(domain => {
+      const status = this.getExpirationStatus(domain.expiresAt);
+      switch (status) {
+        case 'expired':
+          stats.expired++;
+          break;
+        case 'critical':
+          stats.critical++;
+          break;
+        case 'warning':
+          stats.warning++;
+          break;
+        case 'ok':
+          stats.active++;
+          break;
+      }
 
-        const renewalPrice = domain.renewalPrice ||
-          (domain.hostingRenewalPrice || 0) + (domain.domainRenewalPrice || 0);
-        stats.totalValue += renewalPrice;
-      });
+      const renewalPrice = domain.renewalPrice ||
+        (domain.hostingRenewalPrice || 0) + (domain.domainRenewalPrice || 0);
+      stats.totalValue += renewalPrice;
+    });
 
-      return stats;
-    } catch (error) {
-      throw error;
-    }
+    return stats;
   }
 
   /**
    * Get domains grouped by expiration month for charts
    */
   async getDomainsGroupedByMonth(workspaceId: string): Promise<
-    Array<{ month: string; count: number; domains: IDomain[] }>
+    { month: string; count: number; domains: IDomain[] }[]
   > {
-    try {
-      const allDomains = await this.getAllDomains(workspaceId);
-      const groups = new Map<string, IDomain[]>();
+    const allDomains = await this.getAllDomains(workspaceId);
+    const groups = new Map<string, IDomain[]>();
 
-      allDomains.forEach(domain => {
-        const date = this.toDate(domain.expiresAt);
-        if (!date) return;
+    allDomains.forEach(domain => {
+      const date = this.toDate(domain.expiresAt);
+      if (!date) return;
 
-        const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-        if (!groups.has(monthKey)) {
-          groups.set(monthKey, []);
-        }
-        groups.get(monthKey)!.push(domain);
-      });
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+      if (!groups.has(monthKey)) {
+        groups.set(monthKey, []);
+      }
+      groups.get(monthKey)!.push(domain);
+    });
 
-      return Array.from(groups.entries())
-        .map(([month, domains]) => ({
-          month,
-          count: domains.length,
-          domains,
-        }))
-        .sort((a, b) => a.month.localeCompare(b.month));
-    } catch (error) {
-      throw error;
-    }
+    return Array.from(groups.entries())
+      .map(([month, domains]) => ({
+        month,
+        count: domains.length,
+        domains,
+      }))
+      .sort((a, b) => a.month.localeCompare(b.month));
   }
 }

@@ -23,7 +23,6 @@ vi.mock('firebase/firestore', async () => {
 
 describe('AuditLogService', () => {
   let service: AuditLogService;
-  let authService: AuthService;
 
   beforeEach(() => {
     vi.spyOn(FirebaseAdapter, 'getFirestore').mockReturnValue({} as any);
@@ -42,7 +41,6 @@ describe('AuditLogService', () => {
     });
 
     service = TestBed.inject(AuditLogService);
-    authService = TestBed.inject(AuthService);
   });
 
   describe('initialization', () => {

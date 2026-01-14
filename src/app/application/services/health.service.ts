@@ -5,6 +5,7 @@ import {
   query,
   where,
   getDocs,
+  addDoc,
   Timestamp,
   orderBy,
 } from 'firebase/firestore';
@@ -577,7 +578,8 @@ export class HealthService {
         createdAt: Timestamp.fromDate(new Date()),
       };
 
-      // Note: In production, use addDoc from firebase/firestore
+      // Persist alert to Firestore
+      await addDoc(alertsRef, alertData);
     } catch (error: unknown) {
       console.error('[HealthService] Error creating health alert:', error);
     }

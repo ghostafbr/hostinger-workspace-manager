@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, input, output, inject, signal, effect, computed, LOCALE_ID } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, output, inject, signal, effect, LOCALE_ID } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CurrencyPipe, registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
