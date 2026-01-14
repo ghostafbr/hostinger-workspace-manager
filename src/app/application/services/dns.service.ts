@@ -11,8 +11,10 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
-import { DnsRecord, DnsSnapshot, DnsRecordType } from '@app/domain';
+import { Timestamp as FirestoreTimestamp } from 'firebase/firestore';
+import { DnsRecord, DnsSnapshot, DnsRecordType, DnsValidationResult, DnsValidationStatus } from '@app/domain';
 import { WorkspaceContextService } from './workspace-context.service';
+import { httpsCallable, Functions } from 'firebase/functions';
 
 /**
  * DNS Service
@@ -24,12 +26,14 @@ import { WorkspaceContextService } from './workspace-context.service';
 })
 export class DnsService {
   private readonly firestore: Firestore = FirebaseAdapter.getFirestore();
+  private readonly functions: Functions = FirebaseAdapter.getFunctions();
   private readonly workspaceContext = inject(WorkspaceContextService);
   private readonly http = inject(HttpClient);
 
   // State signals
   readonly dnsRecords = signal<DnsRecord[]>([]);
   readonly snapshots = signal<DnsSnapshot[]>([]);
+  readonly validationResults = signal<DnsValidationResult | null>(null);
   readonly isLoading = signal<boolean>(false);
   readonly isSyncing = signal<boolean>(false);
   readonly error = signal<string | null>(null);
@@ -38,6 +42,57 @@ export class DnsService {
   readonly filteredRecords = signal<DnsRecord[]>([]);
   readonly selectedDomain = signal<string | null>(null);
   readonly selectedRecordTypes = signal<DnsRecordType[]>([]);
+
+  /**
+   * Validate DNS Configuration for a domain
+   */
+  async validateDns(domainName: string): Promise<DnsValidationResult> {
+    this.isLoading.set(true);
+    this.error.set(null);
+    const workspaceId = this.workspaceContext.workspaceId();
+
+    if (!workspaceId) {
+      const errorMsg = 'No workspace selected';
+      this.error.set(errorMsg);
+      this.isLoading.set(false);
+      throw new Error(errorMsg);
+    }
+
+    try {
+      // Direct call to Cloud Function using Modular SDK
+      const validateDnsFn = httpsCallable<{workspaceId: string, domainName: string}, DnsValidationResult>(
+        this.functions,
+        'validateDns'
+      );
+
+      const result = await validateDnsFn({ workspaceId, domainName });
+      const validationData = result.data as any;
+
+      // Normalize validatedAt to Firestore Timestamp on client so template can call toDate()
+      const va = validationData?.validatedAt;
+      if (va && typeof va.toDate !== 'function') {
+        if (typeof va.seconds === 'number') {
+          // Admin Timestamp serialized as { seconds, nanoseconds }
+          const millis = va.seconds * 1000 + (va.nanoseconds ? Math.round(va.nanoseconds / 1e6) : 0);
+          validationData.validatedAt = FirestoreTimestamp.fromMillis(millis);
+        } else if (typeof va === 'string' || typeof va === 'number') {
+          validationData.validatedAt = FirestoreTimestamp.fromDate(new Date(va));
+        } else {
+          validationData.validatedAt = FirestoreTimestamp.now();
+        }
+      }
+
+      this.validationResults.set(validationData as DnsValidationResult);
+      return validationData as DnsValidationResult;
+    } catch (err: any) {
+      console.error('Error validating DNS:', err);
+      const errorMsg = err.message || 'Failed to validate DNS';
+      this.error.set(errorMsg);
+      throw err;
+    } finally {
+      this.isLoading.set(false);
+    }
+  }
 
   /**
    * Get DNS records for a specific domain

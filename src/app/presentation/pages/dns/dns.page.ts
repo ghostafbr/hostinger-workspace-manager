@@ -18,6 +18,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { MessageService } from 'primeng/api';
 import { DnsViewerComponent } from '../../components/organisms/dns-viewer/dns-viewer.component';
 import { DnsComparatorComponent } from '../../components/organisms/dns-comparator/dns-comparator.component';
+import { DnsValidationComponent } from '../../components/organisms/dns-validation/dns-validation.component';
 import { DomainService, WorkspaceContextService, DnsService } from '@app/application';
 import { IDomain } from '@app/domain';
 import { fadeIn, slideUp } from '@app/infrastructure';
@@ -33,6 +34,7 @@ import { fadeIn, slideUp } from '@app/infrastructure';
   imports: [
     DnsViewerComponent,
     DnsComparatorComponent,
+    DnsValidationComponent,
     FormsModule,
     Select,
     CardModule,

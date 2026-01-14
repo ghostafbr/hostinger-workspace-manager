@@ -2,6 +2,7 @@ import { initializeApp, FirebaseApp } from 'firebase/app';
 import { getAuth, Auth, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { getFirestore, Firestore } from 'firebase/firestore';
 import { getFunctions, Functions } from 'firebase/functions';
+
 import { environment } from '../../../environments/environment';
 
 /**
@@ -65,7 +66,6 @@ export class FirebaseAdapter {
   /**
    * Get Firebase Functions instance
    * Configured for us-central1 region
-   * Always uses production endpoint (even in development)
    */
   static getFunctions(): Functions {
     if (!this.functionsInstance) {

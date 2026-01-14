@@ -30,6 +30,9 @@ export { createTestAlert } from './createTestAlert';
 export { runGenerateAlerts } from './runGenerateAlerts';
 // Webhooks
 export { wompiWebhook } from './wompiWebhook';
+
+// DNS Validation
+export { validateDns, validateDnsHttp } from './validateDns';
 /*
  * Example functions commented out - not needed for MVP
  *

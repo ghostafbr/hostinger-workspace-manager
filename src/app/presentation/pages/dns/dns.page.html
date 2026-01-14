@@ -66,6 +66,11 @@
         <app-dns-viewer [domainName]="domainName()" />
       </div>
 
+      <!-- DNS Validation Section -->
+      <div class="dns-section" @slideUp>
+        <app-dns-validation [domainName]="domainName()" />
+      </div>
+
       <!-- DNS Comparison Section -->
       <div class="dns-section" @slideUp>
         <app-dns-comparator [domainName]="domainName()" />

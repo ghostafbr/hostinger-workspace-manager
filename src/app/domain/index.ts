@@ -68,3 +68,4 @@ export { AuditLogModel } from './models/audit-log.model';
 export { DnsRecord } from './models/dns-record.model';
 export { DnsSnapshot } from './models/dns-snapshot.model';
 export { HealthMetrics, SystemHealthSummary, HealthHistory } from './models/health-metrics.model';
+export * from './dns-validation.model';
