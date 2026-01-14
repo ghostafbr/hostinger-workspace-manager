@@ -80,21 +80,30 @@ src/app/
 
 ## 📚 Documentación
 
-### Guías Principales
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Clean Architecture + Atomic Design
-- **[DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md)** - Ejemplos de código detallados
-- **[DEPLOYMENT.md](DEPLOYMENT.md)** - CI/CD y despliegue en Hostinger
-- **[CONTRIBUTING.md](.github/CONTRIBUTING.md)** - Guía de contribución
+La documentación completa del proyecto se encuentra en la carpeta [`Docs/`](Docs/).
 
-### Documentación Técnica
-- **[FIREBASE_SETUP.md](FIREBASE_SETUP.md)** - Configuración Firebase paso a paso
-- **[CLOUD_FUNCTIONS.md](CLOUD_FUNCTIONS.md)** - Cloud Functions documentación
-- **[SYNC_AUDIT_LOGS.md](SYNC_AUDIT_LOGS.md)** - Sistema de auditoría
-- **[SECURITY_RULES.md](SECURITY_RULES.md)** - Reglas de seguridad Firestore
+### Estructura de Documentación
 
-### Issues de Desarrollo
-- **[Issue #14](.github/ISSUE_14_CICD.md)** - CI/CD Setup
-- **[Issue #26](.github/ISSUE_26_DOCUMENTATION.md)** - Documentación
+#### [01. Arquitectura](Docs/01_Architecture/)
+- **[Architecture.md](Docs/01_Architecture/Architecture.md)** - Clean Architecture y Diseño
+- **[Implementation_Summary.md](Docs/01_Architecture/Implementation_Summary.md)** - Resumen de implementación
+
+#### [02. Setup y Despliegue](Docs/02_Setup_and_Deployment/)
+- **[Setup.md](Docs/02_Setup_and_Deployment/Firebase_Setup.md)** - Configuración inicial y Firebase
+- **[Development.md](Docs/02_Setup_and_Deployment/Development.md)** - Guía de desarrollo
+- **[Deployment.md](Docs/02_Setup_and_Deployment/Deployment.md)** - Guías de despliegue y CI/CD
+
+#### [03. Funcionalidades](Docs/03_Features/)
+- **[Cloud_Functions.md](Docs/03_Features/Cloud_Functions.md)** - Documentación de backend
+- **[DNS_Viewer.md](Docs/03_Features/DNS_Viewer.md)** - Visor y comparador de DNS
+- **[Sync_and_Audit.md](Docs/03_Features/Sync_and_Audit.md)** - Sistema de sincronización
+
+#### [04. Calidad (QA)](Docs/04_Quality_Assurance/)
+- **[Tests.md](Docs/04_Quality_Assurance/Tests.md)** - Estrategia de pruebas
+- **[Performance.md](Docs/04_Quality_Assurance/Performance.md)** - Análisis de rendimiento
+
+#### [05. Seguridad](Docs/05_Security/)
+- **[Security_Rules.md](Docs/05_Security/Security_Rules.md)** - Reglas de seguridad Firestore
 
 ## ✨ Funcionalidades
 
@@ -266,7 +275,7 @@ Este proyecto es privado y propietario.
 ## 📞 Soporte
 
 - **Issues:** Reportar bugs o sugerencias en GitHub Issues
-- **Documentación:** Ver carpeta `/docs` para más guías
+- **Documentación:** Ver carpeta [`Docs/`](Docs/) para más guías
 - **Cloud Functions:** Ver logs en Firebase Console
 
 ## 🎯 Roadmap

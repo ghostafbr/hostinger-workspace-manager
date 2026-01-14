@@ -31,10 +31,7 @@ describe('DnsService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        DnsService,
-        { provide: WorkspaceContextService, useValue: workspaceContextSpy },
-      ],
+      providers: [DnsService, { provide: WorkspaceContextService, useValue: workspaceContextSpy }],
     });
 
     service = TestBed.inject(DnsService);
@@ -121,21 +118,21 @@ describe('DnsService', () => {
 
   describe('validateDns', () => {
     it('should call cloud function and update validationResults signal', async () => {
-        const mockResult = {
-            id: '123',
-            status: 'healthy',
-            checks: []
-        };
-        // Mock httpsCallable return value
-        const httpsCallableMock = vi.mocked(await import('firebase/functions')).httpsCallable;
-        const callableReturn = vi.fn().mockResolvedValue({ data: mockResult }) as any;
-        httpsCallableMock.mockReturnValue(callableReturn);
+      const mockResult = {
+        id: '123',
+        status: 'healthy',
+        checks: [],
+      };
+      // Mock httpsCallable return value
+      const httpsCallableMock = vi.mocked(await import('firebase/functions')).httpsCallable;
+      const callableReturn = vi.fn().mockResolvedValue({ data: mockResult }) as any;
+      httpsCallableMock.mockReturnValue(callableReturn);
 
-        await service.validateDns('example.com');
+      await service.validateDns('example.com');
 
-        expect(httpsCallableMock).toHaveBeenCalled();
-        expect(service.validationResults()).toEqual(mockResult);
-        expect(service.isLoading()).toBe(false);
+      expect(httpsCallableMock).toHaveBeenCalled();
+      expect(service.validationResults()).toEqual(mockResult);
+      expect(service.isLoading()).toBe(false);
     });
   });
 });

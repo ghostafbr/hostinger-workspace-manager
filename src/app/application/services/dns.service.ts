@@ -12,7 +12,13 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
 import { Timestamp as FirestoreTimestamp } from 'firebase/firestore';
-import { DnsRecord, DnsSnapshot, DnsRecordType, DnsValidationResult, DnsValidationStatus } from '@app/domain';
+import {
+  DnsRecord,
+  DnsSnapshot,
+  DnsRecordType,
+  DnsValidationResult,
+  DnsValidationStatus,
+} from '@app/domain';
 import { WorkspaceContextService } from './workspace-context.service';
 import { httpsCallable, Functions } from 'firebase/functions';
 
@@ -60,10 +66,10 @@ export class DnsService {
 
     try {
       // Direct call to Cloud Function using Modular SDK
-      const validateDnsFn = httpsCallable<{workspaceId: string, domainName: string}, DnsValidationResult>(
-        this.functions,
-        'validateDns'
-      );
+      const validateDnsFn = httpsCallable<
+        { workspaceId: string; domainName: string },
+        DnsValidationResult
+      >(this.functions, 'validateDns');
 
       const result = await validateDnsFn({ workspaceId, domainName });
       const validationData = result.data as any;
@@ -73,7 +79,8 @@ export class DnsService {
       if (va && typeof va.toDate !== 'function') {
         if (typeof va.seconds === 'number') {
           // Admin Timestamp serialized as { seconds, nanoseconds }
-          const millis = va.seconds * 1000 + (va.nanoseconds ? Math.round(va.nanoseconds / 1e6) : 0);
+          const millis =
+            va.seconds * 1000 + (va.nanoseconds ? Math.round(va.nanoseconds / 1e6) : 0);
           validationData.validatedAt = FirestoreTimestamp.fromMillis(millis);
         } else if (typeof va === 'string' || typeof va === 'number') {
           validationData.validatedAt = FirestoreTimestamp.fromDate(new Date(va));
