@@ -96,6 +96,7 @@ La documentación completa del proyecto se encuentra en la carpeta [`Docs/`](Doc
 #### [03. Funcionalidades](Docs/03_Features/)
 - **[Cloud_Functions.md](Docs/03_Features/Cloud_Functions.md)** - Documentación de backend
 - **[DNS_Viewer.md](Docs/03_Features/DNS_Viewer.md)** - Visor y comparador de DNS
+- **[DNS_Validation.md](Docs/03_Features/DNS_Validation.md)** - Validación y salud de registros DNS
 - **[Sync_and_Audit.md](Docs/03_Features/Sync_and_Audit.md)** - Sistema de sincronización
 
 #### [04. Calidad (QA)](Docs/04_Quality_Assurance/)
