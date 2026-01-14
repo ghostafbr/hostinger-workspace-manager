@@ -3,7 +3,9 @@
     <ng-template pTemplate="header">
       <div class="card-header">
         <h2><i class="fas fa-envelope"></i> Configuración de Emails</h2>
-        <p class="subtitle">Configure el envío de notificaciones por email para {{ currentWorkspace()?.name }}</p>
+        <p class="subtitle">
+          Configure el envío de notificaciones por email para {{ currentWorkspace()?.name }}
+        </p>
       </div>
     </ng-template>
 
@@ -93,7 +95,11 @@
             type="email"
             [(ngModel)]="fromEmail"
             name="fromEmail"
-            [placeholder]="providerType() === EmailProvider.SMTP ? 'tu-email@andres-bolanos.dev' : 'noreply@yourdomain.com'"
+            [placeholder]="
+              providerType() === EmailProvider.SMTP
+                ? 'tu-email@andres-bolanos.dev'
+                : 'noreply@yourdomain.com'
+            "
             class="w-full"
             [disabled]="!enabled()"
           />
@@ -234,15 +240,23 @@
               />
             </div>
             <small>
-              Obtén tu API key en <a href="https://app.sendgrid.com/settings/api_keys" target="_blank">SendGrid Dashboard</a>
+              Obtén tu API key en
+              <a href="https://app.sendgrid.com/settings/api_keys" target="_blank"
+                >SendGrid Dashboard</a
+              >
             </small>
           </div>
         }
 
         <!-- Payment Options -->
         <div class="col-12">
-          <h3 class="section-title"><i class="fas fa-credit-card"></i> Opciones de Pago para Renovaciones</h3>
-          <small class="text-muted">Configure los métodos de pago que aparecerán en los correos de renovación de dominios</small>
+          <h3 class="section-title">
+            <i class="fas fa-credit-card"></i> Opciones de Pago para Renovaciones
+          </h3>
+          <small class="text-muted"
+            >Configure los métodos de pago que aparecerán en los correos de renovación de
+            dominios</small
+          >
         </div>
 
         <!-- Wompi Payment Gateway -->
@@ -291,7 +305,10 @@
             id="bancolombiaAccountType"
             [(ngModel)]="bancolombiaAccountType"
             name="bancolombiaAccountType"
-            [options]="[{label: 'Ahorros', value: 'ahorros'}, {label: 'Corriente', value: 'corriente'}]"
+            [options]="[
+              { label: 'Ahorros', value: 'ahorros' },
+              { label: 'Corriente', value: 'corriente' },
+            ]"
             optionLabel="label"
             optionValue="value"
             placeholder="Selecciona tipo"

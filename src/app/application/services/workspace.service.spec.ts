@@ -11,7 +11,7 @@ import { firstValueFrom } from 'rxjs';
 // Mock Firestore functions
 vi.mock('firebase/firestore', async () => {
   const actual = await vi.importActual('firebase/firestore');
-    return {
+  return {
     ...actual,
     collection: vi.fn(),
     addDoc: vi.fn(),
@@ -23,9 +23,12 @@ vi.mock('firebase/firestore', async () => {
     query: vi.fn(),
     where: vi.fn(),
 
-      Timestamp: {
+    Timestamp: {
       now: vi.fn(() => ({ seconds: 1640000000, nanoseconds: 0 })),
-      fromDate: vi.fn((date: Date) => ({ seconds: Math.floor(date.getTime() / 1000), nanoseconds: 0 })),
+      fromDate: vi.fn((date: Date) => ({
+        seconds: Math.floor(date.getTime() / 1000),
+        nanoseconds: 0,
+      })),
     },
   };
 });
@@ -263,7 +266,7 @@ describe('WorkspaceService', () => {
           name: 'Test',
           description: '',
           status: WorkspaceStatus.ACTIVE,
-        })
+        }),
       ).rejects.toThrow('User not authenticated');
     });
 
@@ -277,7 +280,7 @@ describe('WorkspaceService', () => {
           name: 'Test',
           description: '',
           status: WorkspaceStatus.ACTIVE,
-        })
+        }),
       ).rejects.toThrow('Create failed');
       expect(service.error()).toBe('Create failed');
     });
@@ -310,7 +313,7 @@ describe('WorkspaceService', () => {
       vi.mocked(updateDoc).mockRejectedValue(error);
 
       await expect(service.updateWorkspace('ws-123', { name: 'Updated' })).rejects.toThrow(
-        'Update failed'
+        'Update failed',
       );
       expect(service.error()).toBe('Update failed');
     });

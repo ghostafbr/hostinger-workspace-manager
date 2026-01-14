@@ -1,203 +1,203 @@
 <p-card class="search-card">
   <div class="search-content">
-      <!-- Basic Search -->
-      <div class="search-section">
-        <h4>Búsqueda Básica</h4>
-        <div class="field-grid">
-          <div class="field">
-            <label for="name">Nombre del Workspace</label>
-            <input
-              id="name"
-              type="text"
-              pInputText
-              [(ngModel)]="name"
-              placeholder="Buscar por nombre..."
-              (keyup.enter)="applySearch()"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- Status & Priority -->
-      <div class="search-section">
-        <h4>Estado y Prioridad</h4>
-        <div class="field-grid">
-          <div class="field">
-            <label for="status">Estado</label>
-            <p-multiSelect
-              id="status"
-              [options]="statusOptions"
-              [(ngModel)]="selectedStatuses"
-              placeholder="Seleccionar estados..."
-              optionLabel="label"
-              optionValue="value"
-              [showClear]="true"
-            />
-          </div>
-
-          <div class="field">
-            <label for="priority">Prioridad</label>
-            <p-multiSelect
-              id="priority"
-              [options]="priorityOptions"
-              [(ngModel)]="selectedPriorities"
-              placeholder="Seleccionar prioridades..."
-              optionLabel="label"
-              optionValue="value"
-              [showClear]="true"
-            />
-          </div>
-
-          <div class="field">
-            <label for="errors">Errores</label>
-            <p-select
-              id="errors"
-              [options]="errorOptions"
-              [(ngModel)]="hasErrors"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Filtrar por errores..."
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- Tags & Special Filters -->
-      <div class="search-section">
-        <h4>Tags y Filtros Especiales</h4>
-        <div class="field-grid">
-          <div class="field">
-            <label for="tags">Tags (separados por comas)</label>
-            <input
-              id="tags"
-              type="text"
-              pInputText
-              [(ngModel)]="tagsInput"
-              placeholder="ej: producción, crítico, urgente"
-              (blur)="parseTags()"
-            />
-            <small>Ingresa tags separados por comas</small>
-          </div>
-
-          <div class="field checkbox-field">
-            <p-checkbox
-              id="favorites"
-              [(ngModel)]="favoritesOnly"
-              [binary]="true"
-              label="Solo favoritos"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- Date Filters -->
-      <div class="search-section">
-        <h4>Última Sincronización</h4>
-        <div class="field-grid">
-          <div class="field">
-            <label for="syncAfter">Desde</label>
-            <p-datepicker
-              id="syncAfter"
-              [(ngModel)]="lastSyncAfter"
-              [showIcon]="true"
-              placeholder="Fecha inicio..."
-              dateFormat="dd/mm/yy"
-            />
-          </div>
-
-          <div class="field">
-            <label for="syncBefore">Hasta</label>
-            <p-datepicker
-              id="syncBefore"
-              [(ngModel)]="lastSyncBefore"
-              [showIcon]="true"
-              placeholder="Fecha fin..."
-              dateFormat="dd/mm/yy"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- Saved Filters -->
-      @if (savedFilters().length > 0) {
-        <div class="search-section">
-          <h4>Filtros Guardados</h4>
-          <div class="saved-filters">
-            @for (filter of savedFilters(); track filter.id) {
-              <div class="saved-filter-item">
-                <p-button
-                  [label]="filter.name"
-                  class="p-button-outlined p-button-sm"
-                  icon="pi pi-filter"
-                  (onClick)="loadSavedFilter(filter)"
-                  [pTooltip]="filter.description || 'Cargar filtro'"
-                />
-                <p-button
-                  icon="pi pi-trash"
-                  class="p-button-text p-button-sm p-button-danger"
-                  (onClick)="deleteSavedFilter(filter.id!)"
-                  pTooltip="Eliminar filtro"
-                />
-              </div>
-            }
-          </div>
-        </div>
-      }
-
-      <!-- Action Buttons -->
-      <div class="search-actions">
-        <div class="action-group">
-          <p-button
-            label="Buscar"
-            icon="pi pi-search"
-            class="p-button-primary"
-            (onClick)="applySearch()"
-          />
-          <p-button
-            label="Limpiar"
-            icon="pi pi-times"
-            class="p-button-outlined"
-            (onClick)="clearFilters()"
-          />
-        </div>
-
-        @if (hasActiveFilters()) {
-          <p-button
-            label="Guardar Filtro"
-            icon="pi pi-save"
-            class="p-button-outlined"
-            (onClick)="showSaveDialog.set(true)"
-          />
-        }
-      </div>
-
-      <!-- Save Filter Dialog -->
-      @if (showSaveDialog()) {
-        <div class="save-dialog">
-          <h4>Guardar Filtro Actual</h4>
+    <!-- Basic Search -->
+    <div class="search-section">
+      <h4>Búsqueda Básica</h4>
+      <div class="field-grid">
+        <div class="field">
+          <label for="name">Nombre del Workspace</label>
           <input
+            id="name"
             type="text"
             pInputText
-            [(ngModel)]="saveFilterName"
-            placeholder="Nombre del filtro..."
-            (keyup.enter)="saveCurrentFilter()"
+            [(ngModel)]="name"
+            placeholder="Buscar por nombre..."
+            (keyup.enter)="applySearch()"
           />
-          <div class="dialog-actions">
-            <p-button
-              label="Guardar"
-              icon="pi pi-check"
-              class="p-button-sm"
-              (onClick)="saveCurrentFilter()"
-              [disabled]="!saveFilterName()"
-            />
-            <p-button
-              label="Cancelar"
-              icon="pi pi-times"
-              class="p-button-text p-button-sm"
-              (onClick)="showSaveDialog.set(false)"
-            />
-          </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Status & Priority -->
+    <div class="search-section">
+      <h4>Estado y Prioridad</h4>
+      <div class="field-grid">
+        <div class="field">
+          <label for="status">Estado</label>
+          <p-multiSelect
+            id="status"
+            [options]="statusOptions"
+            [(ngModel)]="selectedStatuses"
+            placeholder="Seleccionar estados..."
+            optionLabel="label"
+            optionValue="value"
+            [showClear]="true"
+          />
+        </div>
+
+        <div class="field">
+          <label for="priority">Prioridad</label>
+          <p-multiSelect
+            id="priority"
+            [options]="priorityOptions"
+            [(ngModel)]="selectedPriorities"
+            placeholder="Seleccionar prioridades..."
+            optionLabel="label"
+            optionValue="value"
+            [showClear]="true"
+          />
+        </div>
+
+        <div class="field">
+          <label for="errors">Errores</label>
+          <p-select
+            id="errors"
+            [options]="errorOptions"
+            [(ngModel)]="hasErrors"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Filtrar por errores..."
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Tags & Special Filters -->
+    <div class="search-section">
+      <h4>Tags y Filtros Especiales</h4>
+      <div class="field-grid">
+        <div class="field">
+          <label for="tags">Tags (separados por comas)</label>
+          <input
+            id="tags"
+            type="text"
+            pInputText
+            [(ngModel)]="tagsInput"
+            placeholder="ej: producción, crítico, urgente"
+            (blur)="parseTags()"
+          />
+          <small>Ingresa tags separados por comas</small>
+        </div>
+
+        <div class="field checkbox-field">
+          <p-checkbox
+            id="favorites"
+            [(ngModel)]="favoritesOnly"
+            [binary]="true"
+            label="Solo favoritos"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Date Filters -->
+    <div class="search-section">
+      <h4>Última Sincronización</h4>
+      <div class="field-grid">
+        <div class="field">
+          <label for="syncAfter">Desde</label>
+          <p-datepicker
+            id="syncAfter"
+            [(ngModel)]="lastSyncAfter"
+            [showIcon]="true"
+            placeholder="Fecha inicio..."
+            dateFormat="dd/mm/yy"
+          />
+        </div>
+
+        <div class="field">
+          <label for="syncBefore">Hasta</label>
+          <p-datepicker
+            id="syncBefore"
+            [(ngModel)]="lastSyncBefore"
+            [showIcon]="true"
+            placeholder="Fecha fin..."
+            dateFormat="dd/mm/yy"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Saved Filters -->
+    @if (savedFilters().length > 0) {
+      <div class="search-section">
+        <h4>Filtros Guardados</h4>
+        <div class="saved-filters">
+          @for (filter of savedFilters(); track filter.id) {
+            <div class="saved-filter-item">
+              <p-button
+                [label]="filter.name"
+                class="p-button-outlined p-button-sm"
+                icon="pi pi-filter"
+                (onClick)="loadSavedFilter(filter)"
+                [pTooltip]="filter.description || 'Cargar filtro'"
+              />
+              <p-button
+                icon="pi pi-trash"
+                class="p-button-text p-button-sm p-button-danger"
+                (onClick)="deleteSavedFilter(filter.id!)"
+                pTooltip="Eliminar filtro"
+              />
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Action Buttons -->
+    <div class="search-actions">
+      <div class="action-group">
+        <p-button
+          label="Buscar"
+          icon="pi pi-search"
+          class="p-button-primary"
+          (onClick)="applySearch()"
+        />
+        <p-button
+          label="Limpiar"
+          icon="pi pi-times"
+          class="p-button-outlined"
+          (onClick)="clearFilters()"
+        />
+      </div>
+
+      @if (hasActiveFilters()) {
+        <p-button
+          label="Guardar Filtro"
+          icon="pi pi-save"
+          class="p-button-outlined"
+          (onClick)="showSaveDialog.set(true)"
+        />
       }
     </div>
+
+    <!-- Save Filter Dialog -->
+    @if (showSaveDialog()) {
+      <div class="save-dialog">
+        <h4>Guardar Filtro Actual</h4>
+        <input
+          type="text"
+          pInputText
+          [(ngModel)]="saveFilterName"
+          placeholder="Nombre del filtro..."
+          (keyup.enter)="saveCurrentFilter()"
+        />
+        <div class="dialog-actions">
+          <p-button
+            label="Guardar"
+            icon="pi pi-check"
+            class="p-button-sm"
+            (onClick)="saveCurrentFilter()"
+            [disabled]="!saveFilterName()"
+          />
+          <p-button
+            label="Cancelar"
+            icon="pi pi-times"
+            class="p-button-text p-button-sm"
+            (onClick)="showSaveDialog.set(false)"
+          />
+        </div>
+      </div>
+    }
+  </div>
 </p-card>

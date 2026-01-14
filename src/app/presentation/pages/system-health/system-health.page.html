@@ -40,7 +40,7 @@
           </div>
           <div class="stat-content">
             <div class="stat-label">Health Score Promedio</div>
-            <div class="stat-value">{{ summary.averageHealthScore | number:'1.0-0' }}/100</div>
+            <div class="stat-value">{{ summary.averageHealthScore | number: '1.0-0' }}/100</div>
             <div class="stat-subtitle">
               {{ summary.getHealthyPercentage() }}% workspaces saludables
             </div>
@@ -75,9 +75,7 @@
           <div class="stat-content">
             <div class="stat-label">Rate Limit Usage</div>
             <div class="stat-value">{{ formatPercentage(summary.totalRateLimitUsage) }}</div>
-            <div class="stat-subtitle">
-              {{ summary.workspacesNearLimit }} cerca del límite
-            </div>
+            <div class="stat-subtitle">{{ summary.workspacesNearLimit }} cerca del límite</div>
           </div>
         </div>
       </p-card>
@@ -107,9 +105,7 @@
           <div class="stat-content">
             <div class="stat-label">Errores (24h)</div>
             <div class="stat-value">{{ summary.totalErrors24h }}</div>
-            <div class="stat-subtitle">
-              {{ summary.workspacesWithErrors }} workspaces afectados
-            </div>
+            <div class="stat-subtitle">{{ summary.workspacesWithErrors }} workspaces afectados</div>
           </div>
         </div>
       </p-card>
@@ -131,11 +127,11 @@
               responsive: true,
               maintainAspectRatio: false,
               plugins: {
-                legend: { display: false }
+                legend: { display: false },
               },
               scales: {
-                y: { beginAtZero: true, max: 100 }
-              }
+                y: { beginAtZero: true, max: 100 },
+              },
             }"
             [style]="{ height: '300px' }"
           />
@@ -154,11 +150,11 @@
               responsive: true,
               maintainAspectRatio: false,
               plugins: {
-                legend: { display: false }
+                legend: { display: false },
               },
               scales: {
-                y: { beginAtZero: true, max: 100 }
-              }
+                y: { beginAtZero: true, max: 100 },
+              },
             }"
             [style]="{ height: '300px' }"
           />
@@ -266,8 +262,8 @@
                 metrics.healthStatus === HealthStatus.HEALTHY
                   ? 'pi pi-check'
                   : metrics.healthStatus === HealthStatus.WARNING
-                  ? 'pi pi-exclamation-triangle'
-                  : 'pi pi-times'
+                    ? 'pi pi-exclamation-triangle'
+                    : 'pi pi-times'
               "
             />
           </td>

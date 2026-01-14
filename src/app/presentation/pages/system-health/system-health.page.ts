@@ -78,8 +78,7 @@ export default class SystemHealthPage implements OnInit {
       this.systemSummary.set(summary);
       this.updateCharts(metrics);
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Error loading health data';
+      const errorMessage = error instanceof Error ? error.message : 'Error loading health data';
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -218,9 +217,7 @@ export default class SystemHealthPage implements OnInit {
   /**
    * Get health status severity for PrimeNG tag
    */
-  getHealthSeverity(
-    status: string
-  ): 'success' | 'warn' | 'danger' | 'info' | 'secondary' {
+  getHealthSeverity(status: string): 'success' | 'warn' | 'danger' | 'info' | 'secondary' {
     switch (status) {
       case HealthStatus.HEALTHY:
         return 'success';
@@ -236,9 +233,7 @@ export default class SystemHealthPage implements OnInit {
   /**
    * Get circuit breaker severity
    */
-  getCircuitSeverity(
-    status: string
-  ): 'success' | 'warn' | 'danger' | 'info' | 'secondary' {
+  getCircuitSeverity(status: string): 'success' | 'warn' | 'danger' | 'info' | 'secondary' {
     switch (status) {
       case 'closed':
         return 'success';

@@ -22,7 +22,7 @@ export class CustomPreloadingStrategy implements PreloadingStrategy {
       return timer(delay).pipe(
         mergeMap(() => {
           return load();
-        })
+        }),
       );
     }
 

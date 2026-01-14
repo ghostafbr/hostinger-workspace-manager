@@ -72,7 +72,9 @@ describe('SubscriptionService', () => {
       const error = new Error('Firestore error');
       vi.mocked(getDocs).mockRejectedValue(error);
 
-      await expect(service.getSubscriptions({ workspaceId: 'ws-123' })).rejects.toThrow('Firestore error');
+      await expect(service.getSubscriptions({ workspaceId: 'ws-123' })).rejects.toThrow(
+        'Firestore error',
+      );
       expect(service.error()).toBe('Firestore error');
     });
   });

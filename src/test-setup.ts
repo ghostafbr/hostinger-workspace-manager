@@ -52,8 +52,9 @@ global.sessionStorage = sessionStorageMock as any;
 // Extend expect matchers
 expect.extend({
   toHaveBeenCalledOnceWith(received: any, ...expected: any[]) {
-    const pass = received.mock.calls.length === 1 &&
-                 JSON.stringify(received.mock.calls[0]) === JSON.stringify(expected);
+    const pass =
+      received.mock.calls.length === 1 &&
+      JSON.stringify(received.mock.calls[0]) === JSON.stringify(expected);
     return {
       pass,
       message: () =>

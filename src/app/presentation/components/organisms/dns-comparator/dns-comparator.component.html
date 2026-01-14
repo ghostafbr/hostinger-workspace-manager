@@ -29,7 +29,8 @@
         <option [value]="null">Selecciona un snapshot para comparar</option>
         @for (snapshot of snapshots(); track snapshot.id) {
           <option [value]="snapshot.id">
-            {{ snapshot.createdAt.toDate().toLocaleString() }} - {{ snapshot.note || 'Snapshot manual' }}
+            {{ snapshot.createdAt.toDate().toLocaleString() }} -
+            {{ snapshot.note || 'Snapshot manual' }}
           </option>
         }
       </select>
@@ -79,11 +80,7 @@
             <i class="pi pi-plus-circle mr-2"></i>
             Added Records ({{ comparison()!.added.length }})
           </h4>
-          <p-table
-            [value]="comparison()!.added"
-            [rowHover]="true"
-            class="p-datatable-sm"
-          >
+          <p-table [value]="comparison()!.added" [rowHover]="true" class="p-datatable-sm">
             <ng-template pTemplate="header">
               <tr>
                 <th>Type</th>
@@ -98,7 +95,9 @@
                   <p-tag [value]="record.recordType" severity="success" />
                 </td>
                 <td>{{ record.name }}</td>
-                <td><code>{{ record.value }}</code></td>
+                <td>
+                  <code>{{ record.value }}</code>
+                </td>
                 <td>{{ record.getFormattedTTL() }}</td>
               </tr>
             </ng-template>
@@ -113,11 +112,7 @@
             <i class="pi pi-minus-circle mr-2"></i>
             Removed Records ({{ comparison()!.removed.length }})
           </h4>
-          <p-table
-            [value]="comparison()!.removed"
-            [rowHover]="true"
-            class="p-datatable-sm"
-          >
+          <p-table [value]="comparison()!.removed" [rowHover]="true" class="p-datatable-sm">
             <ng-template pTemplate="header">
               <tr>
                 <th>Type</th>
@@ -132,7 +127,9 @@
                   <p-tag [value]="record.recordType" severity="danger" />
                 </td>
                 <td>{{ record.name }}</td>
-                <td><code>{{ record.value }}</code></td>
+                <td>
+                  <code>{{ record.value }}</code>
+                </td>
                 <td>{{ record.getFormattedTTL() }}</td>
               </tr>
             </ng-template>
@@ -147,11 +144,7 @@
             <i class="pi pi-pencil mr-2"></i>
             Modified Records ({{ comparison()!.modified.length }})
           </h4>
-          <p-table
-            [value]="comparison()!.modified"
-            [rowHover]="true"
-            class="p-datatable-sm"
-          >
+          <p-table [value]="comparison()!.modified" [rowHover]="true" class="p-datatable-sm">
             <ng-template pTemplate="header">
               <tr>
                 <th>Type</th>
@@ -166,7 +159,9 @@
                   <p-tag [value]="record.recordType" severity="warn" />
                 </td>
                 <td>{{ record.name }}</td>
-                <td><code>{{ record.value }}</code></td>
+                <td>
+                  <code>{{ record.value }}</code>
+                </td>
                 <td>{{ record.getFormattedTTL() }}</td>
               </tr>
             </ng-template>

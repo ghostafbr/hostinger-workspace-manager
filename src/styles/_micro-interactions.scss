@@ -14,7 +14,10 @@
 }
 
 .transition-colors {
-  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .transition-transform {
@@ -30,7 +33,9 @@
    ======================================== */
 
 .hover-lift {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
@@ -109,7 +114,9 @@
   transition: box-shadow 0.2s ease;
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px var(--surface-0), 0 0 0 4px rgba(var(--primary-500-rgb), 0.5);
+    box-shadow:
+      0 0 0 2px var(--surface-0),
+      0 0 0 4px rgba(var(--primary-500-rgb), 0.5);
   }
 }
 
@@ -272,13 +279,16 @@
 }
 
 @keyframes shake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
-  20%, 60% {
+  20%,
+  60% {
     transform: translateX(-10px);
   }
-  40%, 80% {
+  40%,
+  80% {
     transform: translateX(10px);
   }
 }
@@ -288,7 +298,8 @@
 }
 
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   25% {
@@ -307,7 +318,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -360,7 +372,9 @@
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.5);
     transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
+    transition:
+      width 0.6s,
+      height 0.6s;
   }
 
   &:active::before {

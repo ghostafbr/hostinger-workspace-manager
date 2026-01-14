@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  input,
-  output,
-  ChangeDetectionStrategy,
-  Signal,
-} from '@angular/core';
+import { Component, computed, input, output, ChangeDetectionStrategy, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ChipModule } from 'primeng/chip';
@@ -77,9 +70,7 @@ export class CriticalWorkspacesWidgetComponent {
     const now = new Date();
     if (workspace.lastSyncAt) {
       const lastSync =
-        workspace.lastSyncAt instanceof Date
-          ? workspace.lastSyncAt
-          : workspace.lastSyncAt.toDate();
+        workspace.lastSyncAt instanceof Date ? workspace.lastSyncAt : workspace.lastSyncAt.toDate();
       const daysSinceSync = (now.getTime() - lastSync.getTime()) / (24 * 60 * 60 * 1000);
 
       if (daysSinceSync > 7) {

@@ -318,7 +318,8 @@ export class DashboardService {
           expirationDate: expiresAt,
           workspaceName: workspaceMap.get(domain.workspaceId) || 'Unknown',
           daysUntilExpiration,
-          status: daysUntilExpiration <= 7 ? 'critical' : daysUntilExpiration <= 15 ? 'warning' : 'info',
+          status:
+            daysUntilExpiration <= 7 ? 'critical' : daysUntilExpiration <= 15 ? 'warning' : 'info',
         });
       });
 
@@ -338,7 +339,8 @@ export class DashboardService {
           expirationDate: expiresAt,
           workspaceName: workspaceMap.get(sub.workspaceId) || 'Unknown',
           daysUntilExpiration,
-          status: daysUntilExpiration <= 7 ? 'critical' : daysUntilExpiration <= 15 ? 'warning' : 'info',
+          status:
+            daysUntilExpiration <= 7 ? 'critical' : daysUntilExpiration <= 15 ? 'warning' : 'info',
         });
       });
 
@@ -380,7 +382,8 @@ export class DashboardService {
         label: 'Vencimientos (7d)',
         current: stats.domainsExpiring7Days + stats.subscriptionsExpiring7Days,
         previous: Math.floor(
-          (stats.domainsExpiring7Days + stats.subscriptionsExpiring7Days) * (0.8 + Math.random() * 0.4),
+          (stats.domainsExpiring7Days + stats.subscriptionsExpiring7Days) *
+            (0.8 + Math.random() * 0.4),
         ),
       },
     ];

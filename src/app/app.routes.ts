@@ -50,7 +50,10 @@ export const routes: Routes = [
       },
       {
         path: 'email-config',
-        loadComponent: () => import('./presentation/pages/email-config/email-config.page').then(m => m.EmailConfigPage),
+        loadComponent: () =>
+          import('./presentation/pages/email-config/email-config.page').then(
+            (m) => m.EmailConfigPage,
+          ),
       },
       {
         path: 'settings',

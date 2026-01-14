@@ -166,7 +166,9 @@ export class EmailConfigPage implements OnInit {
         if (config.paymentOptions) {
           this.wompiPublicKey.set(config.paymentOptions.wompiPublicKey || '');
           this.wompiIntegrityKey.set(config.paymentOptions.wompiIntegrityKey || '');
-          this.bancolombiaAccountType.set(config.paymentOptions.bancolombia?.accountType || 'ahorros');
+          this.bancolombiaAccountType.set(
+            config.paymentOptions.bancolombia?.accountType || 'ahorros',
+          );
           this.bancolombiaAccountNumber.set(config.paymentOptions.bancolombia?.accountNumber || '');
           this.bancolombiaOwnerName.set(config.paymentOptions.bancolombia?.ownerName || '');
           this.bancolombiaOwnerDocument.set(config.paymentOptions.bancolombia?.ownerDocument || '');
@@ -408,7 +410,7 @@ export class EmailConfigPage implements OnInit {
           body: JSON.stringify({
             email: this.recipientEmail(),
           }),
-        }
+        },
       );
 
       if (!response.ok) {
@@ -422,7 +424,7 @@ export class EmailConfigPage implements OnInit {
         'https://us-central1-hostinger-workspace-manager.cloudfunctions.net/runGenerateAlerts',
         {
           method: 'POST',
-        }
+        },
       );
 
       if (!processResponse.ok) {
@@ -433,8 +435,8 @@ export class EmailConfigPage implements OnInit {
 
       this.success.set(
         `✅ Email de prueba enviado exitosamente a ${this.recipientEmail()}. ` +
-        `El email será entregado en los próximos 15 minutos por la función automática. ` +
-        `Dominio de prueba: ${alertResult.data?.domainName || 'N/A'}`
+          `El email será entregado en los próximos 15 minutos por la función automática. ` +
+          `Dominio de prueba: ${alertResult.data?.domainName || 'N/A'}`,
       );
 
       // Recargar logs después de 2 segundos

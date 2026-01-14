@@ -43,10 +43,7 @@ export class WebhookService {
       const formattedPayload = this.formatPayload(config.platform, payload);
       const headers = this.buildHeaders(config);
 
-      await this.http
-        .post(config.url, formattedPayload, { headers })
-        .toPromise();
-
+      await this.http.post(config.url, formattedPayload, { headers }).toPromise();
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       this.lastError.set(errorMessage);
@@ -301,10 +298,7 @@ export class WebhookService {
   /**
    * Map alert severity to webhook event
    */
-  mapAlertToWebhookEvent(
-    alertTitle: string,
-    severity: 'warning' | 'critical'
-  ): WebhookEvent {
+  mapAlertToWebhookEvent(alertTitle: string, severity: 'warning' | 'critical'): WebhookEvent {
     if (alertTitle.includes('Rate Limit Critical')) {
       return 'rateLimit.critical';
     }

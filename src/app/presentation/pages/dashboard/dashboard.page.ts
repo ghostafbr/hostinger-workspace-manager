@@ -38,10 +38,7 @@ import {
   UpcomingEventsTimelineComponent,
   type TimelineEvent,
 } from '@app/presentation/components/organisms/upcoming-events-timeline/upcoming-events-timeline.component';
-import {
-  CriticalWorkspacesWidgetComponent,
-  AdvancedSearchComponent,
-} from '@app/presentation';
+import { CriticalWorkspacesWidgetComponent, AdvancedSearchComponent } from '@app/presentation';
 
 /**
  * Dashboard Page Component
@@ -238,7 +235,12 @@ export default class DashboardPage implements OnInit {
       Workspace: event.workspaceName,
       'Fecha de Vencimiento': event.expirationDate.toLocaleDateString('es-ES'),
       'Días Restantes': event.daysUntilExpiration,
-      Estado: event.status === 'critical' ? 'Crítico' : event.status === 'warning' ? 'Advertencia' : 'Info',
+      Estado:
+        event.status === 'critical'
+          ? 'Crítico'
+          : event.status === 'warning'
+            ? 'Advertencia'
+            : 'Info',
     }));
 
     const filename = `dashboard-vencimientos-${new Date().toISOString().split('T')[0]}.csv`;

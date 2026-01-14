@@ -16,14 +16,10 @@
           </div>
           <div class="stat-trend" [style.color]="getTrendColor(stat.current, stat.previous)">
             <i [class]="getTrendIcon(stat.current, stat.previous)"></i>
-            <span>
-              {{ getPercentageChange(stat.current, stat.previous) | number: '1.0-1' }}%
-            </span>
+            <span> {{ getPercentageChange(stat.current, stat.previous) | number: '1.0-1' }}% </span>
           </div>
         </div>
-        <div class="stat-previous">
-          Anterior: {{ formatValue(stat.previous, stat.unit) }}
-        </div>
+        <div class="stat-previous">Anterior: {{ formatValue(stat.previous, stat.unit) }}</div>
       </div>
     }
   </div>

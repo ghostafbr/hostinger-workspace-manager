@@ -12,4 +12,3 @@ export { StatsComparisonComponent } from './stats-comparison/stats-comparison.co
 export type { ExpirationTrendData } from './expiration-trends-chart/expiration-trends-chart.component';
 export type { TimelineEvent } from './upcoming-events-timeline/upcoming-events-timeline.component';
 export type { StatComparison } from './stats-comparison/stats-comparison.component';
-

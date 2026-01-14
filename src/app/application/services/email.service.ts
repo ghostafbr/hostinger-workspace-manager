@@ -12,10 +12,7 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import { FirebaseAdapter } from '@app/infrastructure';
-import type {
-  IEmailConfig,
-  IEmailLog,
-} from '@app/domain';
+import type { IEmailConfig, IEmailLog } from '@app/domain';
 
 /**
  * Email Service
@@ -97,7 +94,7 @@ export class EmailService {
    */
   async updateEmailConfig(
     workspaceId: string,
-    updates: Partial<Omit<IEmailConfig, 'id' | 'workspaceId' | 'createdAt'>>
+    updates: Partial<Omit<IEmailConfig, 'id' | 'workspaceId' | 'createdAt'>>,
   ): Promise<void> {
     try {
       const config = await this.getEmailConfig(workspaceId);
@@ -139,10 +136,7 @@ export class EmailService {
   /**
    * Get email logs for a workspace
    */
-  async getEmailLogs(
-    workspaceId: string,
-    limit = 50
-  ): Promise<IEmailLog[]> {
+  async getEmailLogs(workspaceId: string, limit = 50): Promise<IEmailLog[]> {
     try {
       this.isLoading.set(true);
 
@@ -150,7 +144,7 @@ export class EmailService {
       const q = query(
         logsRef,
         where('workspaceId', '==', workspaceId),
-        orderBy('createdAt', 'desc')
+        orderBy('createdAt', 'desc'),
       );
 
       const snapshot = await getDocs(q);
@@ -196,7 +190,7 @@ export class EmailService {
    */
   async updateEmailLog(
     logId: string,
-    updates: Partial<Omit<IEmailLog, 'id' | 'workspaceId' | 'createdAt'>>
+    updates: Partial<Omit<IEmailLog, 'id' | 'workspaceId' | 'createdAt'>>,
   ): Promise<void> {
     try {
       const logRef = doc(this.firestore, 'emailLogs', logId);
@@ -223,7 +217,7 @@ export class EmailService {
         logsRef,
         where('status', 'in', ['pending', 'retrying']),
         where('nextRetryAt', '<=', now),
-        orderBy('nextRetryAt', 'asc')
+        orderBy('nextRetryAt', 'asc'),
       );
 
       const snapshot = await getDocs(q);

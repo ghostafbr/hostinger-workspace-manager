@@ -32,7 +32,10 @@ export type { AuditLog as IAuditLog } from './interfaces/audit-log.interface';
 export type { DnsRecord as IDnsRecord } from './interfaces/dns-record.interface';
 export type { DnsSnapshot as IDnsSnapshot } from './interfaces/dns-snapshot.interface';
 export type { Payment as IPayment } from './interfaces/payment.interface';
-export type { SavedFilter as ISavedFilter, FilterCriteria } from './interfaces/saved-filter.interface';
+export type {
+  SavedFilter as ISavedFilter,
+  FilterCriteria,
+} from './interfaces/saved-filter.interface';
 export type { DashboardSnapshot as IDashboardSnapshot } from './interfaces/dashboard-snapshot.interface';
 export type {
   HealthMetricsInterface as IHealthMetrics,

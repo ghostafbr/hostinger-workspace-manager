@@ -1,19 +1,8 @@
 import { Injectable, signal, computed } from '@angular/core';
 import type { Firestore } from 'firebase/firestore';
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  addDoc,
-  Timestamp,
-  orderBy,
-} from 'firebase/firestore';
+import { collection, query, where, getDocs, addDoc, Timestamp, orderBy } from 'firebase/firestore';
 import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
-import type {
-  IHealthMetrics,
-  ISystemHealthSummary,
-} from '@app/domain';
+import type { IHealthMetrics, ISystemHealthSummary } from '@app/domain';
 import {
   HealthMetrics,
   SystemHealthSummary,
@@ -51,19 +40,19 @@ export class HealthService {
 
   // Computed signals
   readonly healthyWorkspaces = computed(() =>
-    this.workspaceMetrics().filter((m) => m.healthStatus === HealthStatus.HEALTHY)
+    this.workspaceMetrics().filter((m) => m.healthStatus === HealthStatus.HEALTHY),
   );
 
   readonly criticalWorkspaces = computed(() =>
-    this.workspaceMetrics().filter((m) => m.healthStatus === HealthStatus.CRITICAL)
+    this.workspaceMetrics().filter((m) => m.healthStatus === HealthStatus.CRITICAL),
   );
 
   readonly warningWorkspaces = computed(() =>
-    this.workspaceMetrics().filter((m) => m.healthStatus === HealthStatus.WARNING)
+    this.workspaceMetrics().filter((m) => m.healthStatus === HealthStatus.WARNING),
   );
 
   readonly workspacesNearLimit = computed(() =>
-    this.workspaceMetrics().filter((m) => m.isNearRateLimit())
+    this.workspaceMetrics().filter((m) => m.isNearRateLimit()),
   );
 
   /**
@@ -78,12 +67,11 @@ export class HealthService {
       const workspacesRef = collection(this.firestore, 'workspaces');
       const workspacesSnapshot = await getDocs(workspacesRef);
 
-
       const metricsPromises = workspacesSnapshot.docs.map(async (workspaceDoc) => {
         const workspaceData = workspaceDoc.data();
         return this.calculateWorkspaceMetrics(
           workspaceDoc.id,
-          (workspaceData['name'] as string) || 'Unknown'
+          (workspaceData['name'] as string) || 'Unknown',
         );
       });
 
@@ -112,9 +100,8 @@ export class HealthService {
    */
   private async calculateWorkspaceMetrics(
     workspaceId: string,
-    workspaceName: string
+    workspaceName: string,
   ): Promise<HealthMetrics> {
-
     // Get sync runs for this workspace (last 30 days)
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
@@ -124,9 +111,8 @@ export class HealthService {
       syncRunsRef,
       where('workspaceId', '==', workspaceId),
       where('startedAt', '>=', Timestamp.fromDate(thirtyDaysAgo)),
-      orderBy('startedAt', 'desc')
+      orderBy('startedAt', 'desc'),
     );
-
 
     let syncRunsSnapshot;
     try {
@@ -134,10 +120,7 @@ export class HealthService {
     } catch (error: unknown) {
       console.error(`[HealthService] Query failed:`, error);
       // Si falla el query compuesto, intentar sin el orderBy
-      const simpleQuery = query(
-        syncRunsRef,
-        where('workspaceId', '==', workspaceId)
-      );
+      const simpleQuery = query(syncRunsRef, where('workspaceId', '==', workspaceId));
       syncRunsSnapshot = await getDocs(simpleQuery);
     }
 
@@ -150,10 +133,14 @@ export class HealthService {
     }) as (Record<string, unknown> & { id: string })[];
 
     if (syncRuns.length === 0) {
-      console.warn(`[HealthService] No syncRuns found for workspace ${workspaceId}. Checking if any syncRuns exist at all...`);
+      console.warn(
+        `[HealthService] No syncRuns found for workspace ${workspaceId}. Checking if any syncRuns exist at all...`,
+      );
       // Query all syncRuns to debug
       const allSyncRunsSnapshot = await getDocs(collection(this.firestore, 'sync_runs'));
-      console.warn(`[HealthService] Total syncRuns in database: ${allSyncRunsSnapshot.docs.length}`);
+      console.warn(
+        `[HealthService] Total syncRuns in database: ${allSyncRunsSnapshot.docs.length}`,
+      );
       if (allSyncRunsSnapshot.docs.length > 0) {
         const sampleDoc = allSyncRunsSnapshot.docs[0];
         console.warn('[HealthService] Sample document from syncRuns collection:', {
@@ -166,7 +153,7 @@ export class HealthService {
     // Calculate sync metrics
     const totalSyncs = syncRuns.length;
     const successfulSyncs = syncRuns.filter(
-      (run) => run['status'] === SyncRunStatus.SUCCESS
+      (run) => run['status'] === SyncRunStatus.SUCCESS,
     ).length;
     const failedSyncs = totalSyncs - successfulSyncs;
 
@@ -182,7 +169,7 @@ export class HealthService {
 
     // Calculate average sync time
     const completedSyncs = syncRuns.filter(
-      (run) => run['status'] === SyncRunStatus.SUCCESS && run['duration']
+      (run) => run['status'] === SyncRunStatus.SUCCESS && run['duration'],
     );
     const averageSyncTime =
       completedSyncs.length > 0
@@ -191,9 +178,7 @@ export class HealthService {
         : 0;
 
     // Get last successful and failed sync
-    const lastSuccessfulSync = syncRuns.find(
-      (run) => run['status'] === SyncRunStatus.SUCCESS
-    );
+    const lastSuccessfulSync = syncRuns.find((run) => run['status'] === SyncRunStatus.SUCCESS);
     const lastFailedSync = syncRuns.find((run) => run['status'] === SyncRunStatus.FAILED);
 
     // Get error metrics (last 24 hours)
@@ -220,9 +205,7 @@ export class HealthService {
     });
 
     const lastError = (lastFailedSync?.['errorMessage'] as string) || null;
-    const lastErrorTimestamp = lastFailedSync?.['startedAt'] as
-      | { toDate?: () => Date }
-      | undefined;
+    const lastErrorTimestamp = lastFailedSync?.['startedAt'] as { toDate?: () => Date } | undefined;
     const lastErrorTime = lastErrorTimestamp?.toDate?.() || null;
     const errorFrequency = recentErrors.length;
 
@@ -268,8 +251,7 @@ export class HealthService {
           : null,
       lastFailedSync:
         lastFailedSync?.['startedAt'] &&
-        typeof (lastFailedSync['startedAt'] as FirebaseTimestamp | undefined)?.toDate ===
-          'function'
+        typeof (lastFailedSync['startedAt'] as FirebaseTimestamp | undefined)?.toDate === 'function'
           ? (lastFailedSync['startedAt'] as FirebaseTimestamp).toDate()
           : null,
       consecutiveFailures,
@@ -300,10 +282,18 @@ export class HealthService {
     if (lowerMsg.includes('rate limit') || lowerMsg.includes('too many requests')) {
       return 'Rate Limit';
     }
-    if (lowerMsg.includes('auth') || lowerMsg.includes('unauthorized') || lowerMsg.includes('401')) {
+    if (
+      lowerMsg.includes('auth') ||
+      lowerMsg.includes('unauthorized') ||
+      lowerMsg.includes('401')
+    ) {
       return 'Authentication';
     }
-    if (lowerMsg.includes('network') || lowerMsg.includes('timeout') || lowerMsg.includes('econnrefused')) {
+    if (
+      lowerMsg.includes('network') ||
+      lowerMsg.includes('timeout') ||
+      lowerMsg.includes('econnrefused')
+    ) {
       return 'Network';
     }
     if (lowerMsg.includes('not found') || lowerMsg.includes('404')) {
@@ -323,14 +313,10 @@ export class HealthService {
     const metrics = await this.getAllHealthMetrics();
 
     const totalWorkspaces = metrics.length;
-    const healthyWorkspaces = metrics.filter(
-      (m) => m.healthStatus === HealthStatus.HEALTHY
-    ).length;
-    const warningWorkspaces = metrics.filter(
-      (m) => m.healthStatus === HealthStatus.WARNING
-    ).length;
+    const healthyWorkspaces = metrics.filter((m) => m.healthStatus === HealthStatus.HEALTHY).length;
+    const warningWorkspaces = metrics.filter((m) => m.healthStatus === HealthStatus.WARNING).length;
     const criticalWorkspaces = metrics.filter(
-      (m) => m.healthStatus === HealthStatus.CRITICAL
+      (m) => m.healthStatus === HealthStatus.CRITICAL,
     ).length;
 
     const totalRateLimitUsage =
@@ -411,11 +397,12 @@ export class HealthService {
       for (const metric of metrics) {
         // History is now saved by Cloud Function for better performance
         // Use add() which returns a Promise
-        const addPromise = getDocs(query(historyRef, where('workspaceId', '==', metric.workspaceId)))
-          .then(() => {
-            // Just resolve, actual add happens in Cloud Function
-            return Promise.resolve();
-          });
+        const addPromise = getDocs(
+          query(historyRef, where('workspaceId', '==', metric.workspaceId)),
+        ).then(() => {
+          // Just resolve, actual add happens in Cloud Function
+          return Promise.resolve();
+        });
 
         batch.push(addPromise);
       }
@@ -430,10 +417,7 @@ export class HealthService {
   /**
    * Get health history for a workspace
    */
-  async getWorkspaceHistory(
-    workspaceId: string,
-    days = 7
-  ): Promise<HealthHistory[]> {
+  async getWorkspaceHistory(workspaceId: string, days = 7): Promise<HealthHistory[]> {
     try {
       const historyRef = collection(this.firestore, 'healthHistory');
       const startDate = new Date();
@@ -443,7 +427,7 @@ export class HealthService {
         historyRef,
         where('workspaceId', '==', workspaceId),
         where('timestamp', '>=', Timestamp.fromDate(startDate)),
-        orderBy('timestamp', 'desc')
+        orderBy('timestamp', 'desc'),
       );
 
       const snapshot = await getDocs(historyQuery);
@@ -480,7 +464,7 @@ export class HealthService {
           metric.workspaceName,
           'critical',
           'Rate Limit Critical',
-          `Rate limit usage at ${metric.rateLimitPercentage}%. Immediate action required.`
+          `Rate limit usage at ${metric.rateLimitPercentage}%. Immediate action required.`,
         );
         alertsCreated++;
       }
@@ -492,7 +476,7 @@ export class HealthService {
           metric.workspaceName,
           'warning',
           'Rate Limit Warning',
-          `Rate limit usage at ${metric.rateLimitPercentage}%. Consider reducing API calls.`
+          `Rate limit usage at ${metric.rateLimitPercentage}%. Consider reducing API calls.`,
         );
         alertsCreated++;
       }
@@ -504,7 +488,7 @@ export class HealthService {
           metric.workspaceName,
           'critical',
           'Sync Failures Detected',
-          `${metric.consecutiveFailures} consecutive sync failures. Check workspace configuration.`
+          `${metric.consecutiveFailures} consecutive sync failures. Check workspace configuration.`,
         );
         alertsCreated++;
       }
@@ -516,7 +500,7 @@ export class HealthService {
           metric.workspaceName,
           'critical',
           'Circuit Breaker Open',
-          `Circuit breaker has been triggered. Workspace syncs are paused.`
+          `Circuit breaker has been triggered. Workspace syncs are paused.`,
         );
         alertsCreated++;
       }
@@ -528,7 +512,7 @@ export class HealthService {
           metric.workspaceName,
           'critical',
           'Critical Health Status',
-          `Health score is ${metric.healthScore}/100. Multiple issues detected.`
+          `Health score is ${metric.healthScore}/100. Multiple issues detected.`,
         );
         alertsCreated++;
       }
@@ -545,7 +529,7 @@ export class HealthService {
     workspaceName: string,
     severity: 'warning' | 'critical',
     title: string,
-    message: string
+    message: string,
   ): Promise<void> {
     try {
       const alertsRef = collection(this.firestore, 'healthAlerts');
@@ -558,7 +542,7 @@ export class HealthService {
         alertsRef,
         where('workspaceId', '==', workspaceId),
         where('title', '==', title),
-        where('createdAt', '>=', Timestamp.fromDate(oneHourAgo))
+        where('createdAt', '>=', Timestamp.fromDate(oneHourAgo)),
       );
 
       const duplicates = await getDocs(duplicateQuery);

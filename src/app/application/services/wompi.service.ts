@@ -27,15 +27,8 @@ export class WompiService {
     redirectUrl?: string; // URL to redirect after payment
     customerEmail?: string; // Customer email for notifications
   }): Promise<string> {
-    const {
-      publicKey,
-      amount,
-      currency,
-      reference,
-      description,
-      redirectUrl,
-      customerEmail,
-    } = params;
+    const { publicKey, amount, currency, reference, description, redirectUrl, customerEmail } =
+      params;
 
     // Wompi uses URL params to generate dynamic links
     const baseUrl = 'https://checkout.wompi.co/l/';
@@ -57,7 +50,7 @@ export class WompiService {
    */
   async verifyPayment(
     transactionId: string,
-    publicKey: string
+    publicKey: string,
   ): Promise<{ status: string; data: unknown }> {
     try {
       const response = await firstValueFrom(
@@ -67,8 +60,8 @@ export class WompiService {
             headers: {
               Authorization: `Bearer ${publicKey}`,
             },
-          }
-        )
+          },
+        ),
       );
 
       return response;

@@ -123,7 +123,6 @@ export class DomainService {
       this.isLoading.set(true);
       this.error.set(null);
 
-
       const domainsQuery = query(
         collection(this.firestore, 'domains'),
         where('workspaceId', '==', workspaceId),
@@ -132,12 +131,10 @@ export class DomainService {
 
       const snapshot = await getDocs(domainsQuery);
 
-
       const domains = snapshot.docs.map((doc) => ({
         ...(doc.data() as IDomain),
         id: doc.id,
       }));
-
 
       return domains;
     } catch (error) {
@@ -242,7 +239,7 @@ export class DomainService {
       renewalPrice?: number;
       hostingRenewalPrice?: number;
       domainRenewalPrice?: number;
-    }
+    },
   ): Promise<void> {
     try {
       this.isLoading.set(true);
@@ -281,7 +278,7 @@ export class DomainService {
       totalValue: 0,
     };
 
-    allDomains.forEach(domain => {
+    allDomains.forEach((domain) => {
       const status = this.getExpirationStatus(domain.expiresAt);
       switch (status) {
         case 'expired':
@@ -298,8 +295,8 @@ export class DomainService {
           break;
       }
 
-      const renewalPrice = domain.renewalPrice ||
-        (domain.hostingRenewalPrice || 0) + (domain.domainRenewalPrice || 0);
+      const renewalPrice =
+        domain.renewalPrice || (domain.hostingRenewalPrice || 0) + (domain.domainRenewalPrice || 0);
       stats.totalValue += renewalPrice;
     });
 
@@ -309,13 +306,13 @@ export class DomainService {
   /**
    * Get domains grouped by expiration month for charts
    */
-  async getDomainsGroupedByMonth(workspaceId: string): Promise<
-    { month: string; count: number; domains: IDomain[] }[]
-  > {
+  async getDomainsGroupedByMonth(
+    workspaceId: string,
+  ): Promise<{ month: string; count: number; domains: IDomain[] }[]> {
     const allDomains = await this.getAllDomains(workspaceId);
     const groups = new Map<string, IDomain[]>();
 
-    allDomains.forEach(domain => {
+    allDomains.forEach((domain) => {
       const date = this.toDate(domain.expiresAt);
       if (!date) return;
 

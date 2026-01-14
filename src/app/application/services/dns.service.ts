@@ -1,5 +1,13 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Firestore, collection, query, where, getDocs, addDoc, Timestamp } from 'firebase/firestore';
+import {
+  Firestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  Timestamp,
+} from 'firebase/firestore';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
@@ -307,7 +315,7 @@ export class DnsService {
           errors: string[];
         }>(cloudFunctionUrl, {
           workspaceId,
-        })
+        }),
       );
 
       // Refresh records for selected domain if any

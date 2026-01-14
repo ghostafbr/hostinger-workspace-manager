@@ -21,7 +21,11 @@ export class HostingerDnsAdapter {
   /**
    * Fetch DNS records for a specific domain
    */
-  async getDnsRecords(token: string, domainName: string, workspaceId: string): Promise<DnsRecord[]> {
+  async getDnsRecords(
+    token: string,
+    domainName: string,
+    workspaceId: string,
+  ): Promise<DnsRecord[]> {
     try {
       const headers = new HttpHeaders({
         Authorization: `Bearer ${token}`,

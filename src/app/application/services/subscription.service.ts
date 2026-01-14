@@ -105,7 +105,6 @@ export class SubscriptionService {
       this.isLoading.set(true);
       this.error.set(null);
 
-
       const subscriptionsQuery = query(
         collection(this.firestore, 'subscriptions'),
         where('workspaceId', '==', workspaceId),
@@ -114,12 +113,10 @@ export class SubscriptionService {
 
       const snapshot = await getDocs(subscriptionsQuery);
 
-
       const subscriptions = snapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => ({
         ...(doc.data() as ISubscription),
         id: doc.id,
       }));
-
 
       return subscriptions;
     } catch (error) {

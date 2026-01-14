@@ -170,9 +170,7 @@ export class FilterService {
 
     // Filter by tags
     if (criteria.tags && criteria.tags.length > 0) {
-      filtered = filtered.filter((w) =>
-        criteria.tags!.some((tag) => w.tags?.includes(tag)),
-      );
+      filtered = filtered.filter((w) => criteria.tags!.some((tag) => w.tags?.includes(tag)));
     }
 
     // Filter by priority

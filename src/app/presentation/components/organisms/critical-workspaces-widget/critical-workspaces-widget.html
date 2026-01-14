@@ -22,10 +22,7 @@
           <div class="item-header">
             <div class="workspace-info">
               <h4>{{ item.workspace.name }}</h4>
-              <span
-                class="status-badge"
-                [class]="getStatusClass(item.workspace.status)"
-              >
+              <span class="status-badge" [class]="getStatusClass(item.workspace.status)">
                 {{ item.workspace.status }}
               </span>
             </div>

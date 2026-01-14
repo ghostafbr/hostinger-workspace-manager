@@ -109,8 +109,7 @@ export class HealthMetrics implements HealthMetricsInterface {
    */
   needsAttention(): boolean {
     return (
-      this.healthStatus === HealthStatus.WARNING ||
-      this.healthStatus === HealthStatus.CRITICAL
+      this.healthStatus === HealthStatus.WARNING || this.healthStatus === HealthStatus.CRITICAL
     );
   }
 

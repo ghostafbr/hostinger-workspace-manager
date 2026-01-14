@@ -45,7 +45,6 @@ export class HostingerApiService {
 
       for (const endpoint of endpoints) {
         try {
-
           const response = (await firstValueFrom(
             this.http
               .get<unknown>(`${this.BASE_URL}${endpoint}`, {

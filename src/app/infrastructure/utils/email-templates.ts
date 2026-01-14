@@ -98,7 +98,8 @@ const baseEmailTemplate = (content: string, preheader: string): string => `
  * Generate domain expiration email template
  */
 export const generateDomainExpiringEmail = (data: IEmailTemplateData): string => {
-  const alertType = data.daysRemaining <= 7 ? 'danger' : data.daysRemaining <= 30 ? 'alert-box' : 'info';
+  const alertType =
+    data.daysRemaining <= 7 ? 'danger' : data.daysRemaining <= 30 ? 'alert-box' : 'info';
 
   const content = `
     <div class="alert-box ${alertType}">
@@ -153,7 +154,8 @@ export const generateDomainExpiringEmail = (data: IEmailTemplateData): string =>
  * Generate subscription expiration email template
  */
 export const generateSubscriptionExpiringEmail = (data: IEmailTemplateData): string => {
-  const alertType = data.daysRemaining <= 7 ? 'danger' : data.daysRemaining <= 30 ? 'alert-box' : 'info';
+  const alertType =
+    data.daysRemaining <= 7 ? 'danger' : data.daysRemaining <= 30 ? 'alert-box' : 'info';
 
   const content = `
     <div class="alert-box ${alertType}">
@@ -249,7 +251,10 @@ export const generateHealthAlertEmail = (data: IEmailTemplateData): string => {
 /**
  * Generate plain text version of email
  */
-export const generatePlainTextEmail = (data: IEmailTemplateData, type: 'domain' | 'subscription' | 'health'): string => {
+export const generatePlainTextEmail = (
+  data: IEmailTemplateData,
+  type: 'domain' | 'subscription' | 'health',
+): string => {
   const header = '='.repeat(60);
 
   if (type === 'domain') {

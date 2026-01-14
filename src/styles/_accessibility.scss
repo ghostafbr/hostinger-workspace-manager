@@ -13,7 +13,12 @@
  * All interactive elements must have visible focus indicators
  * with minimum contrast ratio of 3:1
  */
-a, button, input, select, textarea, [tabindex]:not([tabindex="-1"]) {
+a,
+button,
+input,
+select,
+textarea,
+[tabindex]:not([tabindex='-1']) {
   &:focus-visible {
     outline: 3px solid var(--primary-500);
     outline-offset: 2px;
@@ -204,7 +209,7 @@ a, button, input, select, textarea, [tabindex]:not([tabindex="-1"]) {
 /* Ensure buttons and interactive elements meet 44x44px */
 button,
 a.button,
-[role="button"] {
+[role='button'] {
   min-height: 44px;
   padding: 8px 16px;
 }
@@ -378,12 +383,12 @@ label {
 }
 
 /* Language direction support */
-[dir="rtl"] {
+[dir='rtl'] {
   direction: rtl;
   text-align: right;
 }
 
-[dir="ltr"] {
+[dir='ltr'] {
   direction: ltr;
   text-align: left;
 }

@@ -126,11 +126,7 @@
               />
             </td>
             <td>
-              <span
-                class="font-medium"
-                [pTooltip]="record.getFQDN()"
-                tooltipPosition="top"
-              >
+              <span class="font-medium" [pTooltip]="record.getFQDN()" tooltipPosition="top">
                 {{ record.name }}
               </span>
             </td>
@@ -171,7 +167,9 @@
               <i class="pi pi-inbox text-4xl text-gray-400 mb-3"></i>
               <p class="text-gray-600">No DNS records found</p>
               @if (selectedTypes().length > 0) {
-                <p class="text-sm text-gray-500">Try clearing filters or selecting different types</p>
+                <p class="text-sm text-gray-500">
+                  Try clearing filters or selecting different types
+                </p>
               }
             </td>
           </tr>

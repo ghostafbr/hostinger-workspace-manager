@@ -1,4 +1,11 @@
-import { Component, ChangeDetectionStrategy, signal, computed, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  signal,
+  computed,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
@@ -57,8 +64,8 @@ export class DnsPage implements OnInit {
   readonly domainOptions = computed(() =>
     this.domains().map((domain: IDomain) => ({
       label: domain.domainName,
-      value: domain.domainName
-    }))
+      value: domain.domainName,
+    })),
   );
 
   async ngOnInit(): Promise<void> {

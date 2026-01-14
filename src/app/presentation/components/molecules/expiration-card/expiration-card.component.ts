@@ -28,40 +28,28 @@ import { ChipModule } from 'primeng/chip';
             <i class="pi pi-clock"></i>
             7 días
           </span>
-          <p-chip
-            [label]="count7Days().toString()"
-            [class]="getChipClass(count7Days(), '7d')"
-          />
+          <p-chip [label]="count7Days().toString()" [class]="getChipClass(count7Days(), '7d')" />
         </div>
         <div class="expiration-row" [class.has-items]="count15Days() > 0">
           <span class="period-label">
             <i class="pi pi-clock"></i>
             15 días
           </span>
-          <p-chip
-            [label]="count15Days().toString()"
-            [class]="getChipClass(count15Days(), '15d')"
-          />
+          <p-chip [label]="count15Days().toString()" [class]="getChipClass(count15Days(), '15d')" />
         </div>
         <div class="expiration-row" [class.has-items]="count30Days() > 0">
           <span class="period-label">
             <i class="pi pi-clock"></i>
             30 días
           </span>
-          <p-chip
-            [label]="count30Days().toString()"
-            [class]="getChipClass(count30Days(), '30d')"
-          />
+          <p-chip [label]="count30Days().toString()" [class]="getChipClass(count30Days(), '30d')" />
         </div>
         <div class="expiration-row" [class.has-items]="count60Days() > 0">
           <span class="period-label">
             <i class="pi pi-clock"></i>
             60 días
           </span>
-          <p-chip
-            [label]="count60Days().toString()"
-            [class]="getChipClass(count60Days(), '60d')"
-          />
+          <p-chip [label]="count60Days().toString()" [class]="getChipClass(count60Days(), '60d')" />
         </div>
       </div>
 

@@ -33,11 +33,13 @@ describe('AuthService', () => {
     vi.mocked(FirebaseAdapter.getAuth).mockReturnValue(mockAuth as Auth);
 
     // Setup onAuthStateChanged to call the callback immediately with null user
-    onAuthStateChangedMock.mockImplementation((auth: Auth, callback: (user: User | null) => void) => {
-      // Call immediately with null user
-      setTimeout(() => callback(null), 0);
-      return vi.fn(); // Return unsubscribe function
-    });
+    onAuthStateChangedMock.mockImplementation(
+      (auth: Auth, callback: (user: User | null) => void) => {
+        // Call immediately with null user
+        setTimeout(() => callback(null), 0);
+        return vi.fn(); // Return unsubscribe function
+      },
+    );
 
     TestBed.configureTestingModule({
       providers: [AuthService],
@@ -72,7 +74,7 @@ describe('AuthService', () => {
     expect(signInWithEmailAndPassword).toHaveBeenCalledWith(
       mockAuth,
       'test@example.com',
-      'password123'
+      'password123',
     );
   });
 
@@ -160,7 +162,7 @@ describe('AuthService', () => {
     vi.mocked(signInWithEmailAndPassword).mockRejectedValue(error);
 
     await expect(service.signIn('test@example.com', 'wrong')).rejects.toThrow(
-      'Invalid credentials'
+      'Invalid credentials',
     );
     expect(service.isLoading()).toBe(false);
   });
@@ -201,4 +203,3 @@ describe('AuthService', () => {
     expect(displayName).toBeDefined();
   });
 });
-

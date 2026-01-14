@@ -49,9 +49,7 @@ describe('workspaceGuard', () => {
   it('should deny access and redirect when no workspaceId in route', async () => {
     vi.mocked(route.paramMap.get).mockReturnValue(null);
 
-    const result = await TestBed.runInInjectionContext(() =>
-      workspaceGuard(route, {} as any)
-    );
+    const result = await TestBed.runInInjectionContext(() => workspaceGuard(route, {} as any));
 
     expect(result).toBe(false);
     expect(router.navigate).toHaveBeenCalledWith(['/workspaces']);
@@ -64,9 +62,7 @@ describe('workspaceGuard', () => {
     vi.mocked(route.paramMap.get).mockReturnValue(workspaceId);
     vi.mocked(workspaceContext.getCurrentWorkspace).mockReturnValue(workspace);
 
-    const result = await TestBed.runInInjectionContext(() =>
-      workspaceGuard(route, {} as any)
-    );
+    const result = await TestBed.runInInjectionContext(() => workspaceGuard(route, {} as any));
 
     expect(result).toBe(true);
     expect(workspaceService.getWorkspaceById).not.toHaveBeenCalled();

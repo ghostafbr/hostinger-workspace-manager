@@ -207,12 +207,12 @@ describe('EncryptionService', () => {
     });
 
     it('should throw error when hashing fails', () => {
-        // Force error by mocking hash implementation
-        vi.spyOn(service as any, 'hash').mockImplementation(() => {
-          throw new Error('Hash error');
-        });
+      // Force error by mocking hash implementation
+      vi.spyOn(service as any, 'hash').mockImplementation(() => {
+        throw new Error('Hash error');
+      });
 
-        expect(() => service.hash('text')).toThrow('Hash error');
+      expect(() => service.hash('text')).toThrow('Hash error');
     });
   });
 
@@ -241,4 +241,3 @@ describe('EncryptionService', () => {
     });
   });
 });
-
