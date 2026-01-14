@@ -11,6 +11,7 @@ export const environment: Environment = {
   production: ${process.env.PRODUCTION === 'true'},
   version: '${process.env.APP_VERSION || "0.0.0"}',
   encryptionKey: '${process.env.ENCRYPTION_KEY || "dev-key"}',
+  cloudFunctionsUrl: '${process.env.CLOUD_FUNCTIONS_URL || "https://us-central1-hostinger-workspace-manager.cloudfunctions.net"}',
   firebase: {
     apiKey: '${process.env.FIREBASE_API_KEY || "mock-api-key"}',
     authDomain: '${process.env.FIREBASE_AUTH_DOMAIN || "mock-auth-domain"}',
