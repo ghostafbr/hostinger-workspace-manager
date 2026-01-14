@@ -1,10 +1,10 @@
 <p-card>
   <ng-template pTemplate="header">
-    <div class="flex justify-content-between align-items-center p-3">
-      <h3 class="m-0">
-        <i class="pi pi-history mr-2"></i>
-        DNS Configuration Comparison
-      </h3>
+    <div class="dns-compare-header">
+      <div class="dns-compare-title">
+        <i class="pi pi-history"></i>
+        <span>DNS Configuration Comparison</span>
+      </div>
       <p-button
         icon="pi pi-camera"
         label="Create Snapshot"
@@ -12,57 +12,54 @@
         size="small"
         (onClick)="createSnapshot()"
         [loading]="isLoading()"
+        class="create-snapshot-btn"
       />
     </div>
   </ng-template>
 
   <ng-template pTemplate="content">
     <!-- Snapshot Selection -->
-    <div class="mb-4">
-      <label class="block font-semibold mb-2">Compare with Snapshot:</label>
+    <div class="compare-select-block">
+      <label class="compare-label">Comparar con Snapshot:</label>
       <select
-        class="p-inputtext p-component"
+        class="compare-select p-inputtext p-component"
         [(ngModel)]="selectedSnapshotId"
         (change)="selectedSnapshotId() && onSnapshotSelect(selectedSnapshotId()!)"
-        style="width: 100%; padding: 0.75rem"
       >
-        <option [value]="null">Select a snapshot to compare</option>
+        <option [value]="null">Selecciona un snapshot para comparar</option>
         @for (snapshot of snapshots(); track snapshot.id) {
           <option [value]="snapshot.id">
-            {{ snapshot.createdAt.toDate().toLocaleString() }} - {{ snapshot.note || 'Manual snapshot' }}
+            {{ snapshot.createdAt.toDate().toLocaleString() }} - {{ snapshot.note || 'Snapshot manual' }}
           </option>
         }
       </select>
       @if (snapshots().length === 0) {
-        <p class="text-sm text-gray-600 mt-2">No snapshots available. Create one to start comparing.</p>
+        <div class="compare-empty-msg">
+          <i class="pi pi-info-circle"></i>
+          <span>No hay snapshots disponibles. Crea uno para comenzar a comparar.</span>
+        </div>
       }
     </div>
 
     <p-divider />
 
-    <!-- Comparison Summary -->
+    <!-- Resumen visual de cambios -->
     @if (comparison()) {
-      <div class="grid mb-4">
-        <div class="col-12 md:col-4">
-          <div class="surface-card p-3 border-round text-center">
-            <i class="pi pi-plus-circle text-4xl text-green-500 mb-2"></i>
-            <div class="text-2xl font-bold text-green-600">{{ comparison()!.added.length }}</div>
-            <div class="text-sm text-gray-600">Added Records</div>
-          </div>
+      <div class="dns-compare-summary">
+        <div class="summary-card added">
+          <i class="pi pi-plus-circle"></i>
+          <span class="summary-count">{{ comparison()!.added.length }}</span>
+          <span class="summary-label">Agregados</span>
         </div>
-        <div class="col-12 md:col-4">
-          <div class="surface-card p-3 border-round text-center">
-            <i class="pi pi-minus-circle text-4xl text-red-500 mb-2"></i>
-            <div class="text-2xl font-bold text-red-600">{{ comparison()!.removed.length }}</div>
-            <div class="text-sm text-gray-600">Removed Records</div>
-          </div>
+        <div class="summary-card removed">
+          <i class="pi pi-minus-circle"></i>
+          <span class="summary-count">{{ comparison()!.removed.length }}</span>
+          <span class="summary-label">Eliminados</span>
         </div>
-        <div class="col-12 md:col-4">
-          <div class="surface-card p-3 border-round text-center">
-            <i class="pi pi-pencil text-4xl text-orange-500 mb-2"></i>
-            <div class="text-2xl font-bold text-orange-600">{{ comparison()!.modified.length }}</div>
-            <div class="text-sm text-gray-600">Modified Records</div>
-          </div>
+        <div class="summary-card modified">
+          <i class="pi pi-pencil"></i>
+          <span class="summary-count">{{ comparison()!.modified.length }}</span>
+          <span class="summary-label">Modificados</span>
         </div>
       </div>
 

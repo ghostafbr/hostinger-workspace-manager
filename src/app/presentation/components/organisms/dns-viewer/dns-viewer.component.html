@@ -6,14 +6,14 @@
       <div class="filter-control">
         <label for="type-filter" class="filter-label">
           <i class="pi pi-filter"></i>
-          Filtrar por tipo:
+          Filtros:
         </label>
         <p-multiSelect
           inputId="type-filter"
           [options]="availableTypes"
           [(ngModel)]="selectedTypes"
           (onChange)="onFilterChange($event.value)"
-          placeholder="Selecciona tipos de registro..."
+          placeholder="Tipos de registro..."
           optionLabel="label"
           optionValue="value"
           display="chip"

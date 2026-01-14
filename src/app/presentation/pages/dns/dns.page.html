@@ -63,33 +63,11 @@
     @if (domainName()) {
       <!-- DNS Records Section -->
       <div class="dns-section" @slideUp>
-        <div class="section-header">
-          <div class="header-left">
-            <h2>
-              <i class="pi pi-list" aria-hidden="true"></i>
-              Registros DNS
-            </h2>
-            <p-chip
-              label="{{ domainName() }}"
-              icon="pi pi-globe"
-              class="domain-chip"
-            />
-          </div>
-        </div>
         <app-dns-viewer [domainName]="domainName()" />
       </div>
 
       <!-- DNS Comparison Section -->
       <div class="dns-section" @slideUp>
-        <div class="section-header">
-          <div class="header-left">
-            <h2>
-              <i class="pi pi-history" aria-hidden="true"></i>
-              Comparar Snapshots
-            </h2>
-          </div>
-          <p class="section-subtitle">Compara la configuración actual con versiones anteriores</p>
-        </div>
         <app-dns-comparator [domainName]="domainName()" />
       </div>
     } @else {
