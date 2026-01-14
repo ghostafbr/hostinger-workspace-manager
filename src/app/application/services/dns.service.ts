@@ -12,12 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
 import { Timestamp as FirestoreTimestamp } from 'firebase/firestore';
-import {
-  DnsRecord,
-  DnsSnapshot,
-  DnsRecordType,
-  DnsValidationResult,
-} from '@app/domain';
+import { DnsRecord, DnsSnapshot, DnsRecordType, DnsValidationResult } from '@app/domain';
 import { WorkspaceContextService } from './workspace-context.service';
 import { httpsCallable, Functions } from 'firebase/functions';
 

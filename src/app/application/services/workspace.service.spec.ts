@@ -125,10 +125,10 @@ describe('WorkspaceService', () => {
         },
       ];
 
-        vi.mocked(getDocs).mockResolvedValue({ docs: mockDocs } as any);
-        vi.mocked(collection).mockReturnValue({} as any);
-        vi.mocked(query).mockReturnValue({} as any);
-        vi.mocked(where).mockReturnValue({} as any);
+      vi.mocked(getDocs).mockResolvedValue({ docs: mockDocs } as any);
+      vi.mocked(collection).mockReturnValue({} as any);
+      vi.mocked(query).mockReturnValue({} as any);
+      vi.mocked(where).mockReturnValue({} as any);
 
       const result = await service.getAllWorkspaces();
 
@@ -161,7 +161,7 @@ describe('WorkspaceService', () => {
 
       vi.mocked(getDocs).mockImplementation(async () => {
         loadingDuringFetch = service.isLoading();
-            return { docs: [] } as any;
+        return { docs: [] } as any;
       });
 
       await service.getAllWorkspaces();
@@ -185,8 +185,8 @@ describe('WorkspaceService', () => {
         }),
       };
 
-        vi.mocked(getDoc).mockResolvedValue(mockDoc as any);
-        vi.mocked(doc).mockReturnValue({} as any);
+      vi.mocked(getDoc).mockResolvedValue(mockDoc as any);
+      vi.mocked(doc).mockReturnValue({} as any);
 
       const result = await service.getWorkspaceByIdAsync('ws-123');
 
@@ -197,7 +197,7 @@ describe('WorkspaceService', () => {
 
     it('should return null when workspace not found', async () => {
       const { getDoc } = await import('firebase/firestore');
-        vi.mocked(getDoc).mockResolvedValue({ exists: () => false } as any);
+      vi.mocked(getDoc).mockResolvedValue({ exists: () => false } as any);
 
       const result = await service.getWorkspaceByIdAsync('nonexistent');
 
@@ -247,8 +247,8 @@ describe('WorkspaceService', () => {
         token: 'plain-token',
       };
 
-        vi.mocked(addDoc).mockResolvedValue({ id: 'new-ws-id' } as any);
-        vi.mocked(collection).mockReturnValue({} as any);
+      vi.mocked(addDoc).mockResolvedValue({ id: 'new-ws-id' } as any);
+      vi.mocked(collection).mockReturnValue({} as any);
 
       const result = await service.createWorkspace(newWorkspaceData);
 
@@ -291,7 +291,7 @@ describe('WorkspaceService', () => {
     it('should update workspace', async () => {
       const { updateDoc, doc } = await import('firebase/firestore');
       vi.mocked(updateDoc).mockResolvedValue(undefined);
-        vi.mocked(doc).mockReturnValue({} as any);
+      vi.mocked(doc).mockReturnValue({} as any);
 
       await service.updateWorkspace('ws-123', { name: 'Updated Name' });
 
@@ -324,7 +324,7 @@ describe('WorkspaceService', () => {
     it('should delete workspace', async () => {
       const { deleteDoc, doc } = await import('firebase/firestore');
       vi.mocked(deleteDoc).mockResolvedValue(undefined);
-        vi.mocked(doc).mockReturnValue({} as any);
+      vi.mocked(doc).mockReturnValue({} as any);
 
       await service.deleteWorkspace('ws-123');
 
@@ -345,7 +345,7 @@ describe('WorkspaceService', () => {
   describe('signals', () => {
     it('should update workspaces signal', async () => {
       const { getDocs } = await import('firebase/firestore');
-        vi.mocked(getDocs).mockResolvedValue({ docs: [] } as any);
+      vi.mocked(getDocs).mockResolvedValue({ docs: [] } as any);
 
       expect(service.workspaces()).toEqual([]);
 
@@ -380,7 +380,7 @@ describe('WorkspaceService', () => {
       expect(service.error()).toBe('First error');
 
       // Then succeed
-        vi.mocked(getDocs).mockResolvedValue({ docs: [] } as any);
+      vi.mocked(getDocs).mockResolvedValue({ docs: [] } as any);
       await service.getAllWorkspaces();
 
       expect(service.error()).toBeNull();
