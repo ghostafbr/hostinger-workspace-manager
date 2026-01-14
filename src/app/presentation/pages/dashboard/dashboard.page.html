@@ -21,9 +21,7 @@
             @if (hasIssues()) {
               <span class="status-text warning-text">
                 <i class="pi pi-exclamation-circle"></i>
-                {{
-                  stats()!.domainsExpiring7Days + stats()!.subscriptionsExpiring7Days
-                }}
+                {{ stats()!.domainsExpiring7Days + stats()!.subscriptionsExpiring7Days }}
                 vencimientos próximos
               </span>
             } @else {
