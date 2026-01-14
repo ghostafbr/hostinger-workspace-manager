@@ -6,6 +6,7 @@ export interface Environment {
   production: boolean;
   version: string;
   encryptionKey: string;
+  cloudFunctionsUrl: string;
   firebase: {
     apiKey: string;
     authDomain: string;

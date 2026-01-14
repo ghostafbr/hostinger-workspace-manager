@@ -23,19 +23,16 @@ export class WebhookService {
    */
   async sendWebhook(config: IWebhookConfig, payload: WebhookPayload): Promise<void> {
     if (!config.enabled) {
-      console.log('Webhook disabled, skipping notification');
       return;
     }
 
     // Check if event is configured
     if (!config.events.includes(payload.event)) {
-      console.log(`Event ${payload.event} not configured for webhook, skipping`);
       return;
     }
 
     // Check severity threshold
     if (config.minSeverity === 'critical' && payload.severity === 'warning') {
-      console.log('Alert severity below threshold, skipping webhook');
       return;
     }
 
@@ -50,7 +47,6 @@ export class WebhookService {
         .post(config.url, formattedPayload, { headers })
         .toPromise();
 
-      console.log('Webhook sent successfully', { url: config.url, event: payload.event });
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       this.lastError.set(errorMessage);

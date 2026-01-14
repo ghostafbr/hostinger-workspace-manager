@@ -79,6 +79,11 @@ export class SidebarComponent {
       route: 'domains',
     },
     {
+      label: 'DNS Viewer',
+      icon: 'pi pi-sitemap',
+      route: 'dns',
+    },
+    {
       label: 'Suscripciones',
       icon: 'pi pi-credit-card',
       route: 'subscriptions',

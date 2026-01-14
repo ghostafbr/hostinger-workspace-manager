@@ -1,0 +1,189 @@
+<p-card>
+  <ng-template pTemplate="header">
+    <div class="flex justify-content-between align-items-center p-3">
+      <h3 class="m-0">
+        <i class="pi pi-history mr-2"></i>
+        DNS Configuration Comparison
+      </h3>
+      <p-button
+        icon="pi pi-camera"
+        label="Create Snapshot"
+        severity="success"
+        size="small"
+        (onClick)="createSnapshot()"
+        [loading]="isLoading()"
+      />
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <!-- Snapshot Selection -->
+    <div class="mb-4">
+      <label class="block font-semibold mb-2">Compare with Snapshot:</label>
+      <select
+        class="p-inputtext p-component"
+        [(ngModel)]="selectedSnapshotId"
+        (change)="selectedSnapshotId() && onSnapshotSelect(selectedSnapshotId()!)"
+        style="width: 100%; padding: 0.75rem"
+      >
+        <option [value]="null">Select a snapshot to compare</option>
+        @for (snapshot of snapshots(); track snapshot.id) {
+          <option [value]="snapshot.id">
+            {{ snapshot.createdAt.toDate().toLocaleString() }} - {{ snapshot.note || 'Manual snapshot' }}
+          </option>
+        }
+      </select>
+      @if (snapshots().length === 0) {
+        <p class="text-sm text-gray-600 mt-2">No snapshots available. Create one to start comparing.</p>
+      }
+    </div>
+
+    <p-divider />
+
+    <!-- Comparison Summary -->
+    @if (comparison()) {
+      <div class="grid mb-4">
+        <div class="col-12 md:col-4">
+          <div class="surface-card p-3 border-round text-center">
+            <i class="pi pi-plus-circle text-4xl text-green-500 mb-2"></i>
+            <div class="text-2xl font-bold text-green-600">{{ comparison()!.added.length }}</div>
+            <div class="text-sm text-gray-600">Added Records</div>
+          </div>
+        </div>
+        <div class="col-12 md:col-4">
+          <div class="surface-card p-3 border-round text-center">
+            <i class="pi pi-minus-circle text-4xl text-red-500 mb-2"></i>
+            <div class="text-2xl font-bold text-red-600">{{ comparison()!.removed.length }}</div>
+            <div class="text-sm text-gray-600">Removed Records</div>
+          </div>
+        </div>
+        <div class="col-12 md:col-4">
+          <div class="surface-card p-3 border-round text-center">
+            <i class="pi pi-pencil text-4xl text-orange-500 mb-2"></i>
+            <div class="text-2xl font-bold text-orange-600">{{ comparison()!.modified.length }}</div>
+            <div class="text-sm text-gray-600">Modified Records</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Changes Message -->
+      @if (getTotalChanges() === 0) {
+        <div class="p-4 bg-green-50 border-round text-center">
+          <i class="pi pi-check-circle text-4xl text-green-600 mb-2"></i>
+          <p class="text-green-900 font-semibold">No changes detected</p>
+          <p class="text-sm text-green-700">DNS configuration matches the selected snapshot</p>
+        </div>
+      }
+
+      <!-- Added Records -->
+      @if (comparison()!.added.length > 0) {
+        <div class="mb-4">
+          <h4 class="text-green-600 mb-3">
+            <i class="pi pi-plus-circle mr-2"></i>
+            Added Records ({{ comparison()!.added.length }})
+          </h4>
+          <p-table
+            [value]="comparison()!.added"
+            [rowHover]="true"
+            styleClass="p-datatable-sm"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Value</th>
+                <th>TTL</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-record>
+              <tr class="bg-green-50">
+                <td>
+                  <p-tag [value]="record.recordType" severity="success" />
+                </td>
+                <td>{{ record.name }}</td>
+                <td><code>{{ record.value }}</code></td>
+                <td>{{ record.getFormattedTTL() }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      }
+
+      <!-- Removed Records -->
+      @if (comparison()!.removed.length > 0) {
+        <div class="mb-4">
+          <h4 class="text-red-600 mb-3">
+            <i class="pi pi-minus-circle mr-2"></i>
+            Removed Records ({{ comparison()!.removed.length }})
+          </h4>
+          <p-table
+            [value]="comparison()!.removed"
+            [rowHover]="true"
+            styleClass="p-datatable-sm"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Value</th>
+                <th>TTL</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-record>
+              <tr class="bg-red-50">
+                <td>
+                  <p-tag [value]="record.recordType" severity="danger" />
+                </td>
+                <td>{{ record.name }}</td>
+                <td><code>{{ record.value }}</code></td>
+                <td>{{ record.getFormattedTTL() }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      }
+
+      <!-- Modified Records -->
+      @if (comparison()!.modified.length > 0) {
+        <div class="mb-4">
+          <h4 class="text-orange-600 mb-3">
+            <i class="pi pi-pencil mr-2"></i>
+            Modified Records ({{ comparison()!.modified.length }})
+          </h4>
+          <p-table
+            [value]="comparison()!.modified"
+            [rowHover]="true"
+            styleClass="p-datatable-sm"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Value</th>
+                <th>TTL</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-record>
+              <tr class="bg-orange-50">
+                <td>
+                  <p-tag [value]="record.recordType" severity="warn" />
+                </td>
+                <td>{{ record.name }}</td>
+                <td><code>{{ record.value }}</code></td>
+                <td>{{ record.getFormattedTTL() }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      }
+    }
+
+    <!-- No Snapshot Selected -->
+    @if (!comparison() && !isLoading()) {
+      <div class="text-center p-5">
+        <i class="pi pi-info-circle text-5xl text-gray-400 mb-3"></i>
+        <p class="text-gray-600">Select a snapshot to compare with current DNS configuration</p>
+      </div>
+    }
+  </ng-template>
+</p-card>

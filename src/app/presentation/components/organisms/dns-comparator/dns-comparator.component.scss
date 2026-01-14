@@ -1,0 +1,36 @@
+:host {
+  display: block;
+}
+
+.p-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+code {
+  background-color: var(--surface-100);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+}
+
+.bg-green-50 {
+  background-color: #f0fdf4;
+}
+
+.bg-red-50 {
+  background-color: #fef2f2;
+}
+
+.bg-orange-50 {
+  background-color: #fff7ed;
+}
+
+::ng-deep {
+  .p-datatable {
+    .p-datatable-thead > tr > th {
+      background-color: var(--surface-50);
+      font-weight: 600;
+    }
+  }
+}

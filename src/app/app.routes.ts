@@ -89,6 +89,10 @@ export const routes: Routes = [
             loadComponent: () => import('./presentation/pages/audit-logs/audit-logs.page'),
           },
           {
+            path: 'dns',
+            loadComponent: () => import('./presentation/pages/dns/dns.page').then((m) => m.DnsPage),
+          },
+          {
             path: '',
             redirectTo: 'dashboard',
             pathMatch: 'full',

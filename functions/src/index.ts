@@ -7,6 +7,7 @@ admin.initializeApp();
 // Manual sync functions (HTTP with CORS)
 export { syncWorkspace } from './syncWorkspace.http';
 export { syncAllWorkspaces } from './syncAllWorkspaces';
+export { syncDnsRecordsHttp } from './syncDnsRecords.http';
 
 // Scheduled sync function (Cloud Scheduler)
 export { syncAllWorkspacesScheduled } from './syncAllWorkspaces';

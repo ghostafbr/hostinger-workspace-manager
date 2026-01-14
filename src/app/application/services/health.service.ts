@@ -77,7 +77,6 @@ export class HealthService {
       const workspacesRef = collection(this.firestore, 'workspaces');
       const workspacesSnapshot = await getDocs(workspacesRef);
 
-      console.log('[HealthService] Found workspaces:', workspacesSnapshot.size);
 
       const metricsPromises = workspacesSnapshot.docs.map(async (workspaceDoc) => {
         const workspaceData = workspaceDoc.data();
@@ -114,7 +113,6 @@ export class HealthService {
     workspaceId: string,
     workspaceName: string
   ): Promise<HealthMetrics> {
-    console.log(`[HealthService] Calculating metrics for: ${workspaceName} (${workspaceId})`);
 
     // Get sync runs for this workspace (last 30 days)
     const thirtyDaysAgo = new Date();
@@ -128,12 +126,10 @@ export class HealthService {
       orderBy('startedAt', 'desc')
     );
 
-    console.log(`[HealthService] Querying syncRuns for workspaceId: ${workspaceId}, since: ${thirtyDaysAgo.toISOString()}`);
 
     let syncRunsSnapshot;
     try {
       syncRunsSnapshot = await getDocs(syncRunsQuery);
-      console.log(`[HealthService] Query successful. Raw docs count: ${syncRunsSnapshot.docs.length}`);
     } catch (error: unknown) {
       console.error(`[HealthService] Query failed:`, error);
       // Si falla el query compuesto, intentar sin el orderBy
@@ -141,9 +137,7 @@ export class HealthService {
         syncRunsRef,
         where('workspaceId', '==', workspaceId)
       );
-      console.log(`[HealthService] Retrying with simple query (no date filter)...`);
       syncRunsSnapshot = await getDocs(simpleQuery);
-      console.log(`[HealthService] Simple query result: ${syncRunsSnapshot.docs.length} docs`);
     }
 
     const syncRuns = syncRunsSnapshot.docs.map((doc) => {
@@ -154,15 +148,7 @@ export class HealthService {
       };
     }) as (Record<string, unknown> & { id: string })[];
 
-    console.log(`[HealthService] Found ${syncRuns.length} sync runs for ${workspaceName}`);
-    if (syncRuns.length > 0) {
-      console.log('[HealthService] Sample syncRun:', {
-        id: syncRuns[0].id,
-        workspaceId: syncRuns[0]['workspaceId'],
-        status: syncRuns[0]['status'],
-        startedAt: syncRuns[0]['startedAt'],
-      });
-    } else {
+    if (syncRuns.length === 0) {
       console.warn(`[HealthService] No syncRuns found for workspace ${workspaceId}. Checking if any syncRuns exist at all...`);
       // Query all syncRuns to debug
       const allSyncRunsSnapshot = await getDocs(collection(this.firestore, 'sync_runs'));
@@ -434,7 +420,6 @@ export class HealthService {
       }
 
       await Promise.all(batch);
-      console.log('[HealthService] Health history saved successfully');
     } catch (error: unknown) {
       console.error('[HealthService] Error saving health history:', error);
       throw error;
@@ -578,7 +563,6 @@ export class HealthService {
       const duplicates = await getDocs(duplicateQuery);
 
       if (duplicates.size > 0) {
-        console.log(`[HealthService] Duplicate alert skipped: ${title} for ${workspaceName}`);
         return;
       }
 
@@ -594,7 +578,6 @@ export class HealthService {
       };
 
       // Note: In production, use addDoc from firebase/firestore
-      console.log('[HealthService] Alert created:', alertData);
     } catch (error: unknown) {
       console.error('[HealthService] Error creating health alert:', error);
     }

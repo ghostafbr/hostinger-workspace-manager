@@ -30,6 +30,7 @@ export type { AlertRule as IAlertRule } from './interfaces/alert-rule.interface'
 export type { AlertLog as IAlertLog } from './interfaces/alert-log.interface';
 export type { AuditLog as IAuditLog } from './interfaces/audit-log.interface';
 export type { DnsRecord as IDnsRecord } from './interfaces/dns-record.interface';
+export type { DnsSnapshot as IDnsSnapshot } from './interfaces/dns-snapshot.interface';
 export type { Payment as IPayment } from './interfaces/payment.interface';
 export type { SavedFilter as ISavedFilter, FilterCriteria } from './interfaces/saved-filter.interface';
 export type { DashboardSnapshot as IDashboardSnapshot } from './interfaces/dashboard-snapshot.interface';
@@ -61,4 +62,6 @@ export { SyncRun } from './models/sync-run.model';
 export { AlertLogModel } from './models/alert-log.model';
 export { AlertRuleModel } from './models/alert-rule.model';
 export { AuditLogModel } from './models/audit-log.model';
+export { DnsRecord } from './models/dns-record.model';
+export { DnsSnapshot } from './models/dns-snapshot.model';
 export { HealthMetrics, SystemHealthSummary, HealthHistory } from './models/health-metrics.model';

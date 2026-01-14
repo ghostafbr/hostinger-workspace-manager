@@ -80,14 +80,12 @@ export default class DomainsPage implements OnInit {
   async loadDomains(): Promise<void> {
     try {
       const workspaceId = this.route.snapshot.paramMap.get('workspaceId');
-      console.log('[DomainsPage] Loading domains for workspaceId:', workspaceId);
 
       if (!workspaceId) {
         throw new Error('No se encontró el ID del workspace');
       }
 
       const domains = await this.domainService.getAllDomains(workspaceId);
-      console.log('[DomainsPage] Loaded', domains.length, 'domains');
 
       this.domains.set(domains);
 

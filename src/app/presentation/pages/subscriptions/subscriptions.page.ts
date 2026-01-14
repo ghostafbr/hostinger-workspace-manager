@@ -79,14 +79,12 @@ export default class SubscriptionsPage implements OnInit {
   async loadSubscriptions(): Promise<void> {
     try {
       const workspaceId = this.route.snapshot.paramMap.get('workspaceId');
-      console.log('[SubscriptionsPage] Loading subscriptions for workspaceId:', workspaceId);
 
       if (!workspaceId) {
         throw new Error('No se encontró el ID del workspace');
       }
 
       const subscriptions = await this.subscriptionService.getAllSubscriptions(workspaceId);
-      console.log('[SubscriptionsPage] Loaded', subscriptions.length, 'subscriptions');
 
       this.subscriptions.set(subscriptions);
 

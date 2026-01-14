@@ -26,7 +26,6 @@ export class FirebaseAdapter {
     }
 
     this.app = initializeApp(environment.firebase);
-    console.log('✅ Firebase initialized successfully');
   }
 
   /**
@@ -71,7 +70,6 @@ export class FirebaseAdapter {
   static getFunctions(): Functions {
     if (!this.functionsInstance) {
       this.functionsInstance = getFunctions(this.getApp(), 'us-central1');
-      console.log('✅ Firebase Functions initialized for region: us-central1');
     }
     return this.functionsInstance;
   }

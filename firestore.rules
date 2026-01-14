@@ -523,6 +523,77 @@ service cloud.firestore {
     }
 
     // ============================================================
+    // DNS RECORDS COLLECTION
+    // ============================================================
+
+    /**
+     * DNS Records - DNS records per domain
+     * - Synced from Hostinger API or created manually
+     * - Owner can read/write
+     * - Scoped by workspaceId
+     */
+    match /dnsRecords/{recordId} {
+      // Read: Owner only (with workspace context)
+      allow read: if isOwner();
+
+      // Create: Owner and Cloud Functions only
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'workspaceId', 'domainName', 'type', 'name', 'content', 'ttl', 'priority', 'createdAt'
+        ]) &&
+        isValidString('workspaceId') &&
+        isValidString('domainName') &&
+        request.resource.data.type in ['A', 'AAAA', 'CNAME', 'MX', 'TXT', 'NS', 'SOA', 'SRV', 'PTR'] &&
+        isValidString('name') &&
+        isValidString('content') &&
+        isValidNumber('ttl') &&
+        request.resource.data.ttl >= 60 &&
+        isValidNumber('priority') &&
+        isValidTimestamp('createdAt');
+
+      // Update: Owner only (protect immutable fields)
+      allow update: if isOwner() &&
+        immutableFieldsValid(['workspaceId', 'domainName', 'createdAt']);
+
+      // Delete: Owner only
+      allow delete: if isOwner();
+    }
+
+    // ============================================================
+    // DNS SNAPSHOTS COLLECTION
+    // ============================================================
+
+    /**
+     * DNS Snapshots - Historical snapshots of DNS configurations
+     * - Created manually or automatically before changes
+     * - Owner can read/write
+     * - Scoped by workspaceId
+     */
+    match /dnsSnapshots/{snapshotId} {
+      // Read: Owner only (with workspace context)
+      allow read: if isOwner();
+
+      // Create: Owner and Cloud Functions only
+      allow create: if isOwner() &&
+        request.resource.data.keys().hasAll([
+          'workspaceId', 'domainName', 'records', 'createdAt', 'createdBy'
+        ]) &&
+        isValidString('workspaceId') &&
+        isValidString('domainName') &&
+        request.resource.data.records is list &&
+        request.resource.data.records.size() >= 0 &&
+        isValidTimestamp('createdAt') &&
+        isValidString('createdBy') &&
+        isValidOptionalString('description');
+
+      // Update: Not allowed (immutable snapshots)
+      allow update: if false;
+
+      // Delete: Owner only
+      allow delete: if isOwner();
+    }
+
+    // ============================================================
     // PAYMENTS COLLECTION
     // ============================================================
 

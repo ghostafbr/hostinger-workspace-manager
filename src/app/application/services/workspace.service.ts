@@ -268,11 +268,6 @@ export class WorkspaceService {
         throw new Error('Workspace not found');
       }
 
-      console.log('🔄 Calling syncWorkspace function...', {
-        workspaceId: id,
-        cloudFunctionUrl: this.cloudFunctionUrl,
-      });
-
       // Get current user's ID token
       const currentUser = this.auth.currentUser;
       if (!currentUser) {
@@ -301,7 +296,6 @@ export class WorkspaceService {
         ),
       );
 
-      console.log('✅ Function response:', response);
 
       if (!response.success) {
         throw new Error(response.error || 'Sync failed');
@@ -335,18 +329,17 @@ export class WorkspaceService {
    * @returns Summary with counts of success/failure/skipped workspaces
    */
   async syncAllWorkspaces(): Promise<{
-    success: boolean;
-    totalWorkspaces: number;
-    successCount: number;
-    failureCount: number;
-    skippedCount: number;
-    disabledCount: number;
+    success: boolean,
+    totalWorkspaces: number,
+    successCount: number,
+    failureCount: number,
+    skippedCount: number,
+    disabledCount: number,
   }> {
     try {
       this.isLoading.set(true);
       this.error.set(null);
 
-      console.log('🔄 Starting batch sync for all workspaces...');
 
       // Get current user's ID token
       const currentUser = this.auth.currentUser;
@@ -359,19 +352,19 @@ export class WorkspaceService {
       // Call syncAllWorkspaces HTTP endpoint
       const response = await firstValueFrom(
         this.http.post<{
-          success: boolean;
-          totalWorkspaces: number;
-          successCount: number;
-          failureCount: number;
-          skippedCount: number;
-          disabledCount: number;
+          success: boolean,
+          totalWorkspaces: number,
+          successCount: number,
+          failureCount: number,
+          skippedCount: number,
+          disabledCount: number,
           details: {
-            workspaceId: string;
-            status: 'success' | 'failed' | 'skipped' | 'disabled';
-            domainsProcessed?: number;
-            subscriptionsProcessed?: number;
-            error?: string;
-          }[];
+            workspaceId: string,
+            status: 'success' | 'failed' | 'skipped' | 'disabled',
+            domainsProcessed?: number,
+            subscriptionsProcessed?: number,
+            error?: string,
+          }[],
         }>(
           this.syncAllUrl,
           {},
@@ -384,7 +377,6 @@ export class WorkspaceService {
         ),
       );
 
-      console.log('✅ Batch sync response:', response);
 
       if (!response.success) {
         throw new Error('Batch sync failed');
@@ -442,8 +434,8 @@ export class WorkspaceService {
    * Decrypts token and validates it against Hostinger API
    */
   async testConnection(workspaceId: string): Promise<{
-    success: boolean;
-    error?: string;
+    success: boolean,
+    error?: string,
   }> {
     try {
       this.isLoading.set(true);

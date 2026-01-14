@@ -105,7 +105,6 @@ export class SubscriptionService {
       this.isLoading.set(true);
       this.error.set(null);
 
-      console.log('[SubscriptionService] Fetching all subscriptions for workspaceId:', workspaceId);
 
       const subscriptionsQuery = query(
         collection(this.firestore, 'subscriptions'),
@@ -115,14 +114,12 @@ export class SubscriptionService {
 
       const snapshot = await getDocs(subscriptionsQuery);
 
-      console.log('[SubscriptionService] Fetched', snapshot.size, 'subscriptions');
 
       const subscriptions = snapshot.docs.map((doc: QueryDocumentSnapshot<DocumentData>) => ({
         ...(doc.data() as ISubscription),
         id: doc.id,
       }));
 
-      console.log('[SubscriptionService] Mapped subscriptions:', subscriptions);
 
       return subscriptions;
     } catch (error) {

@@ -123,7 +123,6 @@ export class DomainService {
       this.isLoading.set(true);
       this.error.set(null);
 
-      console.log('[DomainService] Fetching all domains for workspaceId:', workspaceId);
 
       const domainsQuery = query(
         collection(this.firestore, 'domains'),
@@ -133,14 +132,12 @@ export class DomainService {
 
       const snapshot = await getDocs(domainsQuery);
 
-      console.log('[DomainService] Fetched', snapshot.size, 'domains');
 
       const domains = snapshot.docs.map((doc) => ({
         ...(doc.data() as IDomain),
         id: doc.id,
       }));
 
-      console.log('[DomainService] Mapped domains:', domains);
 
       return domains;
     } catch (error) {

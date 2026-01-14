@@ -45,7 +45,6 @@ export class HostingerApiService {
 
       for (const endpoint of endpoints) {
         try {
-          console.log(`Testing endpoint: ${this.BASE_URL}${endpoint}`);
 
           const response = (await firstValueFrom(
             this.http
@@ -61,7 +60,6 @@ export class HostingerApiService {
             return { success: true };
           }
         } catch (err) {
-          console.log(`✗ Failed with endpoint ${endpoint}:`, err);
           // Continue to next endpoint
           continue;
         }
