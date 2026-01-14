@@ -38,7 +38,6 @@ describe('WorkspaceService', () => {
   let service: WorkspaceService;
   let authService: AuthService;
   let encryptionService: EncryptionService;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mockFirestore: any;
 
   const mockUserId = 'user-123';
