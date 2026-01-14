@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
 import { DomainService } from './domain.service';
 import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';

@@ -276,7 +276,7 @@ export default class DashboardPage implements OnInit {
   /**
    * Handle search applied
    */
-  onSearchApplied(_criteria: any): void {
+  onSearchApplied(_criteria: unknown): void {
     this.messageService.add({
       severity: 'info',
       summary: 'Filtro Aplicado',

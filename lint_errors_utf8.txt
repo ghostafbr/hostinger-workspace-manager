@@ -1,0 +1,112 @@
+﻿
+> hostinger-workspace-manager@0.0.0 lint
+> eslint src/**/*.ts
+
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\application\guards\auth.guard.spec.ts
+  36:78  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  36:89  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  44:27  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  49:78  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  49:89  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  65:63  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  65:74  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\application\guards\login.guard.spec.ts
+  36:79  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  36:90  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  44:27  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  49:79  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  49:90  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  65:64  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  65:75  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\application\guards\workspace.guard.spec.ts
+   46:10  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   52:90  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   65:90  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   80:51  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  100:51  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  121:51  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\application\services\alert.service.spec.ts
+  24:69  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  63:66  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\application\services\audit-log.service.spec.ts
+   28:69  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   78:66  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  100:60  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\application\services\auth.service.spec.ts
+  199:10  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\application\services\dashboard.service.spec.ts
+   30:69  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   76:60  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  103:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  115:60  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  135:60  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\application\services\dns.service.spec.ts
+    7:10  error    'computed' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  128:81  warning  Unexpected any. Specify a different type                                    @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\application\services\dns.service.ts
+  20:3   error    'DnsValidationStatus' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  75:45  warning  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+  94:19  warning  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\application\services\domain.service.spec.ts
+  27:69  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  64:66  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  91:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\application\services\encryption.service.spec.ts
+  211:27  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\application\services\subscription.service.spec.ts
+  23:69  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  60:66  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\application\services\sync-run.service.spec.ts
+  23:69  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  61:66  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\application\services\workspace.service.spec.ts
+   40:22  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   52:80  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   53:64  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  127:66  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  128:51  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  129:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  130:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  163:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  187:54  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  188:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  199:70  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  231:54  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  249:66  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  250:51  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  293:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  326:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  347:60  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  382:60  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\presentation\components\organisms\dns-validation\dns-validation.component.ts
+  4:10  error  'DnsValidationResult' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\presentation\pages\dashboard\dashboard.page.ts
+  279:30  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\app\presentation\pages\dns\dns.page.ts
+  158:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Dev\Projects\hostinger-workspace-manager\src\test-setup.ts
+  41:43  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  50:47  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  54:38  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  54:56  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+Γ£û 69 problems (3 errors, 66 warnings)
+

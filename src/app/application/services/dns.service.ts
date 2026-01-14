@@ -17,7 +17,6 @@ import {
   DnsSnapshot,
   DnsRecordType,
   DnsValidationResult,
-  DnsValidationStatus,
 } from '@app/domain';
 import { WorkspaceContextService } from './workspace-context.service';
 import { httpsCallable, Functions } from 'firebase/functions';
@@ -72,6 +71,7 @@ export class DnsService {
       >(this.functions, 'validateDns');
 
       const result = await validateDnsFn({ workspaceId, domainName });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const validationData = result.data as any;
 
       // Normalize validatedAt to Firestore Timestamp on client so template can call toDate()
@@ -91,9 +91,12 @@ export class DnsService {
 
       this.validationResults.set(validationData as DnsValidationResult);
       return validationData as DnsValidationResult;
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error validating DNS:', err);
-      const errorMsg = err.message || 'Failed to validate DNS';
+      let errorMsg = 'Failed to validate DNS';
+      if (err instanceof Error) {
+        errorMsg = err.message;
+      }
       this.error.set(errorMsg);
       throw err;
     } finally {

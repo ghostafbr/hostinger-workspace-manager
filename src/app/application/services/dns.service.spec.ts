@@ -4,7 +4,7 @@ import { DnsService } from './dns.service';
 import { WorkspaceContextService } from './workspace-context.service';
 import { DnsRecordType } from '@app/domain';
 import { vi } from 'vitest';
-import { computed, signal } from '@angular/core';
+import { signal } from '@angular/core';
 
 // Mock Firebase Adapter BEFORE importing service
 vi.mock('@app/infrastructure/adapters/firebase.adapter', () => ({
@@ -125,6 +125,7 @@ describe('DnsService', () => {
       };
       // Mock httpsCallable return value
       const httpsCallableMock = vi.mocked(await import('firebase/functions')).httpsCallable;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const callableReturn = vi.fn().mockResolvedValue({ data: mockResult }) as any;
       httpsCallableMock.mockReturnValue(callableReturn);
 

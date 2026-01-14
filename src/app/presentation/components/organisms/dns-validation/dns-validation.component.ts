@@ -1,7 +1,7 @@
 import { Component, Input, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DnsService } from '@app/application/services/dns.service';
-import { DnsValidationResult, DnsCheckStatus, DnsValidationStatus } from '@app/domain';
+import { DnsCheckStatus, DnsValidationStatus } from '@app/domain';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';

@@ -38,6 +38,7 @@ const localStorageMock = {
   removeItem: vi.fn(),
   clear: vi.fn(),
 };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 global.localStorage = localStorageMock as any;
 
 // Mock sessionStorage
@@ -47,10 +48,12 @@ const sessionStorageMock = {
   removeItem: vi.fn(),
   clear: vi.fn(),
 };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 global.sessionStorage = sessionStorageMock as any;
 
 // Extend expect matchers
 expect.extend({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   toHaveBeenCalledOnceWith(received: any, ...expected: any[]) {
     const pass =
       received.mock.calls.length === 1 &&

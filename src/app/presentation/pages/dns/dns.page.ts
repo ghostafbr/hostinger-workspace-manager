@@ -155,6 +155,7 @@ export class DnsPage implements OnInit {
 
       // Extract detailed error message from HttpErrorResponse
       if (error && typeof error === 'object' && 'error' in error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const httpError = error as any;
         if (httpError.error?.error) {
           errorDetail = httpError.error.error;
