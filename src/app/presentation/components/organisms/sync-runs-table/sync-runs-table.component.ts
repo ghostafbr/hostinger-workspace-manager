@@ -36,7 +36,7 @@ import { SyncRun } from '@app/domain';
       [rows]="10"
       [rowsPerPageOptions]="[10, 25, 50]"
       [tableStyle]="{ 'min-width': '70rem' }"
-      styleClass="p-datatable-sm"
+      class="p-datatable-sm"
       [rowHover]="true"
       #dt
     >
@@ -45,7 +45,7 @@ import { SyncRun } from '@app/domain';
         <div class="table-header">
           <div class="header-left">
             <h2><i class="pi pi-sync"></i> Historial de Sincronizaciones</h2>
-            <p-chip [label]="syncRuns().length.toString()" styleClass="ml-2" />
+            <p-chip [label]="syncRuns().length.toString()" class="ml-2" />
           </div>
           <div class="header-right">
             <span class="p-input-icon-left">
@@ -89,7 +89,7 @@ import { SyncRun } from '@app/domain';
           <!-- Duration -->
           <td>
             @if (run.getDuration()) {
-              <p-chip [label]="formatDuration(run.getDuration()!)" styleClass="duration-chip" />
+              <p-chip [label]="formatDuration(run.getDuration()!)" class="duration-chip" />
             } @else {
               <span class="text-muted">En progreso...</span>
             }
@@ -99,7 +99,7 @@ import { SyncRun } from '@app/domain';
           <td style="text-align: center">
             <p-chip
               [label]="(run.domainsProcessed || 0).toString()"
-              styleClass="count-chip"
+              class="count-chip"
               icon="pi pi-globe"
             />
           </td>
@@ -108,7 +108,7 @@ import { SyncRun } from '@app/domain';
           <td style="text-align: center">
             <p-chip
               [label]="(run.subscriptionsProcessed || 0).toString()"
-              styleClass="count-chip"
+              class="count-chip"
               icon="pi pi-shopping-cart"
             />
           </td>

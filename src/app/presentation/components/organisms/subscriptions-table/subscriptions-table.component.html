@@ -3,7 +3,7 @@
   <div class="table-header">
     <div class="search-container">
       <p-iconfield iconPosition="left">
-        <p-inputicon styleClass="pi pi-search" />
+        <p-inputicon class="pi pi-search" />
         <input
           type="text"
           pInputText
@@ -21,7 +21,7 @@
       optionLabel="label"
       optionValue="value"
       placeholder="Filtrar por renovación"
-      styleClass="autorenew-filter"
+      class="autorenew-filter"
     />
   </div>
 
@@ -35,7 +35,7 @@
     [totalRecords]="filteredSubscriptions().length"
     [showCurrentPageReport]="true"
     currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} suscripciones"
-    styleClass="subscriptions-table"
+    class="subscriptions-table"
     responsiveLayout="scroll"
   >
     <ng-template pTemplate="header">
@@ -96,7 +96,7 @@
             offLabel="No"
             onIcon="pi pi-check"
             offIcon="pi pi-times"
-            styleClass="autorenew-toggle"
+            class="autorenew-toggle"
           />
         </td>
 

@@ -39,7 +39,7 @@ import { AuditLogModel, AuditAction, AuditStatus } from '@app/domain';
       [rowsPerPageOptions]="[10, 25, 50, 100]"
       [globalFilterFields]="['action', 'actorEmail', 'workspaceId']"
       [tableStyle]="{ 'min-width': '70rem' }"
-      styleClass="p-datatable-sm"
+      class="p-datatable-sm"
       [rowHover]="true"
       #dt
     >
@@ -48,7 +48,7 @@ import { AuditLogModel, AuditAction, AuditStatus } from '@app/domain';
         <div class="table-header">
           <div class="header-left">
             <h2><i class="pi pi-file"></i> Audit Logs</h2>
-            <p-chip [label]="auditLogs().length.toString()" styleClass="ml-2" />
+            <p-chip [label]="auditLogs().length.toString()" class="ml-2" />
           </div>
           <div class="header-right">
             <!-- Search -->
@@ -69,7 +69,7 @@ import { AuditLogModel, AuditAction, AuditStatus } from '@app/domain';
               (onChange)="onActionFilter($event)"
               placeholder="Todas las acciones"
               [showClear]="true"
-              styleClass="ml-2"
+              class="ml-2"
             />
 
             <!-- Status Filter -->
@@ -79,7 +79,7 @@ import { AuditLogModel, AuditAction, AuditStatus } from '@app/domain';
               (onChange)="onStatusFilter($event)"
               placeholder="Todos los estados"
               [showClear]="true"
-              styleClass="ml-2"
+              class="ml-2"
             />
           </div>
         </div>
@@ -134,7 +134,7 @@ import { AuditLogModel, AuditAction, AuditStatus } from '@app/domain';
           <!-- Workspace -->
           <td>
             @if (log.workspaceId) {
-              <p-chip [label]="log.workspaceId" styleClass="workspace-chip" />
+              <p-chip [label]="log.workspaceId" class="workspace-chip" />
             } @else {
               <span class="text-muted">Sistema</span>
             }

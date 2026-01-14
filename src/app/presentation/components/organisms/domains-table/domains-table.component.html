@@ -1,8 +1,8 @@
 <div class="domains-table-container">
   <!-- Toolbar with search and filters -->
   <div class="table-toolbar">
-    <p-iconfield iconPosition="left" styleClass="search-field">
-      <p-inputicon styleClass="pi pi-search" />
+    <p-iconfield iconPosition="left" class="search-field">
+      <p-inputicon class="pi pi-search" />
       <input
         pInputText
         type="text"
@@ -19,7 +19,7 @@
       optionLabel="label"
       optionValue="value"
       placeholder="Filtrar por días"
-      styleClass="days-filter"
+      class="days-filter"
     />
 
     <div class="results-count">
@@ -40,7 +40,7 @@
     [virtualScrollItemSize]="60"
     scrollHeight="600px"
     responsiveLayout="scroll"
-    styleClass="domains-table"
+    class="domains-table"
   >
     <!-- Semáforo Column -->
     <ng-template pTemplate="header">

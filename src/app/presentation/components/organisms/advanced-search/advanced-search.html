@@ -1,4 +1,4 @@
-<p-card styleClass="search-card">
+<p-card class="search-card">
   <div class="search-content">
       <!-- Basic Search -->
       <div class="search-section">
@@ -127,14 +127,14 @@
               <div class="saved-filter-item">
                 <p-button
                   [label]="filter.name"
-                  styleClass="p-button-outlined p-button-sm"
+                  class="p-button-outlined p-button-sm"
                   icon="pi pi-filter"
                   (onClick)="loadSavedFilter(filter)"
                   [pTooltip]="filter.description || 'Cargar filtro'"
                 />
                 <p-button
                   icon="pi pi-trash"
-                  styleClass="p-button-text p-button-sm p-button-danger"
+                  class="p-button-text p-button-sm p-button-danger"
                   (onClick)="deleteSavedFilter(filter.id!)"
                   pTooltip="Eliminar filtro"
                 />
@@ -150,13 +150,13 @@
           <p-button
             label="Buscar"
             icon="pi pi-search"
-            styleClass="p-button-primary"
+            class="p-button-primary"
             (onClick)="applySearch()"
           />
           <p-button
             label="Limpiar"
             icon="pi pi-times"
-            styleClass="p-button-outlined"
+            class="p-button-outlined"
             (onClick)="clearFilters()"
           />
         </div>
@@ -165,7 +165,7 @@
           <p-button
             label="Guardar Filtro"
             icon="pi pi-save"
-            styleClass="p-button-outlined"
+            class="p-button-outlined"
             (onClick)="showSaveDialog.set(true)"
           />
         }
@@ -186,14 +186,14 @@
             <p-button
               label="Guardar"
               icon="pi pi-check"
-              styleClass="p-button-sm"
+              class="p-button-sm"
               (onClick)="saveCurrentFilter()"
               [disabled]="!saveFilterName()"
             />
             <p-button
               label="Cancelar"
               icon="pi pi-times"
-              styleClass="p-button-text p-button-sm"
+              class="p-button-text p-button-sm"
               (onClick)="showSaveDialog.set(false)"
             />
           </div>

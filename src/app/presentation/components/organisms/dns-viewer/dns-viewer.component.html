@@ -17,7 +17,7 @@
           optionLabel="label"
           optionValue="value"
           display="chip"
-          styleClass="filter-select"
+          class="filter-select"
         />
       </div>
 
@@ -58,7 +58,7 @@
                   [value]="type.label + ': ' + recordCounts().get(type.value)"
                   [severity]="getTypeSeverity(type.value)"
                   [icon]="getTypeIcon(type.value)"
-                  styleClass="record-count-tag"
+                  class="record-count-tag"
                 />
               }
             }
@@ -102,7 +102,7 @@
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records"
         [globalFilterFields]="['name', 'value', 'recordType']"
-        styleClass="p-datatable-sm"
+        class="p-datatable-sm"
         responsiveLayout="scroll"
       >
         <ng-template pTemplate="header">

@@ -14,7 +14,7 @@ import { ChipModule } from 'primeng/chip';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CardModule, ChipModule],
   template: `
-    <p-card styleClass="expiration-card">
+    <p-card class="expiration-card">
       <ng-template pTemplate="header">
         <div class="card-header-custom">
           <i [class]="icon()" class="card-icon"></i>
@@ -30,7 +30,7 @@ import { ChipModule } from 'primeng/chip';
           </span>
           <p-chip
             [label]="count7Days().toString()"
-            [styleClass]="getChipClass(count7Days(), '7d')"
+            [class]="getChipClass(count7Days(), '7d')"
           />
         </div>
         <div class="expiration-row" [class.has-items]="count15Days() > 0">
@@ -40,7 +40,7 @@ import { ChipModule } from 'primeng/chip';
           </span>
           <p-chip
             [label]="count15Days().toString()"
-            [styleClass]="getChipClass(count15Days(), '15d')"
+            [class]="getChipClass(count15Days(), '15d')"
           />
         </div>
         <div class="expiration-row" [class.has-items]="count30Days() > 0">
@@ -50,7 +50,7 @@ import { ChipModule } from 'primeng/chip';
           </span>
           <p-chip
             [label]="count30Days().toString()"
-            [styleClass]="getChipClass(count30Days(), '30d')"
+            [class]="getChipClass(count30Days(), '30d')"
           />
         </div>
         <div class="expiration-row" [class.has-items]="count60Days() > 0">
@@ -60,7 +60,7 @@ import { ChipModule } from 'primeng/chip';
           </span>
           <p-chip
             [label]="count60Days().toString()"
-            [styleClass]="getChipClass(count60Days(), '60d')"
+            [class]="getChipClass(count60Days(), '60d')"
           />
         </div>
       </div>

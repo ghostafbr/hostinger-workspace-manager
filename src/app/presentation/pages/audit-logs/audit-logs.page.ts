@@ -34,7 +34,7 @@ import { AuditLogModel } from '@app/domain';
       <p-toast />
 
       <!-- Toolbar -->
-      <p-toolbar styleClass="audit-logs-toolbar">
+      <p-toolbar class="audit-logs-toolbar">
         <div class="p-toolbar-group-start">
           <h1 class="page-title">
             <i class="pi pi-file"></i>
@@ -57,7 +57,7 @@ import { AuditLogModel } from '@app/domain';
             icon="pi pi-arrow-left"
             severity="secondary"
             [outlined]="true"
-            styleClass="ml-2"
+            class="ml-2"
             (onClick)="goBack()"
           />
         </div>

@@ -46,7 +46,7 @@
           @if (item.workspace.tags && item.workspace.tags.length > 0) {
             <div class="item-tags">
               @for (tag of item.workspace.tags; track tag) {
-                <p-chip [label]="tag" styleClass="tag-chip" />
+                <p-chip [label]="tag" class="tag-chip" />
               }
             </div>
           }

@@ -3,7 +3,7 @@
     <div class="timeline-header">
       <i class="pi pi-calendar"></i>
       <h3>{{ title() }}</h3>
-      <p-chip [label]="sortedEvents().length + ' eventos'" styleClass="ml-2" />
+      <p-chip [label]="sortedEvents().length + ' eventos'" class="ml-2" />
     </div>
   </ng-template>
 
@@ -13,7 +13,7 @@
       <p>No hay vencimientos próximos</p>
     </div>
   } @else {
-    <p-timeline [value]="sortedEvents()" align="alternate" styleClass="custom-timeline">
+    <p-timeline [value]="sortedEvents()" align="alternate" class="custom-timeline">
       <ng-template #marker let-event>
         <div
           class="timeline-marker"
@@ -34,9 +34,9 @@
             <p-chip
               [label]="event.type === 'domain' ? 'Dominio' : 'Suscripción'"
               [icon]="getIcon(event.type)"
-              styleClass="timeline-chip"
+              class="timeline-chip"
             />
-            <p-chip [label]="event.workspaceName" icon="pi pi-briefcase" styleClass="timeline-chip" />
+            <p-chip [label]="event.workspaceName" icon="pi pi-briefcase" class="timeline-chip" />
           </div>
           <div class="timeline-date">
             <i class="pi pi-clock"></i>

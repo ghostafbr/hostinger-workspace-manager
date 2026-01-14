@@ -20,7 +20,7 @@
         (onChange)="onWorkspaceChange($event)"
         placeholder="Selecciona un workspace"
         [showClear]="false"
-        styleClass="workspace-dropdown"
+        class="workspace-dropdown"
         aria-label="Seleccionar workspace activo"
       >
         <ng-template let-workspace pTemplate="selectedItem">
@@ -31,7 +31,7 @@
                 <p-tag
                   [value]="workspace.status"
                   [severity]="getStatusSeverity(workspace.status)"
-                  styleClass="workspace-status-tag"
+                  class="workspace-status-tag"
                 ></p-tag>
               }
             </div>
@@ -96,14 +96,14 @@
     <div class="user-menu">
       <p-avatar
         [label]="userInitials()"
-        styleClass="user-avatar"
+        class="user-avatar"
         shape="circle"
         [style]="{ 'background-color': '#2196F3', color: '#ffffff', cursor: 'pointer' }"
         (click)="userPopover.toggle($event)"
       ></p-avatar>
 
       <p-popover #userPopover>
-        <p-menu [model]="userMenuItems" styleClass="user-dropdown-menu" />
+        <p-menu [model]="userMenuItems" class="user-dropdown-menu" />
       </p-popover>
     </div>
   </div>

@@ -8,11 +8,11 @@
     </ng-template>
 
     @if (error()) {
-      <p-message severity="error" [text]="error()!" styleClass="mb-4 block" />
+      <p-message severity="error" [text]="error()!" class="mb-4 block" />
     }
 
     @if (success()) {
-      <p-message severity="success" [text]="success()!" styleClass="mb-4 block" />
+      <p-message severity="success" [text]="success()!" class="mb-4 block" />
     }
 
     @if (isLoading()) {
@@ -79,7 +79,7 @@
             optionLabel="label"
             optionValue="value"
             placeholder="Selecciona un proveedor"
-            styleClass="w-full"
+            class="w-full"
             [disabled]="!enabled()"
           />
           <small>Usa SMTP para Hostinger, Gmail, Outlook, etc. o SendGrid API</small>
@@ -147,7 +147,7 @@
               name="smtpPort"
               [min]="1"
               [max]="65535"
-              styleClass="w-full"
+              class="w-full"
               [disabled]="!enabled()"
             />
             <small>465 (SSL) o 587 (TLS)</small>
@@ -161,7 +161,7 @@
               name="smtpSecure"
               onLabel="SSL/TLS"
               offLabel="Sin SSL"
-              styleClass="w-full"
+              class="w-full"
               [disabled]="!enabled()"
             />
           </div>
@@ -295,7 +295,7 @@
             optionLabel="label"
             optionValue="value"
             placeholder="Selecciona tipo"
-            styleClass="w-full"
+            class="w-full"
             [disabled]="!enabled()"
           />
         </div>
@@ -390,7 +390,7 @@
             name="maxPerHour"
             [min]="1"
             [max]="100"
-            styleClass="w-full"
+            class="w-full"
             [disabled]="!enabled()"
           />
           <small>Límite de emails por hora</small>
@@ -404,7 +404,7 @@
             name="maxPerDay"
             [min]="1"
             [max]="1000"
-            styleClass="w-full"
+            class="w-full"
             [disabled]="!enabled()"
           />
           <small>Límite de emails por día</small>
@@ -423,7 +423,7 @@
             name="maxRetryAttempts"
             [min]="0"
             [max]="10"
-            styleClass="w-full"
+            class="w-full"
             [disabled]="!enabled()"
           />
           <small>Número de reintentos en caso de fallo</small>
@@ -437,7 +437,7 @@
             name="retryDelayMinutes"
             [min]="1"
             [max]="60"
-            styleClass="w-full"
+            class="w-full"
             [disabled]="!enabled()"
           />
           <small>Tiempo de espera entre reintentos</small>
@@ -489,7 +489,7 @@
 
   <!-- Email History Table -->
   @if (emailLogs().length > 0) {
-    <p-card styleClass="mt-4">
+    <p-card class="mt-4">
       <ng-template pTemplate="header">
         <div class="card-header">
           <h3><i class="fas fa-inbox"></i> Historial de Emails</h3>
@@ -497,7 +497,7 @@
         </div>
       </ng-template>
 
-      <p-table [value]="emailLogs()" [paginator]="true" [rows]="10" styleClass="p-datatable-sm">
+      <p-table [value]="emailLogs()" [paginator]="true" [rows]="10" class="p-datatable-sm">
         <ng-template pTemplate="header">
           <tr>
             <th>Fecha</th>

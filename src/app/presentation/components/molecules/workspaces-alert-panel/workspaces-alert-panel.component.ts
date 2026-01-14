@@ -16,7 +16,7 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CardModule, TagModule, ButtonModule],
   template: `
-    <p-card styleClass="alert-panel">
+    <p-card class="alert-panel">
       <ng-template pTemplate="header">
         <div class="card-header-custom">
           <i class="pi pi-exclamation-triangle card-icon"></i>

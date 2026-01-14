@@ -2,7 +2,7 @@
   <p-toast />
 
   <!-- Toolbar -->
-  <p-toolbar styleClass="dns-toolbar" role="toolbar" aria-label="Barra de herramientas DNS">
+  <p-toolbar class="dns-toolbar" role="toolbar" aria-label="Barra de herramientas DNS">
     <div class="p-toolbar-group-start">
       <h1 class="page-title" id="dns-heading">
         <i class="pi pi-sitemap" aria-hidden="true"></i>
@@ -27,7 +27,7 @@
         [loading]="isLoadingDomains()"
         optionLabel="label"
         optionValue="value"
-        styleClass="w-auto domain-toolbar-select"
+        class="w-auto domain-toolbar-select"
         [disabled]="isLoadingDomains()"
       >
         <ng-template pTemplate="empty">
@@ -72,7 +72,7 @@
             <p-chip
               label="{{ domainName() }}"
               icon="pi pi-globe"
-              styleClass="domain-chip"
+              class="domain-chip"
             />
           </div>
         </div>

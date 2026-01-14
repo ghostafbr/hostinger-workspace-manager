@@ -68,8 +68,8 @@
               [feedback]="false"
               [class.ng-invalid]="isFieldInvalid('token')"
               [class.ng-dirty]="isFieldInvalid('token')"
-              styleClass="w-full"
-              inputStyleClass="w-full"
+              class="w-full"
+              inputclass="w-full"
             />
             @if (isFieldInvalid('token')) {
               <small class="text-red-500">
@@ -116,7 +116,7 @@
           placeholder="Seleccione un estado"
           [class.ng-invalid]="isFieldInvalid('status')"
           [class.ng-dirty]="isFieldInvalid('status')"
-          styleClass="w-full"
+          class="w-full"
         />
         @if (isFieldInvalid('status')) {
           <small class="text-red-500">

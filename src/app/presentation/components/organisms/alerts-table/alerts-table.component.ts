@@ -39,7 +39,7 @@ import { AlertLogModel, EntityType } from '@app/domain';
       [rowsPerPageOptions]="[10, 25, 50]"
       [globalFilterFields]="['entityName', 'entityType']"
       [tableStyle]="{ 'min-width': '60rem' }"
-      styleClass="p-datatable-sm"
+      class="p-datatable-sm"
       [rowHover]="true"
       #dt
     >
@@ -48,7 +48,7 @@ import { AlertLogModel, EntityType } from '@app/domain';
         <div class="table-header">
           <div class="header-left">
             <h2><i class="pi pi-bell"></i> Alertas</h2>
-            <p-chip [label]="alerts().length.toString()" styleClass="ml-2" />
+            <p-chip [label]="alerts().length.toString()" class="ml-2" />
           </div>
           <div class="header-right">
             <!-- Search -->
@@ -69,7 +69,7 @@ import { AlertLogModel, EntityType } from '@app/domain';
               (onChange)="onEntityTypeFilter($event)"
               placeholder="Todos los tipos"
               [showClear]="true"
-              styleClass="ml-2"
+              class="ml-2"
             />
 
             <!-- Days Before Filter -->
@@ -79,7 +79,7 @@ import { AlertLogModel, EntityType } from '@app/domain';
               (onChange)="onDaysBeforeFilter($event)"
               placeholder="Todos los días"
               [showClear]="true"
-              styleClass="ml-2"
+              class="ml-2"
             />
           </div>
         </div>
@@ -140,7 +140,7 @@ import { AlertLogModel, EntityType } from '@app/domain';
           <td style="text-align: center">
             <p-chip
               [label]="alert.getDaysBeforeLabel()"
-              [styleClass]="getDaysBeforeChipClass(alert.daysBefore)"
+              [class]="getDaysBeforeChipClass(alert.daysBefore)"
             />
           </td>
 
