@@ -154,6 +154,7 @@ export function validateDmarcRecord(records: DnsRecord[]): DnsCheckResult[] {
 export function validateTtl(records: DnsRecord[]): DnsCheckResult[] {
     const checks: DnsCheckResult[] = [];
     const lowTtl = records.filter(r => r.ttl < 300);
+    const highTtl = records.filter(r => r.ttl > 86400); // > 1 day
 
     if (lowTtl.length > 0) {
         checks.push({
@@ -162,10 +163,22 @@ export function validateTtl(records: DnsRecord[]): DnsCheckResult[] {
             name: 'TTL Configuration',
             status: DnsCheckStatus.WARN,
             message: `Found ${lowTtl.length} records with very low TTL (< 300s).`,
-            recommendation: 'Increase TTL to at least 300s (5 mins) or 3600s (1 hour) for stable records to reduce query load.',
-            affectedRecords: lowTtl.slice(0, 5).map(r => `${r.name} (${r.type})`)
+            recommendation: 'Increase TTL to at least 300s (5 mins) for stable records.'
         });
-    } else {
+    }
+
+    if (highTtl.length > 0) {
+        checks.push({
+            id: 'ttl-high',
+            category: DnsCheckCategory.PERFORMANCE,
+            name: 'TTL Configuration',
+            status: DnsCheckStatus.WARN,
+            message: `Found ${highTtl.length} records with very high TTL (> 1 day).`,
+            recommendation: 'Consider lowering TTL if you plan to make changes soon. 1 hour (3600s) is a good default.'
+        });
+    }
+
+    if (lowTtl.length === 0 && highTtl.length === 0) {
          checks.push({
             id: 'ttl-valid',
             category: DnsCheckCategory.PERFORMANCE,
@@ -173,6 +186,127 @@ export function validateTtl(records: DnsRecord[]): DnsCheckResult[] {
             status: DnsCheckStatus.PASS,
             message: 'All records have reasonable TTL values.'
         });
+    }
+
+    return checks;
+}
+
+/**
+ * Validate A and AAAA Records
+ */
+export function validateAddressRecords(records: DnsRecord[]): DnsCheckResult[] {
+    const checks: DnsCheckResult[] = [];
+    const aRecords = records.filter(r => r.type === 'A');
+    const aaaaRecords = records.filter(r => r.type === 'AAAA');
+
+    // Private IP ranges regex
+    const privateIpRegex = /^(?:10\.|172\.(?:1[6-9]|2[0-9]|3[0-1])\.|192\.168\.|127\.|0\.0\.0\.0)/;
+    
+    // Check A records
+    const privateARecords = aRecords.filter(r => privateIpRegex.test(r.value));
+    if (privateARecords.length > 0) {
+        checks.push({
+            id: 'a-private-ip',
+            category: DnsCheckCategory.CONFIGURATION,
+            name: 'A Record Value',
+            status: DnsCheckStatus.WARN,
+            message: 'Found A records pointing to private/local IP addresses.',
+            recommendation: 'Ensure standard A records point to public IP addresses.',
+            affectedRecords: privateARecords.map(r => r.value)
+        });
+    }
+
+    if (aRecords.length === 0 && aaaaRecords.length === 0) {
+        checks.push({
+            id: 'root-record-missing',
+            category: DnsCheckCategory.CONFIGURATION,
+            name: 'Root Record',
+            status: DnsCheckStatus.WARN,
+            message: 'No A or AAAA records found. The domain might not resolve to a website.',
+            recommendation: 'Add an A record pointing to your web server if you have a website.'
+        });
+    } else {
+        checks.push({
+            id: 'root-record-valid',
+            category: DnsCheckCategory.CONFIGURATION,
+            name: 'Root Record',
+            status: DnsCheckStatus.PASS,
+            message: `Found ${aRecords.length} A records and ${aaaaRecords.length} AAAA records.`
+        });
+    }
+
+    return checks;
+}
+
+/**
+ * Validate Duplicate Records
+ */
+export function validateDuplicates(records: DnsRecord[]): DnsCheckResult[] {
+    const checks: DnsCheckResult[] = [];
+    const seen = new Set<string>();
+    const requestDuplicates: string[] = [];
+
+    records.forEach(r => {
+        const key = `${r.type}:${r.name}:${r.value}`;
+        if (seen.has(key)) {
+            requestDuplicates.push(`${r.type} ${r.name} -> ${r.value}`);
+        }
+        seen.add(key);
+    });
+
+    if (requestDuplicates.length > 0) {
+        checks.push({
+            id: 'duplicates-found',
+            category: DnsCheckCategory.CONFIGURATION,
+            name: 'Duplicate Records',
+            status: DnsCheckStatus.WARN,
+            message: 'Found duplicate DNS records.',
+            recommendation: 'Remove duplicate records to keep configuration clean.',
+            affectedRecords: requestDuplicates
+        });
+    } else {
+         checks.push({
+            id: 'duplicates-none',
+            category: DnsCheckCategory.CONFIGURATION,
+            name: 'Duplicate Records',
+            status: DnsCheckStatus.PASS,
+            message: 'No duplicate records found.'
+        });
+    }
+
+    return checks;
+}
+
+/**
+ * Validate DKIM Record
+ */
+export function validateDkimRecord(records: DnsRecord[]): DnsCheckResult[] {
+    const checks: DnsCheckResult[] = [];
+    // DKIM records are TXT records usually at selector._domainkey
+    const dkimRecords = records.filter(r => r.type === 'TXT' && r.value.includes('v=DKIM1'));
+
+    if (dkimRecords.length > 0) {
+        checks.push({
+             id: 'dkim-found',
+             category: DnsCheckCategory.SECURITY,
+             name: 'DKIM Record',
+             status: DnsCheckStatus.PASS,
+             message: `Found ${dkimRecords.length} DKIM record(s).`
+        });
+    } else {
+        // Not definitely a fail/warn because we don't know if they send email or what selectors they use,
+        // but often if MX exists, DKIM should too.
+        const mxExists = records.some(r => r.type === 'MX');
+        if (mxExists) {
+             checks.push({
+             id: 'dkim-missing',
+             category: DnsCheckCategory.SECURITY,
+             name: 'DKIM Record',
+             status: DnsCheckStatus.WARN,
+             message: 'No DKIM records found, but MX records exist.',
+             recommendation: 'Configure DKIM for your mail provider to improve deliverability.'
+            });
+        }
     }
 
     return checks;

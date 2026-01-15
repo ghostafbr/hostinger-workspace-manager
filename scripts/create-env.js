@@ -1,6 +1,30 @@
 const fs = require('fs');
 const path = require('path');
 
+// Read .env file
+const envPath = path.resolve(__dirname, '../.env');
+if (fs.existsSync(envPath)) {
+  const envConfig = fs.readFileSync(envPath, 'utf8');
+  envConfig.split('\n').forEach(line => {
+    // Skip comments and empty lines
+    if (!line || line.trim().startsWith('#')) return;
+    
+    // Split by first equals sign only
+    const splitIndex = line.indexOf('=');
+    if (splitIndex === -1) return;
+    
+    const key = line.substring(0, splitIndex).trim();
+    const value = line.substring(splitIndex + 1).trim();
+    
+    if (key) {
+      process.env[key] = value;
+    }
+  });
+  console.log('Loaded environment variables from .env');
+} else {
+  console.warn('.env file not found at ' + envPath);
+}
+
 const dir = 'src/environments';
 const prodFile = 'environment.ts';
 const devFile = 'environment.development.ts';

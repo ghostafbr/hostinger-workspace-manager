@@ -6,7 +6,10 @@ import {
   validateMxRecords,
   validateSpfRecord,
   validateDmarcRecord,
-  validateTtl
+  validateTtl,
+  validateAddressRecords,
+  validateDuplicates,
+  validateDkimRecord
 } from '../../utils/dnsValidationUtils';
 import {
     DnsValidationStatus,
@@ -107,7 +110,10 @@ export const validateDns = onCall(callableOptions, async (request) => {
         ...validateMxRecords(records),
         ...validateSpfRecord(records),
         ...validateDmarcRecord(records),
-        ...validateTtl(records)
+        ...validateTtl(records),
+        ...validateAddressRecords(records),
+        ...validateDuplicates(records),
+        ...validateDkimRecord(records)
     ];
 
     // 3. Determine Overall Status
@@ -222,7 +228,10 @@ export const validateDnsHttp = onRequest(httpOptions, async (req: Request, res: 
       ...validateMxRecords(records),
       ...validateSpfRecord(records),
       ...validateDmarcRecord(records),
-      ...validateTtl(records)
+      ...validateTtl(records),
+      ...validateAddressRecords(records),
+      ...validateDuplicates(records),
+      ...validateDkimRecord(records)
     ];
 
     let overallStatus = DnsValidationStatus.HEALTHY;
