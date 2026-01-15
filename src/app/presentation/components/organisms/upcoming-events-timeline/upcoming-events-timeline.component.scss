@@ -1,20 +1,80 @@
-.timeline-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
-  border-bottom: 1px solid var(--surface-border);
+// Neutral Premium Glass Styles
+$card-bg: #ffffff;
+$border-color: #e2e8f0; // Slate 200
+$text-primary: #1e293b; // Slate 800
+$text-secondary: #64748b; // Slate 500
+$primary-color: var(--primary-color);
+$radius: 12px;
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
-  i {
-    font-size: 1.5rem;
-    color: var(--primary-color);
+// Status Colors
+$color-critical: #ef4444;
+$color-warning: #f59e0b;
+$color-info: #3b82f6;
+$bg-critical: #fee2e2;
+$bg-warning: #fef3c7;
+$bg-info: #dbeafe;
+
+:host {
+  display: block;
+}
+
+.glass-events-card {
+  background: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: $radius;
+  padding: 1.5rem;
+  box-shadow: $shadow-sm;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+}
+
+.card-header {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .header-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .icon-indicator {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--surface-50);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $primary-color;
+      border: 1px solid $border-color;
+
+      i {
+        font-size: 1.2rem;
+      }
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: $text-primary;
+    }
   }
 
-  h3 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-    flex: 1;
+  .count-badge {
+    background: var(--surface-100);
+    color: $text-secondary;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
   }
 }
 
@@ -23,98 +83,156 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
+  padding: 4rem 2rem;
   text-align: center;
 
-  i {
-    font-size: 3rem;
-    color: var(--gray-400);
+  .empty-icon {
+    width: 64px;
+    height: 64px;
+    background: var(--surface-50);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 1rem;
+
+    i {
+      font-size: 2rem;
+      color: #94a3b8; // Slate 400
+    }
   }
 
   p {
-    color: var(--text-color-secondary);
+    color: $text-secondary;
     font-size: 1rem;
+    font-weight: 500;
   }
 }
 
+// Timeline Customization
 ::ng-deep .custom-timeline {
-  padding: 1rem;
+  .p-timeline-event-opposite {
+    display: none; // Align left, remove opposite side spacing
+  }
 
-  .p-timeline-event-content {
-    flex: 1;
+  .p-timeline-event-connector {
+    background-color: #e2e8f0; // Slate 200
   }
 }
 
 .timeline-marker {
-  width: 3rem;
-  height: 3rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 1.25rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-size: 1rem;
+  box-shadow: 0 0 0 4px #ffffff; // White ring border effect
+  z-index: 1;
+
+  &.marker-domain {
+    background: #475569; // Slate 600
+  }
+
+  &.marker-subscription {
+    background: #64748b; // Slate 500
+  }
 }
 
-.timeline-content {
-  padding: 1rem;
-  background: var(--surface-card);
-  border-radius: var(--border-radius);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+.event-card {
+  background: #ffffff;
+  border: 1px solid $border-color;
+  border-radius: $radius;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem; // Spacing between events
+  margin-left: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
 
-  .timeline-title {
-    font-weight: 600;
-    font-size: 1rem;
-    margin-bottom: 0.75rem;
-    color: var(--text-color);
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-color: #cbd5e1;
   }
 
-  .timeline-meta {
+  .event-header {
     display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
     margin-bottom: 0.75rem;
-  }
 
-  .timeline-date {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    color: var(--text-color-secondary);
-
-    i {
-      color: var(--primary-color);
+    .event-title {
+      font-weight: 600;
+      color: $text-primary;
+      font-size: 1rem;
+      margin-right: 1rem;
     }
 
     .days-badge {
-      display: inline-block;
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
       font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
       font-weight: 600;
-      margin-left: 0.5rem;
+      white-space: nowrap;
 
       &.status-critical {
-        background-color: #e5e7eb;
-        color: #374151;
+        background: $bg-critical;
+        color: $color-critical;
       }
 
       &.status-warning {
-        background-color: #f3f4f6;
-        color: #4b5563;
+        background: $bg-warning;
+        color: $color-warning;
       }
 
       &.status-info {
-        background-color: #f9fafb;
-        color: #6b7280;
+        background: $bg-info;
+        color: $color-info;
       }
     }
   }
 
-  .timeline-chip {
-    font-size: 0.75rem;
+  .event-details {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 0.75rem;
+
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: $text-secondary;
+      font-size: 0.875rem;
+
+      i {
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  .event-tags {
+    display: flex;
+    gap: 0.5rem;
+
+    .mini-tag {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      // background: var(--surface-100);
+      color: $text-secondary;
+      font-weight: 500;
+      border: 1px solid $border-color;
+
+      &.tag-domain {
+        background: #f1f5f9;
+        color: #475569;
+      }
+
+      &.tag-sub {
+        background: #f8fafc;
+        color: #64748b;
+      }
+    }
   }
 }

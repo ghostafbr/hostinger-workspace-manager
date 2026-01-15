@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
 import { TimelineModule } from 'primeng/timeline';
-import { CardModule } from 'primeng/card';
+
 import { ChipModule } from 'primeng/chip';
 import { TooltipModule } from 'primeng/tooltip';
 import { NgClass, DatePipe } from '@angular/common';
@@ -24,7 +24,7 @@ export interface TimelineEvent {
   selector: 'app-upcoming-events-timeline',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [TimelineModule, CardModule, ChipModule, TooltipModule, NgClass, DatePipe],
+  imports: [TimelineModule, ChipModule, TooltipModule, NgClass, DatePipe],
   templateUrl: './upcoming-events-timeline.component.html',
   styleUrl: './upcoming-events-timeline.component.scss',
 })

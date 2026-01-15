@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
-import { CardModule } from 'primeng/card';
+import { CommonModule } from '@angular/common';
 
 export interface ExpirationTrendData {
   label: string;
@@ -17,7 +17,7 @@ export interface ExpirationTrendData {
   selector: 'app-expiration-trends-chart',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ChartModule, CardModule],
+  imports: [ChartModule, CommonModule],
   templateUrl: './expiration-trends-chart.component.html',
   styleUrl: './expiration-trends-chart.component.scss',
 })
@@ -37,23 +37,32 @@ export class ExpirationTrendsChartComponent {
    */
   readonly chartData = computed(() => {
     const trends = this.data();
-
+    // Brand colors matching the Slate theme
+    // Domains: Slate 600 (#475569)
+    // Subscriptions: Slate 400 (#94a3b8)
+    
     return {
       labels: trends.map((t) => t.label),
       datasets: [
         {
           label: 'Dominios',
           data: trends.map((t) => t.domains),
-          backgroundColor: 'rgba(100, 116, 139, 0.8)', // Neutral gray
-          borderColor: 'rgb(100, 116, 139)',
-          borderWidth: 1,
+          backgroundColor: '#475569', 
+          hoverBackgroundColor: '#334155',
+          borderRadius: 4,
+          borderSkipped: false,
+          barPercentage: 0.6,
+          categoryPercentage: 0.8
         },
         {
           label: 'Suscripciones',
           data: trends.map((t) => t.subscriptions),
-          backgroundColor: 'rgba(71, 85, 105, 0.8)', // Neutral gray-blue
-          borderColor: 'rgb(71, 85, 105)',
-          borderWidth: 1,
+          backgroundColor: '#94a3b8',
+          hoverBackgroundColor: '#64748b',
+          borderRadius: 4,
+          borderSkipped: false,
+          barPercentage: 0.6,
+          categoryPercentage: 0.8
         },
       ],
     };
@@ -68,33 +77,60 @@ export class ExpirationTrendsChartComponent {
     plugins: {
       legend: {
         position: 'top' as const,
+        align: 'end' as const, // Align legend to the right
         labels: {
           usePointStyle: true,
-          padding: 15,
+          pointStyle: 'rectRounded',
+          boxWidth: 10,
+          boxHeight: 10,
+          padding: 20,
+          color: '#64748b', // Slate 500
+          font: {
+              family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+              size: 12
+          }
         },
       },
       tooltip: {
         mode: 'index' as const,
         intersect: false,
+        backgroundColor: '#1e293b', // Dark tooltip
+        titleColor: '#f8fafc',
+        bodyColor: '#e2e8f0',
+        padding: 10,
+        cornerRadius: 8,
+        displayColors: true,
       },
     },
     scales: {
       y: {
         beginAtZero: true,
+        border: { display: false }, // Remove axis line
+        grid: {
+            color: '#f1f5f9', // Very light grid (Slate 100)
+            drawBorder: false,
+        },
         ticks: {
           stepSize: 1,
-        },
-        title: {
-          display: true,
-          text: 'Cantidad',
-        },
+          color: '#94a3b8', // Slate 400
+          font: { size: 11 }
+        }
       },
       x: {
-        title: {
-          display: true,
-          text: 'Período',
+        border: { display: false },
+        grid: {
+            display: false, // No vertical grid lines
         },
+        ticks: {
+            color: '#64748b', // Slate 500
+            font: { weight: 500 }
+        }
       },
     },
+    interaction: {
+        mode: 'nearest' as const,
+        axis: 'x' as const,
+        intersect: false
+    }
   };
 }

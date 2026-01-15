@@ -1,12 +1,15 @@
-<p-card>
-  <ng-template pTemplate="header">
-    <div class="chart-header">
-      <i class="pi pi-chart-bar"></i>
+<div class="glass-chart-card">
+  <div class="chart-header">
+    <div class="header-title">
+      <div class="icon-indicator">
+        <i class="pi pi-chart-line"></i>
+      </div>
       <h3>{{ title() }}</h3>
     </div>
-  </ng-template>
+    <!-- Future: Add periods selector here? -->
+  </div>
 
-  <div class="chart-container">
+  <div class="chart-content">
     <p-chart type="bar" [data]="chartData()" [options]="chartOptions" height="300px" />
   </div>
-</p-card>
+</div>
