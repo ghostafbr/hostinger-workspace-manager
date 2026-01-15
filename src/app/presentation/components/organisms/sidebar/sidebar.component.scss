@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '../../../../../styles/variables';
 
 // Premium Neutral Variables
@@ -111,7 +112,7 @@ $active-bg: rgba(31, 41, 55, 0.05);
         }
 
         &:hover {
-          background: lighten($primary-dark, 5%);
+          background: color.adjust($primary-dark, $lightness: 5%);
         }
       }
     }
