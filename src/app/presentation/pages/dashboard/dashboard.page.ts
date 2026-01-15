@@ -22,7 +22,9 @@ import { DashboardService } from '@app/application/services/dashboard.service';
 import { WorkspaceService } from '@app/application/services/workspace.service';
 import { AuthService } from '@app/application/services/auth.service';
 import { ExportService } from '@app/application';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService, MenuItem } from 'primeng/api';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { MenuModule } from 'primeng/menu';
 
 // Animations
 import { fadeIn, slideUp, listStagger } from '@app/infrastructure';
@@ -60,6 +62,8 @@ import { CriticalWorkspacesWidgetComponent, AdvancedSearchComponent } from '@app
     ConfirmDialogModule,
     ToolbarModule,
     ChipModule,
+    SplitButtonModule, // Added
+    MenuModule, // Added
     ExpirationCardComponent,
     WorkspacesAlertPanelComponent,
     ExpirationTrendsChartComponent,
@@ -73,6 +77,7 @@ import { CriticalWorkspacesWidgetComponent, AdvancedSearchComponent } from '@app
   styleUrl: './dashboard.page.scss',
 })
 export default class DashboardPage implements OnInit {
+  // ... existing injections ...
   private readonly dashboardService = inject(DashboardService);
   private readonly workspaceService = inject(WorkspaceService);
   private readonly authService = inject(AuthService);
@@ -80,6 +85,37 @@ export default class DashboardPage implements OnInit {
   private readonly router = inject(Router);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly messageService = inject(MessageService);
+
+  // Toolbar Menu Actions
+  readonly toolbarActions = computed<MenuItem[]>(() => [
+    {
+      label: 'Actualizar Datos',
+      icon: 'pi pi-refresh',
+      command: () => this.loadDashboard()
+    },
+    {
+      separator: true
+    },
+    {
+      label: 'Sincronizar Global',
+      icon: 'pi pi-sync',
+      command: () => this.syncAllWorkspaces()
+    },
+    {
+      label: 'Exportar CSV',
+      icon: 'pi pi-download',
+      command: () => this.exportToCSV()
+    },
+    {
+      separator: true
+    },
+    {
+      label: 'Salir',
+      icon: 'pi pi-sign-out',
+      styleClass: 'text-red-500', 
+      command: () => this.onLogout()
+    }
+  ]);
 
   readonly stats = this.dashboardService.stats;
   readonly isLoading = this.dashboardService.isLoading;

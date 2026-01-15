@@ -4,11 +4,7 @@
   <p-confirmDialog />
 
   <!-- Toolbar -->
-  <p-toolbar
-    class="dashboard-toolbar"
-    role="toolbar"
-    aria-label="Barra de herramientas del dashboard"
-  >
+  <p-toolbar class="dashboard-toolbar" role="toolbar" aria-label="Barra de herramientas del dashboard">
     <div class="p-toolbar-group-start">
       <div class="toolbar-left-content">
         <h1 class="dashboard-title" id="dashboard-heading">
@@ -16,74 +12,34 @@
           Dashboard
         </h1>
         @if (stats() && !isLoading()) {
-          <div class="welcome-inline">
-            <span class="welcome-user">¡Hola, {{ userDisplayName() }}!</span>
-            @if (hasIssues()) {
-              <span class="status-text warning-text">
-                <i class="pi pi-exclamation-circle"></i>
-                {{ stats()!.domainsExpiring7Days + stats()!.subscriptionsExpiring7Days }}
-                vencimientos próximos
-              </span>
-            } @else {
-              <span class="status-text success-text">
-                <i class="pi pi-check-circle"></i>
-                Todo bajo control
-              </span>
-            }
-          </div>
+        <div class="welcome-inline">
+          <span class="welcome-user">¡Hola, {{ userDisplayName() }}!</span>
+          @if (hasIssues()) {
+          <span class="status-text warning-text">
+            <i class="pi pi-exclamation-circle"></i>
+            {{ stats()!.domainsExpiring7Days + stats()!.subscriptionsExpiring7Days }}
+            vencimientos
+          </span>
+          } @else {
+          <span class="status-text success-text">
+            <i class="pi pi-check-circle"></i>
+            Todo en orden
+          </span>
+          }
+        </div>
         }
       </div>
     </div>
 
     <div class="p-toolbar-group-end">
-      <p-button
-        label="Actualizar"
-        icon="pi pi-refresh"
-        severity="secondary"
-        [outlined]="true"
-        size="small"
-        [loading]="isLoading()"
-        (onClick)="loadDashboard()"
-        pTooltip="Actualizar estadísticas"
-        tooltipPosition="bottom"
-      />
-      <p-button
-        label="Sincronizar Todos"
-        icon="pi pi-sync"
-        severity="secondary"
-        [outlined]="true"
-        size="small"
-        [loading]="isSyncingAll()"
-        (onClick)="syncAllWorkspaces()"
-        pTooltip="Sincronizar todos los workspaces activos"
-        tooltipPosition="bottom"
-        aria-label="Sincronizar todos los workspaces activos"
-      />
-      <p-button
-        label="Exportar CSV"
-        icon="pi pi-download"
-        severity="secondary"
-        [outlined]="true"
-        size="small"
-        (onClick)="exportToCSV()"
-        pTooltip="Exportar vencimientos a CSV"
-        tooltipPosition="bottom"
-      />
-      <p-button
-        label="Ver Workspaces"
-        icon="pi pi-briefcase"
-        severity="success"
-        size="small"
-        (onClick)="navigateToWorkspaces()"
-      />
-      <p-button
-        label="Salir"
-        icon="pi pi-sign-out"
-        severity="secondary"
-        [outlined]="true"
-        size="small"
-        (onClick)="onLogout()"
-      />
+      <!-- Primary Action -->
+      <p-button label="Ver Workspaces" icon="pi pi-briefcase" severity="success" size="small"
+        (onClick)="navigateToWorkspaces()" class="mr-2" />
+
+      <!-- Secondary Actions Menu -->
+      <p-splitButton label="Actualizar" icon="pi pi-refresh" [model]="toolbarActions()" severity="secondary"
+        [outlined]="true" size="small" (onClick)="loadDashboard()" pTooltip="Opciones adicionales"
+        tooltipPosition="bottom"></p-splitButton>
     </div>
   </p-toolbar>
 
@@ -91,201 +47,177 @@
   <div class="dashboard-content">
     <!-- Loading State -->
     @if (isLoading()) {
-      <div class="stats-grid">
-        <p-card>
-          <ng-template pTemplate="header">
-            <p-skeleton width="60%" height="2rem" />
-          </ng-template>
-          <p-skeleton height="10rem" />
-        </p-card>
-        <p-card>
-          <ng-template pTemplate="header">
-            <p-skeleton width="60%" height="2rem" />
-          </ng-template>
-          <p-skeleton height="10rem" />
-        </p-card>
-      </div>
+    <div class="stats-grid">
+      <p-card>
+        <ng-template pTemplate="header">
+          <p-skeleton width="60%" height="2rem" />
+        </ng-template>
+        <p-skeleton height="10rem" />
+      </p-card>
+      <p-card>
+        <ng-template pTemplate="header">
+          <p-skeleton width="60%" height="2rem" />
+        </ng-template>
+        <p-skeleton height="10rem" />
+      </p-card>
+    </div>
     }
 
     <!-- Error State -->
     @if (error() && !isLoading()) {
-      <p-card>
-        <div class="error-state">
-          <i class="pi pi-exclamation-triangle" style="font-size: 3rem; color: var(--red-500)"></i>
-          <h2>Error al cargar el dashboard</h2>
-          <p>{{ error() }}</p>
-          <p-button label="Reintentar" icon="pi pi-refresh" (onClick)="loadDashboard()" />
-        </div>
-      </p-card>
+    <p-card>
+      <div class="error-state">
+        <i class="pi pi-exclamation-triangle" style="font-size: 3rem; color: var(--red-500)"></i>
+        <h2>Error al cargar el dashboard</h2>
+        <p>{{ error() }}</p>
+        <p-button label="Reintentar" icon="pi pi-refresh" (onClick)="loadDashboard()" />
+      </div>
+    </p-card>
     }
 
     <!-- Data Loaded -->
     @if (stats() && !isLoading()) {
-      <!-- Compact Stats Grid - 3 cards per row -->
-      <div class="compact-stats-grid collapsible-section">
-        <div class="section-header" (click)="toggleStats()">
-          <h3>
-            <i class="pi pi-chart-bar"></i>
-            Estadísticas Rápidas
-          </h3>
-          <i [class]="isStatsCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
-        </div>
-        @if (!isStatsCollapsed()) {
-          <div class="section-content stats-grid-content">
-            <!-- Domains Expiration Card -->
-            <app-expiration-card
-              title="Dominios"
-              icon="pi pi-globe"
-              [count7Days]="stats()!.domainsExpiring7Days"
-              [count15Days]="stats()!.domainsExpiring15Days"
-              [count30Days]="stats()!.domainsExpiring30Days"
-              [count60Days]="stats()!.domainsExpiring60Days"
-              [totalCount]="stats()!.totalDomains"
-            />
-
-            <!-- Subscriptions Expiration Card -->
-            <app-expiration-card
-              title="Suscripciones"
-              icon="pi pi-ticket"
-              [count7Days]="stats()!.subscriptionsExpiring7Days"
-              [count15Days]="stats()!.subscriptionsExpiring15Days"
-              [count30Days]="stats()!.subscriptionsExpiring30Days"
-              [count60Days]="stats()!.subscriptionsExpiring60Days"
-              [totalCount]="stats()!.totalSubscriptions"
-            />
-
-            <!-- Quick Summary Card -->
-            <p-card class="summary-card">
-              <ng-template pTemplate="header">
-                <div class="card-header-compact">
-                  <i class="pi pi-briefcase"></i>
-                  <h3>Resumen</h3>
-                </div>
-              </ng-template>
-              <div class="summary-compact">
-                <div class="stat-row">
-                  <span class="stat-label">Workspaces:</span>
-                  <span class="stat-value">{{ stats()!.totalWorkspaces }}</span>
-                </div>
-                <div class="stat-row">
-                  <span class="stat-label">Activos:</span>
-                  <span class="stat-value success">{{
-                    stats()!.totalWorkspaces - stats()!.workspacesInError.length
-                  }}</span>
-                </div>
-                <div class="stat-row">
-                  <span class="stat-label">Total Dominios:</span>
-                  <span class="stat-value">{{ stats()!.totalDomains }}</span>
-                </div>
-                <div class="stat-row">
-                  <span class="stat-label">Total Suscripciones:</span>
-                  <span class="stat-value">{{ stats()!.totalSubscriptions }}</span>
-                </div>
-              </div>
-            </p-card>
-          </div>
-        }
+    <!-- Compact Stats Grid - 3 cards per row -->
+    <div class="compact-stats-grid collapsible-section">
+      <div class="section-header" (click)="toggleStats()">
+        <h3>
+          <i class="pi pi-chart-bar"></i>
+          Estadísticas Rápidas
+        </h3>
+        <i [class]="isStatsCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
       </div>
+      @if (!isStatsCollapsed()) {
+      <div class="section-content stats-grid-content">
+        <!-- Domains Expiration Card -->
+        <app-expiration-card title="Dominios" icon="pi pi-globe" [count7Days]="stats()!.domainsExpiring7Days"
+          [count15Days]="stats()!.domainsExpiring15Days" [count30Days]="stats()!.domainsExpiring30Days"
+          [count60Days]="stats()!.domainsExpiring60Days" [totalCount]="stats()!.totalDomains" />
 
-      <!-- Workspaces Alert Panel -->
-      @if (stats()!.workspacesInError.length > 0) {
-        <div class="alert-section collapsible-section">
-          <div class="section-header" (click)="toggleAlerts()">
-            <h3>
-              <i class="pi pi-exclamation-triangle"></i>
-              Workspaces con Errores ({{ stats()!.workspacesInError.length }})
-            </h3>
-            <i [class]="isAlertsCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
-          </div>
-          @if (!isAlertsCollapsed()) {
-            <div class="section-content">
-              <app-workspaces-alert-panel [workspaces]="stats()!.workspacesInError" />
+        <!-- Subscriptions Expiration Card -->
+        <app-expiration-card title="Suscripciones" icon="pi pi-ticket"
+          [count7Days]="stats()!.subscriptionsExpiring7Days" [count15Days]="stats()!.subscriptionsExpiring15Days"
+          [count30Days]="stats()!.subscriptionsExpiring30Days" [count60Days]="stats()!.subscriptionsExpiring60Days"
+          [totalCount]="stats()!.totalSubscriptions" />
+
+        <!-- Quick Summary Card -->
+        <p-card class="summary-card">
+          <ng-template pTemplate="header">
+            <div class="card-header-compact">
+              <i class="pi pi-briefcase"></i>
+              <h3>Resumen</h3>
             </div>
-          }
-        </div>
+          </ng-template>
+          <div class="summary-compact">
+            <div class="stat-row">
+              <span class="stat-label">Workspaces:</span>
+              <span class="stat-value">{{ stats()!.totalWorkspaces }}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Activos:</span>
+              <span class="stat-value success">{{
+                stats()!.totalWorkspaces - stats()!.workspacesInError.length
+                }}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Total Dominios:</span>
+              <span class="stat-value">{{ stats()!.totalDomains }}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Total Suscripciones:</span>
+              <span class="stat-value">{{ stats()!.totalSubscriptions }}</span>
+            </div>
+          </div>
+        </p-card>
+      </div>
       }
+    </div>
 
-      <!-- Critical Workspaces Widget -->
-      <div class="critical-section collapsible-section">
-        <div class="section-header" (click)="toggleCritical()">
-          <h3>
-            <i class="pi pi-exclamation-circle"></i>
-            Workspaces Más Críticos
-          </h3>
-          <i [class]="isCriticalCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
-        </div>
-        @if (!isCriticalCollapsed()) {
-          <div class="section-content">
-            <app-critical-workspaces-widget
-              [workspaces]="allWorkspaces()"
-              [maxItems]="5"
-              (workspaceClicked)="navigateToWorkspace($event)"
-            />
-          </div>
-        }
+    <!-- Workspaces Alert Panel -->
+    @if (stats()!.workspacesInError.length > 0) {
+    <div class="alert-section collapsible-section">
+      <div class="section-header" (click)="toggleAlerts()">
+        <h3>
+          <i class="pi pi-exclamation-triangle"></i>
+          Workspaces con Errores ({{ stats()!.workspacesInError.length }})
+        </h3>
+        <i [class]="isAlertsCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
       </div>
+      @if (!isAlertsCollapsed()) {
+      <div class="section-content">
+        <app-workspaces-alert-panel [workspaces]="stats()!.workspacesInError" />
+      </div>
+      }
+    </div>
+    }
 
-      <!-- Advanced Search -->
-      <div class="search-section collapsible-section">
-        <div class="section-header" (click)="toggleSearch()">
-          <h3>
-            <i class="pi pi-filter"></i>
-            Búsqueda Avanzada
-          </h3>
-          <i [class]="isSearchCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
-        </div>
-        @if (!isSearchCollapsed()) {
-          <div class="section-content">
-            <app-advanced-search
-              (searchApplied)="onSearchApplied($event)"
-              (searchCleared)="onSearchCleared()"
-            />
-          </div>
-        }
+    <!-- Critical Workspaces Widget -->
+    <div class="critical-section collapsible-section">
+      <div class="section-header" (click)="toggleCritical()">
+        <h3>
+          <i class="pi pi-exclamation-circle"></i>
+          Workspaces Más Críticos
+        </h3>
+        <i [class]="isCriticalCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
       </div>
+      @if (!isCriticalCollapsed()) {
+      <div class="section-content">
+        <app-critical-workspaces-widget [workspaces]="allWorkspaces()" [maxItems]="5"
+          (workspaceClicked)="navigateToWorkspace($event)" />
+      </div>
+      }
+    </div>
 
-      <!-- Expiration Trends Chart (Full Width) -->
-      <div class="chart-section-full collapsible-section">
-        <div class="section-header" (click)="toggleCharts()">
-          <h3>
-            <i class="pi pi-chart-line"></i>
-            Tendencias de Vencimientos
-          </h3>
-          <i [class]="isChartsCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
-        </div>
-        @if (!isChartsCollapsed()) {
-          <div class="section-content">
-            <app-expiration-trends-chart
-              [data]="expirationTrends()"
-              title="Tendencias de Vencimientos"
-            />
-          </div>
-        }
+    <!-- Advanced Search -->
+    <div class="search-section collapsible-section">
+      <div class="section-header" (click)="toggleSearch()">
+        <h3>
+          <i class="pi pi-filter"></i>
+          Búsqueda Avanzada
+        </h3>
+        <i [class]="isSearchCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
       </div>
+      @if (!isSearchCollapsed()) {
+      <div class="section-content">
+        <app-advanced-search (searchApplied)="onSearchApplied($event)" (searchCleared)="onSearchCleared()" />
+      </div>
+      }
+    </div>
 
-      <!-- Timeline of Upcoming Events -->
-      <div class="timeline-section collapsible-section">
-        <div class="section-header" (click)="toggleTimeline()">
-          <h3>
-            <i class="pi pi-calendar"></i>
-            Próximos Vencimientos
-          </h3>
-          <i [class]="isTimelineCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
-        </div>
-        @if (isLoadingEvents()) {
-          <p-card>
-            <p-skeleton height="300px" />
-          </p-card>
-        } @else if (!isTimelineCollapsed()) {
-          <div class="section-content">
-            <app-upcoming-events-timeline
-              [events]="upcomingEvents()"
-              title="Próximos Vencimientos"
-              [maxEvents]="10"
-            />
-          </div>
-        }
+    <!-- Expiration Trends Chart (Full Width) -->
+    <div class="chart-section-full collapsible-section">
+      <div class="section-header" (click)="toggleCharts()">
+        <h3>
+          <i class="pi pi-chart-line"></i>
+          Tendencias de Vencimientos
+        </h3>
+        <i [class]="isChartsCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
       </div>
+      @if (!isChartsCollapsed()) {
+      <div class="section-content">
+        <app-expiration-trends-chart [data]="expirationTrends()" title="Tendencias de Vencimientos" />
+      </div>
+      }
+    </div>
+
+    <!-- Timeline of Upcoming Events -->
+    <div class="timeline-section collapsible-section">
+      <div class="section-header" (click)="toggleTimeline()">
+        <h3>
+          <i class="pi pi-calendar"></i>
+          Próximos Vencimientos
+        </h3>
+        <i [class]="isTimelineCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
+      </div>
+      @if (isLoadingEvents()) {
+      <p-card>
+        <p-skeleton height="300px" />
+      </p-card>
+      } @else if (!isTimelineCollapsed()) {
+      <div class="section-content">
+        <app-upcoming-events-timeline [events]="upcomingEvents()" title="Próximos Vencimientos" [maxEvents]="10" />
+      </div>
+      }
+    </div>
     }
   </div>
 </div>
