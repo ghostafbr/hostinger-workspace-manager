@@ -7,58 +7,64 @@
       <h3>{{ title() }}</h3>
     </div>
     @if (sortedEvents().length > 0) {
-    <span class="count-badge">
-      {{ sortedEvents().length }} evento{{ sortedEvents().length !== 1 ? 's' : '' }}
-    </span>
+      <span class="count-badge">
+        {{ sortedEvents().length }} evento{{ sortedEvents().length !== 1 ? 's' : '' }}
+      </span>
     }
   </div>
 
   @if (sortedEvents().length === 0) {
-  <div class="empty-state">
-    <div class="empty-icon">
-      <i class="pi pi-check-circle"></i>
+    <div class="empty-state">
+      <div class="empty-icon">
+        <i class="pi pi-check-circle"></i>
+      </div>
+      <p>No hay vencimientos próximos</p>
     </div>
-    <p>No hay vencimientos próximos</p>
-  </div>
   } @else {
-  <div class="timeline-container">
-    <p-timeline [value]="sortedEvents()" align="left" class="custom-timeline">
-      <ng-template pTemplate="marker" let-event>
-        <div class="timeline-marker" [class.marker-domain]="event.type === 'domain'"
-          [class.marker-subscription]="event.type === 'subscription'">
-          <i [class]="getIcon(event.type)"></i>
-        </div>
-      </ng-template>
-
-      <ng-template pTemplate="content" let-event>
-        <div class="event-card">
-          <div class="event-header">
-            <span class="event-title">{{ event.title }}</span>
-            <span class="days-badge" [ngClass]="'status-' + event.status">
-              {{ event.daysUntilExpiration }} días
-            </span>
+    <div class="timeline-container">
+      <p-timeline [value]="sortedEvents()" align="left" class="custom-timeline">
+        <ng-template pTemplate="marker" let-event>
+          <div
+            class="timeline-marker"
+            [class.marker-domain]="event.type === 'domain'"
+            [class.marker-subscription]="event.type === 'subscription'"
+          >
+            <i [class]="getIcon(event.type)"></i>
           </div>
+        </ng-template>
 
-          <div class="event-details">
-            <div class="detail-item">
-              <i class="pi pi-briefcase"></i>
-              <span>{{ event.workspaceName }}</span>
+        <ng-template pTemplate="content" let-event>
+          <div class="event-card">
+            <div class="event-header">
+              <span class="event-title">{{ event.title }}</span>
+              <span class="days-badge" [ngClass]="'status-' + event.status">
+                {{ event.daysUntilExpiration }} días
+              </span>
             </div>
-            <div class="detail-item">
-              <i class="pi pi-clock"></i>
-              <span>{{ event.expirationDate | date: 'dd/MM/yyyy' }}</span>
+
+            <div class="event-details">
+              <div class="detail-item">
+                <i class="pi pi-briefcase"></i>
+                <span>{{ event.workspaceName }}</span>
+              </div>
+              <div class="detail-item">
+                <i class="pi pi-clock"></i>
+                <span>{{ event.expirationDate | date: 'dd/MM/yyyy' }}</span>
+              </div>
+            </div>
+
+            <div class="event-tags">
+              <span
+                class="mini-tag"
+                [class.tag-domain]="event.type === 'domain'"
+                [class.tag-sub]="event.type === 'subscription'"
+              >
+                {{ event.type === 'domain' ? 'Dominio' : 'Suscripción' }}
+              </span>
             </div>
           </div>
-
-          <div class="event-tags">
-            <span class="mini-tag" [class.tag-domain]="event.type === 'domain'"
-              [class.tag-sub]="event.type === 'subscription'">
-              {{ event.type === 'domain' ? 'Dominio' : 'Suscripción' }}
-            </span>
-          </div>
-        </div>
-      </ng-template>
-    </p-timeline>
-  </div>
+        </ng-template>
+      </p-timeline>
+    </div>
   }
 </div>

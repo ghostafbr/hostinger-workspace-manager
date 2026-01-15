@@ -40,19 +40,19 @@ export class ExpirationTrendsChartComponent {
     // Brand colors matching the Slate theme
     // Domains: Slate 600 (#475569)
     // Subscriptions: Slate 400 (#94a3b8)
-    
+
     return {
       labels: trends.map((t) => t.label),
       datasets: [
         {
           label: 'Dominios',
           data: trends.map((t) => t.domains),
-          backgroundColor: '#475569', 
+          backgroundColor: '#475569',
           hoverBackgroundColor: '#334155',
           borderRadius: 4,
           borderSkipped: false,
           barPercentage: 0.6,
-          categoryPercentage: 0.8
+          categoryPercentage: 0.8,
         },
         {
           label: 'Suscripciones',
@@ -62,7 +62,7 @@ export class ExpirationTrendsChartComponent {
           borderRadius: 4,
           borderSkipped: false,
           barPercentage: 0.6,
-          categoryPercentage: 0.8
+          categoryPercentage: 0.8,
         },
       ],
     };
@@ -86,9 +86,9 @@ export class ExpirationTrendsChartComponent {
           padding: 20,
           color: '#64748b', // Slate 500
           font: {
-              family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-              size: 12
-          }
+            family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            size: 12,
+          },
         },
       },
       tooltip: {
@@ -107,30 +107,30 @@ export class ExpirationTrendsChartComponent {
         beginAtZero: true,
         border: { display: false }, // Remove axis line
         grid: {
-            color: '#f1f5f9', // Very light grid (Slate 100)
-            drawBorder: false,
+          color: '#f1f5f9', // Very light grid (Slate 100)
+          drawBorder: false,
         },
         ticks: {
           stepSize: 1,
           color: '#94a3b8', // Slate 400
-          font: { size: 11 }
-        }
+          font: { size: 11 },
+        },
       },
       x: {
         border: { display: false },
         grid: {
-            display: false, // No vertical grid lines
+          display: false, // No vertical grid lines
         },
         ticks: {
-            color: '#64748b', // Slate 500
-            font: { weight: 500 }
-        }
+          color: '#64748b', // Slate 500
+          font: { weight: 500 },
+        },
       },
     },
     interaction: {
-        mode: 'nearest' as const,
-        axis: 'x' as const,
-        intersect: false
-    }
+      mode: 'nearest' as const,
+      axis: 'x' as const,
+      intersect: false,
+    },
   };
 }
