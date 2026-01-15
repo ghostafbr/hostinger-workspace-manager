@@ -10,7 +10,9 @@ $text-secondary: #64748b; // Slate 500
 $primary-color: var(--primary-color);
 $radius: 12px;
 $shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-md:
+  0 4px 6px -1px rgba(0, 0, 0, 0.1),
+  0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
 .advanced-search-card {
   background: $card-bg;
@@ -132,7 +134,6 @@ $shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06
 
 // Overriding PrimeNG for that "Clean White" look
 ::ng-deep {
-
   .p-inputtext,
   .p-multiselect,
   .p-select,
@@ -276,7 +277,6 @@ $shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06
   display: flex;
   justify-content: flex-end;
 }
-
 
 // Modal (Simple & Clean)
 .modal-backdrop {

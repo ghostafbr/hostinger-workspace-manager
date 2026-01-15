@@ -91,30 +91,30 @@ export default class DashboardPage implements OnInit {
     {
       label: 'Actualizar Datos',
       icon: 'pi pi-refresh',
-      command: () => this.loadDashboard()
+      command: () => this.loadDashboard(),
     },
     {
-      separator: true
+      separator: true,
     },
     {
       label: 'Sincronizar Global',
       icon: 'pi pi-sync',
-      command: () => this.syncAllWorkspaces()
+      command: () => this.syncAllWorkspaces(),
     },
     {
       label: 'Exportar CSV',
       icon: 'pi pi-download',
-      command: () => this.exportToCSV()
+      command: () => this.exportToCSV(),
     },
     {
-      separator: true
+      separator: true,
     },
     {
       label: 'Salir',
       icon: 'pi pi-sign-out',
-      styleClass: 'text-red-500', 
-      command: () => this.onLogout()
-    }
+      styleClass: 'text-red-500',
+      command: () => this.onLogout(),
+    },
   ]);
 
   readonly stats = this.dashboardService.stats;
@@ -307,7 +307,7 @@ export default class DashboardPage implements OnInit {
    */
   navigateToWorkspace(workspace: { id: string }): void {
     if (!workspace || !workspace.id) {
-        return;
+      return;
     }
     // Correct route is /w/:id/dashboard
     this.router.navigate(['/w', workspace.id, 'dashboard']);

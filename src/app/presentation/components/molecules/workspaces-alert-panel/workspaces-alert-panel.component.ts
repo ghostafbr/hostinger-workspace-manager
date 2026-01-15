@@ -19,7 +19,7 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
     <div class="glass-card alert-panel-container">
       <div class="card-header-compact">
         <div class="header-icon-wrapper">
-           <i class="pi pi-exclamation-triangle"></i>
+          <i class="pi pi-exclamation-triangle"></i>
         </div>
         <h3>Workspaces Críticos</h3>
       </div>
@@ -27,7 +27,7 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
       @if (workspaces().length === 0) {
         <div class="no-issues">
           <div class="success-icon-wrapper">
-             <i class="pi pi-verified"></i>
+            <i class="pi pi-verified"></i>
           </div>
           <p>Todo en orden</p>
           <span class="sub-text">Todos los workspaces están activos</span>
@@ -38,8 +38,12 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
             <div class="workspace-item">
               <div class="workspace-info">
                 <div class="name-row">
-                    <span class="workspace-name">{{ workspace.name }}</span>
-                    <p-tag [value]="getStatusLabel(workspace.status)" [severity]="getStatusSeverity(workspace.status)" class="compact-tag"/>
+                  <span class="workspace-name">{{ workspace.name }}</span>
+                  <p-tag
+                    [value]="getStatusLabel(workspace.status)"
+                    [severity]="getStatusSeverity(workspace.status)"
+                    class="compact-tag"
+                  />
                 </div>
                 <div class="workspace-description">
                   {{ workspace.description || 'Sin descripción' }}
@@ -76,7 +80,7 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
         padding-bottom: 1rem;
         border-bottom: 1px solid rgba(229, 231, 235, 0.6);
       }
-      
+
       .header-icon-wrapper {
         width: 2.5rem;
         height: 2.5rem;
@@ -85,10 +89,10 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
         display: flex;
         align-items: center;
         justify-content: center;
-        
+
         i {
-             color: var(--red-500);
-             font-size: 1.25rem;
+          color: var(--red-500);
+          font-size: 1.25rem;
         }
       }
 
@@ -107,33 +111,33 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
         justify-content: center;
         padding: 2rem;
         text-align: center;
-        
+
         .success-icon-wrapper {
-             width: 4rem;
-             height: 4rem;
-             background: rgba(16, 185, 129, 0.1);
-             border-radius: 50%;
-             display: flex;
-             align-items: center;
-             justify-content: center;
-             margin-bottom: 1rem;
-             
-             i {
-                 font-size: 2rem;
-                 color: var(--green-600);
-             }
+          width: 4rem;
+          height: 4rem;
+          background: rgba(16, 185, 129, 0.1);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 1rem;
+
+          i {
+            font-size: 2rem;
+            color: var(--green-600);
+          }
         }
-        
+
         p {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-color);
+          margin: 0 0 0.5rem 0;
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: var(--text-color);
         }
-        
+
         .sub-text {
-            color: var(--text-color-secondary);
-            font-size: 0.9rem;
+          color: var(--text-color-secondary);
+          font-size: 0.9rem;
         }
       }
 
@@ -152,12 +156,12 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
         border: 1px solid transparent;
         border-radius: 12px;
         transition: all 0.2s ease;
-        
+
         &:hover {
-             background: white;
-             border-color: rgba(229, 231, 235, 0.8);
-             box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-             transform: translateX(4px);
+          background: white;
+          border-color: rgba(229, 231, 235, 0.8);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+          transform: translateX(4px);
         }
       }
 
@@ -165,12 +169,12 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
         flex: 1;
         min-width: 0; // Truncate text
       }
-      
+
       .name-row {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          margin-bottom: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.25rem;
       }
 
       .workspace-name {
@@ -189,22 +193,22 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      
+
       :host ::ng-deep .compact-tag .p-tag {
-          padding: 0.1rem 0.5rem;
-          font-size: 0.75rem;
-          line-height: 1.2;
+        padding: 0.1rem 0.5rem;
+        font-size: 0.75rem;
+        line-height: 1.2;
       }
-      
+
       :host ::ng-deep .action-btn.p-button {
-          color: var(--text-color-secondary);
-          width: 2rem;
-          height: 2rem;
-          
-          &:hover {
-              background: rgba(0,0,0,0.05);
-              color: var(--primary-color);
-          }
+        color: var(--text-color-secondary);
+        width: 2rem;
+        height: 2rem;
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.05);
+          color: var(--primary-color);
+        }
       }
     `,
   ],
