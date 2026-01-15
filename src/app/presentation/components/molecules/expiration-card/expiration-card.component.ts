@@ -14,13 +14,13 @@ import { ChipModule } from 'primeng/chip';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CardModule, ChipModule],
   template: `
-    <p-card class="expiration-card">
-      <ng-template pTemplate="header">
-        <div class="card-header-custom">
-          <i [class]="icon()" class="card-icon"></i>
-          <h3>{{ title() }}</h3>
+    <div class="expiration-container">
+      <div class="card-header-custom">
+        <div class="header-icon-wrapper">
+           <i [class]="icon()" class="card-icon"></i>
         </div>
-      </ng-template>
+        <h3>{{ title() }}</h3>
+      </div>
 
       <div class="expiration-content">
         <div class="expiration-row" [class.has-items]="count7Days() > 0">
@@ -53,36 +53,50 @@ import { ChipModule } from 'primeng/chip';
         </div>
       </div>
 
-      <ng-template pTemplate="footer">
+      <div class="card-footer">
+        <div class="separator"></div>
         <div class="total-count">
           <i class="pi pi-list"></i>
           Total: <strong>{{ totalCount() }}</strong>
         </div>
-      </ng-template>
-    </p-card>
+      </div>
+    </div>
   `,
   styles: [
     `
-      .expiration-card {
+      .expiration-container {
+        display: flex;
+        flex-direction: column;
         height: 100%;
       }
 
       .card-header-custom {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        padding: 1.25rem;
-        background: var(--surface-100);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(229, 231, 235, 0.6);
+      }
+      
+      .header-icon-wrapper {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 12px;
+        background: rgba(var(--primary-500-rgb), 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .card-icon {
-        font-size: 2rem;
+        font-size: 1.25rem;
         color: var(--primary-color);
       }
 
       .card-header-custom h3 {
         margin: 0;
-        font-size: 1.25rem;
+        font-size: 1.1rem;
         font-weight: 600;
         color: var(--text-color);
       }
@@ -90,41 +104,51 @@ import { ChipModule } from 'primeng/chip';
       .expiration-content {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
-        padding: 0.5rem 0;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        flex: 1;
       }
 
       .expiration-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.75rem 0;
-        border-bottom: 1px solid var(--surface-200);
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
         transition: background-color 0.2s ease;
+        
+        &:hover {
+             background-color: var(--surface-50);
+        }
       }
 
       .expiration-row.has-items {
-        background-color: var(--surface-50);
-        padding: 0.75rem 1rem;
-        margin: 0 -1rem;
-        border-radius: 6px;
-      }
-
-      .expiration-row:last-child {
-        border-bottom: none;
+        background-color: rgba(var(--primary-500-rgb), 0.05);
       }
 
       .period-label {
         font-weight: 500;
+        font-size: 0.95rem;
         color: var(--text-color-secondary);
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.75rem;
+        
+        i {
+            font-size: 0.9rem;
+            color: var(--text-color-secondary);
+            opacity: 0.7;
+        }
       }
 
-      .period-label i {
-        font-size: 0.9rem;
-        color: var(--primary-color);
+      .card-footer {
+         margin-top: auto;
+      }
+      
+      .separator {
+        height: 1px;
+        background: rgba(229, 231, 235, 0.6);
+        margin-bottom: 1rem;
       }
 
       .total-count {
@@ -132,14 +156,18 @@ import { ChipModule } from 'primeng/chip';
         align-items: center;
         gap: 0.5rem;
         justify-content: flex-end;
-        font-size: 1.1rem;
+        font-size: 1rem;
         color: var(--text-color-secondary);
-        padding-top: 0.5rem;
-        border-top: 2px solid var(--surface-300);
       }
 
       .total-count i {
         color: var(--primary-color);
+        font-size: 1rem;
+      }
+      
+      .total-count strong {
+         color: var(--text-color);
+         font-size: 1.1rem;
       }
 
       :host ::ng-deep {

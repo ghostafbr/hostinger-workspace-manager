@@ -78,58 +78,54 @@
     <!-- Data Loaded -->
     @if (stats() && !isLoading()) {
     <!-- Compact Stats Grid - 3 cards per row -->
-    <div class="compact-stats-grid collapsible-section">
-      <div class="section-header" (click)="toggleStats()">
-        <h3>
-          <i class="pi pi-chart-bar"></i>
-          Estadísticas Rápidas
-        </h3>
-        <i [class]="isStatsCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
+    <div class="stats-section-container">
+      <div class="section-title-row">
+        <h3><i class="pi pi-chart-bar"></i> Estadísticas Rápidas</h3>
       </div>
-      @if (!isStatsCollapsed()) {
-      <div class="section-content stats-grid-content">
+
+      <div class="compact-stats-grid">
         <!-- Domains Expiration Card -->
         <app-expiration-card title="Dominios" icon="pi pi-globe" [count7Days]="stats()!.domainsExpiring7Days"
           [count15Days]="stats()!.domainsExpiring15Days" [count30Days]="stats()!.domainsExpiring30Days"
-          [count60Days]="stats()!.domainsExpiring60Days" [totalCount]="stats()!.totalDomains" />
+          [count60Days]="stats()!.domainsExpiring60Days" [totalCount]="stats()!.totalDomains"
+          class="glass-card full-height" />
 
         <!-- Subscriptions Expiration Card -->
         <app-expiration-card title="Suscripciones" icon="pi pi-ticket"
           [count7Days]="stats()!.subscriptionsExpiring7Days" [count15Days]="stats()!.subscriptionsExpiring15Days"
           [count30Days]="stats()!.subscriptionsExpiring30Days" [count60Days]="stats()!.subscriptionsExpiring60Days"
-          [totalCount]="stats()!.totalSubscriptions" />
+          [totalCount]="stats()!.totalSubscriptions" class="glass-card full-height" />
 
         <!-- Quick Summary Card -->
-        <p-card class="summary-card">
-          <ng-template pTemplate="header">
-            <div class="card-header-compact">
+        <div class="glass-card summary-card-container">
+          <div class="card-header-compact">
+            <div class="header-icon-wrapper">
               <i class="pi pi-briefcase"></i>
-              <h3>Resumen</h3>
             </div>
-          </ng-template>
-          <div class="summary-compact">
-            <div class="stat-row">
-              <span class="stat-label">Workspaces:</span>
-              <span class="stat-value">{{ stats()!.totalWorkspaces }}</span>
+            <h3>Resumen</h3>
+          </div>
+
+          <div class="summary-content">
+            <div class="summary-item">
+              <span class="label">Workspaces</span>
+              <span class="value">{{ stats()!.totalWorkspaces }}</span>
             </div>
-            <div class="stat-row">
-              <span class="stat-label">Activos:</span>
-              <span class="stat-value success">{{
-                stats()!.totalWorkspaces - stats()!.workspacesInError.length
-                }}</span>
+            <div class="summary-item">
+              <span class="label">Activos</span>
+              <span class="value success">{{ stats()!.totalWorkspaces - stats()!.workspacesInError.length }}</span>
             </div>
-            <div class="stat-row">
-              <span class="stat-label">Total Dominios:</span>
-              <span class="stat-value">{{ stats()!.totalDomains }}</span>
+            <div class="separator"></div>
+            <div class="summary-item small">
+              <span class="label">Dominios</span>
+              <span class="value">{{ stats()!.totalDomains }}</span>
             </div>
-            <div class="stat-row">
-              <span class="stat-label">Total Suscripciones:</span>
-              <span class="stat-value">{{ stats()!.totalSubscriptions }}</span>
+            <div class="summary-item small">
+              <span class="label">Suscripciones</span>
+              <span class="value">{{ stats()!.totalSubscriptions }}</span>
             </div>
           </div>
-        </p-card>
+        </div>
       </div>
-      }
     </div>
 
     <!-- Workspaces Alert Panel -->
