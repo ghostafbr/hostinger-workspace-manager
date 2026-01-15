@@ -1,10 +1,24 @@
 @use '../../../../../styles/variables';
 
+// Premium Neutral Variables
+$primary-dark: #1f2937;
+$primary-main: #374151;
+$text-main: #111827;
+$text-secondary: #6b7280;
+$surface-glass: rgba(255, 255, 255, 0.75);
+$border-light: rgba(229, 231, 235, 0.6);
+
+// Status Colors (Refined)
+$success-soft-bg: rgba(16, 185, 129, 0.1); // Emerald 500 with opacity
+$success-soft-text: #059669; // Emerald 600
+
 .header {
   height: 80px;
-  background: var(--surface-card);
-  border-bottom: 2px solid var(--surface-border);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  background: $surface-glass;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid $border-light;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -12,18 +26,28 @@
   position: sticky;
   top: 0;
   z-index: 100;
+  transition: all 0.3s ease;
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
   flex: 1;
-  min-width: 0; // Allow flex items to shrink below content size
+  min-width: 0;
 
   .toggle-sidebar-btn {
     display: none;
-    flex-shrink: 0; // Don't shrink the menu button
+    flex-shrink: 0;
+    color: $text-secondary;
+    width: 2.5rem;
+    height: 2.5rem;
+    transition: all 0.2s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.04);
+      color: $text-main;
+    }
 
     @include variables.media-max-md {
       display: flex;
@@ -34,66 +58,110 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    flex: 1;
-    min-width: 0; // Allow shrinking
+    flex: 0 1 320px;
+    min-width: 0;
 
     ::ng-deep .workspace-dropdown {
-      min-width: 250px;
+      width: 100%;
+      min-width: 200px;
+
+      .p-select {
+        background: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(209, 213, 219, 0.8);
+        border-radius: 12px;
+        padding: 2px;
+        transition: all 0.2s;
+
+        &:not(.p-disabled):hover {
+          border-color: $text-secondary;
+          background: rgba(255, 255, 255, 0.8);
+        }
+
+        &.p-focus {
+          box-shadow: 0 0 0 2px rgba(31, 41, 55, 0.1);
+          border-color: $primary-main;
+        }
+
+        .p-select-label {
+          padding: 0.5rem 0.75rem;
+          font-size: 0.9rem;
+          color: $text-main;
+        }
+
+        .p-select-dropdown {
+          width: 2.5rem;
+          color: $text-secondary;
+        }
+      }
+
+      .p-select-overlay {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(12px);
+        border: 1px solid $border-light;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        padding: 0.5rem;
+      }
+
+      .p-select-list-container {
+        padding: 0;
+      }
+
+      .p-select-option {
+        border-radius: 8px;
+        margin: 0.125rem 0;
+        padding: 0.625rem 1rem;
+        transition: background 0.15s;
+
+        &.p-select-option-selected {
+          background: rgba(31, 41, 55, 0.05);
+          color: $primary-dark;
+          font-weight: 600;
+        }
+
+        &:not(.p-select-option-selected):not(.p-disabled):hover {
+          background: rgba(0, 0, 0, 0.03);
+        }
+      }
     }
 
     @include variables.media-max-sm {
       flex: 1;
-      max-width: 60%; // Limit to 60% on small phones to leave space for avatar
-
-      ::ng-deep .workspace-dropdown {
-        width: 100% !important;
-        min-width: auto !important;
-        max-width: 100%;
-      }
-
-      ::ng-deep .p-select {
-        max-width: 100%;
-      }
-
-      ::ng-deep .p-select-label {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-    }
-
-    @include variables.media-max-md {
-      flex: 1;
-      max-width: 70%; // Limit to 70% on tablets to leave space for buttons and avatar
-
-      ::ng-deep .workspace-dropdown {
-        width: 100%;
-        min-width: auto !important;
-      }
-    }
-
-    @include variables.media-xxxl {
-      gap: 1rem;
+      max-width: 100%;
     }
   }
 
   .quick-actions {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    flex-shrink: 0; // Don't shrink action buttons
+    gap: 0.75rem;
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+
+    ::ng-deep .p-button {
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 0.85rem;
+
+      &.p-button-outlined {
+        color: $text-secondary;
+        border-color: rgba(209, 213, 219, 0.8);
+        background: rgba(255, 255, 255, 0.3);
+
+        &:hover {
+          background: rgba(31, 41, 55, 0.05);
+          color: $primary-dark;
+          border-color: $primary-main;
+        }
+      }
+    }
 
     @include variables.media-max-md {
-      // Show as icon-only buttons in mobile
       ::ng-deep .p-button {
         .p-button-label {
           display: none;
         }
       }
-    }
-
-    @include variables.media-xxxl {
-      gap: 1rem;
     }
   }
 }
@@ -101,23 +169,31 @@
 .header-right {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex-shrink: 0; // Prevent avatar from shrinking
+  gap: 1.25rem;
+  flex-shrink: 0;
 
   @include variables.media-max-sm {
-    gap: 0.25rem; // Reduce gap on small phones
-  }
-
-  @include variables.media-max-md {
     gap: 0.5rem;
-
-    .notification-btn {
-      display: none; // Hide notifications in mobile to save space
-    }
   }
 
   .notification-btn {
     position: relative;
+    color: $text-secondary;
+    width: 2.5rem;
+    height: 2.5rem;
+    transition: all 0.2s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.04);
+      color: $primary-dark;
+      transform: translateY(-1px);
+    }
+
+    ::ng-deep .p-badge {
+      min-width: 1rem;
+      height: 1rem;
+      font-size: 0.65rem;
+    }
   }
 
   .user-menu {
@@ -125,190 +201,120 @@
     align-items: center;
     gap: 0.75rem;
 
-    @include variables.media-xxxl {
-      gap: 1.5rem;
-    }
-
     .user-avatar {
       cursor: pointer;
-      transition: transform 0.2s;
+      width: 2.5rem;
+      height: 2.5rem;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-      @include variables.media-xxxl {
-        font-size: 1.5rem;
+      ::ng-deep .p-avatar {
+        background: linear-gradient(135deg, #4b5563, #374151) !important;
+        color: white !important;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       }
 
       &:hover {
-        transform: scale(1.05);
+        transform: scale(1.1);
+
+        ::ng-deep .p-avatar {
+          box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
       }
     }
   }
 }
 
-// User dropdown menu styles
 ::ng-deep .user-dropdown-menu {
-  border: none !important;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid $border-light !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1) !important;
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
 
   .p-menu-list {
-    border: none !important;
+    padding: 0;
   }
 
-  .p-menuitem {
-    border: none !important;
+  .p-menuitem-link {
+    padding: 0.75rem 1.25rem;
+    transition: background 0.15s;
+    border-radius: 0;
+
+    &:hover {
+      background: rgba(31, 41, 55, 0.04);
+    }
+
+    .p-menuitem-text {
+      font-size: 0.9rem;
+      color: $text-main;
+      font-weight: 500;
+    }
+
+    .p-menuitem-icon {
+      color: $text-secondary;
+    }
   }
 
   .p-menu-separator {
-    border-top: 1px solid var(--surface-border);
-    margin: 0.25rem 0;
+    border-top: 1px solid $border-light;
+    margin: 0.35rem 0;
   }
 }
 
-// Workspace item styles (for dropdown)
 .workspace-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  min-width: 200px;
-
-  @include variables.media-max-sm {
-    min-width: 150px;
-    gap: 0.5rem;
-  }
+  width: 100%;
 
   .workspace-name {
     flex: 1;
     font-weight: 500;
-
-    @include variables.media-max-sm {
-      font-size: 0.875rem;
-    }
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.9rem;
   }
 
-  .workspace-status-tag {
+  // Refined Status Tag
+  .workspace-status-tag,
+  ::ng-deep .p-tag {
     flex-shrink: 0;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    font-weight: 600;
 
-    @include variables.media-max-sm {
-      font-size: 0.625rem;
+    // Success State Overrides
+    &.p-tag-success {
+      background: $success-soft-bg;
+      color: $success-soft-text;
     }
+
+    // Ensure all tags have the softer look
+    background: rgba(0, 0, 0, 0.05); // Fallback
   }
 }
 
-// Mobile phones
 @include variables.media-max-sm {
   .header {
-    padding: 0 0.75rem;
     height: 64px;
-  }
-
-  .header-left {
-    gap: 0.5rem;
-
-    .workspace-selector {
-      gap: 0.25rem;
-    }
-
-    .quick-actions {
-      gap: 0.375rem; // More space between buttons
-      margin-right: 0.5rem; // Add space before avatar section
-    }
-  }
-
-  .header-right {
-    gap: 0.75rem; // Increase gap to give more space before avatar
-
-    .user-menu {
-      gap: 0.5rem;
-    }
-  }
-}
-
-// Tablets
-@include variables.media-max-md {
-  .header {
     padding: 0 1rem;
   }
+
+  .header-left .workspace-selector {
+    ::ng-deep .p-select .p-select-label {
+      font-size: 0.85rem;
+    }
+  }
 }
 
-// Large desktops
 @include variables.media-xxl {
   .header {
     padding: 0 3rem;
-  }
-}
-
-// Full HD and above
-@include variables.media-xxxl {
-  .header {
-    height: 100px;
-    padding: 0 4rem;
-  }
-
-  .header-left {
-    gap: 2rem;
-  }
-
-  .header-right {
-    gap: 2rem;
-  }
-}
-
-// 2K screens
-@include variables.media-2k {
-  .header {
-    height: 120px;
-    padding: 0 5rem;
-  }
-
-  .workspace-item {
-    min-width: 280px;
-
-    .workspace-name {
-      font-size: 1.25rem;
-    }
-
-    .workspace-status-tag {
-      font-size: 1rem;
-    }
-  }
-}
-
-// 4K screens
-@include variables.media-4k {
-  .header {
-    height: 140px; // Reduced from 160px
-    padding: 0 8rem; // Better padding
-    max-width: 3840px; // Limit header width
-    margin: 0 auto; // Center header
-  }
-
-  .header-left,
-  .header-right {
-    gap: 2rem; // Reduced from 3rem for better proportion
-  }
-
-  .workspace-item {
-    min-width: 320px; // Reduced from 360px
-
-    .workspace-name {
-      font-size: 1.375rem; // Slightly smaller
-    }
-
-    .workspace-status-tag {
-      font-size: 1.125rem; // Slightly smaller
-    }
-  }
-
-  // Scale buttons proportionally
-  ::ng-deep .p-button {
-    font-size: 1.125rem;
-    padding: 0.875rem 1.5rem;
-  }
-
-  // Scale avatar
-  ::ng-deep .p-avatar {
-    width: 3.5rem;
-    height: 3.5rem;
-    font-size: 1.5rem;
   }
 }

@@ -1,6 +1,5 @@
 .dashboard-container {
   min-height: 100vh;
-  background-color: #f9fafb;
 
   // Soporte para animación fadeIn de Angular
   &.ng-animating {
@@ -9,13 +8,9 @@
 }
 
 .dashboard-toolbar {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   margin-bottom: 2rem;
-  background: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 1.25rem 2rem;
 
-  // Agregar animación de entrada
+  // Animation
   animation: slideDown 0.3s ease-out;
 
   .p-toolbar-group-end {
@@ -112,6 +107,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -325,6 +321,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

@@ -1,35 +1,50 @@
 @use '../../../../../styles/variables';
 
+// Premium Neutral Variables
+$primary-dark: #1f2937; // Gray 900
+$primary-main: #374151; // Gray 700
+$primary-light: #f3f4f6; // Gray 100
+$text-main: #111827; // Gray 900
+$text-secondary: #6b7280; // Gray 500
+$surface-glass-sidebar: rgba(255, 255, 255, 0.95);
+$active-bg: rgba(31, 41, 55, 0.05);
+
 .sidebar {
   position: fixed;
   top: 0;
   left: 0;
   width: 280px;
   height: 100vh;
-  background: #ffffff;
-  background-color: #ffffff !important;
-  border-right: 2px solid var(--surface-border);
+  background: $surface-glass-sidebar;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(229, 231, 235, 0.6);
   display: flex;
   flex-direction: column;
   transition:
-    width 0.3s ease,
-    transform 0.3s ease;
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 999;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.03);
 
   &.collapsed {
     width: 80px;
+
+    .sidebar-header {
+      justify-content: center;
+      padding: 1.5rem 0;
+    }
   }
 }
 
 .sidebar-header {
   padding: 1.5rem;
-  border-bottom: 2px solid var(--surface-border);
+  border-bottom: 1px solid rgba(229, 231, 235, 0.6);
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-height: 80px;
-  background: #f8f9fa;
+  background: transparent; // Let glass effect show through
 
   .logo {
     display: flex;
@@ -38,12 +53,14 @@
 
     i {
       font-size: 1.5rem;
+      color: $primary-dark;
     }
 
     .logo-text {
       font-size: 1.25rem;
       font-weight: 700;
-      color: var(--text-color);
+      color: $text-main;
+      letter-spacing: -0.02em;
     }
   }
 
@@ -54,18 +71,25 @@
 
     i {
       font-size: 1.5rem;
+      color: $primary-dark;
     }
   }
 
   .toggle-btn {
     flex-shrink: 0;
+    color: $text-secondary;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.05);
+      color: $text-main;
+    }
   }
 }
 
 .sidebar-nav {
   flex: 1;
   overflow-y: auto;
-  padding: 1rem 0;
+  padding: 1.5rem 0;
 
   .menu-list {
     list-style: none;
@@ -74,15 +98,20 @@
   }
 
   .menu-item {
-    margin: 0.25rem 0;
+    margin: 0.25rem 1rem; // Add horizontal margin for rounded feel
 
     &.active {
       .menu-link {
-        background: var(--primary-color);
-        color: var(--primary-color-text);
+        background: $primary-dark;
+        color: #ffffff;
+        box-shadow: 0 4px 12px rgba(31, 41, 55, 0.15);
 
         i {
-          color: var(--primary-color-text);
+          color: #ffffff;
+        }
+
+        &:hover {
+          background: lighten($primary-dark, 5%);
         }
       }
     }
@@ -92,40 +121,39 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 1rem 1.5rem;
-    color: var(--text-color);
+    padding: 0.875rem 1rem;
+    color: $text-main;
     text-decoration: none;
-    transition: all 0.2s;
-    border-radius: 0;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 12px; // Classic modern rounded corners
     cursor: pointer;
+    font-weight: 500;
 
     &:hover {
-      background: var(--surface-hover);
+      background: rgba(0, 0, 0, 0.04);
+      transform: translateX(2px); // Subtle movement
     }
 
     i {
       font-size: 1.25rem;
-      color: var(--text-color-secondary);
+      color: $text-secondary;
       min-width: 1.5rem;
-
-      @include variables.media-xxxl {
-        font-size: 1.5rem;
-        min-width: 2rem;
-      }
+      transition: color 0.2s;
     }
 
     .menu-label {
       flex: 1;
-      font-weight: 500;
+      font-size: 0.95rem;
     }
 
     .badge {
-      background: var(--primary-color);
-      color: var(--primary-color-text);
-      padding: 0.25rem 0.5rem;
-      border-radius: 12px;
+      background: $primary-main;
+      color: #ffffff;
+      padding: 0.25rem 0.6rem;
+      border-radius: 99px; // Pill shape
       font-size: 0.75rem;
       font-weight: 600;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
 
@@ -133,29 +161,33 @@
     opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
+    background: transparent !important;
+    color: $text-secondary !important;
   }
 }
 
 // Menu sections
 .menu-section {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 
   .section-header {
-    padding: 0.75rem 1.5rem 0.5rem;
+    padding: 0.5rem 1.5rem;
     margin-bottom: 0.5rem;
   }
 
   .section-title {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-color-secondary);
+    letter-spacing: 0.1em; // Increased spacing for elegance
+    color: $text-secondary;
+    opacity: 0.8;
   }
 
   &.workspace-section {
-    border-top: 2px solid var(--surface-border);
-    padding-top: 1rem;
+    border-top: 1px solid rgba(229, 231, 235, 0.6);
+    padding-top: 1.5rem;
+    margin-top: 0.5rem;
   }
 }
 
@@ -163,35 +195,41 @@
 .empty-workspace {
   padding: 1.5rem 1rem;
   text-align: center;
-  color: var(--text-color-secondary);
+  color: $text-secondary;
 
   i {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    opacity: 0.5;
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.6;
+    color: $primary-main;
   }
 
   .empty-message {
-    font-size: 0.875rem;
-    line-height: 1.4;
+    font-size: 0.85rem;
+    line-height: 1.5;
     margin: 0;
   }
 }
 
 .sidebar-footer {
   padding: 1rem;
-  border-top: 2px solid var(--surface-border);
-  background: #f8f9fa;
-  background-color: #f8f9fa !important;
+  border-top: 1px solid rgba(229, 231, 235, 0.6);
+  background: transparent;
 
   .logout-btn {
     width: 100%;
     justify-content: flex-start;
     gap: 1rem;
+    color: #ef4444; // Keep red for logout
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.05);
+    }
 
     ::ng-deep .p-button-label {
       flex: 1;
       text-align: left;
+      font-weight: 600;
     }
   }
 }
@@ -206,12 +244,17 @@
     }
   }
 
+  .menu-item {
+    margin: 0.25rem 0.5rem; // Tighter margins when collapsed
+  }
+
   .menu-link {
     justify-content: center;
-    padding: 1rem;
+    padding: 1rem; // Square padding
 
     i {
       margin: 0;
+      font-size: 1.4rem;
     }
   }
 
@@ -227,9 +270,13 @@
     position: fixed !important;
     transform: translateX(-100%) !important;
     z-index: 1100 !important;
-    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.15) !important;
-    background: #ffffff !important;
-    background-color: #ffffff !important;
+    background: #ffffff !important; // Fallback for mobile performance
+
+    @supports (backdrop-filter: blur(20px)) {
+      background: rgba(255, 255, 255, 0.95) !important;
+      backdrop-filter: blur(20px);
+    }
+
     width: 280px !important;
 
     &:not(.collapsed) {
@@ -243,8 +290,6 @@
   }
 
   .sidebar-header {
-    background: #f8f9fa !important;
-
     .toggle-btn {
       display: flex;
     }
@@ -272,36 +317,14 @@
 // Large screens
 @include variables.media-xxxl {
   .sidebar {
-    width: 30 0px;
+    width: 300px;
 
-    &.collapsed {
-      width: 100px;
+    .sidebar-header {
+      padding: 2rem;
     }
-  }
 
-  .sidebar-header {
-    padding: 2rem;
-    min-height: 100px;
-
-    .logo {
-      gap: 1rem;
-
-      i {
-        font-size: 1.2rem;
-      }
-
-      .logo-text {
-        font-size: 1.2rem;
-      }
-    }
-  }
-
-  .menu-link {
-    padding: 1.25rem 2rem;
-    gap: 1.25rem;
-
-    .menu-label {
-      font-size: 0.9rem;
+    .menu-link {
+      padding: 1rem 1.5rem;
     }
   }
 }
@@ -315,33 +338,6 @@
       width: 120px;
     }
   }
-
-  .sidebar-header {
-    padding: 2.5rem;
-
-    .logo {
-      i {
-        font-size: 1.35rem;
-      }
-
-      .logo-text {
-        font-size: 1.35rem;
-      }
-    }
-  }
-
-  .menu-link {
-    padding: 1.5rem 2.5rem;
-
-    i {
-      font-size: 1.35rem;
-      min-width: 2.5rem;
-    }
-
-    .menu-label {
-      font-size: 1rem;
-    }
-  }
 }
 
 // 4K screens
@@ -352,45 +348,5 @@
     &.collapsed {
       width: 160px;
     }
-  }
-
-  .sidebar-header {
-    padding: 3rem;
-    min-height: 140px;
-
-    .logo {
-      gap: 1.5rem;
-
-      i {
-        font-size: 2rem;
-      }
-
-      .logo-text {
-        font-size: 1.5rem;
-      }
-    }
-  }
-
-  .menu-link {
-    padding: 2rem 3rem;
-    gap: 1.5rem;
-
-    i {
-      font-size: 1.5rem;
-      min-width: 3rem;
-    }
-
-    .menu-label {
-      font-size: 1.125rem;
-    }
-
-    .badge {
-      font-size: 1rem;
-      padding: 0.5rem 1rem;
-    }
-  }
-
-  .section-title {
-    font-size: 1rem;
   }
 }

@@ -12,15 +12,16 @@ $surface-glass: rgba(255, 255, 255, 0.75); // Glassy white
   justify-content: center;
   min-height: 100vh;
   // Dynamic neutral background with subtle depth
-  background: radial-gradient(circle at 15% 50%,
-      rgba(226, 232, 240, 0.8),
-      transparent 25%),
-    radial-gradient(circle at 85% 30%,
-      rgba(229, 231, 235, 0.8),
-      transparent 25%),
+  background:
+    radial-gradient(circle at 15% 50%, rgba(226, 232, 240, 0.8), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(229, 231, 235, 0.8), transparent 25%),
     linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
   padding: 1rem;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
   overflow: hidden;
   position: relative;
 
@@ -57,7 +58,9 @@ $surface-glass: rgba(255, 255, 255, 0.75); // Glassy white
     0 0 0 1px rgba(0, 0, 0, 0.02);
   border-radius: 20px;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 
   &:hover {
     box-shadow:
