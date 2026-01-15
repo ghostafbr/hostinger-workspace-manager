@@ -43,7 +43,10 @@ describe('DnsSnapshot', () => {
     expect(typeof snap.getAgeInHours()).toBe('number');
 
     // recent vs old
-    const oldSnap = new DnsSnapshot({ ...snap, createdAt: Timestamp.fromDate(new Date(Date.now() - 1000 * 60 * 60 * 24 * 2)) });
+    const oldSnap = new DnsSnapshot({
+      ...snap,
+      createdAt: Timestamp.fromDate(new Date(Date.now() - 1000 * 60 * 60 * 24 * 2)),
+    });
     expect(oldSnap.isRecent()).toBe(false);
 
     const r1Modified = new DnsRecord({ ...r1, value: '9.9.9.9' });

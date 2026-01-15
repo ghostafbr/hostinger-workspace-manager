@@ -21,8 +21,12 @@ describe('Workspace model', () => {
 
   it('checks various status helpers', () => {
     expect(new Workspace({ ...base, status: WorkspaceStatus.ACTIVE }).isHealthy()).toBe(true);
-    expect(new Workspace({ ...base, status: WorkspaceStatus.INVALID_TOKEN }).hasTokenIssue()).toBe(true);
-    expect(new Workspace({ ...base, status: WorkspaceStatus.RATE_LIMITED }).isRateLimited()).toBe(true);
+    expect(new Workspace({ ...base, status: WorkspaceStatus.INVALID_TOKEN }).hasTokenIssue()).toBe(
+      true,
+    );
+    expect(new Workspace({ ...base, status: WorkspaceStatus.RATE_LIMITED }).isRateLimited()).toBe(
+      true,
+    );
     expect(new Workspace({ ...base, status: WorkspaceStatus.DISABLED }).isDisabled()).toBe(true);
     expect(new Workspace({ ...base, status: WorkspaceStatus.DISABLED }).canSync()).toBe(false);
     expect(new Workspace({ ...base, status: WorkspaceStatus.INVALID_TOKEN }).canSync()).toBe(false);
@@ -30,11 +34,21 @@ describe('Workspace model', () => {
   });
 
   it('returns human readable status messages', () => {
-    expect(new Workspace({ ...base, status: WorkspaceStatus.ACTIVE }).getStatusMessage()).toBe('Active');
-    expect(new Workspace({ ...base, status: WorkspaceStatus.INVALID_TOKEN }).getStatusMessage()).toBe('Invalid Token');
-    expect(new Workspace({ ...base, status: WorkspaceStatus.RATE_LIMITED }).getStatusMessage()).toBe('Rate Limited');
-    expect(new Workspace({ ...base, status: WorkspaceStatus.ERROR }).getStatusMessage()).toBe('Error');
-    expect(new Workspace({ ...base, status: WorkspaceStatus.DISABLED }).getStatusMessage()).toBe('Disabled');
+    expect(new Workspace({ ...base, status: WorkspaceStatus.ACTIVE }).getStatusMessage()).toBe(
+      'Active',
+    );
+    expect(
+      new Workspace({ ...base, status: WorkspaceStatus.INVALID_TOKEN }).getStatusMessage(),
+    ).toBe('Invalid Token');
+    expect(
+      new Workspace({ ...base, status: WorkspaceStatus.RATE_LIMITED }).getStatusMessage(),
+    ).toBe('Rate Limited');
+    expect(new Workspace({ ...base, status: WorkspaceStatus.ERROR }).getStatusMessage()).toBe(
+      'Error',
+    );
+    expect(new Workspace({ ...base, status: WorkspaceStatus.DISABLED }).getStatusMessage()).toBe(
+      'Disabled',
+    );
   });
 
   it('serializes to firestore and can be created from firestore data', () => {

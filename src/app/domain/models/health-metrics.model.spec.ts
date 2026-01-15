@@ -137,44 +137,44 @@ describe('SystemHealthSummary', () => {
     expect(s.getHealthyPercentage()).toBe(80);
   });
 
-    it('maneja casos frontera en SystemHealthSummary', () => {
-      const zero = new SystemHealthSummary({
-        totalWorkspaces: 0,
-        healthyWorkspaces: 0,
-        warningWorkspaces: 0,
-        criticalWorkspaces: 0,
-        totalRateLimitUsage: 0,
-        workspacesNearLimit: 0,
-        totalSyncsToday: 0,
-        successfulSyncsToday: 0,
-        failedSyncsToday: 0,
-        totalErrors24h: 0,
-        workspacesWithErrors: 0,
-        averageHealthScore: 100,
-        lastUpdated: new Date(),
-      });
-
-      expect(zero.getSyncSuccessRate()).toBe(100);
-      expect(zero.isSystemHealthy()).toBe(true);
-      expect(zero.getHealthyPercentage()).toBe(100);
+  it('maneja casos frontera en SystemHealthSummary', () => {
+    const zero = new SystemHealthSummary({
+      totalWorkspaces: 0,
+      healthyWorkspaces: 0,
+      warningWorkspaces: 0,
+      criticalWorkspaces: 0,
+      totalRateLimitUsage: 0,
+      workspacesNearLimit: 0,
+      totalSyncsToday: 0,
+      successfulSyncsToday: 0,
+      failedSyncsToday: 0,
+      totalErrors24h: 0,
+      workspacesWithErrors: 0,
+      averageHealthScore: 100,
+      lastUpdated: new Date(),
     });
+
+    expect(zero.getSyncSuccessRate()).toBe(100);
+    expect(zero.isSystemHealthy()).toBe(true);
+    expect(zero.getHealthyPercentage()).toBe(100);
   });
+});
 
-  describe('HealthHistory', () => {
-    it('construye correctamente un punto de historial', () => {
-      const now = new Date();
-      const h = new HealthHistory({
-        timestamp: now,
-        workspaceId: 'w',
-        healthScore: 80,
-        rateLimitUsage: 10,
-        syncSuccess: true,
-        errorCount: 0,
-      });
-
-      expect(h.timestamp).toBe(now);
-      expect(h.workspaceId).toBe('w');
-      expect(h.healthScore).toBe(80);
+describe('HealthHistory', () => {
+  it('construye correctamente un punto de historial', () => {
+    const now = new Date();
+    const h = new HealthHistory({
+      timestamp: now,
+      workspaceId: 'w',
+      healthScore: 80,
+      rateLimitUsage: 10,
+      syncSuccess: true,
+      errorCount: 0,
     });
+
+    expect(h.timestamp).toBe(now);
+    expect(h.workspaceId).toBe('w');
+    expect(h.healthScore).toBe(80);
   });
+});
 // end of health-metrics.model.spec.ts

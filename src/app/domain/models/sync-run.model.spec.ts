@@ -39,7 +39,11 @@ describe('SyncRun', () => {
     const obj = s.toFirestore();
     expect(obj.workspaceId).toBe('w2');
 
-    const from = SyncRun.fromFirestore('2', { ...obj, startAt: now, status: SyncRunStatus.RUNNING });
+    const from = SyncRun.fromFirestore('2', {
+      ...obj,
+      startAt: now,
+      status: SyncRunStatus.RUNNING,
+    });
     expect(from.id).toBe('2');
   });
 });

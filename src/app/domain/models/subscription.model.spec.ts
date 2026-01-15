@@ -41,7 +41,11 @@ describe('Subscription', () => {
     });
     const obj = s.toFirestore();
     expect(obj.subscriptionId).toBe('sub_2');
-    const from = (Subscription as any).fromFirestore('2', { ...obj, expiresAt: expiresLater, syncedAt: now });
+    const from = (Subscription as any).fromFirestore('2', {
+      ...obj,
+      expiresAt: expiresLater,
+      syncedAt: now,
+    });
     expect(from.id).toBe('2');
   });
 
