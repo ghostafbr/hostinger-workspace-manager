@@ -1,60 +1,56 @@
-<p-card>
-  <ng-template pTemplate="header">
-    <div class="widget-header">
+<div class="glass-card full-height critical-widget-container">
+  <div class="card-header-compact">
+    <div class="header-icon-wrapper">
       <i class="pi pi-exclamation-triangle"></i>
-      <span>Workspaces Más Críticos</span>
     </div>
-  </ng-template>
-
-  <div class="critical-list">
-    @if (criticalWorkspaces().length === 0) {
-      <div class="no-data">
-        <i class="pi pi-check-circle"></i>
-        <p>No hay workspaces críticos</p>
-      </div>
-    } @else {
-      @for (item of criticalWorkspaces(); track item.workspace.id) {
-        <div
-          class="critical-item"
-          [class]="getSeverityClass(item.criticalityScore)"
-          (click)="onWorkspaceClick(item.workspace)"
-        >
-          <div class="item-header">
-            <div class="workspace-info">
-              <h4>{{ item.workspace.name }}</h4>
-              <span class="status-badge" [class]="getStatusClass(item.workspace.status)">
-                {{ item.workspace.status }}
-              </span>
-            </div>
-            <div class="score-badge" [pTooltip]="'Puntuación de criticidad'">
-              {{ item.criticalityScore }}
-            </div>
-          </div>
-
-          <div class="item-reasons">
-            @for (reason of item.reasons; track $index) {
-              <div class="reason">
-                <i class="pi pi-angle-right"></i>
-                <span>{{ reason }}</span>
-              </div>
-            }
-          </div>
-
-          @if (item.workspace.tags && item.workspace.tags.length > 0) {
-            <div class="item-tags">
-              @for (tag of item.workspace.tags; track tag) {
-                <p-chip [label]="tag" class="tag-chip" />
-              }
-            </div>
-          }
-        </div>
-      }
-    }
+    <h3>Workspaces Críticos</h3>
   </div>
 
-  <ng-template pTemplate="footer">
-    <div class="widget-footer">
-      <small>Actualizado hace {{ 'moments ago' }}</small>
+  <div class="critical-list-container">
+    @if (criticalWorkspaces().length === 0) {
+    <div class="no-data">
+      <div class="success-icon-wrapper">
+        <i class="pi pi-verified"></i>
+      </div>
+      <p>Todo en orden</p>
+      <span class="sub-text">No hay workspaces críticos</span>
     </div>
-  </ng-template>
-</p-card>
+    } @else {
+    <div class="list-content">
+      @for (item of criticalWorkspaces(); track item.workspace.id) {
+      <div class="critical-item" [class]="getSeverityClass(item.criticalityScore)"
+        (click)="onWorkspaceClick(item.workspace)">
+        <div class="item-content">
+          <div class="item-main">
+            <div class="name-row">
+              <h4 class="workspace-name">{{ item.workspace.name }}</h4>
+              <span class="score-pill" [class]="getSeverityClass(item.criticalityScore)">{{ item.criticalityScore
+                }}</span>
+            </div>
+            <div class="status-row">
+              <span class="status-dot" [class]="getStatusClass(item.workspace.status)"></span>
+              <span class="status-text">{{ item.workspace.status }}</span>
+            </div>
+          </div>
+          <div class="item-action">
+            <i class="pi pi-chevron-right"></i>
+          </div>
+        </div>
+
+        <div class="reasons-list">
+          @for (reason of item.reasons.slice(0, 1); track $index) {
+          <div class="reason-pill">
+            <i class="pi pi-info-circle"></i>
+            <span>{{ reason }}</span>
+          </div>
+          }
+          @if (item.reasons.length > 1) {
+          <span class="more-reasons">+{{ item.reasons.length - 1 }} más</span>
+          }
+        </div>
+      </div>
+      }
+    </div>
+    }
+  </div>
+</div>

@@ -306,7 +306,11 @@ export default class DashboardPage implements OnInit {
    * Navigate to specific workspace
    */
   navigateToWorkspace(workspace: { id: string }): void {
-    this.router.navigate(['/workspaces', workspace.id]);
+    if (!workspace || !workspace.id) {
+        return;
+    }
+    // Correct route is /w/:id/dashboard
+    this.router.navigate(['/w', workspace.id, 'dashboard']);
   }
 
   /**

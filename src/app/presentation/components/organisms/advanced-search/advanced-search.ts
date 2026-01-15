@@ -1,10 +1,10 @@
-import { Component, output, signal, inject, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, output, inject, ChangeDetectionStrategy, OnInit, DestroyRef, computed, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { CardModule } from 'primeng/card';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { ButtonModule } from 'primeng/button';
 import { DatePicker } from 'primeng/datepicker';
 import { CheckboxModule } from 'primeng/checkbox';
 import { Select } from 'primeng/select';
@@ -15,15 +15,14 @@ import { WorkspaceStatus, type FilterCriteria, type ISavedFilter } from '@app/do
 /**
  * Advanced Search Component
  *
- * Multi-criteria search with save/load filters
+ * Minimalist "Search Capsule" with expandable drawer for advanced filters.
  */
 @Component({
   selector: 'app-advanced-search',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-    CardModule,
+    ReactiveFormsModule,
     InputTextModule,
     MultiSelectModule,
     ButtonModule,
@@ -38,24 +37,18 @@ import { WorkspaceStatus, type FilterCriteria, type ISavedFilter } from '@app/do
 })
 export class AdvancedSearchComponent implements OnInit {
   private readonly filterService = inject(FilterService);
+  private readonly fb = inject(FormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
 
   searchApplied = output<FilterCriteria>();
   searchCleared = output<void>();
 
-  // Filter criteria
-  name = signal<string>('');
-  selectedStatuses = signal<WorkspaceStatus[]>([]);
-  tagsInput = signal<string>('');
-  tags = signal<string[]>([]);
-  selectedPriorities = signal<number[]>([]);
-  favoritesOnly = signal<boolean>(false);
-  hasErrors = signal<boolean | undefined>(undefined);
-  lastSyncAfter = signal<Date | undefined>(undefined);
-  lastSyncBefore = signal<Date | undefined>(undefined);
+  searchForm: FormGroup;
 
   // UI state
-  saveFilterName = signal<string>('');
-  showSaveDialog = signal<boolean>(false);
+  isExpanded = signal<boolean>(false);
+  showSaveDialog = false;
+  saveFilterControl = this.fb.control('', [Validators.required, Validators.minLength(3)]);
 
   // Saved filters
   savedFilters = this.filterService.savedFilters;
@@ -78,46 +71,129 @@ export class AdvancedSearchComponent implements OnInit {
   ];
 
   readonly errorOptions = [
-    { label: 'Todos', value: undefined },
+    { label: 'Todos', value: null },
     { label: 'Solo con errores', value: true },
     { label: 'Sin errores', value: false },
   ];
 
+  constructor() {
+    this.searchForm = this.fb.group({
+      name: [''],
+      status: [[]],
+      priority: [[]],
+      hasErrors: [null],
+      tagsInput: [''],
+      tags: [[]],
+      favoritesOnly: [false],
+      lastSyncAfter: [null],
+      lastSyncBefore: [null],
+    }, { validators: this.dateRangeValidator });
+  }
+
   async ngOnInit(): Promise<void> {
     await this.filterService.loadSavedFilters();
+    
+    // Track form value changes
+    this.searchForm.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(val => this.formValue.set(val));
+
+    // Initialize signal with current value
+    this.formValue.set(this.searchForm.value);
+
+    // Auto-parse tags
+    this.searchForm.get('tagsInput')?.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+         this.parseTags(value);
+      });
+  }
+
+  // Signal to track form value changes for computed active count
+  private readonly formValue = signal<any>({});
+
+  /**
+   * Computed count of active advanced filters (excluding name and favorites which are visible)
+   */
+  readonly activeAdvancedFiltersCount = computed(() => {
+      const val = this.formValue();
+      let count = 0;
+      if (val.status?.length) count++;
+      if (val.priority?.length) count++;
+      if (val.tags?.length) count++;
+      if (val.hasErrors !== null) count++;
+      if (val.lastSyncAfter || val.lastSyncBefore) count++;
+      return count;
+  });
+
+  toggleFilters(): void {
+    this.isExpanded.update(v => !v);
+  }
+
+  /**
+   * Date Range Validator
+   */
+  private dateRangeValidator(group: FormGroup): { [key: string]: any } | null {
+    const start = group.get('lastSyncAfter')?.value;
+    const end = group.get('lastSyncBefore')?.value;
+
+    if (start && end && new Date(start) > new Date(end)) {
+      return { dateRangeInvalid: true };
+    }
+    return null;
   }
 
   /**
    * Apply current search criteria
    */
   applySearch(): void {
+    if (this.searchForm.invalid) {
+         this.searchForm.markAllAsTouched();
+         // If errors are in the drawer, expand it
+         if (this.searchForm.errors?.['dateRangeInvalid']) {
+             this.isExpanded.set(true);
+         }
+         return;
+    }
+
+    const val = this.searchForm.value;
+
     const criteria: FilterCriteria = {
-      name: this.name() || undefined,
-      status: this.selectedStatuses().length > 0 ? this.selectedStatuses() : undefined,
-      tags: this.tags().length > 0 ? this.tags() : undefined,
-      priority: this.selectedPriorities().length > 0 ? this.selectedPriorities() : undefined,
-      favoritesOnly: this.favoritesOnly(),
-      hasErrors: this.hasErrors(),
-      lastSyncAfter: this.lastSyncAfter(),
-      lastSyncBefore: this.lastSyncBefore(),
+      name: val.name || undefined,
+      status: val.status?.length > 0 ? val.status : undefined,
+      tags: val.tags?.length > 0 ? val.tags : undefined,
+      priority: val.priority?.length > 0 ? val.priority : undefined,
+      favoritesOnly: val.favoritesOnly,
+      hasErrors: val.hasErrors !== null ? val.hasErrors : undefined,
+      lastSyncAfter: val.lastSyncAfter || undefined,
+      lastSyncBefore: val.lastSyncBefore || undefined,
     };
 
     this.filterService.setCurrentFilter(criteria);
     this.searchApplied.emit(criteria);
   }
 
+  activeFavoriteToggle(): void {
+      const current = this.searchForm.get('favoritesOnly')?.value;
+      this.searchForm.patchValue({ favoritesOnly: !current });
+      this.applySearch(); // Auto-apply for single toggles for better UX
+  }
+
   /**
    * Clear all filters
    */
   clearFilters(): void {
-    this.name.set('');
-    this.selectedStatuses.set([]);
-    this.tags.set([]);
-    this.selectedPriorities.set([]);
-    this.favoritesOnly.set(false);
-    this.hasErrors.set(undefined);
-    this.lastSyncAfter.set(undefined);
-    this.lastSyncBefore.set(undefined);
+    this.searchForm.reset({
+      name: '',
+      status: [],
+      priority: [],
+      hasErrors: null,
+      tagsInput: '',
+      tags: [],
+      favoritesOnly: false,
+      lastSyncAfter: null,
+      lastSyncBefore: null,
+    });
 
     this.filterService.clearFilter();
     this.searchCleared.emit();
@@ -128,15 +204,23 @@ export class AdvancedSearchComponent implements OnInit {
    */
   loadSavedFilter(filter: ISavedFilter): void {
     const c = filter.criteria;
-    this.name.set(c.name || '');
-    this.selectedStatuses.set(c.status || []);
-    this.tags.set(c.tags || []);
-    this.selectedPriorities.set(c.priority || []);
-    this.favoritesOnly.set(c.favoritesOnly || false);
-    this.hasErrors.set(c.hasErrors);
-    this.lastSyncAfter.set(c.lastSyncAfter);
-    this.lastSyncBefore.set(c.lastSyncBefore);
+    
+    this.searchForm.patchValue({
+        name: c.name || '',
+        status: c.status || [],
+        priority: c.priority || [],
+        hasErrors: c.hasErrors !== undefined ? c.hasErrors : null,
+        tags: c.tags || [],
+        tagsInput: c.tags ? c.tags.join(', ') : '',
+        favoritesOnly: c.favoritesOnly || false,
+        lastSyncAfter: c.lastSyncAfter ? new Date(c.lastSyncAfter) : null,
+        lastSyncBefore: c.lastSyncBefore? new Date(c.lastSyncBefore) : null
+    });
 
+    // If advanced filters are present, expand drawer? 
+    // Maybe better to keep it compact unless user wants to see details.
+    // Let's autoset favorites only toggle which is visible.
+    
     this.applySearch();
   }
 
@@ -144,24 +228,30 @@ export class AdvancedSearchComponent implements OnInit {
    * Save current criteria as filter
    */
   async saveCurrentFilter(): Promise<void> {
-    const name = this.saveFilterName();
-    if (!name) return;
+    if (this.saveFilterControl.invalid) {
+      this.saveFilterControl.markAsTouched();
+      return;
+    }
 
     try {
+      this.applySearch(); // Ensure criteria is fresh/valid
+      const val = this.searchForm.value;
+      const name = this.saveFilterControl.value!;
+      
       const criteria: FilterCriteria = {
-        name: this.name() || undefined,
-        status: this.selectedStatuses().length > 0 ? this.selectedStatuses() : undefined,
-        tags: this.tags().length > 0 ? this.tags() : undefined,
-        priority: this.selectedPriorities().length > 0 ? this.selectedPriorities() : undefined,
-        favoritesOnly: this.favoritesOnly(),
-        hasErrors: this.hasErrors(),
-        lastSyncAfter: this.lastSyncAfter(),
-        lastSyncBefore: this.lastSyncBefore(),
+          name: val.name || undefined,
+          status: val.status?.length > 0 ? val.status : undefined,
+          tags: val.tags?.length > 0 ? val.tags : undefined,
+          priority: val.priority?.length > 0 ? val.priority : undefined,
+          favoritesOnly: val.favoritesOnly,
+          hasErrors: val.hasErrors !== null ? val.hasErrors : undefined,
+          lastSyncAfter: val.lastSyncAfter || undefined,
+          lastSyncBefore: val.lastSyncBefore || undefined,
       };
 
       await this.filterService.saveFilter(name, criteria);
-      this.saveFilterName.set('');
-      this.showSaveDialog.set(false);
+      this.saveFilterControl.reset();
+      this.showSaveDialog = false;
     } catch (error) {
       console.error('Error saving filter:', error);
     }
@@ -182,31 +272,29 @@ export class AdvancedSearchComponent implements OnInit {
    * Check if any filter is active
    */
   hasActiveFilters(): boolean {
-    return (
-      !!this.name() ||
-      this.selectedStatuses().length > 0 ||
-      this.tags().length > 0 ||
-      this.selectedPriorities().length > 0 ||
-      this.favoritesOnly() ||
-      this.hasErrors() !== undefined ||
-      !!this.lastSyncAfter() ||
-      !!this.lastSyncBefore()
-    );
+      const val = this.searchForm.value;
+      return !!val.name || 
+             (val.status && val.status.length > 0) || 
+             (val.priority && val.priority.length > 0) ||
+             (val.tags && val.tags.length > 0) ||
+             !!val.favoritesOnly ||
+             val.hasErrors !== null ||
+             !!val.lastSyncAfter ||
+             !!val.lastSyncBefore;
   }
 
   /**
    * Parse tags from input
    */
-  parseTags(): void {
-    const input = this.tagsInput();
+  private parseTags(input: string | null): void {
     if (!input) {
-      this.tags.set([]);
+      this.searchForm.get('tags')?.setValue([]);
       return;
     }
     const parsed = input
       .split(',')
       .map((t) => t.trim())
       .filter((t) => t.length > 0);
-    this.tags.set(parsed);
+      this.searchForm.get('tags')?.setValue(parsed);
   }
 }

@@ -95,7 +95,6 @@
           [count7Days]="stats()!.subscriptionsExpiring7Days" [count15Days]="stats()!.subscriptionsExpiring15Days"
           [count30Days]="stats()!.subscriptionsExpiring30Days" [count60Days]="stats()!.subscriptionsExpiring60Days"
           [totalCount]="stats()!.totalSubscriptions" class="glass-card full-height" />
-
         <!-- Quick Summary Card -->
         <div class="glass-card summary-card-container">
           <div class="card-header-compact">
@@ -105,23 +104,22 @@
             <h3>Resumen</h3>
           </div>
 
-          <div class="summary-content">
-            <div class="summary-item">
-              <span class="label">Workspaces</span>
-              <span class="value">{{ stats()!.totalWorkspaces }}</span>
+          <div class="summary-grid-content">
+            <div class="summary-tile">
+              <span class="tile-label">Workspaces</span>
+              <span class="tile-value">{{ stats()!.totalWorkspaces }}</span>
             </div>
-            <div class="summary-item">
-              <span class="label">Activos</span>
-              <span class="value success">{{ stats()!.totalWorkspaces - stats()!.workspacesInError.length }}</span>
+            <div class="summary-tile success-tile">
+              <span class="tile-label">Activos</span>
+              <span class="tile-value">{{ stats()!.totalWorkspaces - stats()!.workspacesInError.length }}</span>
             </div>
-            <div class="separator"></div>
-            <div class="summary-item small">
-              <span class="label">Dominios</span>
-              <span class="value">{{ stats()!.totalDomains }}</span>
+            <div class="summary-tile">
+              <span class="tile-label">Dominios</span>
+              <span class="tile-value">{{ stats()!.totalDomains }}</span>
             </div>
-            <div class="summary-item small">
-              <span class="label">Suscripciones</span>
-              <span class="value">{{ stats()!.totalSubscriptions }}</span>
+            <div class="summary-tile">
+              <span class="tile-label">Subs</span>
+              <span class="tile-value">{{ stats()!.totalSubscriptions }}</span>
             </div>
           </div>
         </div>
@@ -130,53 +128,20 @@
 
     <!-- Workspaces Alert Panel -->
     @if (stats()!.workspacesInError.length > 0) {
-    <div class="alert-section collapsible-section">
-      <div class="section-header" (click)="toggleAlerts()">
-        <h3>
-          <i class="pi pi-exclamation-triangle"></i>
-          Workspaces con Errores ({{ stats()!.workspacesInError.length }})
-        </h3>
-        <i [class]="isAlertsCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
-      </div>
-      @if (!isAlertsCollapsed()) {
-      <div class="section-content">
-        <app-workspaces-alert-panel [workspaces]="stats()!.workspacesInError" />
-      </div>
-      }
+    <div class="alert-section mb-4">
+      <app-workspaces-alert-panel [workspaces]="stats()!.workspacesInError" />
     </div>
     }
 
     <!-- Critical Workspaces Widget -->
-    <div class="critical-section collapsible-section">
-      <div class="section-header" (click)="toggleCritical()">
-        <h3>
-          <i class="pi pi-exclamation-circle"></i>
-          Workspaces Más Críticos
-        </h3>
-        <i [class]="isCriticalCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
-      </div>
-      @if (!isCriticalCollapsed()) {
-      <div class="section-content">
-        <app-critical-workspaces-widget [workspaces]="allWorkspaces()" [maxItems]="5"
-          (workspaceClicked)="navigateToWorkspace($event)" />
-      </div>
-      }
+    <div class="critical-section mb-4">
+      <app-critical-workspaces-widget [workspaces]="allWorkspaces()" [maxItems]="5"
+        (workspaceClicked)="navigateToWorkspace($event)" />
     </div>
 
     <!-- Advanced Search -->
-    <div class="search-section collapsible-section">
-      <div class="section-header" (click)="toggleSearch()">
-        <h3>
-          <i class="pi pi-filter"></i>
-          Búsqueda Avanzada
-        </h3>
-        <i [class]="isSearchCollapsed() ? 'pi pi-chevron-down' : 'pi pi-chevron-up'"></i>
-      </div>
-      @if (!isSearchCollapsed()) {
-      <div class="section-content">
-        <app-advanced-search (searchApplied)="onSearchApplied($event)" (searchCleared)="onSearchCleared()" />
-      </div>
-      }
+    <div class="mb-4">
+      <app-advanced-search (searchApplied)="onSearchApplied($event)" (searchCleared)="onSearchCleared()" />
     </div>
 
     <!-- Expiration Trends Chart (Full Width) -->

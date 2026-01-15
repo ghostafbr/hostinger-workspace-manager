@@ -16,83 +16,125 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CardModule, TagModule, ButtonModule],
   template: `
-    <p-card class="alert-panel">
-      <ng-template pTemplate="header">
-        <div class="card-header-custom">
-          <i class="pi pi-exclamation-triangle card-icon"></i>
-          <h3>Workspaces con Problemas</h3>
+    <div class="glass-card alert-panel-container">
+      <div class="card-header-compact">
+        <div class="header-icon-wrapper">
+           <i class="pi pi-exclamation-triangle"></i>
         </div>
-      </ng-template>
+        <h3>Workspaces Críticos</h3>
+      </div>
 
       @if (workspaces().length === 0) {
         <div class="no-issues">
-          <i class="pi pi-check-circle" style="font-size: 3rem; color: var(--green-500)"></i>
-          <p>¡Todos los workspaces están activos!</p>
+          <div class="success-icon-wrapper">
+             <i class="pi pi-verified"></i>
+          </div>
+          <p>Todo en orden</p>
+          <span class="sub-text">Todos los workspaces están activos</span>
         </div>
       } @else {
         <div class="workspaces-list">
           @for (workspace of workspaces(); track workspace.id) {
             <div class="workspace-item">
               <div class="workspace-info">
-                <div class="workspace-name">{{ workspace.name }}</div>
+                <div class="name-row">
+                    <span class="workspace-name">{{ workspace.name }}</span>
+                    <p-tag [value]="getStatusLabel(workspace.status)" [severity]="getStatusSeverity(workspace.status)" class="compact-tag"/>
+                </div>
                 <div class="workspace-description">
                   {{ workspace.description || 'Sin descripción' }}
                 </div>
               </div>
-              <div class="workspace-actions">
-                <p-tag
-                  [value]="getStatusLabel(workspace.status)"
-                  [severity]="getStatusSeverity(workspace.status)"
-                />
-                <p-button
-                  icon="pi pi-arrow-right"
-                  [text]="true"
-                  [rounded]="true"
-                  (onClick)="navigateToWorkspace(workspace.id)"
-                  pTooltip="Ver detalles"
-                />
-              </div>
+              <p-button
+                icon="pi pi-chevron-right"
+                [text]="true"
+                [rounded]="true"
+                size="small"
+                styleClass="action-btn"
+                (onClick)="navigateToWorkspace(workspace.id)"
+                pTooltip="Ver detalles"
+              />
             </div>
           }
         </div>
       }
-    </p-card>
+    </div>
   `,
   styles: [
     `
-      .alert-panel {
+      .alert-panel-container {
         height: 100%;
+        display: flex;
+        flex-direction: column;
       }
 
-      .card-header-custom {
+      .card-header-compact {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        padding: 1.25rem;
-        background: var(--orange-50);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(229, 231, 235, 0.6);
+      }
+      
+      .header-icon-wrapper {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 12px;
+        background: rgba(239, 68, 68, 0.1); // Red-500 optimized
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        i {
+             color: var(--red-500);
+             font-size: 1.25rem;
+        }
       }
 
-      .card-icon {
-        font-size: 2rem;
-        color: var(--orange-500);
-      }
-
-      .card-header-custom h3 {
+      h3 {
         margin: 0;
-        font-size: 1.25rem;
+        font-size: 1.1rem;
         font-weight: 600;
         color: var(--text-color);
       }
 
       .no-issues {
-        text-align: center;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         padding: 2rem;
-        color: var(--text-color-secondary);
-      }
-
-      .no-issues p {
-        margin-top: 1rem;
-        font-size: 1.1rem;
+        text-align: center;
+        
+        .success-icon-wrapper {
+             width: 4rem;
+             height: 4rem;
+             background: rgba(16, 185, 129, 0.1);
+             border-radius: 50%;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             margin-bottom: 1rem;
+             
+             i {
+                 font-size: 2rem;
+                 color: var(--green-600);
+             }
+        }
+        
+        p {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        
+        .sub-text {
+            color: var(--text-color-secondary);
+            font-size: 0.9rem;
+        }
       }
 
       .workspaces-list {
@@ -103,41 +145,66 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
 
       .workspace-item {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding: 1rem;
-        border: 1px solid var(--surface-200);
-        border-radius: var(--border-radius);
-        background: var(--surface-card);
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        background: var(--surface-50);
+        border: 1px solid transparent;
+        border-radius: 12px;
         transition: all 0.2s ease;
-      }
-
-      .workspace-item:hover {
-        background: var(--surface-100);
-        border-color: var(--primary-color);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        
+        &:hover {
+             background: white;
+             border-color: rgba(229, 231, 235, 0.8);
+             box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+             transform: translateX(4px);
+        }
       }
 
       .workspace-info {
         flex: 1;
+        min-width: 0; // Truncate text
+      }
+      
+      .name-row {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-bottom: 0.25rem;
       }
 
       .workspace-name {
         font-weight: 600;
-        font-size: 1.05rem;
+        font-size: 0.95rem;
         color: var(--text-color);
-        margin-bottom: 0.25rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .workspace-description {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         color: var(--text-color-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
-
-      .workspace-actions {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
+      
+      :host ::ng-deep .compact-tag .p-tag {
+          padding: 0.1rem 0.5rem;
+          font-size: 0.75rem;
+          line-height: 1.2;
+      }
+      
+      :host ::ng-deep .action-btn.p-button {
+          color: var(--text-color-secondary);
+          width: 2rem;
+          height: 2rem;
+          
+          &:hover {
+              background: rgba(0,0,0,0.05);
+              color: var(--primary-color);
+          }
       }
     `,
   ],
@@ -151,7 +218,7 @@ export class WorkspacesAlertPanelComponent {
    * Navigate to workspace details
    */
   navigateToWorkspace(id: string): void {
-    this.router.navigate(['/workspaces', id]);
+    this.router.navigate(['/w', id, 'dashboard']);
   }
 
   /**

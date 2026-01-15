@@ -22,42 +22,37 @@ import { ChipModule } from 'primeng/chip';
         <h3>{{ title() }}</h3>
       </div>
 
-      <div class="expiration-content">
-        <div class="expiration-row" [class.has-items]="count7Days() > 0">
-          <span class="period-label">
-            <i class="pi pi-clock"></i>
-            7 días
-          </span>
-          <p-chip [label]="count7Days().toString()" [class]="getChipClass(count7Days(), '7d')" />
+      <div class="grid-content">
+        <!-- 7 Days -->
+        <div class="stat-tile" [class.active]="count7Days() > 0" [class.critical]="count7Days() > 0">
+           <span class="tile-label">7d</span>
+           <span class="tile-value">{{ count7Days() }}</span>
         </div>
-        <div class="expiration-row" [class.has-items]="count15Days() > 0">
-          <span class="period-label">
-            <i class="pi pi-clock"></i>
-            15 días
-          </span>
-          <p-chip [label]="count15Days().toString()" [class]="getChipClass(count15Days(), '15d')" />
+        
+        <!-- 15 Days -->
+        <div class="stat-tile" [class.active]="count15Days() > 0" [class.warning]="count15Days() > 0">
+           <span class="tile-label">15d</span>
+           <span class="tile-value">{{ count15Days() }}</span>
         </div>
-        <div class="expiration-row" [class.has-items]="count30Days() > 0">
-          <span class="period-label">
-            <i class="pi pi-clock"></i>
-            30 días
-          </span>
-          <p-chip [label]="count30Days().toString()" [class]="getChipClass(count30Days(), '30d')" />
+
+        <!-- 30 Days -->
+        <div class="stat-tile" [class.active]="count30Days() > 0" [class.info]="count30Days() > 0">
+           <span class="tile-label">30d</span>
+           <span class="tile-value">{{ count30Days() }}</span>
         </div>
-        <div class="expiration-row" [class.has-items]="count60Days() > 0">
-          <span class="period-label">
-            <i class="pi pi-clock"></i>
-            60 días
-          </span>
-          <p-chip [label]="count60Days().toString()" [class]="getChipClass(count60Days(), '60d')" />
+
+        <!-- 60 Days -->
+        <div class="stat-tile" [class.active]="count60Days() > 0" [class.success]="count60Days() > 0">
+           <span class="tile-label">60d</span>
+           <span class="tile-value">{{ count60Days() }}</span>
         </div>
       </div>
 
       <div class="card-footer">
         <div class="separator"></div>
         <div class="total-count">
-          <i class="pi pi-list"></i>
-          Total: <strong>{{ totalCount() }}</strong>
+          <span class="total-label">Total</span>
+          <strong>{{ totalCount() }}</strong>
         </div>
       </div>
     </div>
@@ -73,71 +68,106 @@ import { ChipModule } from 'primeng/chip';
       .card-header-custom {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid rgba(229, 231, 235, 0.6);
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid rgba(229, 231, 235, 0.4);
       }
       
       .header-icon-wrapper {
-        width: 2.5rem;
-        height: 2.5rem;
-        border-radius: 12px;
-        background: rgba(var(--primary-500-rgb), 0.1);
+        width: 2rem;
+        height: 2rem;
+        border-radius: 10px;
+        background: rgba(var(--primary-500-rgb), 0.08);
         display: flex;
         align-items: center;
         justify-content: center;
       }
 
       .card-icon {
-        font-size: 1.25rem;
+        font-size: 1rem;
         color: var(--primary-color);
       }
 
       .card-header-custom h3 {
         margin: 0;
-        font-size: 1.1rem;
+        font-size: 1rem;
         font-weight: 600;
         color: var(--text-color);
       }
 
-      .expiration-content {
+      // 2x2 Grid
+      .grid-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        flex: 1;
+        margin-bottom: 1rem;
+      }
+
+      .stat-tile {
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
-        margin-bottom: 1rem;
-        flex: 1;
-      }
-
-      .expiration-row {
-        display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding: 0.5rem 0.75rem;
-        border-radius: 8px;
-        transition: background-color 0.2s ease;
+        justify-content: center;
+        padding: 0.75rem;
+        background: var(--surface-50);
+        border-radius: 12px;
+        border: 1px solid transparent;
+        transition: all 0.2s ease;
         
-        &:hover {
-             background-color: var(--surface-50);
-        }
-      }
-
-      .expiration-row.has-items {
-        background-color: rgba(var(--primary-500-rgb), 0.05);
-      }
-
-      .period-label {
-        font-weight: 500;
-        font-size: 0.95rem;
-        color: var(--text-color-secondary);
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        
-        i {
-            font-size: 0.9rem;
+        // Default (Empty) state
+        .tile-label {
+            font-size: 0.75rem;
             color: var(--text-color-secondary);
-            opacity: 0.7;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .tile-value {
+             font-size: 1.25rem;
+             font-weight: 700;
+             color: var(--text-color-secondary);
+             opacity: 0.5;
+        }
+
+        // Active States
+        &.active {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            
+            .tile-value {
+                opacity: 1;
+                color: var(--text-color);
+            }
+        }
+        
+        &.critical {
+            background: #fef2f2; // Red 50
+            border-color: #fee2e2;
+            .tile-value { color: #dc2626; }
+            .tile-label { color: #991b1b; }
+        }
+        
+        &.warning {
+            background: #fffbeb; // Amber 50
+            border-color: #fef3c7;
+            .tile-value { color: #d97706; }
+            .tile-label { color: #92400e; }
+        }
+        
+        &.info {
+            background: #eff6ff; // Blue 50
+            border-color: #dbeafe;
+            .tile-value { color: #2563eb; }
+            .tile-label { color: #1e40af; }
+        }
+        
+        &.success {
+             background: #ecfdf5; // Emerald 50
+             border-color: #d1fae5;
+             .tile-value { color: #059669; }
+             .tile-label { color: #065f46; }
         }
       }
 
@@ -147,28 +177,27 @@ import { ChipModule } from 'primeng/chip';
       
       .separator {
         height: 1px;
-        background: rgba(229, 231, 235, 0.6);
-        margin-bottom: 1rem;
+        background: rgba(229, 231, 235, 0.4);
+        margin-bottom: 0.75rem;
       }
 
       .total-count {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        justify-content: flex-end;
-        font-size: 1rem;
+        justify-content: space-between;
+        font-size: 0.875rem;
         color: var(--text-color-secondary);
       }
-
-      .total-count i {
-        color: var(--primary-color);
-        font-size: 1rem;
+      
+      .total-label {
+        font-weight: 500;
       }
       
       .total-count strong {
          color: var(--text-color);
-         font-size: 1.1rem;
+         font-size: 1rem;
       }
+
 
       :host ::ng-deep {
         .chip-critical {

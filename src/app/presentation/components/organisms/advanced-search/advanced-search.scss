@@ -2,53 +2,118 @@
   display: block;
 }
 
-.search-header {
+// "Neutral Premium" Variables
+$card-bg: #ffffff;
+$border-color: #e2e8f0; // Slate 200
+$text-primary: #1e293b; // Slate 800
+$text-secondary: #64748b; // Slate 500
+$primary-color: var(--primary-color);
+$radius: 12px;
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+.advanced-search-card {
+  background: $card-bg;
+  border: 1px solid $border-color;
+  border-radius: $radius;
+  padding: 1.5rem;
+  box-shadow: $shadow-sm;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+}
+
+// Header
+.card-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-}
-
-.header-title {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-weight: 600;
-  color: var(--primary-color);
-
-  i {
-    font-size: 1.25rem;
-  }
-}
-
-.active-badge {
-  padding: 0.25rem 0.75rem;
-  background: var(--primary-100);
-  color: var(--primary-700);
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.search-content {
-  padding: 0 1rem 1rem;
-}
-
-.search-section {
+  align-items: flex-start;
   margin-bottom: 2rem;
 
-  h4 {
-    margin: 0 0 1rem;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-color);
+  .title-cluster {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .icon-indicator {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--surface-50);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $primary-color;
+      border: 1px solid $border-color;
+
+      i {
+        font-size: 1.2rem;
+      }
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: $text-primary;
+    }
+
+    .count-badge {
+      background: var(--primary-100);
+      color: var(--primary-700);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 99px;
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .v-divider {
+      width: 1px;
+      height: 20px;
+      background: $border-color;
+      margin: 0 0.25rem;
+    }
   }
 }
 
-.field-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+// Form Layout
+.form-row {
+  margin-bottom: 1.5rem;
+
+  &.main-search-row {
+    display: flex;
+    flex-wrap: wrap; // Allow wrapping on small screens
+    gap: 1rem;
+    align-items: flex-start; // Align top in case of errors
+
+    .search-field {
+      flex: 1 1 300px; // Grow, shrink, min-width
+    }
+
+    .date-range-field {
+      flex: 0 0 auto;
+      // No separate label styling needed here if we rely on placeholders or compact look
+    }
+
+    .toggle-field {
+      flex: 0 0 auto;
+      width: 160px;
+    }
+  }
+
+  &.grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
 }
 
 .field {
@@ -57,90 +122,246 @@
   gap: 0.5rem;
 
   label {
-    font-weight: 500;
-    font-size: 0.875rem;
-    color: var(--text-color-secondary);
-  }
-
-  small {
-    font-size: 0.75rem;
-    color: var(--text-color-secondary);
-    margin-top: -0.25rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
   }
 }
 
-.checkbox-field {
-  justify-content: center;
-}
+// Overriding PrimeNG for that "Clean White" look
+::ng-deep {
 
-.saved-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.saved-filter-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.search-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--surface-border);
-}
-
-.action-group {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.save-dialog {
-  margin-top: 1.5rem;
-  padding: 1.5rem;
-  background: var(--surface-50);
-  border-radius: 8px;
-  border: 1px solid var(--surface-border);
-
-  h4 {
-    margin: 0 0 1rem;
-    font-size: 1rem;
-  }
-
-  input {
+  .p-inputtext,
+  .p-multiselect,
+  .p-select,
+  .p-datepicker,
+  .p-togglebutton.p-button {
     width: 100%;
-    margin-bottom: 1rem;
+    border-radius: 8px;
+    border-color: $border-color;
+
+    &:enabled:hover {
+      border-color: #94a3b8; // Slate 400
+    }
+
+    &:enabled:focus {
+      border-color: $primary-color;
+      box-shadow: 0 0 0 2px var(--primary-100);
+    }
   }
 
-  .dialog-actions {
+  // Icon Positioning Fix
+  .p-input-icon-left {
+    width: 100%;
+    position: relative;
+    display: block;
+
+    i {
+      position: absolute;
+      top: 50%;
+      left: 0.75rem;
+      margin-top: -0.5rem; // Center vertically (font-size dependant)
+      color: $text-secondary;
+      z-index: 1;
+    }
+
+    input {
+      padding-left: 2.5rem; // Room for icon
+    }
+  }
+
+  // Toggle Button
+  .p-togglebutton.p-button {
+    background: #f8fafc;
+    border: 1px solid $border-color;
+    color: $text-secondary;
+
+    &.p-highlight {
+      background: var(--primary-50);
+      border-color: var(--primary-200);
+      color: var(--primary-700);
+    }
+
+    .p-button-icon {
+      color: inherit;
+    }
+  }
+}
+
+// Date Range
+.date-range-field {
+  .date-group {
     display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .date-control {
+      flex: 0 0 140px; // Compact date width
+    }
+
+    .arrow-separator {
+      color: $text-secondary;
+      padding: 0 0.25rem;
+      font-size: 0.8rem;
+    }
+  }
+
+  .error-msg {
+    color: #ef4444;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    display: block; // Ensure it breaks to new line
+  }
+}
+
+// Saved Filters
+.saved-filters-row {
+  margin-bottom: 2rem;
+
+  label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $text-secondary;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .chip-container {
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.75rem;
+
+    .custom-chip {
+      display: inline-flex;
+      align-items: center;
+      background: #f1f5f9;
+      border: 1px solid transparent;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: $text-primary;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      .name {
+        margin-right: 0.5rem;
+        font-weight: 500;
+      }
+
+      .remove-icon {
+        font-size: 0.7rem;
+        color: $text-secondary;
+        padding: 4px;
+        border-radius: 50%;
+
+        &:hover {
+          background: #fee2e2;
+          color: #ef4444;
+        }
+      }
+
+      &:hover {
+        background: white;
+        border-color: $border-color;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
+}
+
+// Footer
+.footer-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+// Modal (Simple & Clean)
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.modal-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 400px;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: $text-primary;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: $text-secondary;
+    }
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
   }
 }
 
 // Responsive
-@media (max-width: 768px) {
-  .field-grid {
+@media (max-width: 1024px) {
+  .form-row.grid-4 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .form-row.main-search-row {
+    flex-direction: column;
+
+    .toggle-field {
+      width: 100%;
+    }
+  }
+
+  .form-row.grid-4 {
     grid-template-columns: 1fr;
   }
 
-  .search-actions {
+  .date-range-field .date-group {
     flex-direction: column;
-    gap: 1rem;
+    align-items: stretch;
 
-    .action-group {
-      width: 100%;
-
-      ::ng-deep button {
-        flex: 1;
-      }
+    .arrow-separator {
+      display: none;
     }
 
-    > button {
-      width: 100%;
+    .date-control {
+      flex: auto;
     }
   }
 }

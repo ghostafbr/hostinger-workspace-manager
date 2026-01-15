@@ -203,44 +203,53 @@
     }
   }
 
-  .summary-content {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  .summary-grid-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
     flex: 1;
+    margin-bottom: 0.5rem;
 
-    .summary-item {
+    .summary-tile {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
+      padding: 0.75rem;
+      background: var(--surface-50);
+      border-radius: 12px;
+      transition: all 0.2s ease;
 
-      .label {
-        font-size: 0.95rem;
+      .tile-label {
+        font-size: 0.75rem;
         color: var(--text-color-secondary);
         font-weight: 500;
+        margin-bottom: 0.25rem;
       }
 
-      .value {
+      .tile-value {
         font-size: 1.25rem;
         font-weight: 700;
         color: var(--text-color);
+      }
 
-        &.success {
-          color: #059669; // Emerald 600
+      &.success-tile {
+        background: #ecfdf5;
+
+        .tile-value {
+          color: #059669;
+        }
+
+        .tile-label {
+          color: #065f46;
         }
       }
 
-      &.small {
-        .value {
-          font-size: 1.1rem;
-        }
+      &:hover {
+        transform: translateY(-2px);
+        background: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       }
-    }
-
-    .separator {
-      height: 1px;
-      background: rgba(229, 231, 235, 0.6);
-      margin: 0.5rem 0;
     }
   }
 }
