@@ -288,6 +288,8 @@ Ver [Issues](../../issues) en GitHub para el roadmap completo.
 - ✅ #16 - Sistema de Alertas
 - ✅ #11 - Audit Logs
 - ✅ #21 - Security Rules
+- ✅ #19 - Dashboard Charts
+- ✅ #20 - Data Exports
 
 ### En Progreso
 - 🚧 #14 - CI/CD
@@ -302,4 +304,4 @@ Ver [Issues](../../issues) en GitHub para el roadmap completo.
 
 ---
 
-**Última actualización:** 11 de enero de 2026
+**Última actualización:** 16 de enero de 2026

@@ -213,6 +213,9 @@ import { DomainStatusChartComponent } from '@app/presentation/components/organis
       .stats-section-container {
         margin-bottom: 2rem;
       }
+      .section-title-row {
+        margin-bottom: 1.5rem;
+      }
       .compact-stats-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -235,6 +238,19 @@ import { DomainStatusChartComponent } from '@app/presentation/components/organis
         .charts-grid {
           grid-template-columns: 1fr;
         }
+      }
+
+      .welcome-inline {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin-top: 0.5rem;
+        color: #64748b;
+      }
+
+      .welcome-user {
+        font-weight: 500;
+        color: #334155;
       }
     `,
   ],
