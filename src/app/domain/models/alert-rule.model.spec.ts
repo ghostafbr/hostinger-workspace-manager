@@ -22,5 +22,12 @@ describe('AlertRuleModel', () => {
     const def = AlertRuleModel.createDefault('w', EntityType.DOMAIN);
     expect(def.workspaceId).toBe('w');
     expect(def.getEntityTypeLabel()).toBe('Dominios');
+    // non-global and disabled rule cases
+    const local = new AlertRuleModel({ ...r, workspaceId: 'w1', id: 'local' });
+    expect(local.isGlobal()).toBe(false);
+    expect(local.appliesToWorkspace('w1')).toBe(true);
+
+    const disabled = new AlertRuleModel({ ...r, enabled: false, id: 'd' });
+    expect(disabled.shouldTrigger(3)).toBe(false);
   });
 });

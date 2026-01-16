@@ -86,6 +86,7 @@ describe('AuditLogService', () => {
     });
 
     it('should handle firestore errors', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const { getDocs } = await import('firebase/firestore');
       const error = new Error('Firestore error');
       vi.mocked(getDocs).mockRejectedValue(error);
@@ -94,6 +95,7 @@ describe('AuditLogService', () => {
         'Firestore error',
       );
       expect(service.error()).toBe('Firestore error');
+      consoleSpy.mockRestore();
     });
 
     it('should fetch all audit logs without filters', async () => {

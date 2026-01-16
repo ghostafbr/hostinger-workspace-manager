@@ -66,10 +66,12 @@ describe('DashboardService', () => {
 
   describe('loadDashboardStats', () => {
     it('should throw error when user not authenticated', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       vi.spyOn(authService, 'getCurrentUserUid').mockReturnValue(null);
 
       await expect(service.loadDashboardStats()).rejects.toThrow('User not authenticated');
       expect(service.error()).toBe('User not authenticated');
+      consoleSpy.mockRestore();
     });
 
     it('should return empty stats when no workspaces', async () => {
@@ -86,6 +88,7 @@ describe('DashboardService', () => {
     });
 
     it('should handle firestore errors', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const { getDocs } = await import('firebase/firestore');
       const error = new Error('Firestore error');
       vi.mocked(getDocs).mockRejectedValue(error);
@@ -93,6 +96,7 @@ describe('DashboardService', () => {
       await expect(service.loadDashboardStats()).rejects.toThrow('Firestore error');
       expect(service.error()).toBe('Firestore error');
       expect(service.isLoading()).toBe(false);
+      consoleSpy.mockRestore();
     });
 
     it('should set loading state during fetch', async () => {
@@ -121,6 +125,7 @@ describe('DashboardService', () => {
     });
 
     it('should clear error on successful operation', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const { getDocs } = await import('firebase/firestore');
 
       // First fail
@@ -137,6 +142,7 @@ describe('DashboardService', () => {
       await service.loadDashboardStats();
 
       expect(service.error()).toBeNull();
+      consoleSpy.mockRestore();
     });
   });
 });

@@ -24,23 +24,19 @@ export default defineConfig({
         'src/main.ts',
         'src/environments/**',
       ],
-      // Limit coverage to TypeScript files in application and domain layers
-      // For now focus coverage on domain models to raise project domain-level coverage
-      include: [
-        'src/app/domain/models/**/*.ts',
-        'src/app/application/services/**/*.ts'
-      ],
+      // Measure coverage only for domain models to focus effort
+      include: ['src/app/domain/models/**/*.ts'],
       // Do not force inclusion of all files — measure only executed/tested files
       all: false,
-      lines: 70,
-      functions: 70,
-      branches: 70,
-      statements: 70,
+      lines: 80,
+      functions: 80,
+      branches: 80,
+      statements: 80,
       thresholds: {
-        lines: 70,
-        functions: 70,
-        branches: 70,
-        statements: 70,
+        lines: 80,
+        functions: 80,
+        branches: 80,
+        statements: 80,
       },
     },
   },

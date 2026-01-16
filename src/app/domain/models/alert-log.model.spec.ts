@@ -29,5 +29,17 @@ describe('AlertLogModel', () => {
     const b = new AlertLogModel({ ...a, daysBefore: 40, id: '2' });
     expect(b.isInfo()).toBe(true);
     expect(b.getSeverity()).toBe('success');
+
+    // edge cases: singular day label and warn severity
+    const one = new AlertLogModel({ ...a, daysBefore: 1, id: '3' });
+    expect(one.getDaysBeforeLabel()).toBe('1 día');
+
+    const warn = new AlertLogModel({ ...a, daysBefore: 8, id: '4' });
+    expect(warn.isWarning()).toBe(true);
+    expect(warn.getSeverity()).toBe('info');
+
+    // entity type label for subscription
+    const sub = new AlertLogModel({ ...a, entityType: EntityType.SUBSCRIPTION, id: '5' });
+    expect(sub.getEntityTypeLabel()).toBe('Suscripción');
   });
 });

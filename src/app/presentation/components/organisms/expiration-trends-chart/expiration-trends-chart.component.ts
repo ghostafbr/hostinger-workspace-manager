@@ -18,8 +18,73 @@ export interface ExpirationTrendData {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ChartModule, CommonModule],
-  templateUrl: './expiration-trends-chart.component.html',
-  styleUrl: './expiration-trends-chart.component.scss',
+  template: `
+    <div class="glass-chart-card">
+      <div class="chart-header">
+        <div class="header-title">
+          <div class="icon-indicator">
+            <i class="pi pi-chart-line"></i>
+          </div>
+          <h3>{{ title() }}</h3>
+        </div>
+        <!-- Future: Add periods selector here? -->
+      </div>
+      <div class="chart-content">
+        <p-chart type="bar" [data]="chartData()" [options]="chartOptions" height="300px" />
+      </div>
+    </div>
+  `,
+  styles: [`
+    :host {
+      display: block;
+    }
+    .glass-chart-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      transition: box-shadow 0.2s;
+    }
+    .glass-chart-card:hover {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    .chart-header {
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chart-header .header-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .chart-header .header-title .icon-indicator {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--surface-50);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-color);
+      border: 1px solid #e2e8f0;
+    }
+    .chart-header .header-title .icon-indicator i {
+      font-size: 1.2rem;
+    }
+    .chart-header .header-title h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+    .chart-content {
+      position: relative;
+      width: 100%;
+    }
+  `],
 })
 export class ExpirationTrendsChartComponent {
   /**

@@ -32,5 +32,20 @@ describe('AuditLogModel', () => {
     const u = new AuditLogModel({ ...a, action: 'unknown.action' as any, id: 'u' });
     expect(u.getActionLabel()).toBe('unknown.action');
     expect(u.getActionIcon()).toBe('pi pi-file');
+    // other action prefixes
+    const t = new AuditLogModel({ ...a, action: 'token.save' as AuditAction, id: 't' });
+    expect(t.getActionIcon()).toBe('pi pi-key');
+
+    const s = new AuditLogModel({ ...a, action: 'sync.manual' as AuditAction, id: 's' });
+    expect(s.getActionIcon()).toBe('pi pi-sync');
+
+    const al = new AuditLogModel({ ...a, action: 'alert.generate' as AuditAction, id: 'al' });
+    expect(al.getActionIcon()).toBe('pi pi-bell');
+
+    const d = new AuditLogModel({ ...a, status: AuditStatus.FAILED, id: 'd' });
+    expect(d.isFailure()).toBe(true);
+    expect(d.getSeverity()).toBe('danger');
+    const syncA = new AuditLogModel({ ...a, action: 'sync.scheduled' as AuditAction, id: 'ss' });
+    expect(syncA.isSyncAction()).toBe(true);
   });
 });

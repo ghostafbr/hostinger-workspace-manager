@@ -71,12 +71,14 @@ describe('AlertService', () => {
     });
 
     it('should handle firestore errors', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const { getDocs } = await import('firebase/firestore');
       const error = new Error('Firestore error');
       vi.mocked(getDocs).mockRejectedValue(error);
 
       await expect(service.getAlertsByWorkspace('ws-123')).rejects.toThrow('Firestore error');
       expect(service.error()).toBe('Firestore error');
+      consoleSpy.mockRestore();
     });
   });
 });

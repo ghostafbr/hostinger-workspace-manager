@@ -48,12 +48,14 @@ describe('workspaceGuard', () => {
   });
 
   it('should deny access and redirect when no workspaceId in route', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.mocked(route.paramMap.get).mockReturnValue(null);
 
     const result = await TestBed.runInInjectionContext(() => workspaceGuard(route, {} as any));
 
     expect(result).toBe(false);
     expect(router.navigate).toHaveBeenCalledWith(['/workspaces']);
+    consoleSpy.mockRestore();
   });
 
   it('should allow access when workspace is already in context with matching ID', async () => {
@@ -91,6 +93,7 @@ describe('workspaceGuard', () => {
   });
 
   it('should redirect when workspace not found', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const workspaceId = 'nonexistent-workspace';
 
     vi.mocked(route.paramMap.get).mockReturnValue(workspaceId);
@@ -108,9 +111,11 @@ describe('workspaceGuard', () => {
 
     expect(result).toBe(false);
     expect(router.navigate).toHaveBeenCalledWith(['/workspaces']);
+    consoleSpy.mockRestore();
   });
 
   it('should handle errors and redirect', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const workspaceId = 'error-workspace';
     const error = new Error('Database error');
 
@@ -129,5 +134,6 @@ describe('workspaceGuard', () => {
 
     expect(result).toBe(false);
     expect(router.navigate).toHaveBeenCalledWith(['/workspaces']);
+    consoleSpy.mockRestore();
   });
 });

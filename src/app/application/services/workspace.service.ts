@@ -125,7 +125,7 @@ export class WorkspaceService {
    * Create new workspace
    */
   async createWorkspace(
-    data: Omit<IWorkspace, 'id' | 'createdAt' | 'updatedAt'> & { token?: string },
+    data: Omit<IWorkspace, 'id' | 'createdAt' | 'updatedAt' | 'userId'> & { token?: string },
   ): Promise<Workspace> {
     try {
       this.isLoading.set(true);
@@ -174,7 +174,9 @@ export class WorkspaceService {
    */
   async updateWorkspace(
     id: string,
-    data: Partial<Omit<IWorkspace, 'id' | 'createdAt' | 'updatedAt'>> & { token?: string },
+    data: Partial<Omit<IWorkspace, 'id' | 'createdAt' | 'updatedAt' | 'userId'>> & {
+      token?: string;
+    },
   ): Promise<void> {
     try {
       this.isLoading.set(true);

@@ -146,6 +146,7 @@ describe('WorkspaceService', () => {
     });
 
     it('should handle firestore errors', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const { getDocs } = await import('firebase/firestore');
       const error = new Error('Firestore error');
       vi.mocked(getDocs).mockRejectedValue(error);
@@ -153,6 +154,7 @@ describe('WorkspaceService', () => {
       await expect(service.getAllWorkspaces()).rejects.toThrow('Firestore error');
       expect(service.error()).toBe('Firestore error');
       expect(service.isLoading()).toBe(false);
+      consoleSpy.mockRestore();
     });
 
     it('should set loading state during fetch', async () => {
@@ -205,12 +207,14 @@ describe('WorkspaceService', () => {
     });
 
     it('should handle errors when fetching workspace', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const { getDoc } = await import('firebase/firestore');
       const error = new Error('Database error');
       vi.mocked(getDoc).mockRejectedValue(error);
 
       await expect(service.getWorkspaceByIdAsync('ws-123')).rejects.toThrow('Database error');
       expect(service.error()).toBe('Database error');
+      consoleSpy.mockRestore();
     });
   });
 
@@ -272,6 +276,7 @@ describe('WorkspaceService', () => {
     });
 
     it('should handle create errors', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const { addDoc } = await import('firebase/firestore');
       const error = new Error('Create failed');
       vi.mocked(addDoc).mockRejectedValue(error);
@@ -284,6 +289,7 @@ describe('WorkspaceService', () => {
         }),
       ).rejects.toThrow('Create failed');
       expect(service.error()).toBe('Create failed');
+      consoleSpy.mockRestore();
     });
   });
 
@@ -309,6 +315,7 @@ describe('WorkspaceService', () => {
     });
 
     it('should handle update errors', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const { updateDoc } = await import('firebase/firestore');
       const error = new Error('Update failed');
       vi.mocked(updateDoc).mockRejectedValue(error);
@@ -317,6 +324,7 @@ describe('WorkspaceService', () => {
         'Update failed',
       );
       expect(service.error()).toBe('Update failed');
+      consoleSpy.mockRestore();
     });
   });
 
@@ -333,12 +341,14 @@ describe('WorkspaceService', () => {
     });
 
     it('should handle delete errors', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const { deleteDoc } = await import('firebase/firestore');
       const error = new Error('Delete failed');
       vi.mocked(deleteDoc).mockRejectedValue(error);
 
       await expect(service.deleteWorkspace('ws-123')).rejects.toThrow('Delete failed');
       expect(service.error()).toBe('Delete failed');
+      consoleSpy.mockRestore();
     });
   });
 
@@ -355,6 +365,7 @@ describe('WorkspaceService', () => {
     });
 
     it('should update error signal on failure', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const { getDocs } = await import('firebase/firestore');
       vi.mocked(getDocs).mockRejectedValue(new Error('Test error'));
 
@@ -365,9 +376,11 @@ describe('WorkspaceService', () => {
       }
 
       expect(service.error()).toBe('Test error');
+      consoleSpy.mockRestore();
     });
 
     it('should clear error on successful operation', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const { getDocs } = await import('firebase/firestore');
 
       // First fail
@@ -384,6 +397,7 @@ describe('WorkspaceService', () => {
       await service.getAllWorkspaces();
 
       expect(service.error()).toBeNull();
+      consoleSpy.mockRestore();
     });
   });
 });
