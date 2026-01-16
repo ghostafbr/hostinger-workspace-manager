@@ -27,11 +27,11 @@ describe('WompiService', () => {
         amount: 10000,
         currency: 'COP',
         reference: 'ref-123',
-        description: 'Test Payment'
+        description: 'Test Payment',
       };
 
       const link = await service.generatePaymentLink(params);
-      
+
       expect(link).toContain('https://checkout.wompi.co/l/');
       expect(link).toContain('public-key=pub_test');
       expect(link).toContain('amount-in-cents=10000');
@@ -42,15 +42,15 @@ describe('WompiService', () => {
   describe('verifyPayment', () => {
     it('should call verify endpoint', async () => {
       const mockResponse = { status: 'APPROVED', data: {} };
-      
+
       const promise = service.verifyPayment('txn-123', 'pub_test');
-      
+
       const req = httpMock.expectOne('https://production.wompi.co/v1/transactions/txn-123');
       expect(req.request.method).toBe('GET');
       expect(req.request.headers.get('Authorization')).toBe('Bearer pub_test');
-      
+
       req.flush(mockResponse);
-      
+
       const res = await promise;
       expect(res.status).toBe('APPROVED');
     });

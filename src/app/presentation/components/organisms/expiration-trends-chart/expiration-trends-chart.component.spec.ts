@@ -11,20 +11,20 @@ describe('ExpirationTrendsChartComponent', () => {
   beforeEach(async () => {
     // Hack: Override inputs to avoid "Input is required" error in JIT
     TestBed.overrideComponent(ExpirationTrendsChartComponent, {
-        set: { inputs: [] }
+      set: { inputs: [] },
     });
 
     await TestBed.configureTestingModule({
       imports: [ExpirationTrendsChartComponent, NoopAnimationsModule],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ExpirationTrendsChartComponent);
     component = fixture.componentInstance;
-    
+
     // Hack: Manually set the signal property
     Object.defineProperty(component, 'data', { value: signal([]) });
-    
+
     fixture.detectChanges();
   });
 

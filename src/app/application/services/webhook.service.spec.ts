@@ -27,49 +27,49 @@ describe('WebhookService', () => {
 
   describe('sendWebhook', () => {
     const config: IWebhookConfig = {
-        url: 'https://test.com/hook',
-        platform: 'slack',
-        events: ['health.warning'],
-        minSeverity: 'warning',
-        enabled: true
+      url: 'https://test.com/hook',
+      platform: 'slack',
+      events: ['health.warning'],
+      minSeverity: 'warning',
+      enabled: true,
     };
 
     const payload: WebhookPayload = {
-        event: 'health.warning',
-        severity: 'warning',
-        title: 'Test',
-        message: 'Msg',
-        workspace: { id: 'w1', name: 'WS' },
-        timestamp: new Date().toISOString()
+      event: 'health.warning',
+      severity: 'warning',
+      title: 'Test',
+      message: 'Msg',
+      workspace: { id: 'w1', name: 'WS' },
+      timestamp: new Date().toISOString(),
     };
 
     it('should send post request for enabled match', async () => {
-        const promise = service.sendWebhook(config, payload);
-        
-        const req = httpMock.expectOne('https://test.com/hook');
-        expect(req.request.method).toBe('POST');
-        req.flush({});
-        
-        await promise;
+      const promise = service.sendWebhook(config, payload);
+
+      const req = httpMock.expectOne('https://test.com/hook');
+      expect(req.request.method).toBe('POST');
+      req.flush({});
+
+      await promise;
     });
 
     it('should check severity filter', async () => {
-        const configStrict = { ...config, minSeverity: 'critical' as 'critical' };
-        // Payload is warning, config is critical only -> should NOT send
-        await service.sendWebhook(configStrict, payload);
-        
-        httpMock.expectNone('https://test.com/hook');
+      const configStrict = { ...config, minSeverity: 'critical' as 'critical' };
+      // Payload is warning, config is critical only -> should NOT send
+      await service.sendWebhook(configStrict, payload);
+
+      httpMock.expectNone('https://test.com/hook');
     });
 
     it('should format payload for slack', async () => {
-        const promise = service.sendWebhook(config, payload);
-        
-        const req = httpMock.expectOne('https://test.com/hook');
-        // Slack payload structure check
-        expect(req.request.body).toHaveProperty('attachments');
-        req.flush({});
-        
-        await promise;
+      const promise = service.sendWebhook(config, payload);
+
+      const req = httpMock.expectOne('https://test.com/hook');
+      // Slack payload structure check
+      expect(req.request.body).toHaveProperty('attachments');
+      req.flush({});
+
+      await promise;
     });
   });
 });

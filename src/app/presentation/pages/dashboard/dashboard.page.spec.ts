@@ -8,7 +8,13 @@ import { AuthService } from '../../../application/services/auth.service';
 import { ExportService } from '../../../application/services/export.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { NO_ERRORS_SCHEMA, signal, Component, output, ChangeDetectionStrategy } from '@angular/core';
+import {
+  NO_ERRORS_SCHEMA,
+  signal,
+  Component,
+  output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToolbarModule } from 'primeng/toolbar';
 
@@ -18,7 +24,7 @@ import { AdvancedSearchComponent } from '../../components/organisms/advanced-sea
   selector: 'app-advanced-search',
   standalone: true,
   template: '',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 class MockAdvancedSearchComponent {
   searchApplied = output<any>();
@@ -69,15 +75,15 @@ describe('DashboardPage', () => {
         { provide: Router, useValue: mockRouter },
         { provide: ConfirmationService, useValue: mockConfirmationService },
         { provide: MessageService, useValue: mockMessageService },
-        { provide: ActivatedRoute, useValue: {} }
+        { provide: ActivatedRoute, useValue: {} },
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     })
-    .overrideComponent(DashboardPage, {
-      remove: { imports: [AdvancedSearchComponent] },
-      add: { imports: [MockAdvancedSearchComponent] }
-    })
-    .compileComponents();
+      .overrideComponent(DashboardPage, {
+        remove: { imports: [AdvancedSearchComponent] },
+        add: { imports: [MockAdvancedSearchComponent] },
+      })
+      .compileComponents();
 
     fixture = TestBed.createComponent(DashboardPage);
     component = fixture.componentInstance;

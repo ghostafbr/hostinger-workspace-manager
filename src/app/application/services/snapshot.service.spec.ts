@@ -20,8 +20,8 @@ vi.mock('firebase/firestore', async () => {
     serverTimestamp: vi.fn(),
     deleteDoc: vi.fn(),
     Timestamp: {
-        fromDate: vi.fn(),
-    }
+      fromDate: vi.fn(),
+    },
   };
 });
 
@@ -72,7 +72,7 @@ describe('SnapshotService', () => {
         subscriptionsExpiring30Days: 0,
         subscriptionsExpiring60Days: 0,
       } as any);
-      
+
       vi.mocked(addDoc).mockResolvedValue({ id: 'snap-1' } as any);
       vi.spyOn(service, 'loadSnapshots').mockResolvedValue([]); // Prevent failing on load
 
@@ -95,13 +95,23 @@ describe('SnapshotService', () => {
 
   describe('getChangeMetrics', () => {
     it('should calculate diffs', () => {
-        const curr = { totalWorkspaces: 10, totalDomains: 5, totalSubscriptions: 2, domainsExpiring7Days: 1 } as any;
-        const prev = { totalWorkspaces: 8, totalDomains: 5, totalSubscriptions: 3, domainsExpiring7Days: 0 } as any;
-        
-        const diff = service.getChangeMetrics(curr, prev);
-        expect(diff.workspaceChange).toBe(2);
-        expect(diff.domainChange).toBe(0);
-        expect(diff.subscriptionChange).toBe(-1);
+      const curr = {
+        totalWorkspaces: 10,
+        totalDomains: 5,
+        totalSubscriptions: 2,
+        domainsExpiring7Days: 1,
+      } as any;
+      const prev = {
+        totalWorkspaces: 8,
+        totalDomains: 5,
+        totalSubscriptions: 3,
+        domainsExpiring7Days: 0,
+      } as any;
+
+      const diff = service.getChangeMetrics(curr, prev);
+      expect(diff.workspaceChange).toBe(2);
+      expect(diff.domainChange).toBe(0);
+      expect(diff.subscriptionChange).toBe(-1);
     });
   });
 });

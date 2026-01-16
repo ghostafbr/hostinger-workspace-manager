@@ -10,17 +10,17 @@ describe('UpcomingEventsTimelineComponent', () => {
 
   beforeEach(async () => {
     TestBed.overrideComponent(UpcomingEventsTimelineComponent, {
-        set: { inputs: [] }
+      set: { inputs: [] },
     });
 
     await TestBed.configureTestingModule({
       imports: [UpcomingEventsTimelineComponent, NoopAnimationsModule],
-      schemas: [NO_ERRORS_SCHEMA]
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(UpcomingEventsTimelineComponent);
     component = fixture.componentInstance;
-    
+
     // Hack: Manually set the signal property
     Object.defineProperty(component, 'events', { value: signal([]) });
     Object.defineProperty(component, 'title', { value: signal('Title') });

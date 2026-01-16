@@ -57,7 +57,10 @@ interface CriticalWorkspace {
                       }}</span>
                     </div>
                     <div class="status-row">
-                      <span class="status-dot" [class]="getStatusClass(item.workspace.status)"></span>
+                      <span
+                        class="status-dot"
+                        [class]="getStatusClass(item.workspace.status)"
+                      ></span>
                       <span class="status-text">{{ item.workspace.status }}</span>
                     </div>
                   </div>
@@ -326,7 +329,7 @@ interface CriticalWorkspace {
         font-weight: 500;
         padding-left: 0.25rem;
       }
-    `
+    `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

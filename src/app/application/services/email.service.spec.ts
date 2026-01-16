@@ -19,11 +19,15 @@ vi.mock('firebase/firestore', async () => {
     where: vi.fn(),
     orderBy: vi.fn(),
     Timestamp: {
-      now: vi.fn(() => ({ seconds: 1640000000, nanoseconds: 0, toDate: () => new Date(1640000000000) })),
+      now: vi.fn(() => ({
+        seconds: 1640000000,
+        nanoseconds: 0,
+        toDate: () => new Date(1640000000000),
+      })),
       fromDate: vi.fn((date: Date) => ({
         seconds: Math.floor(date.getTime() / 1000),
         nanoseconds: 0,
-        toDate: () => date
+        toDate: () => date,
       })),
     },
   };
@@ -104,7 +108,7 @@ describe('EmailService', () => {
     });
 
     it('should throw if config already exists', async () => {
-        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const { getDocs } = await import('firebase/firestore');
       // Mock getEmailConfig returning result
       vi.mocked(getDocs).mockResolvedValue({
@@ -113,7 +117,7 @@ describe('EmailService', () => {
       } as any);
 
       await expect(
-        service.createEmailConfig({ workspaceId: 'ws-1', enabled: true } as any)
+        service.createEmailConfig({ workspaceId: 'ws-1', enabled: true } as any),
       ).rejects.toThrow('already exists');
       consoleSpy.mockRestore();
     });
@@ -134,7 +138,7 @@ describe('EmailService', () => {
     });
 
     it('should throw if config not found', async () => {
-        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const { getDocs } = await import('firebase/firestore');
       vi.mocked(getDocs).mockResolvedValue({ empty: true, docs: [] } as any);
 
@@ -146,7 +150,7 @@ describe('EmailService', () => {
   describe('deleteEmailConfig', () => {
     it('should delete existing config', async () => {
       const { deleteDoc, getDocs } = await import('firebase/firestore');
-       vi.mocked(getDocs).mockResolvedValue({
+      vi.mocked(getDocs).mockResolvedValue({
         empty: false,
         docs: [{ id: 'config-1', data: () => ({}) }],
       } as any);
@@ -191,44 +195,44 @@ describe('EmailService', () => {
 
   describe('checkRateLimits', () => {
     it('should return false if no config', async () => {
-        const { getDocs } = await import('firebase/firestore');
-        vi.mocked(getDocs).mockResolvedValue({ empty: true, docs: [] } as any); // getEmailConfig -> null
+      const { getDocs } = await import('firebase/firestore');
+      vi.mocked(getDocs).mockResolvedValue({ empty: true, docs: [] } as any); // getEmailConfig -> null
 
-        const result = await service.checkRateLimits('ws-1');
-        expect(result.canSend).toBe(false);
+      const result = await service.checkRateLimits('ws-1');
+      expect(result.canSend).toBe(false);
     });
 
     it('should check limits against logs', async () => {
-        const { getDocs } = await import('firebase/firestore');
-        // 1. getEmailConfig returns config
-        const configSnap = {
-            empty: false,
-            docs: [{ id: 'c', data: () => ({ rateLimit: { maxPerHour: 10, maxPerDay: 50 } }) }]
-        };
+      const { getDocs } = await import('firebase/firestore');
+      // 1. getEmailConfig returns config
+      const configSnap = {
+        empty: false,
+        docs: [{ id: 'c', data: () => ({ rateLimit: { maxPerHour: 10, maxPerDay: 50 } }) }],
+      };
 
-        // 2. getEmailLogs returns logs
-        const logsSnap = {
-            docs: [
-                { id: 'l1', data: () => ({ sentAt: { toDate: () => new Date() } }) }, // just now
-                { id: 'l2', data: () => ({ sentAt: { toDate: () => new Date(Date.now() - 10000) } }) } 
-            ]
-        };
+      // 2. getEmailLogs returns logs
+      const logsSnap = {
+        docs: [
+          { id: 'l1', data: () => ({ sentAt: { toDate: () => new Date() } }) }, // just now
+          { id: 'l2', data: () => ({ sentAt: { toDate: () => new Date(Date.now() - 10000) } }) },
+        ],
+      };
 
-        // We need to carefully mock sequential calls to getDocs?
-        // Actually getEmailConfig calls getDocs(query(config)).
-        // getEmailLogs calls getDocs(query(logs)).
-        // Simplified: use mockImplementation to return based on some hint or just assume order if sequential.
-        
-        let callCount = 0;
-        vi.mocked(getDocs).mockImplementation(async () => {
-            callCount++;
-            if (callCount === 1) return configSnap as any;
-            return logsSnap as any;
-        });
+      // We need to carefully mock sequential calls to getDocs?
+      // Actually getEmailConfig calls getDocs(query(config)).
+      // getEmailLogs calls getDocs(query(logs)).
+      // Simplified: use mockImplementation to return based on some hint or just assume order if sequential.
 
-        const result = await service.checkRateLimits('ws-1');
-        expect(result.canSend).toBe(true);
-        expect(result.hourlyCount).toBe(2);
+      let callCount = 0;
+      vi.mocked(getDocs).mockImplementation(async () => {
+        callCount++;
+        if (callCount === 1) return configSnap as any;
+        return logsSnap as any;
+      });
+
+      const result = await service.checkRateLimits('ws-1');
+      expect(result.canSend).toBe(true);
+      expect(result.hourlyCount).toBe(2);
     });
   });
 });

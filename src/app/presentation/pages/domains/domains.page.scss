@@ -35,6 +35,9 @@
       @media (max-width: 768px) {
         font-size: 1.5rem;
       }
+
+      color: var(--text-color-secondary);
+      margin: 0;
     }
 
     .page-subtitle {
@@ -42,6 +45,12 @@
       color: #6b7280;
       font-size: 1rem;
     }
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
   }
 }
 
@@ -51,6 +60,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

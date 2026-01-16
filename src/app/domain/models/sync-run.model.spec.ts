@@ -46,7 +46,12 @@ describe('SyncRun', () => {
     });
     expect(from.id).toBe('2');
     // case: running without endAt -> duration null
-    const running = new SyncRun({ ...s, id: 'run', endAt: undefined, status: SyncRunStatus.RUNNING });
+    const running = new SyncRun({
+      ...s,
+      id: 'run',
+      endAt: undefined,
+      status: SyncRunStatus.RUNNING,
+    });
     expect(running.getDurationMs()).toBeNull();
     expect(running.getDurationSeconds()).toBeNull();
 
@@ -55,7 +60,11 @@ describe('SyncRun', () => {
     expect(er.hasErrors()).toBe(true);
 
     // fromFirestore missing optional fields should default
-    const from2 = SyncRun.fromFirestore('3', { workspaceId: 'w3', startAt: now, status: SyncRunStatus.FAILED });
+    const from2 = SyncRun.fromFirestore('3', {
+      workspaceId: 'w3',
+      startAt: now,
+      status: SyncRunStatus.FAILED,
+    });
     expect(from2.domainsProcessed).toBe(0);
     expect(from2.errors.length).toBe(0);
   });

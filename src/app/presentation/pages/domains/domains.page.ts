@@ -12,10 +12,12 @@ import { ActivatedRoute } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
 
 // Services
 import { DomainService } from '@app/application/services/domain.service';
 import { WorkspaceContextService } from '@app/application/services/workspace-context.service';
+import { ExportService } from '@app/application/services/export.service';
 
 // Domain
 import { IDomain } from '@app/domain';
@@ -43,6 +45,7 @@ import { fadeIn, slideUp } from '@app/infrastructure';
     DomainsTableComponent,
     DomainDetailsDialogComponent,
     DomainEditDialogComponent,
+    ButtonModule,
   ],
   providers: [MessageService],
   animations: [fadeIn, slideUp],
@@ -52,6 +55,7 @@ import { fadeIn, slideUp } from '@app/infrastructure';
 export default class DomainsPage implements OnInit {
   private readonly domainService = inject(DomainService);
   private readonly workspaceContext = inject(WorkspaceContextService);
+  private readonly exportService = inject(ExportService);
   private readonly route = inject(ActivatedRoute);
   private readonly messageService = inject(MessageService);
 
@@ -157,6 +161,48 @@ export default class DomainsPage implements OnInit {
     if (!visible) {
       this.selectedDomain.set(null);
     }
+  }
+
+  /**
+   * Export domains to CSV
+   */
+  exportToCSV(): void {
+    const domains = this.domains();
+    if (domains.length === 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Sin datos',
+        detail: 'No hay dominios para exportar',
+        life: 3000,
+      });
+      return;
+    }
+
+    const exportData = domains.map((domain) => ({
+      Dominio: domain.domainName,
+      Workspace: this.workspaceName(),
+      'Fecha de Vencimiento': this.formatDate(domain.expiresAt),
+      Estado: this.domainService.getExpirationStatus(domain.expiresAt),
+    }));
+
+    const filename = `dominios-${this.workspaceName().replace(/\s+/g, '-').toLowerCase()}-${new Date().toISOString().split('T')[0]}.csv`;
+    this.exportService.exportToCSV(exportData, filename);
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Exportado',
+      detail: `Datos exportados a ${filename}`,
+      life: 3000,
+    });
+  }
+
+  private formatDate(date: unknown): string {
+    if (!date) return '';
+    if (date instanceof Date) return date.toLocaleDateString();
+    if (typeof date === 'object' && 'toDate' in date) {
+      return (date as { toDate: () => Date }).toDate().toLocaleDateString();
+    }
+    return String(date);
   }
 
   /**

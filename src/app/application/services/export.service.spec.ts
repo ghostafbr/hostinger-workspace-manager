@@ -10,7 +10,7 @@ describe('ExportService', () => {
       providers: [ExportService],
     });
     service = TestBed.inject(ExportService);
-    
+
     // Mock DOM elements
     vi.stubGlobal('URL', {
       createObjectURL: vi.fn(() => 'blob:url'),
@@ -36,17 +36,17 @@ describe('ExportService', () => {
 
     it('should generate CSV and trigger download', () => {
       const data = [{ name: 'Test', value: 123 }];
-      
+
       const linkMock = {
         href: '',
         download: '',
         click: vi.fn(),
       } as any;
-      
+
       const createElementSpy = vi.spyOn(document, 'createElement').mockReturnValue(linkMock);
-      
+
       service.exportToCSV(data, 'test.csv');
-      
+
       expect(createElementSpy).toHaveBeenCalledWith('a');
       expect(linkMock.download).toBe('test.csv');
       expect(linkMock.click).toHaveBeenCalled();
@@ -54,16 +54,16 @@ describe('ExportService', () => {
     });
 
     it('should handle custom columns', () => {
-        const data = [{ name: 'Test', value: 123, ignored: true }];
-        const columns = [{ label: 'Name Label', key: 'name' as keyof typeof data[0] }];
+      const data = [{ name: 'Test', value: 123, ignored: true }];
+      const columns = [{ label: 'Name Label', key: 'name' as keyof (typeof data)[0] }];
 
-        const linkMock = { href: '', download: '', click: vi.fn() } as any;
-        vi.spyOn(document, 'createElement').mockReturnValue(linkMock);
+      const linkMock = { href: '', download: '', click: vi.fn() } as any;
+      vi.spyOn(document, 'createElement').mockReturnValue(linkMock);
 
-        service.exportToCSV(data, 'custom.csv', columns);
-        // We can't easily inspect the blob content here without more complex mocking,
-        // but verifying it runs without error and clicks the link is good basic verification.
-        expect(linkMock.click).toHaveBeenCalled();
+      service.exportToCSV(data, 'custom.csv', columns);
+      // We can't easily inspect the blob content here without more complex mocking,
+      // but verifying it runs without error and clicks the link is good basic verification.
+      expect(linkMock.click).toHaveBeenCalled();
     });
   });
 

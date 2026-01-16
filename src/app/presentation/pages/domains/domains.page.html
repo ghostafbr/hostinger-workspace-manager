@@ -10,6 +10,16 @@
       </h1>
       <p class="page-subtitle">Gestiona y monitorea los dominios de este workspace</p>
     </div>
+    <div class="header-actions">
+      <p-button
+        label="Exportar CSV"
+        icon="pi pi-download"
+        severity="secondary"
+        [outlined]="true"
+        (onClick)="exportToCSV()"
+        [disabled]="totalDomains() === 0"
+      />
+    </div>
   </div>
 
   <!-- Domains Table -->
