@@ -18,8 +18,6 @@ import {
 import { CommonModule } from '@angular/common';
 import { ToolbarModule } from 'primeng/toolbar';
 
-import { AdvancedSearchComponent } from '../../components/organisms/advanced-search/advanced-search';
-
 @Component({
   selector: 'app-advanced-search',
   standalone: true,
@@ -80,7 +78,7 @@ describe('DashboardPage', () => {
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(DashboardPage, {
-        remove: { imports: [AdvancedSearchComponent] },
+        remove: { imports: [] },
         add: { imports: [MockAdvancedSearchComponent] },
       })
       .compileComponents();
