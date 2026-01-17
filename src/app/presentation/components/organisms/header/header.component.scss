@@ -303,13 +303,52 @@ $success-soft-text: #059669; // Emerald 600
 @include variables.media-max-sm {
   .header {
     height: 64px;
-    padding: 0 1rem;
+    padding: 0 0.75rem;
+    justify-content: space-between;
+    gap: 0.5rem;
   }
 
-  .header-left .workspace-selector {
-    ::ng-deep .p-select .p-select-label {
-      font-size: 0.85rem;
+  .header-left {
+    gap: 0.5rem;
+    min-width: 0;
+    flex: 1;
+
+    .workspace-selector {
+      flex: 1;
+      min-width: 0;
+      max-width: 100%;
+
+      ::ng-deep .workspace-dropdown {
+        width: 100%;
+        min-width: 0; // Override 200px min-width
+
+        .p-select {
+          width: 100%;
+
+          .p-select-label {
+            font-size: 0.85rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0.5rem;
+          }
+
+          .p-select-dropdown {
+            width: 2rem;
+          }
+        }
+      }
     }
+
+    // Hide quick actions buttons on mobile to save space
+    .quick-actions {
+      display: none;
+    }
+  }
+
+  .header-right {
+    gap: 0.5rem;
+    flex-shrink: 0;
   }
 }
 

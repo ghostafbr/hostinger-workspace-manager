@@ -273,31 +273,58 @@ import { DomainStatusChartComponent } from '@app/presentation/components/organis
           flex-direction: column;
           width: 100%;
           gap: 0.5rem;
-          margin-top: 1rem;
+          margin-top: 0.75rem; // Reduced margin
+        }
+        
+        // Target buttons for smaller size on mobile
+        .p-toolbar-group-end ::ng-deep p-button,
+        .p-toolbar-group-end ::ng-deep .p-button {
+           width: 100%;
+           font-size: 0.85rem; // Smaller font
+           padding: 0.5rem 1rem; // Smaller padding
         }
 
-        .p-toolbar-group-end ::ng-deep p-button,
-        .p-toolbar-group-end ::ng-deep .p-button,
+        // SplitButton Separation Logic
         .p-toolbar-group-end ::ng-deep p-splitButton {
           width: 100%;
+          
+          .p-splitbutton {
+             display: flex;
+             width: 100%;
+             gap: 0.5rem; // The requested separation
+          }
         }
 
         .p-toolbar-group-end ::ng-deep .p-splitbutton-defaultbutton {
           width: 100%;
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
+          border-radius: 8px !important; // Restore full radius
+          flex: 1; // Take available space
+        }
+        
+        .p-toolbar-group-end ::ng-deep .p-splitbutton-menubutton {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: auto;
+          min-width: 3rem; // Ensure distinct clickable area
+          border-radius: 8px !important; // Restore full radius
         }
 
         .dashboard-title {
-          font-size: 1.25rem; // Smaller title
-          flex-wrap: wrap;
+          font-size: 1.15rem; // Even smaller
+          gap: 0.5rem;
+          
+          i {
+             font-size: 1.15rem;
+          }
         }
 
         .welcome-inline {
           flex-direction: column;
           align-items: flex-start;
-          gap: 0.5rem;
-          margin-top: 1rem;
+          gap: 0.25rem; // Tighter gap
+          margin-top: 0.5rem;
+          font-size: 0.9rem; // Smaller text
         }
 
         .system-status {
@@ -306,8 +333,9 @@ import { DomainStatusChartComponent } from '@app/presentation/components/organis
           align-items: center;
           gap: 0.5rem;
           background: #f8fafc;
-          padding: 0.5rem;
-          border-radius: 8px;
+          padding: 0.4rem 0.6rem; // Compact padding
+          border-radius: 6px;
+          font-size: 0.85rem;
         }
       }
     `,
