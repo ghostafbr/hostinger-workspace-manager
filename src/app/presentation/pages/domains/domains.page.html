@@ -1,50 +1,192 @@
-<div class="domains-page" @fadeIn role="main" aria-labelledby="domains-heading">
+<div class="system-health-container" @fadeIn>
   <p-toast />
 
-  <!-- Page Header -->
-  <div class="page-header" role="banner">
-    <div class="header-content">
-      <h1 class="page-title" id="domains-heading">
-        <i class="pi pi-globe" aria-hidden="true"></i>
+  <!-- Toolbar -->
+  <p-toolbar>
+    <div class="p-toolbar-group-start">
+      <h2 class="page-title">
+        <i class="fa fa-globe"></i>
         Dominios - {{ workspaceName() }}
-      </h1>
-      <p class="page-subtitle">Gestiona y monitorea los dominios de este workspace</p>
+      </h2>
     </div>
-    <div class="header-actions">
-      <p-button
-        label="Exportar CSV"
-        icon="pi pi-download"
-        severity="secondary"
-        [outlined]="true"
-        (onClick)="exportToCSV()"
-        [disabled]="totalDomains() === 0"
-      />
+    <div class="p-toolbar-group-end">
+      <p-button label="Actualizar" icon="fa fa-refresh" severity="secondary" [outlined]="true" size="small"
+        [loading]="isLoading()" (onClick)="loadData()" pTooltip="Actualizar datos" tooltipPosition="bottom" />
+      <p-button label="Exportar" icon="fa fa-download" severity="secondary" [outlined]="true" size="small" class="ml-2"
+        (onClick)="exportToCSV()" [disabled]="domains().length === 0" />
+    </div>
+  </p-toolbar>
+
+  <!-- Loading State -->
+  @if (isLoading() && !stats()) {
+  <div class="loading-container">
+    <p-skeleton height="150px" width="100%" />
+    <div class="mt-4">
+      <p-skeleton height="400px" width="100%" />
     </div>
   </div>
+  }
+
+  <!-- Summary Cards -->
+  @if (stats(); as s) {
+  <div class="summary-cards">
+    <!-- Total -->
+    <p-card>
+      <div class="stat-card">
+        <div class="stat-icon total">
+          <i class="fa fa-hashtag"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Total Dominios</div>
+          <div class="stat-value">{{ s.total }}</div>
+          <div class="stat-subtitle">Registrados</div>
+        </div>
+      </div>
+    </p-card>
+
+    <!-- Healthy -->
+    <p-card>
+      <div class="stat-card">
+        <div class="stat-icon success">
+          <i class="fa fa-check-circle"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Saludables</div>
+          <div class="stat-value">{{ s.active }}</div>
+          <div class="stat-subtitle">Sin alertas</div>
+        </div>
+      </div>
+    </p-card>
+
+    <!-- Issues -->
+    <p-card>
+      <div class="stat-card">
+        <div class="stat-icon warning">
+          <i class="fa fa-exclamation-triangle"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Atención Requerida</div>
+          <div class="stat-value">{{ s.critical + s.warning + s.expired }}</div>
+          <div class="stat-breakdown">
+            <span class="danger">{{ s.expired }} vencidos</span>
+            <span class="warning">{{ s.critical + s.warning }} próximos</span>
+          </div>
+        </div>
+      </div>
+    </p-card>
+
+    <!-- Value -->
+    <p-card>
+      <div class="stat-card">
+        <div class="stat-icon value">
+          <i class="fa fa-dollar-sign"></i>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Valor de Renovación</div>
+          <div class="stat-value">{{ s.totalValue | currency }}</div>
+          <div class="stat-subtitle">Proyectado</div>
+        </div>
+      </div>
+    </p-card>
+  </div>
+  }
 
   <!-- Domains Table -->
   <p-card>
-    <app-domains-table
-      [domains]="domains()"
-      [isLoading]="isLoading()"
-      [totalRecords]="totalDomains()"
-      (domainClicked)="onDomainClicked($event)"
-      (domainEditClicked)="onEditDomain($event)"
-    />
+    <p-table #dt [value]="domains()" [loading]="isLoading()" [paginator]="true" [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['domainName', 'registrar', 'provider']"
+      [tableStyle]="{ 'min-width': '50rem' }" class="p-datatable-sm" [rowHover]="true">
+
+      <!-- Caption -->
+      <ng-template pTemplate="caption">
+        <div class="filter-toolbar">
+          <div class="search-wrapper">
+            <i class="fa fa-search search-icon"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+              placeholder="Buscar dominio..." class="glass-input with-icon" />
+          </div>
+        </div>
+      </ng-template>
+
+      <!-- Header -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="domainName" style="min-width: 200px">Dominio <p-sortIcon field="domainName" /></th>
+          <th pSortableColumn="expiresAt" style="width: 180px">Vencimiento <p-sortIcon field="expiresAt" /></th>
+          <th style="width: 120px; text-align: center">Estado</th>
+          <th style="width: 100px; text-align: center">Auto-Renew</th>
+          <th style="width: 100px; text-align: center">Privacy</th>
+          <th style="width: 100px; text-align: center">Acciones</th>
+        </tr>
+      </ng-template>
+
+      <!-- Body -->
+      <ng-template pTemplate="body" let-domain>
+        <tr>
+          <!-- Domain Name -->
+          <td>
+            <div class="font-bold text-lg text-truncate">{{ domain.domainName }}</div>
+            <div class="text-sm text-muted text-truncate">
+              {{ domain.registrar || 'Desconocido' }}
+            </div>
+          </td>
+
+          <!-- Expiration -->
+          <td>
+            <div class="d-flex flex-column">
+              <span class="font-medium">{{ formatDate(domain.expiresAt) }}</span>
+              <small class="text-muted block mt-1">{{ getStatusLabel(domain.expiresAt) }}</small>
+            </div>
+          </td>
+
+          <!-- Status -->
+          <td style="text-align: center">
+            <p-tag [value]="getStatusLabel(domain.expiresAt).split('(')[0]" [severity]="getSeverity(domain.expiresAt)"
+              [icon]="getStatusIcon(domain.expiresAt)" />
+          </td>
+
+          <!-- Auto Renew -->
+          <td style="text-align: center">
+            <i class="fa" [ngClass]="domain.autoRenew ? 'fa-check text-green-500' : 'fa-times text-red-400'"></i>
+          </td>
+
+          <!-- Privacy -->
+          <td style="text-align: center">
+            <i class="fa"
+              [ngClass]="domain.privacyProtection ? 'fa-shield-alt text-green-500' : 'fa-lock-open text-orange-400'"></i>
+          </td>
+
+          <!-- Actions -->
+          <td style="text-align: center">
+            <div class="flex justify-content-center gap-2">
+              <p-button icon="fa fa-edit" [rounded]="true" [text]="true" severity="secondary"
+                (onClick)="onEditDomain(domain)" pTooltip="Editar" />
+              <p-button icon="fa fa-external-link" [rounded]="true" [text]="true" severity="info"
+                (onClick)="onDomainClicked(domain)" pTooltip="Ver Detalles" />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <!-- Empty State -->
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 3rem">
+            <div class="empty-state">
+              <i class="fa fa-globe"></i>
+              <p>No se encontraron dominios</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+    </p-table>
   </p-card>
 
-  <!-- Domain Details Dialog -->
-  <app-domain-details-dialog
-    [domain]="selectedDomain()"
-    [visible]="showDetailsDialog()"
-    (visibleChange)="onDialogVisibilityChange($event)"
-  />
+  <!-- Sub-components kept as they are logic-heavy dialogs -->
+  <app-domain-details-dialog [domain]="selectedDomain()" [visible]="showDetailsDialog()"
+    (visibleChange)="onDialogVisibilityChange($event)" />
 
-  <!-- Domain Edit Dialog -->
-  <app-domain-edit-dialog
-    [domain]="selectedDomain()"
-    [visible]="showEditDialog()"
-    (visibleChange)="onEditDialogVisibilityChange($event)"
-    (domainUpdated)="onDomainUpdated()"
-  />
+  <app-domain-edit-dialog [domain]="selectedDomain()" [visible]="showEditDialog()"
+    (visibleChange)="onEditDialogVisibilityChange($event)" (domainUpdated)="onDomainUpdated()" />
 </div>

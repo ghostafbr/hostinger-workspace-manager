@@ -72,10 +72,18 @@ export class DomainEditDialogComponent {
     effect(() => {
       const domain = this.domain();
       if (domain) {
+        let hostingPrice = domain.hostingRenewalPrice || 0;
+        let domainPrice = domain.domainRenewalPrice || 0;
+
+        // Legacy data migration: If no split prices exist but renewalPrice does, use it as domainPrice
+        if (hostingPrice === 0 && domainPrice === 0 && domain.renewalPrice) {
+          domainPrice = domain.renewalPrice;
+        }
+
         this.editForm.patchValue({
           contactEmail: domain.contactEmail || '',
-          hostingRenewalPrice: domain.hostingRenewalPrice || 0,
-          domainRenewalPrice: domain.domainRenewalPrice || 0,
+          hostingRenewalPrice: hostingPrice,
+          domainRenewalPrice: domainPrice,
         });
         this.updateTotalPrice();
       }
@@ -110,8 +118,9 @@ export class DomainEditDialogComponent {
     try {
       const updates = {
         contactEmail: this.editForm.value.contactEmail || undefined,
-        hostingRenewalPrice: this.editForm.value.hostingRenewalPrice || undefined,
-        domainRenewalPrice: this.editForm.value.domainRenewalPrice || undefined,
+        hostingRenewalPrice: this.editForm.value.hostingRenewalPrice || 0,
+        domainRenewalPrice: this.editForm.value.domainRenewalPrice || 0,
+        renewalPrice: 0, // Explicitly clear legacy field to prefer split prices
       };
 
       await this.domainService.updateDomain(domain.id, updates);

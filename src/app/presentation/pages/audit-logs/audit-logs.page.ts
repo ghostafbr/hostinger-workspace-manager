@@ -1,14 +1,20 @@
 import { Component, ChangeDetectionStrategy, OnInit, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
+import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
 import { MessageService } from 'primeng/api';
 import { AuditLogService } from '@app/application';
-import { AuditLogsTableComponent } from '@app/presentation/components/organisms/audit-logs-table/audit-logs-table.component';
-import { AuditLogModel } from '@app/domain';
+import { AuditLogModel, AuditAction, AuditStatus } from '@app/domain';
 
 /**
  * Audit Logs Page Component
@@ -20,147 +26,22 @@ import { AuditLogModel } from '@app/domain';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    CommonModule,
+    FormsModule,
     CardModule,
     ButtonModule,
     SkeletonModule,
     ToastModule,
     ToolbarModule,
-    AuditLogsTableComponent,
+    TableModule,
+    TagModule,
+    TooltipModule,
+    InputTextModule,
+    SelectModule,
   ],
   providers: [MessageService],
-  template: `
-    <div class="audit-logs-container">
-      <!-- Toast Notifications -->
-      <p-toast />
-
-      <!-- Toolbar -->
-      <p-toolbar class="audit-logs-toolbar">
-        <div class="p-toolbar-group-start">
-          <h1 class="page-title">
-            <i class="pi pi-file"></i>
-            Audit Logs
-          </h1>
-        </div>
-
-        <div class="p-toolbar-group-end">
-          <p-button
-            label="Actualizar"
-            icon="pi pi-refresh"
-            [outlined]="true"
-            [loading]="isLoading()"
-            (onClick)="loadAuditLogs()"
-            pTooltip="Actualizar logs"
-            tooltipPosition="bottom"
-          />
-          <p-button
-            label="Volver"
-            icon="pi pi-arrow-left"
-            severity="secondary"
-            [outlined]="true"
-            class="ml-2"
-            (onClick)="goBack()"
-          />
-        </div>
-      </p-toolbar>
-
-      <!-- Main Content -->
-      <div class="audit-logs-content">
-        <!-- Loading State -->
-        @if (isLoading() && auditLogs().length === 0) {
-          <p-card>
-            <p-skeleton height="400px" />
-          </p-card>
-        }
-
-        <!-- Error State -->
-        @if (error() && !isLoading()) {
-          <p-card>
-            <div class="error-state">
-              <i class="pi pi-exclamation-triangle"></i>
-              <h2>Error al cargar audit logs</h2>
-              <p>{{ error() }}</p>
-              <p-button label="Reintentar" icon="pi pi-refresh" (onClick)="loadAuditLogs()" />
-            </div>
-          </p-card>
-        }
-
-        <!-- Data Loaded -->
-        @if (auditLogs().length > 0 || (!isLoading() && !error())) {
-          <app-audit-logs-table
-            [auditLogs]="auditLogs()"
-            [isLoading]="isLoading()"
-            (viewDetails)="onViewDetails($event)"
-          />
-        }
-      </div>
-    </div>
-  `,
-  styles: [
-    `
-      .audit-logs-container {
-        min-height: 100vh;
-        background-color: var(--surface-50);
-      }
-
-      .audit-logs-toolbar {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-        margin-bottom: 2rem;
-        background: white;
-        border-bottom: 1px solid var(--surface-200);
-      }
-
-      .page-title {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-weight: 700;
-        font-size: 1.5rem;
-        color: var(--text-color);
-        margin: 0;
-
-        i {
-          color: var(--primary-color);
-        }
-      }
-
-      .audit-logs-content {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 0 2rem 2rem;
-      }
-
-      .error-state {
-        text-align: center;
-        padding: 3rem;
-
-        i {
-          font-size: 4rem;
-          color: var(--red-500);
-          margin-bottom: 1rem;
-        }
-
-        h2 {
-          color: var(--text-color);
-          margin-bottom: 0.5rem;
-        }
-
-        p {
-          color: var(--text-color-secondary);
-          margin-bottom: 2rem;
-        }
-      }
-
-      @media (max-width: 768px) {
-        .page-title {
-          font-size: 1.25rem;
-        }
-
-        .audit-logs-content {
-          padding: 0 1rem 1rem;
-        }
-      }
-    `,
-  ],
+  templateUrl: './audit-logs.page.html',
+  styleUrls: ['./audit-logs.page.scss'],
 })
 export default class AuditLogsPage implements OnInit {
   private readonly auditLogService = inject(AuditLogService);
@@ -168,11 +49,42 @@ export default class AuditLogsPage implements OnInit {
   private readonly router = inject(Router);
   private readonly messageService = inject(MessageService);
 
+  // Data Signals
   readonly auditLogs = this.auditLogService.auditLogs;
   readonly isLoading = this.auditLogService.isLoading;
   readonly error = this.auditLogService.error;
 
-  private readonly workspaceId = signal<string | undefined>(undefined);
+  // Stats Signal
+  readonly stats = signal<{
+    total: number;
+    success: number;
+    failure: number;
+    successRate: number;
+    topAction: string;
+  } | null>(null);
+
+  readonly workspaceId = signal<string | undefined>(undefined);
+
+  // Table Filters
+  readonly selectedAction = signal<AuditAction | null>(null);
+  readonly selectedStatus = signal<AuditStatus | null>(null);
+
+  readonly actionOptions = [
+    { label: 'Crear Workspace', value: AuditAction.WORKSPACE_CREATE },
+    { label: 'Actualizar Workspace', value: AuditAction.WORKSPACE_UPDATE },
+    { label: 'Deshabilitar Workspace', value: AuditAction.WORKSPACE_DISABLE },
+    { label: 'Guardar Token', value: AuditAction.TOKEN_SAVE },
+    { label: 'Probar Conexión', value: AuditAction.TOKEN_TEST },
+    { label: 'Sincronización Manual', value: AuditAction.SYNC_MANUAL },
+    { label: 'Sincronización Programada', value: AuditAction.SYNC_SCHEDULED },
+    { label: 'Generar Alertas', value: AuditAction.ALERT_GENERATE },
+  ];
+
+  readonly statusOptions = [
+    { label: 'Éxito', value: AuditStatus.SUCCESS },
+    { label: 'Fallo', value: AuditStatus.FAILED },
+    { label: 'Parcial', value: AuditStatus.PARTIAL },
+  ];
 
   ngOnInit(): void {
     // Check if workspace-specific route
@@ -181,28 +93,74 @@ export default class AuditLogsPage implements OnInit {
       if (id) {
         this.workspaceId.set(id);
       }
-      this.loadAuditLogs();
+      this.loadData();
     });
   }
 
   /**
-   * Load audit logs
+   * Load all data (logs + stats)
    */
-  async loadAuditLogs(): Promise<void> {
+  async loadData(): Promise<void> {
     try {
       const id = this.workspaceId();
-      if (id) {
-        await this.auditLogService.getWorkspaceAuditLogs(id);
-      } else {
-        await this.auditLogService.getRecentAuditLogs();
+      
+      // Parallel loading
+      const [logs, stats] = await Promise.all([
+        id ? this.auditLogService.getWorkspaceAuditLogs(id) : this.auditLogService.getRecentAuditLogs(),
+        this.auditLogService.getAuditStats(id)
+      ]);
+
+      // Process Stats
+      const total = stats.total;
+      const success = stats.success;
+      const failure = stats.failure;
+      const successRate = total > 0 ? (success / total) * 100 : 0;
+      
+      // Find top action
+      let topAction = 'N/A';
+      let maxCount = 0;
+      for (const [action, count] of Object.entries(stats.byAction)) {
+        if (count > maxCount) {
+          maxCount = count;
+          topAction = action;
+        }
       }
+
+      this.stats.set({
+        total,
+        success,
+        failure,
+        successRate,
+        topAction: this.formatActionLabel(topAction)
+      });
+
     } catch {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'No se pudieron cargar los audit logs',
+        detail: 'No se pudieron cargar los datos de auditoría',
       });
     }
+  }
+
+  /**
+   * Helper to format action label
+   */
+  formatActionLabel(action: string): string {
+     const labels: Record<string, string> = {
+      'workspace.create': 'Crear Workspace',
+      'workspace.update': 'Actualizar Workspace',
+      'workspace.disable': 'Deshabilitar Workspace',
+      'workspace.delete': 'Eliminar Workspace',
+      'token.save': 'Guardar Token',
+      'token.test': 'Probar Conexión',
+      'sync.manual': 'Sync Manual',
+      'sync.scheduled': 'Sync Auto',
+      'alert.generate': 'Generar Alertas',
+      'dns.view': 'Ver DNS',
+      'dns.validate': 'Validar DNS',
+    };
+    return labels[action] || action;
   }
 
   /**
@@ -228,5 +186,23 @@ export default class AuditLogsPage implements OnInit {
     } else {
       this.router.navigate(['/dashboard']);
     }
+  }
+
+  getHealthSeverity(status: string): 'success' | 'warn' | 'danger' | 'info' | 'secondary' {
+      switch (status) {
+        case AuditStatus.SUCCESS: return 'success';
+        case AuditStatus.PARTIAL: return 'warn';
+        case AuditStatus.FAILED: return 'danger';
+        default: return 'info';
+      }
+  }
+
+  getStatusIcon(status: string): string {
+    const icons: Record<string, string> = {
+      success: 'fa fa-check-circle',
+      failure: 'fa fa-times-circle',
+      partial: 'fa fa-exclamation-circle',
+    };
+    return icons[status] || 'fa fa-info-circle';
   }
 }

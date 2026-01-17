@@ -1,11 +1,6 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  OnInit,
-  inject,
-  signal,
-  computed,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, inject, signal, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 // PrimeNG
@@ -13,6 +8,12 @@ import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { ToolbarModule } from 'primeng/toolbar'; // Added ToolbarModule
+import { TableModule } from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+import { InputTextModule } from 'primeng/inputtext';
+import { SkeletonModule } from 'primeng/skeleton';
+import { TooltipModule } from 'primeng/tooltip';
 
 // Services
 import { DomainService } from '@app/application/services/domain.service';
@@ -23,7 +24,6 @@ import { ExportService } from '@app/application/services/export.service';
 import { IDomain } from '@app/domain';
 
 // Components
-import { DomainsTableComponent } from '@app/presentation/components/organisms/domains-table/domains-table.component';
 import { DomainDetailsDialogComponent } from '@app/presentation/components/organisms/domain-details-dialog/domain-details-dialog.component';
 import { DomainEditDialogComponent } from '@app/presentation/components/organisms/domain-edit-dialog/domain-edit-dialog.component';
 
@@ -40,12 +40,19 @@ import { fadeIn, slideUp } from '@app/infrastructure';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    CommonModule,
+    FormsModule,
     CardModule,
     ToastModule,
-    DomainsTableComponent,
+    ButtonModule,
+    ToolbarModule,
+    TableModule,
+    TagModule,
+    InputTextModule,
+    SkeletonModule,
+    TooltipModule,
     DomainDetailsDialogComponent,
     DomainEditDialogComponent,
-    ButtonModule,
   ],
   providers: [MessageService],
   animations: [fadeIn, slideUp],
@@ -63,6 +70,16 @@ export default class DomainsPage implements OnInit {
   readonly isLoading = this.domainService.isLoading;
   readonly error = this.domainService.error;
 
+  // Stats Signal
+  readonly stats = signal<{
+    total: number;
+    expired: number;
+    critical: number;
+    warning: number;
+    active: number;
+    totalValue: number;
+  } | null>(null);
+
   readonly selectedDomain = signal<IDomain | null>(null);
   readonly showDetailsDialog = signal<boolean>(false);
   readonly showEditDialog = signal<boolean>(false);
@@ -75,19 +92,16 @@ export default class DomainsPage implements OnInit {
     return ws?.name || 'Workspace';
   });
 
-  /**
-   * Total domains count
-   */
-  readonly totalDomains = computed(() => this.domains().length);
-
   ngOnInit(): void {
-    this.loadDomains();
+    this.route.paramMap.subscribe(() => {
+      this.loadData();
+    });
   }
 
   /**
-   * Load all domains for current workspace
+   * Load data (domains + stats)
    */
-  async loadDomains(): Promise<void> {
+  async loadData(): Promise<void> {
     try {
       const workspaceId = this.route.snapshot.paramMap.get('workspaceId');
 
@@ -95,35 +109,64 @@ export default class DomainsPage implements OnInit {
         throw new Error('No se encontró el ID del workspace');
       }
 
-      const domains = await this.domainService.getAllDomains(workspaceId);
+      // Parallel loading
+      const [domains, stats] = await Promise.all([
+        this.domainService.getAllDomains(workspaceId),
+        this.domainService.getDomainStatistics(workspaceId),
+      ]);
 
       this.domains.set(domains);
+      this.stats.set(stats);
 
       if (domains.length === 0) {
         this.messageService.add({
           severity: 'info',
           summary: 'Sin dominios',
-          detail:
-            'No se encontraron dominios para este workspace. Asegúrate de haber ejecutado la sincronización.',
+          detail: 'No se encontraron dominios para este workspace.',
           life: 5000,
         });
       }
     } catch (error) {
-      console.error('[DomainsPage] Error loading domains:', error);
-
-      let errorDetail = error instanceof Error ? error.message : 'Error al cargar dominios';
-
-      // Check for index error
-      if (error instanceof Error && error.message.includes('index')) {
-        errorDetail =
-          'El índice de Firestore está construyéndose. Espera unos minutos y recarga la página.';
-      }
-
-      this.messageService.add({
+       console.error('[DomainsPage] Error loading data:', error);
+       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: errorDetail,
+        detail: 'Error al cargar los datos de dominios',
       });
+    }
+  }
+
+  /**
+   * Status Helpers
+   */
+  getSeverity(expiresAt: any): 'success' | 'warn' | 'danger' | 'info' {
+    const status = this.domainService.getExpirationStatus(expiresAt);
+    switch (status) {
+      case 'ok': return 'success';
+      case 'warning': return 'warn';
+      case 'critical':
+      case 'expired': return 'danger';
+      default: return 'info';
+    }
+  }
+
+  getStatusLabel(expiresAt: any): string {
+    const status = this.domainService.getExpirationStatus(expiresAt);
+    const days = this.domainService.getDaysUntilExpiration(expiresAt);
+
+    if (status === 'expired') return `Vencido (${Math.abs(days || 0)}d)`;
+    if (days !== null) return `${days} días`;
+    return 'Desconocido';
+  }
+
+  getStatusIcon(expiresAt: any): string {
+    const status = this.domainService.getExpirationStatus(expiresAt);
+    switch (status) {
+        case 'ok': return 'fa fa-check-circle';
+        case 'warning': return 'fa fa-exclamation-triangle';
+        case 'critical': return 'fa fa-exclamation-circle';
+        case 'expired': return 'fa fa-times-circle';
+        default: return 'fa fa-question-circle';
     }
   }
 
@@ -168,15 +211,7 @@ export default class DomainsPage implements OnInit {
    */
   exportToCSV(): void {
     const domains = this.domains();
-    if (domains.length === 0) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Sin datos',
-        detail: 'No hay dominios para exportar',
-        life: 3000,
-      });
-      return;
-    }
+    if (domains.length === 0) return;
 
     const exportData = domains.map((domain) => ({
       Dominio: domain.domainName,
@@ -196,7 +231,7 @@ export default class DomainsPage implements OnInit {
     });
   }
 
-  private formatDate(date: unknown): string {
+  formatDate(date: unknown): string {
     if (!date) return '';
     if (date instanceof Date) return date.toLocaleDateString();
     if (typeof date === 'object' && 'toDate' in date) {
@@ -214,6 +249,6 @@ export default class DomainsPage implements OnInit {
       summary: 'Dominio actualizado',
       detail: 'Los cambios se guardaron correctamente',
     });
-    this.loadDomains(); // Refresh list
+    this.loadData();
   }
 }

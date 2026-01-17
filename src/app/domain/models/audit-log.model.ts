@@ -106,12 +106,12 @@ export class AuditLogModel implements AuditLog {
    * Get icon for action type
    */
   getActionIcon(): string {
-    if (this.action.startsWith('workspace.')) return 'pi pi-briefcase';
-    if (this.action.startsWith('token.')) return 'pi pi-key';
-    if (this.action.startsWith('sync.')) return 'pi pi-sync';
-    if (this.action.startsWith('alert.')) return 'pi pi-bell';
-    if (this.action.startsWith('dns.')) return 'pi pi-globe';
-    return 'pi pi-file';
+    if (this.action.startsWith('workspace.')) return 'fa fa-briefcase';
+    if (this.action.startsWith('token.')) return 'fa fa-key';
+    if (this.action.startsWith('sync.')) return 'fa fa-refresh';
+    if (this.action.startsWith('alert.')) return 'fa fa-bell';
+    if (this.action.startsWith('dns.')) return 'fa fa-globe';
+    return 'fa fa-file-text';
   }
 
   /**
