@@ -1,18 +1,18 @@
 import { Component, ChangeDetectionStrategy, input, output, signal } from '@angular/core';
-import { DatePipe, JsonPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 
 // PrimeNG
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { DividerModule } from 'primeng/divider';
-import { Accordion, AccordionContent, AccordionHeader, AccordionPanel } from 'primeng/accordion';
 
 // Domain
 import { IDomain } from '@app/domain';
 
 // Components
 import { ExpirationSemaphoreComponent } from '../../molecules/expiration-semaphore/expiration-semaphore.component';
+import { ModalWrapperComponent } from '../../molecules/modal-wrapper/modal-wrapper.component';
+import { DetailItemComponent } from '../../molecules/detail-item/detail-item.component';
+import { RawDataViewerComponent } from '../../molecules/raw-data-viewer/raw-data-viewer.component';
 
 /**
  * Domain Details Dialog Component
@@ -21,20 +21,15 @@ import { ExpirationSemaphoreComponent } from '../../molecules/expiration-semapho
  */
 @Component({
   selector: 'app-domain-details-dialog',
-
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DatePipe,
-    JsonPipe,
-    DialogModule,
-    ButtonModule,
     TagModule,
     DividerModule,
-    Accordion,
-    AccordionPanel,
-    AccordionHeader,
-    AccordionContent,
     ExpirationSemaphoreComponent,
+    ModalWrapperComponent,
+    DetailItemComponent,
+    RawDataViewerComponent,
   ],
   templateUrl: './domain-details-dialog.component.html',
   styleUrl: './domain-details-dialog.component.scss',
@@ -45,20 +40,11 @@ export class DomainDetailsDialogComponent {
 
   readonly visibleChange = output<boolean>();
 
-  readonly showRawData = signal<boolean>(false);
-
   /**
    * Close dialog
    */
   onClose(): void {
     this.visibleChange.emit(false);
-  }
-
-  /**
-   * Toggle raw data visibility
-   */
-  toggleRawData(): void {
-    this.showRawData.update((v) => !v);
   }
 
   /**

@@ -1,112 +1,80 @@
-<p-dialog
-  [header]="'Detalles del Dominio'"
+<app-modal-wrapper
+  header="Detalles del Dominio"
   [visible]="visible()"
-  (visibleChange)="onClose()"
-  [modal]="true"
-  [style]="{ width: '700px', maxWidth: '95vw' }"
-  [dismissableMask]="true"
-  class="domain-details-dialog"
+  (onClose)="onClose()"
+  width="700px"
 >
-  @if (domain()) {
-    <div class="dialog-content">
-      <!-- Header Section -->
-      <div class="domain-header">
+  <!-- Custom Header Content -->
+  <ng-container slot="header">
+    @if (domain()) {
+      <div class="domain-header mb-3">
         <div class="domain-title">
           <app-expiration-semaphore [expiresAt]="domain()!.expiresAt" />
           <h2>{{ domain()!.domainName }}</h2>
         </div>
       </div>
+    }
+  </ng-container>
 
-      <p-divider />
+  @if (domain()) {
+    <p-divider />
 
-      <!-- Details Grid -->
-      <div class="details-grid">
-        <!-- Expiration Date -->
-        <div class="detail-item">
-          <label class="detail-label">Fecha de Vencimiento</label>
-          <div class="detail-value">
-            <strong>{{ domain()!.expiresAt.toDate() | date: 'dd/MM/yyyy HH:mm' }}</strong>
-          </div>
-        </div>
+    <!-- Details Grid -->
+    <div class="details-grid mt-3">
+      <!-- Expiration Date -->
+      <app-detail-item label="Fecha de Vencimiento">
+        <strong>{{ domain()!.expiresAt.toDate() | date: 'dd/MM/yyyy HH:mm' }}</strong>
+      </app-detail-item>
 
-        <!-- Creation Date -->
-        @if (domain()!.createdAt) {
-          <div class="detail-item">
-            <label class="detail-label">Fecha de Creación</label>
-            <div class="detail-value">
-              {{ domain()!.createdAt.toDate() | date: 'dd/MM/yyyy HH:mm' }}
-            </div>
-          </div>
-        }
+      <!-- Creation Date -->
+      @if (domain()!.createdAt) {
+        <app-detail-item label="Fecha de Creación">
+          {{ domain()!.createdAt.toDate() | date: 'dd/MM/yyyy HH:mm' }}
+        </app-detail-item>
+      }
 
-        <!-- Domain Lock -->
-        <div class="detail-item">
-          <label class="detail-label">Domain Lock</label>
-          <div class="detail-value">
-            <p-tag
-              [value]="domain()!.domainLock ? 'Activado' : 'Desactivado'"
-              [severity]="getTagSeverity(domain()!.domainLock || false)"
-            />
-          </div>
-        </div>
+      <!-- Domain Lock -->
+      <app-detail-item label="Domain Lock">
+        <p-tag
+          [value]="domain()!.domainLock ? 'Activado' : 'Desactivado'"
+          [severity]="getTagSeverity(domain()!.domainLock || false)"
+        />
+      </app-detail-item>
 
-        <!-- Privacy Protection -->
-        <div class="detail-item">
-          <label class="detail-label">Privacidad WHOIS</label>
-          <div class="detail-value">
-            <p-tag
-              [value]="domain()!.privacyProtection ? 'Activada' : 'Desactivada'"
-              [severity]="getTagSeverity(domain()!.privacyProtection || false)"
-            />
-          </div>
-        </div>
-      </div>
-
-      <p-divider />
-
-      <!-- Nameservers Section -->
-      <div class="nameservers-section">
-        <h3 class="section-title">
-          <i class="pi pi-server"></i>
-          Nameservers
-        </h3>
-        @if (domain()!.nameservers && domain()!.nameservers!.length > 0) {
-          <ul class="nameservers-list">
-            @for (ns of domain()!.nameservers; track ns) {
-              <li class="nameserver-item">
-                <i class="pi pi-angle-right"></i>
-                <code>{{ ns }}</code>
-              </li>
-            }
-          </ul>
-        } @else {
-          <p class="no-data">No hay nameservers configurados</p>
-        }
-      </div>
-
-      <p-divider />
-
-      <!-- Raw Data Section (Collapsible) -->
-      <div class="raw-data-section">
-        <p-accordion [value]="['0']">
-          <p-accordionpanel value="0">
-            <p-accordionheader>
-              <div class="accordion-header">
-                <i class="pi pi-code"></i>
-                <span>Datos Raw (JSON)</span>
-              </div>
-            </p-accordionheader>
-            <p-accordioncontent>
-              <pre class="raw-data-content">{{ domain() | json }}</pre>
-            </p-accordioncontent>
-          </p-accordionpanel>
-        </p-accordion>
-      </div>
+      <!-- Privacy Protection -->
+      <app-detail-item label="Privacidad WHOIS">
+        <p-tag
+          [value]="domain()!.privacyProtection ? 'Activada' : 'Desactivada'"
+          [severity]="getTagSeverity(domain()!.privacyProtection || false)"
+        />
+      </app-detail-item>
     </div>
 
-    <!-- Footer -->
-    <ng-template pTemplate="footer">
-      <p-button label="Cerrar" icon="pi pi-times" (onClick)="onClose()" severity="secondary" />
-    </ng-template>
+    <p-divider />
+
+    <!-- Nameservers Section -->
+    <div class="nameservers-section">
+      <h3 class="section-title">
+        <i class="pi pi-server"></i>
+        Nameservers
+      </h3>
+      @if (domain()!.nameservers && domain()!.nameservers!.length > 0) {
+        <ul class="nameservers-list">
+          @for (ns of domain()!.nameservers; track ns) {
+            <li class="nameserver-item">
+              <i class="pi pi-angle-right"></i>
+              <code>{{ ns }}</code>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="no-data">No hay nameservers configurados</p>
+      }
+    </div>
+
+    <p-divider />
+
+    <!-- Raw Data Section -->
+    <app-raw-data-viewer [data]="domain()" />
   }
-</p-dialog>
+</app-modal-wrapper>

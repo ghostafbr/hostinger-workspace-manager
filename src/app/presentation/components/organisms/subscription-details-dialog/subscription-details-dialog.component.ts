@@ -1,18 +1,19 @@
 import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
-import { DatePipe, JsonPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 
 // PrimeNG
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { DividerModule } from 'primeng/divider';
-import { Accordion, AccordionContent, AccordionHeader, AccordionPanel } from 'primeng/accordion';
 
 // Domain
 import { Subscription as ISubscription } from '@app/domain/interfaces/subscription.interface';
 
 // Components
 import { ExpirationSemaphoreComponent } from '../../molecules/expiration-semaphore/expiration-semaphore.component';
+import { ModalWrapperComponent } from '../../molecules/modal-wrapper/modal-wrapper.component';
+import { DetailItemComponent } from '../../molecules/detail-item/detail-item.component';
+import { RawDataViewerComponent } from '../../molecules/raw-data-viewer/raw-data-viewer.component';
+import { StatusTagComponent } from '../../atoms/status-tag/status-tag.component';
 
 /**
  * Subscription Details Dialog Component
@@ -21,20 +22,16 @@ import { ExpirationSemaphoreComponent } from '../../molecules/expiration-semapho
  */
 @Component({
   selector: 'app-subscription-details-dialog',
-
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DatePipe,
-    JsonPipe,
-    DialogModule,
-    ButtonModule,
     TagModule,
     DividerModule,
-    Accordion,
-    AccordionPanel,
-    AccordionHeader,
-    AccordionContent,
     ExpirationSemaphoreComponent,
+    ModalWrapperComponent,
+    DetailItemComponent,
+    RawDataViewerComponent,
+    StatusTagComponent,
   ],
   templateUrl: './subscription-details-dialog.component.html',
   styleUrl: './subscription-details-dialog.component.scss',
@@ -50,18 +47,6 @@ export class SubscriptionDetailsDialogComponent {
    */
   onClose(): void {
     this.visibleChange.emit(false);
-  }
-
-  /**
-   * Get status severity for tags
-   */
-  getStatusSeverity(status: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
-    const statusLower = status.toLowerCase();
-    if (statusLower.includes('active') || statusLower.includes('activ')) return 'success';
-    if (statusLower.includes('pending') || statusLower.includes('pendiente')) return 'warn';
-    if (statusLower.includes('suspended') || statusLower.includes('suspendid')) return 'danger';
-    if (statusLower.includes('cancelled') || statusLower.includes('cancelad')) return 'secondary';
-    return 'info';
   }
 
   /**

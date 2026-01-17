@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, input, computed } from '@angular/co
 import { ChartModule } from 'primeng/chart';
 import { CommonModule } from '@angular/common';
 import { DashboardStats } from '@app/application/services/dashboard.service';
+import { ChartCardComponent } from '../../molecules/chart-card/chart-card.component';
 
 /**
  * Domain Status Chart Component
@@ -10,78 +11,17 @@ import { DashboardStats } from '@app/application/services/dashboard.service';
  */
 @Component({
   selector: 'app-domain-status-chart',
-
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ChartModule, CommonModule],
+  imports: [ChartModule, CommonModule, ChartCardComponent],
   template: `
-    <div class="glass-chart-card">
-      <div class="chart-header">
-        <div class="header-title">
-          <div class="icon-indicator">
-            <i class="pi pi-chart-pie"></i>
-          </div>
-          <h3>{{ title() }}</h3>
-        </div>
-      </div>
-      <div class="chart-content">
-        <p-chart type="doughnut" [data]="chartData()" [options]="chartOptions" height="300px" />
-      </div>
-    </div>
+    <app-chart-card [title]="title()" icon="pi pi-chart-pie">
+      <p-chart type="doughnut" [data]="chartData()" [options]="chartOptions" height="300px" />
+    </app-chart-card>
   `,
   styles: [
     `
       :host {
         display: block;
-      }
-      .glass-chart-card {
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 1.5rem;
-        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        transition: box-shadow 0.2s;
-      }
-      .glass-chart-card:hover {
-        box-shadow:
-          0 4px 6px -1px rgba(0, 0, 0, 0.1),
-          0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      }
-      .chart-header {
-        margin-bottom: 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .chart-header .header-title {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-      }
-      .chart-header .header-title .icon-indicator {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        background: var(--surface-50);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--primary-color);
-        border: 1px solid #e2e8f0;
-      }
-      .chart-header .header-title .icon-indicator i {
-        font-size: 1.2rem;
-      }
-      .chart-header .header-title h3 {
-        margin: 0;
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #1e293b;
-      }
-      .chart-content {
-        position: relative;
-        width: 100%;
-        display: flex;
-        justify-content: center;
       }
     `,
   ],
