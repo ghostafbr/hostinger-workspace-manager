@@ -1,9 +1,8 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Firestore, collection, getDocs, query, where, Timestamp } from 'firebase/firestore';
-import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
 import { AuthService } from './auth.service';
 import { Workspace, WorkspaceStatus, IDomain, ISubscription } from '@app/domain';
 import type { ExpirationTrendData, TimelineEvent } from '@app/presentation/components/organisms';
+import { DASHBOARD_REPOSITORY } from '@app/domain/repositories/dashboard.repository';
 
 /**
  * Dashboard Statistics
@@ -39,7 +38,7 @@ export interface DashboardStats {
   providedIn: 'root',
 })
 export class DashboardService {
-  private readonly firestore: Firestore = FirebaseAdapter.getFirestore();
+  private readonly dashboardRepo = inject(DASHBOARD_REPOSITORY);
   private readonly authService = inject(AuthService);
 
   readonly stats = signal<DashboardStats | null>(null);
@@ -60,14 +59,7 @@ export class DashboardService {
       }
 
       // Get all user's workspaces
-      const workspacesSnapshot = await getDocs(
-        query(collection(this.firestore, 'workspaces'), where('userId', '==', userId)),
-      );
-
-      const workspaces = workspacesSnapshot.docs.map((doc) => {
-        const data = doc.data() as Record<string, unknown>;
-        return Workspace.fromFirestore(doc.id, data);
-      });
+      const workspaces: Workspace[] = await this.dashboardRepo.getWorkspacesByUserId(userId);
 
       // Get workspace IDs for querying domains/subscriptions
       const workspaceIds = workspaces.map((w) => w.id);
@@ -93,9 +85,9 @@ export class DashboardService {
         return emptyStats;
       }
 
-      // Firestore 'in' queries support max 30 items, split if needed
-      const domainsData = await this.getDomainsForWorkspaces(workspaceIds);
-      const subscriptionsData = await this.getSubscriptionsForWorkspaces(workspaceIds);
+      const domainsData = await this.dashboardRepo.getDomainsByWorkspaceIds(workspaceIds);
+      const subscriptionsData =
+        await this.dashboardRepo.getSubscriptionsByWorkspaceIds(workspaceIds);
 
       // Calculate date thresholds
       const now = new Date();
@@ -180,49 +172,22 @@ export class DashboardService {
   }
 
   /**
-   * Get domains for workspaces (handles batching for 'in' query limit)
-   */
-  private async getDomainsForWorkspaces(workspaceIds: string[]): Promise<IDomain[]> {
-    const allDomains: IDomain[] = [];
-    const batchSize = 30; // Firestore 'in' limit
-
-    for (let i = 0; i < workspaceIds.length; i += batchSize) {
-      const batch = workspaceIds.slice(i, i + batchSize);
-      const snapshot = await getDocs(
-        query(collection(this.firestore, 'domains'), where('workspaceId', 'in', batch)),
-      );
-      snapshot.docs.forEach((doc) => allDomains.push(doc.data() as IDomain));
-    }
-
-    return allDomains;
-  }
-
-  /**
-   * Get subscriptions for workspaces (handles batching)
-   */
-  private async getSubscriptionsForWorkspaces(workspaceIds: string[]): Promise<ISubscription[]> {
-    const allSubscriptions: ISubscription[] = [];
-    const batchSize = 30;
-
-    for (let i = 0; i < workspaceIds.length; i += batchSize) {
-      const batch = workspaceIds.slice(i, i + batchSize);
-      const snapshot = await getDocs(
-        query(collection(this.firestore, 'subscriptions'), where('workspaceId', 'in', batch)),
-      );
-      snapshot.docs.forEach((doc) => allSubscriptions.push(doc.data() as ISubscription));
-    }
-
-    return allSubscriptions;
-  }
-
-  /**
-   * Convert Firestore Timestamp to Date
+   * Convert Firestore Timestamp-like object to Date
    */
   private toDate(timestamp: unknown): Date | null {
     if (!timestamp) return null;
     if (timestamp instanceof Date) return timestamp;
-    if (timestamp instanceof Timestamp) return timestamp.toDate();
-    if (typeof timestamp === 'object' && 'seconds' in timestamp) {
+    // Duck typing for Firestore Timestamp to avoid direct dependency
+    if (
+      typeof timestamp === 'object' &&
+      timestamp !== null &&
+      'seconds' in timestamp &&
+      'nanoseconds' in timestamp
+    ) {
+      return new Date((timestamp as { seconds: number }).seconds * 1000);
+    }
+    // Fallback for objects with just seconds
+    if (typeof timestamp === 'object' && timestamp !== null && 'seconds' in timestamp) {
       return new Date((timestamp as { seconds: number }).seconds * 1000);
     }
     return null;
@@ -276,14 +241,7 @@ export class DashboardService {
       if (!userId) return [];
 
       // Get all user's workspaces
-      const workspacesSnapshot = await getDocs(
-        query(collection(this.firestore, 'workspaces'), where('userId', '==', userId)),
-      );
-
-      const workspaces = workspacesSnapshot.docs.map((doc) => {
-        const data = doc.data() as Record<string, unknown>;
-        return Workspace.fromFirestore(doc.id, data);
-      });
+      const workspaces = await this.dashboardRepo.getWorkspacesByUserId(userId);
 
       const workspaceIds = workspaces.map((w) => w.id);
       if (workspaceIds.length === 0) return [];
@@ -292,8 +250,9 @@ export class DashboardService {
       const workspaceMap = new Map(workspaces.map((w) => [w.id, w.name]));
 
       // Get domains and subscriptions
-      const domainsData = await this.getDomainsForWorkspaces(workspaceIds);
-      const subscriptionsData = await this.getSubscriptionsForWorkspaces(workspaceIds);
+      const domainsData = await this.dashboardRepo.getDomainsByWorkspaceIds(workspaceIds);
+      const subscriptionsData =
+        await this.dashboardRepo.getSubscriptionsByWorkspaceIds(workspaceIds);
 
       const now = new Date();
       const events: TimelineEvent[] = [];

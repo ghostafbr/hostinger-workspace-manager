@@ -16,7 +16,7 @@ import { InputIconModule } from 'primeng/inputicon';
         pInputText
         [placeholder]="placeholder()"
         [(ngModel)]="value"
-        (input)="onInput.emit($any($event).target.value)"
+        (input)="handleInput($event)"
         class="w-full"
       />
     </p-iconfield>
@@ -36,4 +36,9 @@ export class SearchInputComponent {
   value = model<string>('');
   placeholder = input<string>('Buscar...');
   onInput = output<string>();
+
+  handleInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.onInput.emit(target.value);
+  }
 }

@@ -15,6 +15,10 @@ import lara from '@primeng/themes/lara';
 import { routes } from './app.routes';
 import { FirebaseAdapter } from './infrastructure/adapters';
 import { CustomPreloadingStrategy } from './infrastructure/strategies/preload-strategy';
+import { DASHBOARD_REPOSITORY } from './domain/repositories/dashboard.repository';
+import { FirebaseDashboardRepository } from './infrastructure/repositories/firebase-dashboard.repository';
+import { ALERT_REPOSITORY } from './domain/repositories/alert.repository';
+import { FirebaseAlertRepository } from './infrastructure/repositories/firebase-alert.repository';
 // import { SwUpdateService } from './application/services/sw-update.service';
 
 /**
@@ -63,5 +67,7 @@ export const appConfig: ApplicationConfig = {
         },
       },
     }),
+    { provide: DASHBOARD_REPOSITORY, useClass: FirebaseDashboardRepository },
+    { provide: ALERT_REPOSITORY, useClass: FirebaseAlertRepository },
   ],
 };

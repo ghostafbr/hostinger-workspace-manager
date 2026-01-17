@@ -1,26 +1,17 @@
-import { Injectable, signal } from '@angular/core';
-import {
-  collection,
-  query,
-  where,
-  orderBy,
-  getDocs,
-  Timestamp,
-  QueryConstraint,
-} from 'firebase/firestore';
-import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
-import { AlertLogModel, IAlertLog, EntityType } from '@app/domain';
+import { Injectable, inject, signal } from '@angular/core';
+import { AlertLogModel, EntityType } from '@app/domain';
+import { ALERT_REPOSITORY } from '@app/domain/repositories/alert.repository';
 
 /**
  * Alert Service
  *
- * Manages alert logs from Firestore
+ * Manages alert logs using Repository Pattern
  */
 @Injectable({
   providedIn: 'root',
 })
 export class AlertService {
-  private readonly firestore = FirebaseAdapter.getFirestore();
+  private readonly alertRepo = inject(ALERT_REPOSITORY);
 
   readonly alerts = signal<AlertLogModel[]>([]);
   readonly isLoading = signal<boolean>(false);
@@ -41,31 +32,7 @@ export class AlertService {
     this.error.set(null);
 
     try {
-      const alertsRef = collection(this.firestore, 'alert_logs');
-      const constraints: QueryConstraint[] = [
-        where('workspaceId', '==', workspaceId),
-        orderBy('createdAt', 'desc'),
-      ];
-
-      // Apply optional filters
-      if (filters?.entityType) {
-        constraints.push(where('entityType', '==', filters.entityType));
-      }
-      if (filters?.daysBefore !== undefined) {
-        constraints.push(where('daysBefore', '==', filters.daysBefore));
-      }
-      if (filters?.processed !== undefined) {
-        constraints.push(where('processed', '==', filters.processed));
-      }
-
-      const q = query(alertsRef, ...constraints);
-      const snapshot = await getDocs(q);
-
-      const alertsList = snapshot.docs.map((doc) => {
-        const data = doc.data() as Omit<IAlertLog, 'id'>;
-        return new AlertLogModel({ ...data, id: doc.id });
-      });
-
+      const alertsList = await this.alertRepo.getAlertsByWorkspace(workspaceId, filters);
       this.alerts.set(alertsList);
       return alertsList;
     } catch (error) {
@@ -90,22 +57,7 @@ export class AlertService {
     this.error.set(null);
 
     try {
-      const alertsRef = collection(this.firestore, 'alert_logs');
-      const q = query(
-        alertsRef,
-        where('workspaceId', '==', workspaceId),
-        where('entityId', '==', entityId),
-        where('entityType', '==', entityType),
-        orderBy('createdAt', 'desc'),
-      );
-
-      const snapshot = await getDocs(q);
-      const alertsList = snapshot.docs.map((doc) => {
-        const data = doc.data() as Omit<IAlertLog, 'id'>;
-        return new AlertLogModel({ ...data, id: doc.id });
-      });
-
-      return alertsList;
+      return await this.alertRepo.getAlertsByEntity(workspaceId, entityId, entityType);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Error al cargar alertas de entidad';
@@ -125,24 +77,7 @@ export class AlertService {
     this.error.set(null);
 
     try {
-      const sevenDaysAgo = Timestamp.fromDate(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
-
-      const alertsRef = collection(this.firestore, 'alert_logs');
-      const q = query(
-        alertsRef,
-        where('workspaceId', '==', workspaceId),
-        where('daysBefore', '<=', 7),
-        where('createdAt', '>=', sevenDaysAgo),
-        orderBy('createdAt', 'desc'),
-      );
-
-      const snapshot = await getDocs(q);
-      const alertsList = snapshot.docs.map((doc) => {
-        const data = doc.data() as Omit<IAlertLog, 'id'>;
-        return new AlertLogModel({ ...data, id: doc.id });
-      });
-
-      return alertsList;
+      return await this.alertRepo.getCriticalAlerts(workspaceId, 7);
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Error al cargar alertas críticas';
