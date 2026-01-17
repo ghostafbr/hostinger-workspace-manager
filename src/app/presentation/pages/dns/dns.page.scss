@@ -1,28 +1,24 @@
-@use '../../../../styles/variables';
+@use '../../../../styles/abstracts/mixins';
+@use '../../../../styles/theme/tokens';
+@use '../../../../styles/components/cards';
 
-// Estilos para la barra de selección de dominio compacta en el toolbar
+// Toolbar Styles
+// Most styles are handled by global .p-toolbar now.
+// We only keep necessary layout adjustments.
+
+.dns-page {
+  min-height: 100vh;
+}
+
+// Add margin to separate toolbar from content
+.dns-toolbar {
+  margin-bottom: 2rem;
+}
+
 .domain-toolbar-group {
   display: flex;
   align-items: center;
   gap: 1rem;
-  // Removed previous styling to adapt to new toolbar
-}
-
-.domain-toolbar-label {
-  display: none; // Hide label on desktop for cleaner look (Dashboard style usually cleaner)
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-}
-
-.domain-toolbar-select {
-  min-width: 240px;
-  max-width: 320px;
-  font-size: 1rem;
-  margin: 0 0.5rem;
-
-  // Customizing internal PrimeNG select if needed via ng-deep elsewhere
 }
 
 .domain-toolbar-count {
@@ -31,7 +27,7 @@
   gap: 0.5rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--text-color-secondary);
+  color: var(--text-secondary);
   background: var(--surface-100);
   border-radius: 6px;
   padding: 0.25rem 0.75rem;
@@ -41,17 +37,99 @@
   }
 }
 
-.domain-toolbar-count i {
-  color: var(--primary-600);
-  font-size: 0.9rem;
+// Ensure global toolbar overrides work here
+::ng-deep .dns-toolbar {
+  // Reset duplicated styles if any, rely on global
+  .p-toolbar-group-end {
+    display: flex;
+    gap: 0.5rem;
+  }
 }
 
-// Ajuste para el botón de refrescar
-.domain-toolbar-group .p-button {
-  margin-left: 0.5rem;
+// Empty State Styles
+.empty-state-container {
+  display: flex;
+  justify-content: center;
+
+  .empty-state-content {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+
+    .empty-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+
+      h3 {
+        margin: 0;
+        font-size: 1.25rem;
+        color: var(--text-main);
+      }
+    }
+
+    .empty-icon {
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+      // Removed margin-bottom or other conflicting styles
+
+      i {
+        font-size: 1.25rem;
+      }
+    }
+
+    p {
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
 }
 
-// Animations
+// Table Styles
+.dns-table {
+  // Using global table styles where possible.
+  // Add specific overrides below if needed.
+}
+
+.record-type-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-main);
+  background: var(--surface-200);
+
+  &.type-a {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  &.type-cname {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  &.type-mx {
+    background: #fce7f3;
+    color: #9d174d;
+  }
+
+  &.type-txt {
+    background: #f3f4f6;
+    color: #374151;
+  }
+
+  &.type-ns {
+    background: #ede9fe;
+    color: #5b21b6;
+  }
+}
+
+// Animations - Removed local keyframes to use global if available or keep minimal
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -61,398 +139,5 @@
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-.dns-page {
-  // Use global background
-  min-height: 100vh;
-}
-
-// Toolbar Styles
-::ng-deep .dns-toolbar {
-  // Remove local border to use global glass style
-  border-bottom: none;
-  padding: 1rem 1.5rem;
-  margin-bottom: 0;
-
-  .page-title {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-color);
-
-    i {
-      font-size: 1.25rem;
-      color: var(--primary-color);
-    }
-  }
-
-  .p-toolbar-group-end {
-    display: flex;
-    gap: 0.5rem;
-  }
-}
-
-// Main Content
-.dns-content {
-  padding: 1.5rem 0;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem; // Match Audit Logs grid gap
-}
-
-// Domain Selector Card
-::ng-deep .domain-selector-card {
-  .card-header-custom {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1rem 1.25rem;
-    background: var(--surface-100);
-    border-bottom: 1px solid var(--surface-border);
-
-    .card-icon {
-      font-size: 1.5rem;
-      color: var(--primary-color);
-    }
-
-    .header-text {
-      flex: 1;
-
-      h2 {
-        margin: 0;
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: var(--text-color);
-      }
-
-      .subtitle {
-        margin: 0.25rem 0 0 0;
-        font-size: 0.8125rem;
-        color: var(--text-color-secondary);
-        line-height: 1.3;
-      }
-    }
-  }
-
-  .p-card-body {
-    padding: 1.25rem;
-  }
-}
-
-.selector-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  .domain-count {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    color: var(--text-color-secondary);
-    padding: 0.5rem 0.75rem;
-    background: var(--surface-100);
-    border-radius: var(--border-radius);
-    border-left: 3px solid var(--primary-color);
-
-    i {
-      color: var(--primary-color);
-    }
-  }
-}
-
-// Empty State in Dropdown
-.empty-state-dropdown {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 2rem 1rem;
-  text-align: center;
-  color: var(--text-color-secondary);
-
-  i {
-    font-size: 2.5rem;
-    color: var(--surface-400);
-    margin-bottom: 0.5rem;
-  }
-
-  span {
-    font-weight: 600;
-    color: var(--text-color);
-  }
-
-  small {
-    font-size: 0.875rem;
-    color: var(--text-color-secondary);
-  }
-}
-
-// DNS Sections
-.dns-section {
-  animation: slideDown 0.4s ease-out;
-
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1.25rem;
-    padding: 1rem 0;
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    h2 {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin: 0;
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--text-color);
-
-      i {
-        font-size: 1.125rem;
-        color: var(--primary-color);
-      }
-    }
-
-    .section-subtitle {
-      margin: 0;
-      font-size: 0.875rem;
-      color: var(--text-color-secondary);
-      font-style: italic;
-    }
-
-    ::ng-deep .domain-chip {
-      background: var(--primary-50);
-      color: var(--primary-700);
-      font-weight: 500;
-      font-size: 0.875rem;
-      border: 1px solid var(--primary-200);
-
-      .p-chip-icon {
-        color: var(--primary-600);
-        font-size: 0.875rem;
-      }
-    }
-  }
-}
-
-// Empty State Container
-.empty-state-container {
-  margin-top: 3rem;
-
-  ::ng-deep .p-card {
-    background: linear-gradient(135deg, var(--surface-card) 0%, var(--surface-50) 100%);
-    border: 2px dashed var(--surface-border);
-    box-shadow: none;
-  }
-}
-
-.empty-state-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 3rem 2rem;
-  text-align: center;
-
-  .empty-icon {
-    width: 120px;
-    height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--primary-50) 0%, var(--primary-100) 100%);
-    border-radius: 50%;
-    margin-bottom: 0.5rem;
-
-    i {
-      font-size: 4rem;
-      color: var(--primary-color);
-    }
-  }
-
-  h3 {
-    margin: 0;
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--text-color);
-  }
-
-  p {
-    margin: 0;
-    font-size: 1.1rem;
-    color: var(--text-color-secondary);
-    max-width: 500px;
-    line-height: 1.6;
-  }
-}
-
-// Responsive Design
-@include variables.media-max-md {
-  .dns-content {
-    padding: 1rem;
-  }
-
-  ::ng-deep .dns-toolbar {
-    padding: 1rem;
-    flex-direction: column;
-    gap: 1rem;
-
-    .page-title {
-      font-size: 1.5rem;
-    }
-
-    .p-toolbar-group-end {
-      width: 100%;
-      justify-content: stretch;
-      padding: 0 !important;
-    }
-
-    // New Mobile Toolbar Group Styles
-    .domain-toolbar-group {
-      flex-direction: column !important;
-      align-items: stretch !important;
-      gap: 0.75rem;
-      padding: 0.5rem !important;
-      margin: 0 !important;
-      width: 100%;
-      border: 1px solid var(--surface-border); // Optional: add border to group if needed, or remove
-
-      .domain-toolbar-label {
-        border-right: none;
-        padding-right: 0;
-        justify-content: center;
-        width: 100%;
-        margin-bottom: 0.25rem;
-      }
-
-      .domain-toolbar-select {
-        width: 100% !important;
-        min-width: unset !important;
-        max-width: none !important;
-        margin: 0 !important;
-      }
-
-      .domain-toolbar-count {
-        margin: 0 !important;
-        justify-content: center;
-        width: 100%;
-        margin-top: 0.25rem;
-      }
-
-      .p-button {
-        margin: 0 !important;
-        width: 100%;
-        margin-left: 0 !important; // Reset specific margin
-      }
-    }
-  }
-
-  ::ng-deep .domain-selector-card {
-    .card-header-custom {
-      flex-direction: column;
-      padding: 1.25rem;
-
-      .card-icon {
-        font-size: 2rem;
-      }
-
-      .header-text h2 {
-        font-size: 1.25rem;
-      }
-    }
-
-    .p-card-body {
-      padding: 1.25rem;
-    }
-  }
-
-  .dns-section .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-
-    .header-left {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-      width: 100%;
-    }
-
-    h2 {
-      font-size: 1.125rem;
-    }
-  }
-
-  .empty-state-content {
-    padding: 2rem 1rem;
-
-    .empty-icon {
-      width: 100px;
-      height: 100px;
-
-      i {
-        font-size: 3rem;
-      }
-    }
-
-    h3 {
-      font-size: 1.5rem;
-    }
-
-    p {
-      font-size: 1rem;
-    }
-  }
-}
-
-// Tablets
-@include variables.media-max-lg {
-  ::ng-deep .dns-toolbar {
-    padding: 1.25rem 1.5rem;
-
-    .page-title {
-      font-size: 1.6rem;
-    }
-  }
-}
-
-// Large screens
-@include variables.media-xxl {
-  .dns-content {
-    margin: 0 auto;
-  }
-}
-
-// 2K screens
-@include variables.media-2k {
-  ::ng-deep .dns-toolbar {
-    padding: 2rem 3rem;
-
-    .page-title {
-      font-size: 2rem;
-    }
-  }
-
-  .dns-content {
-    padding: 4rem;
-    gap: 3rem;
-  }
-
-  .dns-section .section-header h2 {
-    font-size: 1.75rem;
   }
 }

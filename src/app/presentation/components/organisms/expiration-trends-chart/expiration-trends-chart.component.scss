@@ -1,29 +1,22 @@
+@use '../../../../../styles/theme/tokens';
+
 // Neutral Premium Glass Chart Styles
-$card-bg: #ffffff;
-$border-color: #e2e8f0; // Slate 200
-$text-primary: #1e293b; // Slate 800
-$text-secondary: #64748b; // Slate 500
-$primary-color: var(--primary-color);
-$radius: 12px;
-$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-$shadow-md:
-  0 4px 6px -1px rgba(0, 0, 0, 0.1),
-  0 2px 4px -1px rgba(0, 0, 0, 0.06);
+// Refactored to use global tokens for consistency
 
 :host {
   display: block;
 }
 
 .glass-chart-card {
-  background: $card-bg;
-  border: 1px solid $border-color;
-  border-radius: $radius;
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: $shadow-sm;
+  box-shadow: var(--shadow-sm);
   transition: box-shadow 0.2s;
 
   &:hover {
-    box-shadow: $shadow-md;
+    box-shadow: var(--shadow-md);
   }
 }
 
@@ -46,8 +39,8 @@ $shadow-md:
       display: flex;
       align-items: center;
       justify-content: center;
-      color: $primary-color;
-      border: 1px solid $border-color;
+      color: var(--primary-color);
+      border: 1px solid var(--border-color);
 
       i {
         font-size: 1.2rem;
@@ -58,7 +51,7 @@ $shadow-md:
       margin: 0;
       font-size: 1.25rem;
       font-weight: 600;
-      color: $text-primary;
+      color: var(--primary-color); // Prioritize primary color as requested
     }
   }
 }

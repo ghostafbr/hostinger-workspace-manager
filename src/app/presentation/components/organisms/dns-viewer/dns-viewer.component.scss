@@ -1,5 +1,4 @@
 // Card Container Style (Matching Dashboard 'glass-card')
-// Card Container Style (Matching Dashboard 'glass-card')
 :host {
   display: block;
   background: white;
@@ -117,6 +116,25 @@ code {
 .text-orange-500 {
   color: var(--orange-600);
   font-weight: 600;
+}
+
+// Table Footer - Explicit styling for alignment
+.table-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; // Consistent spacing
+  margin-top: 1rem;
+  padding: 0 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+
+  i {
+    color: var(--primary-color);
+    font-size: 1rem;
+    // ensure icon is centered visually
+    display: flex;
+    align-items: center;
+  }
 }
 
 ::ng-deep {

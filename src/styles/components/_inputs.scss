@@ -1,0 +1,27 @@
+@use '../theme/tokens';
+
+// Global Input Overrides
+.p-inputtext:enabled:focus,
+.p-inputnumber-input:enabled:focus,
+.p-dropdown.p-focus,
+.p-select.p-focus,
+.p-multiselect.p-focus,
+.p-calendar.p-inputwrapper-focus .p-inputtext,
+.p-checkbox:not(.p-checkbox-disabled).p-checkbox-focused .p-checkbox-box,
+.p-radiobutton:not(.p-radiobutton-disabled).p-radiobutton-focused .p-radiobutton-box {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 1px var(--primary-color) !important;
+  outline: 0 none !important;
+}
+
+.p-inputtext:enabled:hover,
+.p-dropdown:not(.p-disabled):hover,
+.p-multiselect:not(.p-disabled):hover,
+.p-select:not(.p-disabled):hover {
+  border-color: var(--color-brand-700) !important;
+}
+
+.p-checkbox-box.p-focus,
+.p-radiobutton-box.p-focus {
+  box-shadow: 0 0 0 2px rgba(31, 41, 55, 0.2) !important;
+}

@@ -1,0 +1,125 @@
+@use 'sass:map';
+
+// Breakpoints
+$breakpoints: (
+  'xs': 375px,
+  'sm': 576px,
+  'md': 768px,
+  'lg': 992px,
+  'xl': 1200px,
+  'xxl': 1400px,
+  'xxxl': 1920px,
+  '2k': 2560px,
+  '4k': 3840px,
+);
+
+// Mobile-first Max-width Mixins
+@mixin media-max($breakpoint) {
+  $value: map.get($breakpoints, $breakpoint);
+
+  @if $value {
+    @media screen and (max-width: #{$value - 1}) {
+      @content;
+    }
+  } @else {
+    @warn "Invalid breakpoint: #{$breakpoint}.";
+  }
+}
+
+// Desktop-first Min-width Mixins
+@mixin media-min($breakpoint) {
+  $value: map.get($breakpoints, $breakpoint);
+
+  @if $value {
+    @media screen and (min-width: $value) {
+      @content;
+    }
+  } @else {
+    @warn "Invalid breakpoint: #{$breakpoint}.";
+  }
+}
+
+// Aliases for backward compatibility during refactor
+@mixin media-max-xs {
+  @include media-max('xs') {
+    @content;
+  }
+}
+
+@mixin media-max-sm {
+  @include media-max('sm') {
+    @content;
+  }
+}
+
+@mixin media-max-md {
+  @include media-max('md') {
+    @content;
+  }
+}
+
+@mixin media-max-lg {
+  @include media-max('lg') {
+    @content;
+  }
+}
+
+@mixin media-max-xl {
+  @include media-max('xl') {
+    @content;
+  }
+}
+
+@mixin media-max-xxl {
+  @include media-max('xxl') {
+    @content;
+  }
+}
+
+@mixin media-sm {
+  @include media-min('sm') {
+    @content;
+  }
+}
+
+@mixin media-md {
+  @include media-min('md') {
+    @content;
+  }
+}
+
+@mixin media-lg {
+  @include media-min('lg') {
+    @content;
+  }
+}
+
+@mixin media-xl {
+  @include media-min('xl') {
+    @content;
+  }
+}
+
+@mixin media-xxl {
+  @include media-min('xxl') {
+    @content;
+  }
+}
+
+@mixin media-xxxl {
+  @include media-min('xxxl') {
+    @content;
+  }
+}
+
+@mixin media-2k {
+  @include media-min('2k') {
+    @content;
+  }
+}
+
+@mixin media-4k {
+  @include media-min('4k') {
+    @content;
+  }
+}

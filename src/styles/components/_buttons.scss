@@ -1,0 +1,49 @@
+@use '../theme/tokens';
+
+// P-Button: Global Brand Styling
+.p-button {
+  border-radius: 12px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+
+  &.p-button-primary,
+  &.p-button-success,
+  &:not(.p-button-outlined):not(.p-button-text):not(.p-button-secondary):not(.p-button-info):not(
+      .p-button-warning
+    ):not(.p-button-help):not(.p-button-danger) {
+    background: var(--color-brand-800) !important;
+    border: 1px solid var(--color-brand-800) !important;
+    color: #ffffff !important;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+    &:enabled:hover {
+      background: var(--color-brand-700) !important;
+      border-color: var(--color-brand-700) !important;
+      transform: translateY(-1px);
+      box-shadow:
+        0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    &:enabled:active {
+      transform: translateY(0);
+    }
+  }
+
+  // Secondary / Outlined
+  &.p-button-secondary.p-button-outlined {
+    background: rgba(255, 255, 255, 0.4);
+    border-color: rgba(209, 213, 219, 0.6);
+    color: var(--color-brand-600);
+
+    &:hover {
+      background: #ffffff;
+      color: var(--color-brand-900);
+      border-color: var(--color-brand-400);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+  }
+}

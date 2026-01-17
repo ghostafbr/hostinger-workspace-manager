@@ -1,0 +1,179 @@
+:root {
+  /* ==========================================================================
+     Colors - Neutral (Slate)
+     ========================================================================== */
+  --color-brand-900: #111827;
+  /* Gray 900 */
+  --color-brand-800: #1f2937;
+  /* Gray 800 (Primary Base) */
+  --color-brand-700: #374151;
+  /* Gray 700 */
+  --color-brand-600: #4b5563;
+  /* Gray 600 */
+  --color-brand-500: #6b7280;
+  /* Gray 500 */
+  --color-brand-400: #9ca3af;
+  /* Gray 400 */
+  --color-brand-300: #d1d5db;
+  /* Gray 300 */
+  --color-brand-200: #e5e7eb;
+  /* Gray 200 */
+  --color-brand-100: #f3f4f6;
+  /* Gray 100 */
+  --color-brand-50: #f9fafb;
+  /* Gray 50 (Surface Ground) */
+  --color-white: #ffffff;
+
+  /*Aliases for legacy/direct usage */
+  --gray-900: var(--color-brand-900);
+  --gray-800: var(--color-brand-800);
+  --gray-700: var(--color-brand-700);
+  --gray-600: var(--color-brand-600);
+  --gray-500: var(--color-brand-500);
+  --gray-400: var(--color-brand-400);
+  --gray-300: var(--color-brand-300);
+  --gray-200: var(--color-brand-200);
+  --gray-100: var(--color-brand-100);
+  --gray-50: var(--color-brand-50);
+
+  /* ==========================================================================
+     Semantic Colors
+     ========================================================================== */
+  --primary-color: var(--color-brand-800);
+  --primary-color-text: var(--color-white);
+  --primary-hover: var(--color-brand-700);
+  --primary-500: var(--color-brand-800);
+  /* Fix for potential usages */
+  --primary-rgb: 31, 41, 55;
+  --primary-500-rgb: 31, 41, 55;
+
+  --text-main: var(--primary-color);
+  --text-secondary: var(--color-brand-700);
+
+  /* Legacy/PrimeNG Compatibility Aliases */
+  --text-color: var(--text-main);
+  --text-color-secondary: var(--text-secondary);
+
+  --border-color: var(--color-brand-300);
+
+  --surface-ground: var(--color-brand-50);
+  --surface-card: var(--color-white);
+  --surface-overlay: var(--color-white);
+
+  /* Surface Scale (Aliases for PrimeNG/Legacy compatibility) */
+  --surface-0: #ffffff;
+  --surface-50: var(--color-brand-50);
+  --surface-100: var(--color-brand-100);
+  --surface-200: var(--color-brand-200);
+  --surface-300: var(--color-brand-300);
+  --surface-400: var(--color-brand-400);
+  --surface-500: var(--color-brand-500);
+  --surface-600: var(--color-brand-600);
+  --surface-700: var(--color-brand-700);
+  --surface-800: var(--color-brand-800);
+  --surface-900: var(--color-brand-900);
+
+  /* Glass Effects */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-blur: 16px;
+
+  /* ==========================================================================
+     Status Colors (Tailwind-like semantic adaptation)
+     ========================================================================== */
+  /* Success (Green - Emerald) */
+  --color-success-bg: #ecfdf5;
+  --color-success-text: #065f46;
+  --color-success-Main: #10b981;
+
+  --green-50: #ecfdf5;
+  --green-100: #d1fae5;
+  --green-200: #a7f3d0;
+  --green-300: #6ee7b7;
+  --green-400: #34d399;
+  --green-500: #10b981;
+  --green-600: #059669;
+  --green-700: #047857;
+  --green-800: #065f46;
+  --green-900: #064e3b;
+
+  /* Warning (Amber) */
+  --color-warning-bg: #fffbeb;
+  --color-warning-text: #92400e;
+  --color-warning-main: #f59e0b;
+
+  --orange-50: #fff7ed;
+  /* Orange scale often used for warning too */
+  --orange-100: #ffedd5;
+  --orange-200: #fed7aa;
+  --orange-300: #fdba74;
+  --orange-400: #fb923c;
+  --orange-500: #f97316;
+  --orange-600: #ea580c;
+  --orange-700: #c2410c;
+
+  --yellow-500: #eab308;
+  /* Specific yellow used */
+
+  /* Danger (Red) */
+  --color-danger-bg: #fef2f2;
+  --color-danger-text: #991b1b;
+  --color-danger-main: #ef4444;
+
+  --red-50: #fef2f2;
+  --red-100: #fee2e2;
+  --red-200: #fecaca;
+  --red-300: #fca5a5;
+  --red-400: #f87171;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+  --red-700: #b91c1c;
+  --red-800: #991b1b;
+  --red-900: #7f1d1d;
+
+  /* Info (Blue) */
+  --color-info-bg: #eff6ff;
+  --color-info-text: #1e40af;
+  --color-info-main: #3b82f6;
+
+  --blue-50: #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-200: #bfdbfe;
+  --blue-300: #93c5fd;
+  --blue-400: #60a5fa;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+  --blue-800: #1e40af;
+  --blue-900: #1e3a8a;
+
+  /* ==========================================================================
+     Typography
+     ========================================================================== */
+  --font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-size-base: 16px;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  /* ==========================================================================
+     Spacing & Layout
+     ========================================================================== */
+  --border-radius-sm: 6px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 20px;
+  --border-radius-xxl: 24px;
+  --border-radius-round: 999px;
+
+  /* ==========================================================================
+     Shadows
+     ========================================================================== */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.03);
+  --shadow-card-hover: 0 12px 30px rgba(0, 0, 0, 0.06);
+  --shadow-floating: 0 8px 32px rgba(0, 0, 0, 0.03), 0 2px 8px rgba(0, 0, 0, 0.02);
+}

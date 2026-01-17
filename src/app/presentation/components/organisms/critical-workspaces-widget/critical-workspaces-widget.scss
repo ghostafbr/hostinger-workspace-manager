@@ -1,7 +1,15 @@
+@use '../../../../../styles/abstracts/mixins';
+@use '../../../../../styles/theme/tokens';
+
 // Container
 .critical-widget-container {
   display: flex;
   flex-direction: column;
+  background: var(--surface-card); // Explicitly set white background
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem;
+  height: 100%;
 }
 
 // Header
@@ -11,19 +19,19 @@
   gap: 1rem;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(229, 231, 235, 0.6);
+  border-bottom: 1px solid var(--border-color);
 
   .header-icon-wrapper {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 12px;
-    background: rgba(239, 68, 68, 0.1);
+    background: var(--color-danger-bg);
     display: flex;
     align-items: center;
     justify-content: center;
 
     i {
-      color: var(--red-500);
+      color: var(--color-danger-main);
       font-size: 1.25rem;
     }
   }
@@ -32,7 +40,7 @@
     margin: 0;
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--text-color);
+    color: var(--primary-color); // Prioritize primary color for readability
   }
 }
 
@@ -58,7 +66,7 @@
   .success-icon-wrapper {
     width: 4rem;
     height: 4rem;
-    background: rgba(16, 185, 129, 0.1);
+    background: var(--color-success-bg);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -67,7 +75,7 @@
 
     i {
       font-size: 2rem;
-      color: var(--green-600);
+      color: var(--color-success-text); // Darker green
     }
   }
 
@@ -75,11 +83,11 @@
     margin: 0 0 0.5rem 0;
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--text-color);
+    color: var(--primary-color);
   }
 
   .sub-text {
-    color: var(--text-color-secondary);
+    color: var(--text-secondary); // Now mapped to brand-700
     font-size: 0.9rem;
   }
 }
@@ -92,7 +100,7 @@
 }
 
 .critical-item {
-  background: var(--surface-50);
+  background: var(--surface-ground);
   border-radius: 12px;
   padding: 1rem;
   border: 1px solid transparent;
@@ -110,18 +118,20 @@
     }
   }
 
-  // Severity Borders (Subtle)
+  // Severity Borders
   &.critical {
-    border-left: 3px solid var(--red-500);
+    border-left: 3px solid var(--color-danger-main);
   }
 
   &.high {
-    border-left: 3px solid var(--orange-500);
+    border-left: 3px solid var(--color-warning-main);
   }
 
   &.medium {
-    border-left: 3px solid var(--yellow-500);
+    border-left: 3px solid #eab308;
   }
+
+  // Yellow-500
 }
 
 .item-content {
@@ -145,7 +155,7 @@
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
-    color: var(--text-color);
+    color: var(--text-main); // Primary color
   }
 
   .score-pill {
@@ -154,26 +164,27 @@
     padding: 0.1rem 0.5rem;
     border-radius: 12px;
     background: var(--surface-200);
-    color: var(--text-color-secondary);
+    color: var(--text-secondary);
 
     &.critical {
-      background: #fef2f2;
-      color: #dc2626;
+      background: var(--color-danger-bg);
+      color: var(--color-danger-text);
     }
 
     &.high {
-      background: #fffbeb;
-      color: #d97706;
+      background: var(--color-warning-bg);
+      color: var(--color-warning-text);
     }
 
     &.medium {
       background: #fef9c3;
-      color: #ca8a04;
+      color: #854d0e;
     }
 
+    // Yellow-bg / Yellow-text-darker
     &.low {
-      background: #f3f4f6;
-      color: #4b5563;
+      background: var(--surface-200);
+      color: var(--text-secondary);
     }
   }
 }
@@ -190,17 +201,18 @@
     background: var(--surface-400);
 
     &.status-active {
-      background: #10b981;
+      background: var(--color-success-Main);
     }
 
     &.status-error {
-      background: #ef4444;
+      background: var(--color-danger-main);
     }
   }
 
   .status-text {
     font-size: 0.85rem;
-    color: var(--text-color-secondary);
+    color: var(--text-secondary);
+    font-weight: 500;
   }
 }
 
@@ -211,7 +223,7 @@
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
-  color: var(--text-color-secondary);
+  color: var(--text-secondary);
   transition: all 0.2s ease;
 }
 
@@ -229,7 +241,8 @@
     background: rgba(0, 0, 0, 0.04);
     border-radius: 6px;
     font-size: 0.8rem;
-    color: var(--text-color-secondary);
+    color: var(--text-secondary);
+    font-weight: 500;
 
     i {
       font-size: 0.75rem;
@@ -239,8 +252,8 @@
 
   .more-reasons {
     font-size: 0.75rem;
-    color: var(--text-color-secondary);
-    font-weight: 500;
+    color: var(--text-secondary);
+    font-weight: 600;
     padding-left: 0.25rem;
   }
 }

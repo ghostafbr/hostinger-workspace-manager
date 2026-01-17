@@ -1,3 +1,7 @@
+@use '../../../../styles/abstracts/mixins';
+@use '../../../../styles/theme/tokens';
+@use '../../../../styles/components/cards';
+
 .dashboard-container {
   min-height: 100vh;
 
@@ -9,25 +13,19 @@
 
 .dashboard-toolbar {
   margin-bottom: 2rem;
-
-  // Animation
   animation: slideDown 0.3s ease-out;
 
   .p-toolbar-group-end {
     display: flex;
     gap: 0.5rem;
 
-    // Aplicar hover-lift a botones
+    // Aplicar hover-lift a botones (handled by global button styles mostly)
     ::ng-deep .p-button {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
       &:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      }
-
-      &:active:not(:disabled) {
-        transform: translateY(0);
       }
     }
   }
@@ -47,7 +45,7 @@
 
   .welcome-user {
     font-size: 0.95rem;
-    color: #4b5563;
+    color: var(--primary-color);
     font-weight: 500;
   }
 
@@ -64,13 +62,13 @@
     }
 
     &.warning-text {
-      background: #fef3c7;
-      color: #92400e;
+      background: var(--color-warning-bg);
+      color: var(--color-warning-text);
     }
 
     &.success-text {
-      background: #d1fae5;
-      color: #065f46;
+      background: var(--color-success-bg);
+      color: var(--color-success-text);
     }
   }
 }
@@ -81,14 +79,14 @@
   gap: 0.75rem;
   font-weight: 700;
   font-size: 1.5rem;
-  color: #1f2937;
+  color: var(--primary-color);
   margin: 0;
 
   i {
-    color: #64748b;
+    color: var(--primary-color);
   }
 
-  @media (max-width: 768px) {
+  @include mixins.media-max('md') {
     font-size: 1.25rem;
   }
 }
@@ -96,12 +94,11 @@
 .dashboard-content {
   margin: 0 auto;
 
-  @media (max-width: 768px) {
+  @include mixins.media-max('md') {
     padding: 0 1rem 1rem;
   }
 }
 
-// Animaciones
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -122,7 +119,7 @@
   h3 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: var(--text-color);
+    color: var(--text-main);
     margin: 0;
     display: flex;
     align-items: center;
@@ -142,34 +139,19 @@
   gap: 1.5rem;
   margin-bottom: 2.5rem;
 
-  @media (max-width: 1200px) {
+  @include mixins.media-max('xl') {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: 768px) {
+  @include mixins.media-max('md') {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
 }
 
-// Glass Card (Pseudo-component style)
+// Glass Card (Using global component but keeping local override if needed)
 .glass-card {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(229, 231, 235, 0.6);
-  padding: 1.5rem;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
-  }
+  @extend .glass-card; // Use global style
 }
 
 // Summary Card Custom Styling
@@ -180,13 +162,13 @@
     gap: 1rem;
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(229, 231, 235, 0.6);
+    border-bottom: 1px solid var(--border-color);
 
     .header-icon-wrapper {
       width: 2.5rem;
       height: 2.5rem;
       border-radius: 12px;
-      background: rgba(var(--primary-500-rgb), 0.1);
+      background: rgba(var(--primary-500-rgb), 0.1); // Keep rgb var for now or refactor
       display: flex;
       align-items: center;
       justify-content: center;
@@ -201,7 +183,7 @@
       margin: 0;
       font-size: 1.1rem;
       font-weight: 600;
-      color: var(--text-color);
+      color: var(--text-main);
     }
   }
 
@@ -218,13 +200,13 @@
       align-items: center;
       justify-content: center;
       padding: 0.75rem;
-      background: var(--surface-50);
+      background: var(--surface-ground);
       border-radius: 12px;
       transition: all 0.2s ease;
 
       .tile-label {
         font-size: 0.75rem;
-        color: var(--text-color-secondary);
+        color: var(--text-secondary);
         font-weight: 500;
         margin-bottom: 0.25rem;
       }
@@ -232,25 +214,25 @@
       .tile-value {
         font-size: 1.25rem;
         font-weight: 700;
-        color: var(--text-color);
+        color: var(--text-main);
       }
 
       &.success-tile {
-        background: #ecfdf5;
+        background: var(--color-success-bg);
 
         .tile-value {
-          color: #059669;
+          color: var(--color-success-text);
         }
 
         .tile-label {
-          color: #065f46;
+          color: var(--color-success-Main);
         }
       }
 
       &:hover {
         transform: translateY(-2px);
         background: white;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--shadow-sm);
       }
     }
   }
@@ -266,7 +248,7 @@
   margin-bottom: 2rem;
 
   ::ng-deep .p-card {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
   }
 }
 
@@ -282,12 +264,12 @@
   h2 {
     margin: 1rem 0 0.5rem;
     font-size: 1.5rem;
-    color: var(--text-color);
+    color: var(--text-main);
   }
 
   p {
     margin: 0 0 2rem;
-    color: var(--text-color-secondary);
+    color: var(--text-secondary);
   }
 }
 
@@ -298,7 +280,7 @@
   gap: 2rem;
   margin-top: 2rem;
 
-  @media (max-width: 1200px) {
+  @include mixins.media-max('xl') {
     grid-template-columns: 1fr;
   }
 
@@ -306,11 +288,6 @@
   .comparison-section {
     min-height: 350px;
   }
-}
-
-// Alert Section
-.alert-section {
-  margin-bottom: 2rem;
 }
 
 // Critical Section
@@ -323,11 +300,6 @@
   margin-bottom: 2rem;
 }
 
-// Chart Section
-.chart-section-full {
-  margin-bottom: 2rem;
-}
-
 // Timeline Section
 .timeline-section {
   margin-top: 2rem;
@@ -337,7 +309,7 @@
 .collapsible-section {
   background: white;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
   margin-bottom: 2rem;
 
@@ -346,13 +318,13 @@
     justify-content: space-between;
     align-items: center;
     padding: 1.25rem 1.5rem;
-    background: linear-gradient(135deg, #475569 0%, #334155 100%);
+    background: linear-gradient(135deg, var(--color-brand-600) 0%, var(--color-brand-700) 100%);
     cursor: pointer;
     user-select: none;
     transition: all 0.3s ease;
 
     &:hover {
-      background: linear-gradient(135deg, #3f4f63 0%, #2d3748 100%);
+      background: linear-gradient(135deg, var(--color-brand-700) 0%, var(--color-brand-800) 100%);
     }
 
     h3 {
@@ -379,18 +351,6 @@
   .section-content {
     padding: 1.5rem;
     animation: slideDown 0.3s ease-out;
-  }
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 

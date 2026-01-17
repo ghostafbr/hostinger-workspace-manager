@@ -1,0 +1,7 @@
+// Backward compatibility with legacy usages in component SCSS
+// We map these SCSS variables to our new CSS Variables
+$primary-color: var(--primary-color);
+$text-color: var(--text-main);
+$text-secondary: var(--text-secondary);
+$border-color: var(--border-color);
+$surface-ground: var(--surface-ground);

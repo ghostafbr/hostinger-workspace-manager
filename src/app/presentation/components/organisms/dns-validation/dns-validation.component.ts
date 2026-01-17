@@ -117,10 +117,10 @@ import { MessageModule } from 'primeng/message';
     </div>
 
     <ng-template #emptyState>
-      <div class="text-center p-5 border-dashed border-1 border-300 border-round">
+      <div class="text-center p-5 border-dashed border-1 border-300 border-round mb-5">
         <i class="pi pi-shield text-500 text-4xl mb-3"></i>
         <h3 class="text-900 m-0">No Validation Results</h3>
-        <p class="text-600 mb-4">
+        <p class="text-600 mb-4 text-secondary">
           Run a DNS validation to check for security and configuration issues.
         </p>
         <p-button

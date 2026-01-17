@@ -1,29 +1,29 @@
-// Local styles validation
-// The global layout now handles the container padding and width.
-// .page-header is also largely compliant with global styles, but let's see if we need to keep specific internal margins.
-// Actually, looking at the file content, .subscriptions-page is the top level. We should remove it.
+@use '../../../../styles/abstracts/mixins';
+@use '../../../../styles/theme/tokens';
 
-// Responsive adjustments might still be needed if they target specific inner elements, but standard layout should handle most.
-// Let's remove the wrapper and redundant titles.
+// Subscriptions Page Styles
+// Most layout is handled globally or by the HTML structure now.
+// Keeping this file for potential future specific overrides.
 
-// If there are specific component overrides, keep them. In this file, it seems mostly layout and title.
+.subscriptions-page {
+  // Ensure responsive padding if not handled by global container
+  @include mixins.media-max('md') {
+    padding: 0 1rem 1rem;
+  }
+}
 
-// Responsive adjustments
-@media (max-width: 768px) {
-  .subscriptions-page {
-    padding: 1rem;
+// Header adjustments if needed
+.page-header {
+  @include mixins.media-max('md') {
+    margin-bottom: 1.5rem;
 
-    .page-header {
-      margin-bottom: 1.5rem;
+    .header-content {
+      .page-title {
+        font-size: 1.5rem;
+      }
 
-      .header-content {
-        .page-title {
-          font-size: 1.5rem;
-        }
-
-        .page-subtitle {
-          font-size: 0.9rem;
-        }
+      .page-subtitle {
+        font-size: 0.9rem;
       }
     }
   }

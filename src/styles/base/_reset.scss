@@ -1,0 +1,19 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// 2K scaling
+@media screen and (min-width: 2560px) {
+  html {
+    font-size: 18px; // 112.5% scaling
+  }
+}
+
+// 4K scaling
+@media screen and (min-width: 3840px) {
+  html {
+    font-size: 22px; // 137.5% scaling
+  }
+}

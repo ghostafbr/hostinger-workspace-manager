@@ -1,201 +1,31 @@
 /* You can add global styles to this file, and also import other style files */
 
-// PrimeIcons (requerido)
+// 1. Vendors
 @use 'primeicons/primeicons.css';
+// PrimeNG overrides will go here in Phase 2
+// @use 'vendors/primeng';
 
-// UX Enhancement Utilities
-@use 'styles/micro-interactions';
-@use 'styles/accessibility';
-@use 'styles/responsive';
+// 2. Abstracts & Theme (Variables, Mixins, Tokens)
+@use 'styles/theme/tokens';
+@use 'styles/abstracts/variables'; // Component compatibility shim
+@use 'styles/abstracts/mixins';
 
-// Custom variables - Neutral color scheme
-:root {
-  --primary-color: #1f2937; // Dark Slate (Brand)
-  --primary-color-text: #ffffff;
-  --primary-500: #1f2937;
-  --primary-500-rgb: 31, 41, 55; // For rgba() usage
-  --surface-0: #ffffff;
-  --surface-50: #fafafa;
-  --surface-100: #f5f5f5;
-  --surface-200: #e5e7eb;
-  --surface-300: #d1d5db;
-  --surface-ground: #f9fafb;
-  --text-color: #1f2937;
-  --text-color-secondary: #6b7280;
-  --border-color: #d1d5db;
-  --border-radius: 8px;
-  --font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-}
+// 3. Base (Reset, Typography)
+@use 'styles/base/reset';
+@use 'styles/base/typography';
 
-// Global reset
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html,
-body {
-  height: 100%;
-  font-family: var(--font-family);
-  color: var(--text-color);
-  background-color: #f9fafb;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: 16px; // Base font size
-}
-
-// 2K scaling
-@media screen and (min-width: 2560px) {
-  html {
-    font-size: 18px; // 112.5% scaling
-  }
-}
-
-// 4K scaling
-@media screen and (min-width: 3840px) {
-  html {
-    font-size: 22px; // 137.5% scaling for better readability
-  }
-
-  // Scale PrimeNG components
-  .p-component {
-    font-size: 1rem;
-  }
-
-  // Scale buttons
-  .p-button {
-    font-size: 1rem;
-    padding: 0.875rem 1.75rem;
-
-    &.p-button-sm {
-      font-size: 0.875rem;
-      padding: 0.625rem 1.25rem;
-    }
-
-    &.p-button-lg {
-      font-size: 1.125rem;
-      padding: 1rem 2rem;
-    }
-
-    .p-button-icon {
-      font-size: 1.25rem;
-    }
-  }
-
-  // Scale inputs
-  .p-inputtext {
-    font-size: 1rem;
-    padding: 0.75rem 1rem;
-  }
-
-  // Scale tables
-  .p-datatable {
-    font-size: 1rem;
-
-    .p-datatable-thead > tr > th {
-      padding: 1rem 1.25rem;
-      font-size: 0.95rem;
-    }
-
-    .p-datatable-tbody > tr > td {
-      padding: 1rem 1.25rem;
-    }
-  }
-
-  // Scale cards
-  .p-card {
-    .p-card-title {
-      font-size: 1.375rem;
-    }
-
-    .p-card-content {
-      font-size: 1rem;
-    }
-  }
-
-  // Scale tags
-  .p-tag {
-    font-size: 0.875rem;
-    padding: 0.375rem 0.75rem;
-  }
-
-  // Scale dialogs
-  .p-dialog {
-    .p-dialog-title {
-      font-size: 1.5rem;
-    }
-
-    .p-dialog-content {
-      font-size: 1rem;
-    }
-  }
-
-  // Scale menus and dropdowns
-  .p-menu,
-  .p-select-overlay {
-    font-size: 1rem;
-
-    .p-menuitem-text {
-      font-size: 1rem;
-    }
-  }
-
-  // Scale tooltips
-  .p-tooltip-text {
-    font-size: 0.875rem;
-  }
-}
+// 4. Layout
+@use 'styles/responsive'; // Legacy - to be refactored
+@use 'styles/micro-interactions'; // Legacy - to be refactored
+@use 'styles/accessibility'; // Legacy - to be refactored
 
 // ==========================================
-// PREMIUM TAG STYLING
+// LEGACY STYLES (To be refactored in Phase 2/3)
 // ==========================================
-.p-tag {
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  border-radius: 6px;
-  padding: 0.25rem 0.75rem;
-  text-transform: uppercase;
-  font-size: 0.75rem !important;
-  border: 1px solid transparent; // Prepared for border
-
-  // Success (Active) - Brand Green-ish but Slate-aligned
-  &.p-tag-success {
-    background: rgba(34, 197, 94, 0.15) !important; // Subtle green bg
-    color: #15803d !important; // Darker green text
-    border-color: rgba(34, 197, 94, 0.3) !important; // Subtle border
-  }
-
-  // Info
-  &.p-tag-info {
-    background: rgba(59, 130, 246, 0.15) !important;
-    color: #1d4ed8 !important;
-    border-color: rgba(59, 130, 246, 0.3) !important;
-  }
-
-  // Warning
-  &.p-tag-warning {
-    background: rgba(245, 158, 11, 0.15) !important;
-    color: #b45309 !important;
-    border-color: rgba(245, 158, 11, 0.3) !important;
-  }
-
-  // Danger/Disabled
-  &.p-tag-danger {
-    background: rgba(239, 68, 68, 0.15) !important;
-    color: #b91c1c !important;
-    border-color: rgba(239, 68, 68, 0.3) !important;
-  }
-}
 
 // Utility classes
 .p-component {
   font-family: var(--font-family);
-}
-
-.text-center {
-  text-align: center;
 }
 
 .flex {
@@ -242,7 +72,6 @@ body {
   margin-bottom: 1.5rem;
 }
 
-// Width utilities
 .w-full {
   width: 100%;
 }
@@ -254,21 +83,21 @@ body {
   gap: 0.75rem;
   font-weight: 700;
   font-size: 1.5rem;
-  color: var(--text-color);
+  color: var(--primary-color);
   margin: 0;
 
   i {
     color: var(--primary-color);
   }
 
-  @media (max-width: 768px) {
+  @include mixins.media-max('md') {
     font-size: 1.25rem;
     justify-content: center;
     width: 100%;
   }
 }
 
-// Fix z-index for PrimeNG overlays to appear above sticky footer (z-index: 99)
+// Fix z-index for PrimeNG overlays
 .p-component-overlay,
 .p-select-overlay,
 .p-dropdown-panel,
@@ -279,131 +108,75 @@ body {
 }
 
 // ==========================================
-// GLOBAL COMPONENT OVERRIDES
+// TEMPORARY VENDOR OVERRIDES (Move to _primeng.scss next)
 // ==========================================
 
-// P-Button: Global Brand Styling
+// ... (Keeping rest of PrimeNG overrides here temporarily until Phase 2)
 .p-button {
-  border-radius: 12px !important; // Consistent roundness
+  border-radius: 12px !important;
   font-weight: 600 !important;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 
-  // Default / Primary / Success -> Dark Brand Color
   &.p-button-primary,
   &.p-button-success,
   &:not(.p-button-outlined):not(.p-button-text):not(.p-button-secondary):not(.p-button-info):not(
       .p-button-warning
     ):not(.p-button-help):not(.p-button-danger) {
-    background: #1f2937 !important; // Dark Slate (Sidebar Active)
-    border: 1px solid #1f2937 !important;
+    background: var(--color-brand-800) !important;
+    border: 1px solid var(--color-brand-800) !important;
     color: #ffffff !important;
-    box-shadow:
-      0 4px 6px -1px rgba(0, 0, 0, 0.1),
-      0 2px 4px -1px rgba(0, 0, 0, 0.06);
-
-    &:enabled:hover {
-      background: #374151 !important; // Lighter Slate
-      border-color: #374151 !important;
-      transform: translateY(-1px);
-      box-shadow:
-        0 10px 15px -3px rgba(0, 0, 0, 0.1),
-        0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    }
-
-    &:enabled:active {
-      transform: translateY(0);
-    }
-
-    .p-button-icon {
-      color: #ffffff !important;
-    }
-  }
-
-  // Secondary / Outlined
-  &.p-button-secondary.p-button-outlined {
-    background: rgba(255, 255, 255, 0.4);
-    border-color: rgba(209, 213, 219, 0.6);
-    color: #4b5563;
-
-    &:hover {
-      background: #ffffff;
-      color: #111827;
-      border-color: #9ca3af;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    }
   }
 }
 
-// P-Toolbar: Neutral Premium Glass Theme
 .p-toolbar {
-  background: rgba(255, 255, 255, 0.6) !important; // Glass transparency
+  background: var(--glass-bg) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.6) !important; // Subtle white border
-  outline: 1px solid rgba(229, 231, 235, 0.5); // Outer ring
-  border-radius: 24px !important; // High-end rounded corners
-  padding: 1rem 1.75rem !important; // Increased spacing
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.03),
-    0 2px 8px rgba(0, 0, 0, 0.02) !important; // Floating depth
-  display: flex !important;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1rem;
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 24px !important;
+}
 
-  // Hover effect
-  &:hover {
-    box-shadow:
-      0 12px 40px rgba(0, 0, 0, 0.05),
-      0 4px 12px rgba(0, 0, 0, 0.03) !important;
-    transform: translateY(-2px);
+// PREMIUM TAG STYLING
+.p-tag {
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  border-radius: 6px;
+  padding: 0.25rem 0.75rem;
+  text-transform: uppercase;
+  font-size: 0.75rem !important;
+  border: 1px solid transparent;
+
+  &.p-tag-success {
+    background: var(--color-success-bg) !important;
+    color: var(--color-success-text) !important;
+    border-color: rgba(34, 197, 94, 0.3) !important;
   }
 
-  // Alignment groups
-  .p-toolbar-group-start,
-  .p-toolbar-group-end,
-  .p-toolbar-group-left,
-  .p-toolbar-group-right {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+  &.p-tag-info {
+    background: var(--color-info-bg) !important;
+    color: var(--color-info-text) !important;
+    border-color: rgba(59, 130, 246, 0.3) !important;
+  }
+
+  &.p-tag-warning {
+    background: var(--color-warning-bg) !important;
+    color: var(--color-warning-text) !important;
+    border-color: rgba(245, 158, 11, 0.3) !important;
+  }
+
+  &.p-tag-danger {
+    background: var(--color-danger-bg) !important;
+    color: var(--color-danger-text) !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
   }
 }
 
-// ==========================================
-// GLOBAL INPUT OVERRIDES (Focus & Hover)
-// ==========================================
-
-// Target all common PrimeNG input components
+// Input Overrides
 .p-inputtext:enabled:focus,
 .p-inputnumber-input:enabled:focus,
 .p-dropdown.p-focus,
 .p-select.p-focus,
-.p-multiselect.p-focus,
-.p-calendar.p-inputwrapper-focus .p-inputtext,
-.p-checkbox:not(.p-checkbox-disabled).p-checkbox-focused .p-checkbox-box,
-.p-radiobutton:not(.p-radiobutton-disabled).p-radiobutton-focused .p-radiobutton-box {
-  border-color: #1f2937 !important; // Primary Dark (Black-ish)
-  // Remove the default green/teal ring and use the primary color
-  // Using a 1px solid shadow to mimic a thicker border or 'line'
-  box-shadow: 0 0 0 1px #1f2937 !important;
-  outline: 0 none !important;
-}
-
-// Hover states for inputs
-.p-inputtext:enabled:hover,
-.p-dropdown:not(.p-disabled):hover,
-.p-multiselect:not(.p-disabled):hover,
-.p-select:not(.p-disabled):hover {
-  border-color: #374151 !important; // Primary Main
-}
-
-// Focus ring adjustments for specific clickable elements if needed
-.p-checkbox-box.p-focus,
-.p-radiobutton-box.p-focus {
-  box-shadow: 0 0 0 2px rgba(31, 41, 55, 0.2) !important;
+.p-multiselect.p-focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 1px var(--primary-color) !important;
 }

@@ -105,7 +105,6 @@ import { ChipModule } from 'primeng/chip';
         margin: 0;
         font-size: 1rem;
         font-weight: 600;
-        color: var(--text-color);
       }
 
       // 2x2 Grid
@@ -131,16 +130,16 @@ import { ChipModule } from 'primeng/chip';
         // Default (Empty) state
         .tile-label {
           font-size: 0.75rem;
-          color: var(--text-color-secondary);
-          font-weight: 500;
+          color: var(--text-secondary);
+          font-weight: 600; // Increased weight
           margin-bottom: 0.25rem;
         }
 
         .tile-value {
           font-size: 1.25rem;
           font-weight: 700;
-          color: var(--text-color-secondary);
-          opacity: 0.5;
+          color: var(--text-main); // Use main text color
+          opacity: 1; // Removed opacity
         }
 
         // Active States
@@ -150,7 +149,7 @@ import { ChipModule } from 'primeng/chip';
 
           .tile-value {
             opacity: 1;
-            color: var(--text-color);
+            color: var(--primary-color); // Active items use primary color
           }
         }
 
