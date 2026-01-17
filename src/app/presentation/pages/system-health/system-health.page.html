@@ -210,13 +210,13 @@
             Estado
             <p-sortIcon field="healthStatus" />
           </th>
-          <th>Sync Status</th>
-          <th>Circuit Breaker</th>
-          <th pSortableColumn="consecutiveFailures">
+          <th class="hidden-sm-down">Sync Status</th>
+          <th class="hidden-sm-down">Circuit Breaker</th>
+          <th pSortableColumn="consecutiveFailures" class="hidden-sm-down">
             Errores Consecutivos
             <p-sortIcon field="consecutiveFailures" />
           </th>
-          <th>Última Sync</th>
+          <th class="hidden-sm-down">Última Sync</th>
           <th>Acciones</th>
         </tr>
       </ng-template>
@@ -256,7 +256,7 @@
           </td>
 
           <!-- Sync Status -->
-          <td>
+          <td class="hidden-sm-down">
             <div class="sync-status">
               <div>{{ metrics.getSyncSuccessRate() }}%</div>
               <small class="text-muted">
@@ -266,7 +266,7 @@
           </td>
 
           <!-- Circuit Breaker -->
-          <td>
+          <td class="hidden-sm-down">
             <p-tag
               [value]="metrics.circuitBreakerStatus"
               [severity]="getCircuitSeverity(metrics.circuitBreakerStatus)"
@@ -274,7 +274,7 @@
           </td>
 
           <!-- Consecutive Failures -->
-          <td>
+          <td class="hidden-sm-down">
             @if (metrics.consecutiveFailures > 0) {
               <p-tag
                 [value]="metrics.consecutiveFailures.toString()"
@@ -286,7 +286,7 @@
           </td>
 
           <!-- Last Sync -->
-          <td>
+          <td class="hidden-sm-down">
             <div class="last-sync">
               @if (metrics.lastSuccessfulSync) {
                 <div>

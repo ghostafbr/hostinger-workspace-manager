@@ -220,11 +220,46 @@
     }
 
     .filter-toolbar {
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); // 2x2 Grid
+      gap: 0.75rem;
 
-      button {
+      p-button {
         width: 100%;
+
+        ::ng-deep button {
+          width: 100%;
+          justify-content: center;
+        }
       }
+    }
+
+    // Mobile Table Fixes
+    ::ng-deep .p-datatable-sm {
+      .p-datatable-wrapper {
+        overflow-x: hidden !important; // Prevent horizontal scroll if possible
+      }
+
+      table {
+        width: 100% !important;
+        min-width: 0 !important; // Override the 50rem
+      }
+    }
+
+    .hidden-sm-down {
+      display: none !important;
+    }
+
+    // Adjust remaining column headers
+    ::ng-deep th {
+      font-size: 0.8rem;
+      padding: 0.5rem !important;
+    }
+
+    // Adjust remaining cells
+    ::ng-deep td {
+      font-size: 0.85rem;
+      padding: 0.5rem !important;
     }
   }
 }
