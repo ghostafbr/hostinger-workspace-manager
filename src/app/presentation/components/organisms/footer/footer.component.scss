@@ -1,194 +1,191 @@
 @use '../../../../../styles/variables';
 
-.footer {
-  width: 100%; // Ensure full width
-  background: rgba(255, 255, 255, 0.8); // Slightly less transparent for better readability
+.glass-footer {
+  width: 100%;
+  height: 40px; // Fixed minimal height
+  background: rgba(255, 255, 255, 0.7); // Authentic glass feel
   backdrop-filter: blur(12px);
-  border-top: 1px solid var(--surface-border);
-  padding: 1rem 2rem; // Keep padding
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
   position: sticky;
   bottom: 0;
   z-index: 99;
-  font-size: 0.875rem;
-  color: var(--text-color-secondary);
-}
-
-.footer-content {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  max-width: 100%; // Ensure content doesn't overflow
+  justify-content: center;
+  transition: all 0.3s ease;
 
-  @include variables.media-max-md {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 1rem;
-  }
-
-  @include variables.media-xxxl {
-    gap: 2rem;
-  }
-
-  .footer-left,
-  .footer-right {
+  .footer-container {
+    width: 100%;
+    padding: 0 1.5rem;
     display: flex;
     align-items: center;
-    gap: 1.5rem; // Increased gap for better spacing
-    font-size: 0.875rem;
+    justify-content: space-between;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; // Smaller, premium font size
+    color: var(--text-color-secondary);
+    letter-spacing: 0.02em;
 
-    @include variables.media-max-md {
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 0.5rem; // Tight gap
-    }
-
-    @include variables.media-xxxl {
-      font-size: 1rem;
-      gap: 2rem;
-    }
-
-    .separator {
-      color: var(--surface-border);
-      margin: 0 0.25rem;
-
-      @include variables.media-max-md {
-        display: none; // Hide separator on mobile (we will stack or span)
-      }
-    }
-
-    .version,
-    .last-sync {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: var(--text-color-secondary);
-      font-weight: 500;
-      white-space: nowrap; // Prevent internal wrapping
-
-      @include variables.media-max-md {
-        font-size: 0.75rem;
-        width: 100%; // Force full width for stacking
-        justify-content: center;
-      }
-
-      i {
-        font-size: 0.875rem;
-        color: var(--primary-color);
-      }
+    @include variables.media-max-sm {
+      padding: 0 1rem;
     }
   }
 
-  .footer-center {
+  .footer-section {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    flex: 1;
-    text-align: center;
-    flex-wrap: wrap;
+    gap: 0.75rem;
 
-    .separator {
-      color: var(--surface-border);
-    }
-
-    .hidden-mobile {
-      @include variables.media-max-md {
-        display: none;
-      }
-    }
-
-    @include variables.media-max-md {
-      order: 3; // Move to bottom on mobile
-      width: 100%;
-      flex-direction: column;
-      gap: 0.5rem;
-      border-top: 1px solid rgba(0, 0, 0, 0.05); // Subtle divider
-      padding-top: 0.75rem;
-      margin-top: 0.25rem;
+    &.end {
+      justify-content: flex-end;
     }
   }
 
+  // Brand / Copyright
   .copyright {
-    font-size: 0.875rem;
-    color: var(--text-color-secondary);
+    font-weight: 500;
+    opacity: 0.8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
 
-    @include variables.media-max-md {
-      font-size: 0.75rem;
+    @include variables.media-max-sm {
+      max-width: 150px;
     }
   }
 
-  .developer-credit {
-    font-size: 0.875rem;
-    color: var(--text-color-secondary);
-
-    @include variables.media-max-md {
-      font-size: 0.75rem;
-    }
+  // Developer
+  .developer {
+    opacity: 0.8;
 
     .dev-link {
       color: var(--primary-color);
-      font-weight: 600;
       text-decoration: none;
-      transition: color 0.2s;
+      font-weight: 600;
 
       &:hover {
-        color: #111827; // Darker on hover
         text-decoration: underline;
       }
     }
   }
 
-  .footer-links {
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
+  // Version
+  .version {
+    font-family: monospace; // Tech feel
+    opacity: 0.6;
+  }
 
-    .footer-link {
-      color: var(--text-color-secondary);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
+  // Links
+  .footer-link {
+    color: var(--text-color-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+    opacity: 0.8;
 
-      &:hover {
-        color: var(--primary-color);
-      }
-    }
-
-    @include variables.media-max-md {
-      gap: 1.25rem;
-      font-size: 0.8rem;
+    &:hover {
+      color: var(--primary-color);
+      opacity: 1;
     }
   }
 
-  // Custom Badge Style
-  ::ng-deep .footer-badge {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    height: auto;
+  // Minimal Separator
+  .separator {
+    opacity: 0.3;
+    font-size: 8px; // Tiny dot
+  }
 
-    &.p-tag-success {
-      background: rgba(34, 197, 94, 0.1);
-      color: #15803d;
-      border: 1px solid rgba(34, 197, 94, 0.2);
+  // Health Dot Indicator
+  .health-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: help;
+    padding: 2px;
 
-      .p-tag-icon {
-        font-size: 0.5rem; // Tiny dot
-        margin-right: 0.25rem;
-      }
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--gray-400); // Default
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+    }
+
+    &.success .dot {
+      background-color: #10b981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.15);
+    }
+
+    &.warn .dot {
+      background-color: #f59e0b;
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.15);
+    }
+
+    &.danger .dot {
+      background-color: #ef4444;
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.15);
     }
   }
 }
 
-// Mobile phones
+// Mobile Tweaks
 @include variables.media-max-sm {
-  .footer {
-    padding: 1.5rem 1rem; // More padding top/bottom
-    position: relative; // Unstick on mobile if content is long
+  .glass-footer {
+    height: auto;
+    padding: 0.75rem 0; // More padding for stacked content
+
+    .footer-container {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .footer-section {
+      justify-content: center !important;
+      width: 100%;
+
+      &.start {
+        order: 2; // Bottom
+        flex-direction: column; // Stack Copyright and Dev
+        gap: 0.25rem;
+        text-align: center;
+      }
+
+      &.end {
+        order: 1; // Top
+        margin-bottom: 0.25rem;
+      }
+    }
+
+    // Reset copyright truncation for mobile since it has its own line
+    .copyright {
+      max-width: 100%;
+      white-space: normal;
+      font-size: 10px;
+      opacity: 0.5;
+    }
+
+    // Developer credit styling for mobile
+    .developer {
+      font-size: 10px;
+      opacity: 0.5;
+    }
+
+    // Hide the separator between copyright and dev on mobile
+    .footer-section.start .separator {
+      display: none;
+    }
+
+    // Hide separators in the end section on mobile (since version is hidden)
+    .footer-section.end .separator {
+      display: none;
+    }
+
+    .version {
+      display: none;
+    }
   }
 
-  .footer-content {
-    font-size: 0.8rem;
+  .hidden-xs {
+    display: none;
   }
 }

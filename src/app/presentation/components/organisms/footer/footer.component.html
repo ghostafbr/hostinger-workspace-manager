@@ -1,43 +1,36 @@
-<footer class="footer">
-  <div class="footer-content">
-    <div class="footer-left">
-      <span class="version">
-        <i class="pi pi-code" aria-hidden="true"></i>
-        v{{ appVersion }}
-      </span>
-      <span class="separator" aria-hidden="true">|</span>
-      <span class="last-sync">
-        <i class="pi pi-refresh" aria-hidden="true"></i>
-        Última sync: {{ lastGlobalSync() }}
-      </span>
-    </div>
-
-    <div class="footer-center">
-      <span class="copyright"> © {{ currentYear }} Hostinger Workspace Manager </span>
-      <span class="separator hidden-mobile" aria-hidden="true">•</span>
-      <span class="developer-credit">
+<footer class="glass-footer">
+  <div class="footer-container">
+    <!-- Left: Copyright + Developer -->
+    <div class="footer-section start">
+      <span class="copyright">© {{ currentYear }} Hostinger Workspace Manager</span>
+      <span class="separator hidden-xs">•</span>
+      <span class="developer">
         Desarrollado por
-        <a
-          href="https://andres-bolanos.dev/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="dev-link"
-          >Andrés Bolaños</a
-        >
+        <a href="https://andres-bolanos.dev/" target="_blank" class="dev-link">Andrés Bolaños</a>
       </span>
     </div>
 
-    <div class="footer-right">
-      <p-tag
-        [value]="healthStatus().label"
-        [severity]="healthStatus().severity"
-        styleClass="footer-badge"
-        icon="pi pi-circle-fill"
-      ></p-tag>
-      <div class="footer-links">
-        <a href="#" class="footer-link" aria-label="Ver documentación">Docs</a>
-        <a href="#" class="footer-link" aria-label="Contactar soporte">Soporte</a>
+    <!-- Right: Status + Version + Links -->
+    <div class="footer-section end">
+      <!-- Health Dot -->
+      <div
+        class="health-indicator"
+        [class]="healthStatus().severity"
+        pTooltip="Estado del Sistema"
+        tooltipPosition="top"
+      >
+        <div class="dot"></div>
       </div>
+
+      <span class="separator">•</span>
+
+      <!-- Version -->
+      <span class="version">v{{ appVersion }}</span>
+
+      <span class="separator">•</span>
+
+      <!-- Links -->
+      <a href="#" class="footer-link">Soporte</a>
     </div>
   </div>
 </footer>
