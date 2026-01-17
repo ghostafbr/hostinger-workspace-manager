@@ -1,6 +1,5 @@
 import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
-import { CommonModule } from '@angular/common';
 import { DashboardStats } from '@app/application/services/dashboard.service';
 import { ChartCardComponent } from '../../molecules/chart-card/chart-card.component';
 
@@ -12,7 +11,7 @@ import { ChartCardComponent } from '../../molecules/chart-card/chart-card.compon
 @Component({
   selector: 'app-domain-status-chart',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ChartModule, CommonModule, ChartCardComponent],
+  imports: [ChartModule, ChartCardComponent],
   template: `
     <app-chart-card [title]="title()" icon="pi pi-chart-pie">
       <p-chart type="doughnut" [data]="chartData()" [options]="chartOptions" height="300px" />

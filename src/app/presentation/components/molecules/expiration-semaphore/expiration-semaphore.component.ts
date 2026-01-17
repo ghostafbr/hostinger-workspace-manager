@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 /**
  * Expiration Semaphore Component
@@ -13,7 +12,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-expiration-semaphore',
 
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="semaphore" [class]="statusClass()">
       <div class="semaphore-circle" [title]="tooltip()">

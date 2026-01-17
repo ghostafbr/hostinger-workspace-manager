@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-not-found',
 
-  imports: [CommonModule, ButtonModule, RouterLink],
+  imports: [ButtonModule, RouterLink],
   template: `
     <div class="not-found-container">
       <div class="glass-card content">

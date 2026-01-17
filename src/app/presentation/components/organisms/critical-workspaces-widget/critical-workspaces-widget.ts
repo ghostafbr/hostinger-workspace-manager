@@ -1,5 +1,4 @@
 import { Component, computed, input, output, ChangeDetectionStrategy, Signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { ChipModule } from 'primeng/chip';
 import { ButtonModule } from 'primeng/button';
@@ -21,7 +20,7 @@ interface CriticalWorkspace {
 @Component({
   selector: 'app-critical-workspaces-widget',
 
-  imports: [CommonModule, CardModule, ChipModule, ButtonModule, TooltipModule],
+  imports: [CardModule, ChipModule, ButtonModule, TooltipModule],
   template: `
     <div class="glass-card full-height critical-widget-container">
       <div class="card-header-compact">

@@ -148,10 +148,12 @@
             appendTo="body"
           >
             <ng-template pTemplate="selectedItem" let-selectedOption>
-              <div class="flex align-items-center gap-2" *ngIf="selectedOption">
-                <i class="fa fa-bolt text-primary-500"></i>
-                <div>{{ selectedOption.label }}</div>
-              </div>
+              @if (selectedOption) {
+                <div class="flex align-items-center gap-2">
+                  <i class="fa fa-bolt text-primary-500"></i>
+                  <div>{{ selectedOption.label }}</div>
+                </div>
+              }
             </ng-template>
             <ng-template pTemplate="item" let-option>
               <div class="flex align-items-center gap-2">
@@ -175,10 +177,12 @@
             appendTo="body"
           >
             <ng-template pTemplate="selectedItem" let-selectedOption>
-              <div class="flex align-items-center gap-2" *ngIf="selectedOption">
-                <i class="fa fa-tag text-primary-500"></i>
-                <div>{{ selectedOption.label }}</div>
-              </div>
+              @if (selectedOption) {
+                <div class="flex align-items-center gap-2">
+                  <i class="fa fa-tag text-primary-500"></i>
+                  <div>{{ selectedOption.label }}</div>
+                </div>
+              }
             </ng-template>
             <ng-template pTemplate="item" let-option>
               <div class="flex align-items-center gap-2">

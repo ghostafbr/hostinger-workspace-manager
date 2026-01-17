@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { DecimalPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
@@ -26,7 +26,8 @@ import { AuditLogModel, AuditAction, AuditStatus } from '@app/domain';
 
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
+    DecimalPipe,
+    DatePipe,
     FormsModule,
     CardModule,
     ButtonModule,

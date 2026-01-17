@@ -1,6 +1,5 @@
 import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
-import { CommonModule } from '@angular/common';
 import { ChartCardComponent } from '../../molecules/chart-card/chart-card.component';
 
 export interface ExpirationTrendData {
@@ -17,7 +16,7 @@ export interface ExpirationTrendData {
 @Component({
   selector: 'app-expiration-trends-chart',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ChartModule, CommonModule, ChartCardComponent],
+  imports: [ChartModule, ChartCardComponent],
   template: `
     <app-chart-card [title]="title()" icon="pi pi-chart-line">
       <p-chart type="bar" [data]="chartData()" [options]="chartOptions" height="300px" />

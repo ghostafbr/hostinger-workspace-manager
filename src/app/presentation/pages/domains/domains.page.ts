@@ -6,7 +6,7 @@ import {
   signal,
   computed,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CurrencyPipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -47,7 +47,8 @@ import { fadeIn, slideUp } from '@app/infrastructure';
 
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
+    CurrencyPipe,
+    NgClass,
     FormsModule,
     CardModule,
     ToastModule,

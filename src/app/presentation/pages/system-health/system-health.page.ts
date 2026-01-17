@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -25,7 +25,7 @@ import { HealthStatus } from '@app/domain';
   styleUrls: ['./system-health.page.scss'],
 
   imports: [
-    CommonModule,
+    DecimalPipe,
     ProgressBarModule,
     CardModule,
     ButtonModule,
