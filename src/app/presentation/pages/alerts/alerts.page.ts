@@ -29,14 +29,14 @@ import { AlertLogModel } from '@app/domain';
   ],
   providers: [MessageService],
   template: `
-    <div class="alerts-container">
+    <div class="fade-in">
       <!-- Toast Notifications -->
       <p-toast />
 
       <!-- Toolbar -->
       <p-toolbar class="alerts-toolbar">
         <div class="p-toolbar-group-start">
-          <h1 class="page-title">
+          <h1 class="app-page-title">
             <i class="pi pi-bell"></i>
             Alertas
           </h1>
@@ -64,7 +64,7 @@ import { AlertLogModel } from '@app/domain';
       </p-toolbar>
 
       <!-- Main Content -->
-      <div class="alerts-content">
+      <div>
         <!-- Loading State -->
         @if (isLoading() && alerts().length === 0) {
           <p-card>
@@ -97,36 +97,11 @@ import { AlertLogModel } from '@app/domain';
   `,
   styles: [
     `
-      .alerts-container {
-        min-height: 100vh;
-        background-color: var(--surface-50);
-      }
-
       .alerts-toolbar {
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
         margin-bottom: 2rem;
         background: white;
         border-bottom: 1px solid var(--surface-200);
-      }
-
-      .page-title {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-weight: 700;
-        font-size: 1.5rem;
-        color: var(--text-color);
-        margin: 0;
-
-        i {
-          color: var(--primary-color);
-        }
-      }
-
-      .alerts-content {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 0 2rem 2rem;
       }
 
       .error-state {
@@ -147,16 +122,6 @@ import { AlertLogModel } from '@app/domain';
         p {
           color: var(--text-color-secondary);
           margin-bottom: 2rem;
-        }
-      }
-
-      @media (max-width: 768px) {
-        .page-title {
-          font-size: 1.25rem;
-        }
-
-        .alerts-content {
-          padding: 0 1rem 1rem;
         }
       }
     `,

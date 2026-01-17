@@ -1,33 +1,30 @@
-<div class="workspaces-container" @fadeIn role="main" aria-label="Gestión de workspaces">
+<div class="fade-in" role="main" aria-label="Gestión de workspaces">
   <p-toast />
   <p-confirmDialog />
 
+  <!-- Header -->
+  <div class="flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <h1 class="app-page-title m-0">
+      <i class="fa fa-cubes text-primary mr-2"></i>
+      Workspaces
+    </h1>
+    <div class="flex gap-2" role="group" aria-label="Acciones principales">
+      <p-button
+        label="Sincronizar Todos"
+        icon="fa fa-refresh"
+        severity="secondary"
+        [outlined]="true"
+        [loading]="isSyncingAll()"
+        (onClick)="syncAllWorkspaces()"
+        pTooltip="Sincronizar manualmente todos los workspaces activos"
+        tooltipPosition="bottom"
+      />
+      <p-button label="Nuevo Workspace" icon="fa fa-plus" (onClick)="createWorkspace()" />
+    </div>
+  </div>
+
   <p-card>
-    <ng-template pTemplate="header">
-      <div class="page-header" role="banner">
-        <h2 class="m-0" id="workspaces-heading">Workspaces</h2>
-        <div class="flex gap-2" role="group" aria-label="Acciones principales">
-          <!-- TEMP: Batch Sync Button (remove after testing) -->
-          <p-button
-            label="Sincronizar Todos"
-            icon="fa fa-refresh"
-            severity="secondary"
-            [outlined]="true"
-            [loading]="isSyncingAll()"
-            (onClick)="syncAllWorkspaces()"
-            pTooltip="Sincronizar manualmente todos los workspaces activos"
-            tooltipPosition="bottom"
-            aria-label="Sincronizar todos los workspaces"
-          />
-          <p-button
-            label="Nuevo Workspace"
-            icon="fa fa-plus"
-            (onClick)="createWorkspace()"
-            aria-label="Crear nuevo workspace"
-          />
-        </div>
-      </div>
-    </ng-template>
+    <!-- No header template needed now -->
 
     <!-- Search Bar -->
     <div class="search-container mb-4" role="search">

@@ -247,6 +247,27 @@ body {
   width: 100%;
 }
 
+// Global Page Title
+.app-page-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--text-color);
+  margin: 0;
+
+  i {
+    color: var(--primary-color);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.25rem;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
 // Fix z-index for PrimeNG overlays to appear above sticky footer (z-index: 99)
 .p-component-overlay,
 .p-select-overlay,
@@ -386,6 +407,7 @@ body {
 .p-radiobutton-box.p-focus {
   box-shadow: 0 0 0 2px rgba(31, 41, 55, 0.2) !important;
 }
+
 /* trigger rebuild */
 /* trigger rebuild 2 */
 /* trigger cards rebuild */

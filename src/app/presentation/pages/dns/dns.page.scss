@@ -64,7 +64,6 @@
   }
 }
 
-// Main Container (Matches Audit Logs .system-health-container)
 .dns-page {
   // Use global background
   min-height: 100vh;
@@ -100,8 +99,7 @@
 
 // Main Content
 .dns-content {
-  padding: 1.5rem; // Match Audit Logs padding
-  // max-width: 1600px; // Removed to align with full-width toolbar
+  padding: 1.5rem 0;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -435,7 +433,6 @@
 // Large screens
 @include variables.media-xxl {
   .dns-content {
-    max-width: 1800px;
     margin: 0 auto;
   }
 }

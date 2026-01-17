@@ -1,35 +1,12 @@
-.subscriptions-page {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem;
+// Local styles validation
+// The global layout now handles the container padding and width.
+// .page-header is also largely compliant with global styles, but let's see if we need to keep specific internal margins.
+// Actually, looking at the file content, .subscriptions-page is the top level. We should remove it.
 
-  .page-header {
-    margin-bottom: 2rem;
+// Responsive adjustments might still be needed if they target specific inner elements, but standard layout should handle most.
+// Let's remove the wrapper and redundant titles.
 
-    .header-content {
-      .page-title {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--text-color);
-        margin: 0 0 0.5rem 0;
-
-        i {
-          color: var(--primary-color);
-        }
-      }
-
-      .page-subtitle {
-        font-size: 1rem;
-        color: var(--text-color-secondary);
-        margin: 0;
-      }
-    }
-  }
-}
+// If there are specific component overrides, keep them. In this file, it seems mostly layout and title.
 
 // Responsive adjustments
 @media (max-width: 768px) {

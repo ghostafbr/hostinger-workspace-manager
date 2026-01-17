@@ -1,66 +1,37 @@
-.workspaces-container {
-  max-width: 1400px;
-  margin: 0 auto;
+// Soporte para animación fadeIn de Angular
+.ng-animating {
+  overflow: hidden;
+}
 
-  // Soporte para animación fadeIn de Angular
-  &.ng-animating {
-    overflow: hidden;
-  }
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
 
-  .page-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.5rem;
-    background: var(--surface-card);
-    animation: slideDown 0.3s ease-out;
-  }
+.search-container {
+  max-width: 400px;
 
-  h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-color);
-  }
+  ::ng-deep input {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-  .search-container {
-    max-width: 400px;
-
-    ::ng-deep input {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-      &:focus {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      }
+    &:focus {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
   }
+}
 
-  .text-overflow {
-    display: block;
-    max-width: 300px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+.text-overflow {
+  display: block;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-  @media (max-width: 576px) {
-    .page-header {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 1rem;
-
-      // Container of buttons
-      > div.flex {
-        flex-direction: column;
-        width: 100%;
-
-        ::ng-deep p-button,
-        ::ng-deep .p-button {
-          width: 100%;
-        }
-      }
-    }
-  }
+@media (max-width: 576px) {
+  // Mobile adjustments
 }
 
 // Animaciones
