@@ -32,10 +32,7 @@ describe('AlertService', () => {
     };
 
     TestBed.configureTestingModule({
-      providers: [
-        AlertService,
-        { provide: ALERT_REPOSITORY, useValue: mockAlertRepo },
-      ],
+      providers: [AlertService, { provide: ALERT_REPOSITORY, useValue: mockAlertRepo }],
     });
 
     service = TestBed.inject(AlertService);
@@ -59,7 +56,7 @@ describe('AlertService', () => {
     it('should fetch alert logs for workspace', async () => {
       const mockRepo = TestBed.inject(ALERT_REPOSITORY) as Partial<IAlertRepository>;
       vi.mocked(mockRepo.getAlertsByWorkspace!).mockResolvedValue([
-        ({ id: 'alert-1' } as any),
+        { id: 'alert-1' } as any,
       ] as any);
 
       const result = await service.getAlertsByWorkspace('ws-123');
