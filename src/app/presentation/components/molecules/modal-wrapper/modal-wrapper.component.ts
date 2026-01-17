@@ -4,7 +4,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-modal-wrapper',
-  standalone: true,
+
   imports: [DialogModule, ButtonModule],
   template: `
     <p-dialog

@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 
 @Component({
   selector: 'app-detail-item',
-  standalone: true,
+
   template: `
     <div class="detail-item">
       <label class="detail-label">{{ label() }}</label>

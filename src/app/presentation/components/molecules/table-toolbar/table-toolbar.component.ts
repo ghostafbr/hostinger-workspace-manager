@@ -3,7 +3,7 @@ import { ChipModule } from 'primeng/chip';
 
 @Component({
   selector: 'app-table-toolbar',
-  standalone: true,
+
   imports: [ChipModule],
   template: `
     <div class="table-header">

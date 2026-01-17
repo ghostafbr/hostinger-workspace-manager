@@ -6,7 +6,7 @@ export type ButtonActionType = 'view' | 'edit' | 'delete' | 'custom';
 
 @Component({
   selector: 'app-action-button',
-  standalone: true,
+
   imports: [ButtonModule, TooltipModule],
   template: `
     <p-button

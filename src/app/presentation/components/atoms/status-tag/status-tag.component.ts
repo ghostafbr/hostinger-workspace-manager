@@ -5,7 +5,7 @@ export type SeverityType = 'success' | 'info' | 'warn' | 'danger' | 'secondary' 
 
 @Component({
   selector: 'app-status-tag',
-  standalone: true,
+
   imports: [TagModule],
   template: `
     <p-tag [value]="label()" [severity]="severity()" [icon]="icon()" [rounded]="rounded()" />

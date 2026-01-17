@@ -13,41 +13,11 @@
     ></button>
 
     <!-- Workspace Selector -->
-    <div class="workspace-selector" role="region" aria-label="Selector de workspace">
-      <p-select
-        [options]="workspaceOptions()"
-        [(ngModel)]="selectedWorkspaceId"
-        (onChange)="onWorkspaceChange($event)"
-        placeholder="Selecciona un workspace"
-        [showClear]="false"
-        class="workspace-dropdown"
-        aria-label="Seleccionar workspace activo"
-      >
-        <ng-template let-workspace pTemplate="selectedItem">
-          @if (workspace) {
-            <div class="workspace-item">
-              <span class="workspace-name">{{ workspace.label }}</span>
-              @if (workspace.status) {
-                <p-tag
-                  [value]="workspace.status"
-                  [severity]="getStatusSeverity(workspace.status)"
-                  class="workspace-status-tag"
-                ></p-tag>
-              }
-            </div>
-          }
-        </ng-template>
-        <ng-template let-workspace pTemplate="item">
-          <div class="workspace-item">
-            <span class="workspace-name">{{ workspace.label }}</span>
-            <p-tag
-              [value]="workspace.status"
-              [severity]="getStatusSeverity(workspace.status)"
-            ></p-tag>
-          </div>
-        </ng-template>
-      </p-select>
-    </div>
+    <app-workspace-selector
+      [options]="workspaceOptions()"
+      [value]="selectedWorkspaceId"
+      (valueChange)="onWorkspaceSelected($event)"
+    ></app-workspace-selector>
 
     <!-- Quick Actions -->
     @if (hasWorkspaceSelected()) {
@@ -93,17 +63,6 @@
     ></button>
 
     <!-- User Menu -->
-    <div class="user-menu">
-      <p-avatar
-        [label]="userInitials()"
-        class="user-avatar"
-        shape="circle"
-        (click)="userPopover.toggle($event)"
-      ></p-avatar>
-
-      <p-popover #userPopover>
-        <p-menu [model]="userMenuItems" class="user-dropdown-menu" />
-      </p-popover>
-    </div>
+    <app-user-menu [initials]="userInitials()" [items]="userMenuItems"></app-user-menu>
   </div>
 </header>

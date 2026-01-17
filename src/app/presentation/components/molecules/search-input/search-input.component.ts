@@ -6,7 +6,7 @@ import { InputIconModule } from 'primeng/inputicon';
 
 @Component({
   selector: 'app-search-input',
-  standalone: true,
+
   imports: [FormsModule, InputTextModule, IconFieldModule, InputIconModule],
   template: `
     <p-iconfield iconPosition="left">

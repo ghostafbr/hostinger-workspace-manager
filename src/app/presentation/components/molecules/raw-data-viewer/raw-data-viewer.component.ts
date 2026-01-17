@@ -4,7 +4,7 @@ import { AccordionModule } from 'primeng/accordion';
 
 @Component({
   selector: 'app-raw-data-viewer',
-  standalone: true,
+
   imports: [AccordionModule, JsonPipe],
   template: `
     <div class="raw-data-section">

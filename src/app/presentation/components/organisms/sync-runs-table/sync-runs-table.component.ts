@@ -17,7 +17,7 @@ import { EmptyStateComponent } from '../../molecules/empty-state/empty-state.com
  */
 @Component({
   selector: 'app-sync-runs-table',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     TableModule,

@@ -1,76 +1,10 @@
-@use '../../../../styles/abstracts/mixins';
-@use '../../../../styles/theme/tokens';
-@use '../../../../styles/components/cards';
-
 .dashboard-container {
   min-height: 100vh;
-
-  // Soporte para animación fadeIn de Angular
-  &.ng-animating {
-    overflow: hidden;
-  }
 }
 
 .dashboard-toolbar {
   margin-bottom: 2rem;
   animation: slideDown 0.3s ease-out;
-
-  .p-toolbar-group-end {
-    display: flex;
-    gap: 0.5rem;
-
-    // Aplicar hover-lift a botones (handled by global button styles mostly)
-    ::ng-deep .p-button {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-      &:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      }
-    }
-  }
-
-  .toolbar-left-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .welcome-inline {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .welcome-user {
-    font-size: 0.95rem;
-    color: var(--primary-color);
-    font-weight: 500;
-  }
-
-  .status-text {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.875rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: 6px;
-
-    i {
-      font-size: 0.875rem;
-    }
-
-    &.warning-text {
-      background: var(--color-warning-bg);
-      color: var(--color-warning-text);
-    }
-
-    &.success-text {
-      background: var(--color-success-bg);
-      color: var(--color-success-text);
-    }
-  }
 }
 
 .dashboard-title {
@@ -79,288 +13,155 @@
   gap: 0.75rem;
   font-weight: 700;
   font-size: 1.5rem;
-  color: var(--primary-color);
-  margin: 0;
-
-  i {
-    color: var(--primary-color);
-  }
-
-  @include mixins.media-max('md') {
-    font-size: 1.25rem;
-  }
 }
 
 .dashboard-content {
   margin: 0 auto;
-
-  @include mixins.media-max('md') {
-    padding: 0 1rem 1rem;
-  }
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.stats-section-container {
+  margin-bottom: 2rem;
 }
 
-// Section Title
 .section-title-row {
   margin-bottom: 1.5rem;
-  padding: 0 0.5rem;
-
-  h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-main);
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-
-    i {
-      color: var(--primary-color);
-      font-size: 1.25rem;
-    }
-  }
 }
 
-// Grid Layout
 .compact-stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
-  margin-bottom: 2.5rem;
-
-  @include mixins.media-max('xl') {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include mixins.media-max('md') {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
 }
 
-// Glass Card (Using global component but keeping local override if needed)
-.glass-card {
-  @extend .glass-card; // Use global style
-}
-
-// Summary Card Custom Styling
-.summary-card-container {
-  .card-header-compact {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border-color);
-
-    .header-icon-wrapper {
-      width: 2.5rem;
-      height: 2.5rem;
-      border-radius: 12px;
-      background: rgba(var(--primary-500-rgb), 0.1); // Keep rgb var for now or refactor
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      i {
-        color: var(--primary-color);
-        font-size: 1.25rem;
-      }
-    }
-
-    h3 {
-      margin: 0;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-  }
-
-  .summary-grid-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    flex: 1;
-    margin-bottom: 0.5rem;
-
-    .summary-tile {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 0.75rem;
-      background: var(--surface-ground);
-      border-radius: 12px;
-      transition: all 0.2s ease;
-
-      .tile-label {
-        font-size: 0.75rem;
-        color: var(--text-secondary);
-        font-weight: 500;
-        margin-bottom: 0.25rem;
-      }
-
-      .tile-value {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--text-main);
-      }
-
-      &.success-tile {
-        background: var(--color-success-bg);
-
-        .tile-value {
-          color: var(--color-success-text);
-        }
-
-        .tile-label {
-          color: var(--color-success-Main);
-        }
-      }
-
-      &:hover {
-        transform: translateY(-2px);
-        background: white;
-        box-shadow: var(--shadow-sm);
-      }
-    }
-  }
-}
-
-// Alert Section
-.alert-section {
-  margin-bottom: 2rem;
-}
-
-// Chart Section Full Width
-.chart-section-full {
-  margin-bottom: 2rem;
-
-  ::ng-deep .p-card {
-    box-shadow: var(--shadow-sm);
-  }
-}
-
-// Error State
-.error-state {
-  text-align: center;
-  padding: 3rem 1rem;
-
-  i {
-    margin-bottom: 1rem;
-  }
-
-  h2 {
-    margin: 1rem 0 0.5rem;
-    font-size: 1.5rem;
-    color: var(--text-main);
-  }
-
-  p {
-    margin: 0 0 2rem;
-    color: var(--text-secondary);
-  }
-}
-
-// Enhanced Section (New Charts and Visualizations)
-.enhanced-section {
+.charts-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 2rem;
-  margin-top: 2rem;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem;
+}
 
-  @include mixins.media-max('xl') {
+.glass-card {
+  background: white;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+/* Prevent grid blowout */
+.charts-grid > * {
+  min-width: 0;
+}
+
+@media (max-width: 1400px) {
+  .charts-grid {
+    gap: 1rem; // Reduce gap to save space
+  }
+
+  .charts-grid .glass-card {
+    padding: 1rem; // Reduce padding to save space
+  }
+}
+
+@media (max-width: 992px) {
+  .compact-stats-grid,
+  .charts-grid {
     grid-template-columns: 1fr;
   }
+}
 
-  .chart-section,
-  .comparison-section {
-    min-height: 350px;
+.welcome-inline {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 0.5rem;
+  color: #64748b;
+}
+
+.welcome-user {
+  font-weight: 500;
+  color: #334155;
+}
+
+// Separate SplitButton parts
+:host ::ng-deep .p-splitbutton {
+  gap: 0.5rem;
+}
+
+:host ::ng-deep .p-splitbutton > .p-button {
+  border-radius: 12px !important; // Restore full roundedness for separated buttons
+  border: 1px solid rgba(209, 213, 219, 0.6) !important; // Force border back (PrimeNG removes it for joined buttons)
+}
+
+:host ::ng-deep .p-splitbutton > .p-button:hover {
+  border-color: #9ca3af !important;
+}
+
+@media (max-width: 576px) {
+  .p-toolbar-group-end {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+    margin-top: 0.75rem; // Reduced margin
   }
-}
 
-// Critical Section
-.critical-section {
-  margin-bottom: 2rem;
-}
+  // Target buttons for smaller size on mobile
+  .p-toolbar-group-end ::ng-deep p-button,
+  .p-toolbar-group-end ::ng-deep .p-button {
+    width: 100%;
+    font-size: 0.85rem; // Smaller font
+    padding: 0.5rem 1rem; // Smaller padding
+  }
 
-// Search Section
-.search-section {
-  margin-bottom: 2rem;
-}
+  // SplitButton Separation Logic
+  .p-toolbar-group-end ::ng-deep p-splitButton {
+    width: 100%;
 
-// Timeline Section
-.timeline-section {
-  margin-top: 2rem;
-}
-
-// Collapsible Sections
-.collapsible-section {
-  background: white;
-  border-radius: 8px;
-  box-shadow: var(--shadow-sm);
-  overflow: hidden;
-  margin-bottom: 2rem;
-
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.25rem 1.5rem;
-    background: linear-gradient(135deg, var(--color-brand-600) 0%, var(--color-brand-700) 100%);
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.3s ease;
-
-    &:hover {
-      background: linear-gradient(135deg, var(--color-brand-700) 0%, var(--color-brand-800) 100%);
-    }
-
-    h3 {
-      margin: 0;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: white;
+    .p-splitbutton {
       display: flex;
-      align-items: center;
-      gap: 0.75rem;
-
-      i {
-        font-size: 1.25rem;
-      }
-    }
-
-    > i {
-      color: white;
-      font-size: 1.25rem;
-      transition: transform 0.3s ease;
+      width: 100%;
+      gap: 0.5rem; // The requested separation
     }
   }
 
-  .section-content {
-    padding: 1.5rem;
-    animation: slideDown 0.3s ease-out;
+  .p-toolbar-group-end ::ng-deep .p-splitbutton-defaultbutton {
+    width: 100%;
+    border-radius: 8px !important; // Restore full radius
+    flex: 1; // Take available space
   }
-}
 
-// Alert, Critical, Search, Chart, Timeline sections
-.alert-section,
-.critical-section,
-.search-section,
-.chart-section-full,
-.timeline-section {
-  &:not(.collapsible-section) {
-    margin-bottom: 2rem;
+  .p-toolbar-group-end ::ng-deep .p-splitbutton-menubutton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 3rem; // Ensure distinct clickable area
+    border-radius: 8px !important; // Restore full radius
+  }
+
+  .dashboard-title {
+    font-size: 1.15rem; // Even smaller
+    gap: 0.5rem;
+
+    i {
+      font-size: 1.15rem;
+    }
+  }
+
+  .welcome-inline {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem; // Tighter gap
+    margin-top: 0.5rem;
+    font-size: 0.9rem; // Smaller text
+  }
+
+  .system-status {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f8fafc;
+    padding: 0.4rem 0.6rem; // Compact padding
+    border-radius: 6px;
+    font-size: 0.85rem;
   }
 }

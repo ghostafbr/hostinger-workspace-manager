@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 
 @Component({
   selector: 'app-chart-card',
-  standalone: true,
+
   template: `
     <div class="glass-chart-card">
       <div class="chart-header">

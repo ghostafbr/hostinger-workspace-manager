@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 
 @Component({
   selector: 'app-empty-state',
-  standalone: true,
+
   template: `
     <div class="empty-state">
       <i [class]="icon()" class="empty-icon"></i>

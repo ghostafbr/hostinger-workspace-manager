@@ -6,32 +6,24 @@ import {
   computed,
   signal,
   effect,
-  ViewChild,
   OnDestroy,
   OnInit,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { AvatarModule } from 'primeng/avatar';
-import { PopoverModule } from 'primeng/popover';
-import { MenuModule } from 'primeng/menu';
-import { SelectModule } from 'primeng/select';
-import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { Popover } from 'primeng/popover';
 import { AuthService } from '@app/application/services/auth.service';
 import { WorkspaceService } from '@app/application/services/workspace.service';
 import { WorkspaceContextService } from '@app/application/services/workspace-context.service';
 import { WorkspaceStatus } from '@app/domain';
-
-interface WorkspaceOption {
-  label: string;
-  value: string;
-  status: string;
-}
+import {
+  WorkspaceSelectorComponent,
+  WorkspaceOption,
+} from '@app/presentation/components/molecules/workspace-selector/workspace-selector.component';
+import { UserMenuComponent } from '@app/presentation/components/molecules/user-menu/user-menu.component';
 
 /**
  * Header Component
@@ -45,19 +37,15 @@ interface WorkspaceOption {
   imports: [
     FormsModule,
     ButtonModule,
-    AvatarModule,
-    PopoverModule,
-    MenuModule,
-    SelectModule,
-    TagModule,
     TooltipModule,
+    WorkspaceSelectorComponent,
+    UserMenuComponent,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit {
   toggleSidebar = output<void>();
-  @ViewChild('userPopover') userPopover!: Popover;
 
   private readonly authService = inject(AuthService);
   private readonly workspaceService = inject(WorkspaceService);
@@ -161,8 +149,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  onWorkspaceChange(event: { value: string }): void {
-    const workspaceId = event.value;
+  onWorkspaceSelected(workspaceId: string | null): void {
+    if (!workspaceId) return;
+
     const workspace = this.workspaces().find((ws) => ws.id === workspaceId);
 
     if (workspace) {
@@ -247,41 +236,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  getStatusSeverity(status: string): 'success' | 'info' | 'warn' | 'danger' {
-    switch (status) {
-      case WorkspaceStatus.ACTIVE:
-        return 'success';
-      case WorkspaceStatus.INVALID_TOKEN:
-        return 'warn';
-      case WorkspaceStatus.RATE_LIMITED:
-        return 'warn';
-      case WorkspaceStatus.ERROR:
-        return 'danger';
-      case WorkspaceStatus.DISABLED:
-        return 'danger';
-      default:
-        return 'info';
-    }
-  }
-
   onToggleSidebar(): void {
     this.toggleSidebar.emit();
   }
 
   navigateToSettings(): void {
-    this.userPopover.hide();
     this.router.navigate(['/settings']);
   }
 
   async logout(): Promise<void> {
-    this.userPopover.hide();
     this.workspaceContext.clearWorkspace();
     await this.authService.signOut();
     this.router.navigate(['/login']);
-  }
-
-  ngOnDestroy(): void {
-    // Cerrar el popover cuando el componente se destruye
-    this.userPopover?.hide();
   }
 }
