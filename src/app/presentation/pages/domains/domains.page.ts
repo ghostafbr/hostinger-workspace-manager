@@ -44,7 +44,7 @@ import { fadeIn, slideUp } from '@app/infrastructure';
  */
 @Component({
   selector: 'app-domains',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,

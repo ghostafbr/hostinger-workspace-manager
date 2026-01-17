@@ -15,7 +15,7 @@ export interface ExpirationTrendData {
  */
 @Component({
   selector: 'app-expiration-trends-chart',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ChartModule, CommonModule],
   template: `

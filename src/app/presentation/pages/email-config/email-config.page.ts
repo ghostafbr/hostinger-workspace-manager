@@ -30,7 +30,7 @@ import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-email-config',
-  standalone: true,
+
   imports: [
     FormsModule,
     CardModule,

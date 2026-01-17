@@ -25,7 +25,7 @@ import { ExpirationSemaphoreComponent } from '../../molecules/expiration-semapho
  */
 @Component({
   selector: 'app-subscriptions-table',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DatePipe,

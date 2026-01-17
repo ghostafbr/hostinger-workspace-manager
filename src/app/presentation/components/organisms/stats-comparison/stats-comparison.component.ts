@@ -17,7 +17,7 @@ export interface StatComparison {
  */
 @Component({
   selector: 'app-stats-comparison',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CardModule, ChipModule, DecimalPipe],
   templateUrl: './stats-comparison.component.html',

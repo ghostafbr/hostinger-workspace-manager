@@ -10,7 +10,7 @@ import { DashboardStats } from '@app/application/services/dashboard.service';
  */
 @Component({
   selector: 'app-domain-status-chart',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ChartModule, CommonModule],
   template: `

@@ -23,7 +23,7 @@ import { WorkspaceStatus } from '@app/domain';
  */
 @Component({
   selector: 'app-workspace-form',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,

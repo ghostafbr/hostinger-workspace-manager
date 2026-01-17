@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
  */
 @Component({
   selector: 'app-expiration-semaphore',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule],
   template: `

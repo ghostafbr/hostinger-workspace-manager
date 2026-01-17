@@ -53,7 +53,7 @@ import { DomainStatusChartComponent } from '@app/presentation/components/organis
  */
 @Component({
   selector: 'app-dashboard',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CardModule,

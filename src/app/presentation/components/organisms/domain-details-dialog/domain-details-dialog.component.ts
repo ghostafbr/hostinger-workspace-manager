@@ -21,7 +21,7 @@ import { ExpirationSemaphoreComponent } from '../../molecules/expiration-semapho
  */
 @Component({
   selector: 'app-domain-details-dialog',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DatePipe,

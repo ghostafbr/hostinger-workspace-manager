@@ -20,7 +20,7 @@ interface CriticalWorkspace {
  */
 @Component({
   selector: 'app-critical-workspaces-widget',
-  standalone: true,
+
   imports: [CommonModule, CardModule, ChipModule, ButtonModule, TooltipModule],
   template: `
     <div class="glass-card full-height critical-widget-container">

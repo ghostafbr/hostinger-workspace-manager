@@ -18,7 +18,7 @@ import { DnsRecord, DnsRecordType } from '@app/domain';
  */
 @Component({
   selector: 'app-dns-viewer',
-  standalone: true,
+
   imports: [
     FormsModule,
     TableModule,

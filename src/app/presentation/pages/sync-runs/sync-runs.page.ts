@@ -17,7 +17,7 @@ import { SyncRun } from '@app/domain';
  */
 @Component({
   selector: 'app-sync-runs-page',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CardModule,

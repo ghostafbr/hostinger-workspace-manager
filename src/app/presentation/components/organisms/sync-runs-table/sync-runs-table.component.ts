@@ -16,7 +16,7 @@ import { SyncRun } from '@app/domain';
  */
 @Component({
   selector: 'app-sync-runs-table',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     TableModule,

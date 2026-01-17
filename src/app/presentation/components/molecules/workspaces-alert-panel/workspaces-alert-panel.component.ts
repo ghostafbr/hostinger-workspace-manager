@@ -12,7 +12,7 @@ import { Workspace, WorkspaceStatus } from '@app/domain';
  */
 @Component({
   selector: 'app-workspaces-alert-panel',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CardModule, TagModule, ButtonModule],
   template: `

@@ -31,7 +31,7 @@ import { SubscriptionDetailsDialogComponent } from '@app/presentation/components
  */
 @Component({
   selector: 'app-subscriptions',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CardModule,

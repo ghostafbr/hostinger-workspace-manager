@@ -22,7 +22,7 @@ interface ComparisonResult {
  */
 @Component({
   selector: 'app-dns-comparator',
-  standalone: true,
+
   imports: [
     FormsModule,
     CardModule,

@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-not-found',
-  standalone: true,
+
   imports: [CommonModule, ButtonModule, RouterLink],
   template: `
     <div class="not-found-container">

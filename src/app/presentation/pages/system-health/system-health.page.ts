@@ -23,7 +23,7 @@ import { HealthStatus } from '@app/domain';
   selector: 'app-system-health',
   templateUrl: './system-health.page.html',
   styleUrls: ['./system-health.page.scss'],
-  standalone: true,
+
   imports: [
     CommonModule,
     ProgressBarModule,

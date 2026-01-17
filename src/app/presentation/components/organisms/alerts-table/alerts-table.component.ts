@@ -17,7 +17,7 @@ import { AlertLogModel, EntityType } from '@app/domain';
  */
 @Component({
   selector: 'app-alerts-table',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     TableModule,

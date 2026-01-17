@@ -16,7 +16,7 @@ interface HealthStatus {
  */
 @Component({
   selector: 'app-footer',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TagModule],
   templateUrl: './footer.component.html',

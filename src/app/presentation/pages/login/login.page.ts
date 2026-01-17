@@ -22,7 +22,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
  */
 @Component({
   selector: 'app-login',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,

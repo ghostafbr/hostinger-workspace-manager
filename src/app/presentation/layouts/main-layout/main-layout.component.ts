@@ -11,7 +11,7 @@ import { FooterComponent } from '../../components/organisms/footer/footer.compon
  */
 @Component({
   selector: 'app-main-layout',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterOutlet, SidebarComponent, HeaderComponent, FooterComponent],
   host: {

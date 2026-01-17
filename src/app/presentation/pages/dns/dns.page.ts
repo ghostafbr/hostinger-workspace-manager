@@ -30,7 +30,7 @@ import { fadeIn, slideUp } from '@app/infrastructure';
  */
 @Component({
   selector: 'app-dns-page',
-  standalone: true,
+
   imports: [
     DnsViewerComponent,
     DnsComparatorComponent,

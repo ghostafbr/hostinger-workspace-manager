@@ -22,7 +22,7 @@ export interface DomainStats {
  */
 @Component({
   selector: 'app-domain-stats-widget',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CardModule, TagModule, SkeletonModule, DecimalPipe],
   template: `

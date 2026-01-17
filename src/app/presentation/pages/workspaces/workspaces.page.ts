@@ -37,7 +37,7 @@ import { fadeIn, slideUp, listStagger } from '@app/infrastructure';
  */
 @Component({
   selector: 'app-workspaces',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     TableModule,

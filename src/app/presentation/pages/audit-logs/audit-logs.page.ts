@@ -23,7 +23,7 @@ import { AuditLogModel, AuditAction, AuditStatus } from '@app/domain';
  */
 @Component({
   selector: 'app-audit-logs-page',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,

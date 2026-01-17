@@ -34,7 +34,7 @@ registerLocaleData(localeEs);
  */
 @Component({
   selector: 'app-domain-edit-dialog',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CurrencyPipe,

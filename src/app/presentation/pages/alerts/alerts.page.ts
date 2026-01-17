@@ -17,7 +17,7 @@ import { AlertLogModel } from '@app/domain';
  */
 @Component({
   selector: 'app-alerts-page',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CardModule,

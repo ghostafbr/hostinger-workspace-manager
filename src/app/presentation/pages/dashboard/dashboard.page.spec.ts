@@ -20,7 +20,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 
 @Component({
   selector: 'app-advanced-search',
-  standalone: true,
+
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -22,7 +22,7 @@ export interface TimelineEvent {
  */
 @Component({
   selector: 'app-upcoming-events-timeline',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TimelineModule, ChipModule, TooltipModule, NgClass, DatePipe],
   template: `

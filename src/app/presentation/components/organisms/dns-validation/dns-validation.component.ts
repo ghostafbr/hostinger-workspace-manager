@@ -11,7 +11,7 @@ import { MessageModule } from 'primeng/message';
 
 @Component({
   selector: 'app-dns-validation',
-  standalone: true,
+
   imports: [
     CommonModule,
     ButtonModule,

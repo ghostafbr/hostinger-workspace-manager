@@ -20,7 +20,7 @@ interface MenuItem {
  */
 @Component({
   selector: 'app-sidebar',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule, ButtonModule, TooltipModule],
   templateUrl: './sidebar.component.html',

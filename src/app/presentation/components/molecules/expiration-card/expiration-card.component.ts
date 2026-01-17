@@ -10,7 +10,7 @@ import { ChipModule } from 'primeng/chip';
  */
 @Component({
   selector: 'app-expiration-card',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CardModule, ChipModule],
   template: `

@@ -40,7 +40,7 @@ interface WorkspaceOption {
  */
 @Component({
   selector: 'app-header',
-  standalone: true,
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     FormsModule,
