@@ -24,6 +24,7 @@ import {
   WorkspaceOption,
 } from '@app/presentation/components/molecules/workspace-selector/workspace-selector.component';
 import { UserMenuComponent } from '@app/presentation/components/molecules/user-menu/user-menu.component';
+import { UI_CONSTANTS } from '@app/core/constants/ui.constants';
 
 /**
  * Header Component
@@ -92,12 +93,12 @@ export class HeaderComponent implements OnInit {
 
   readonly userMenuItems: MenuItem[] = [
     {
-      label: 'Perfil',
+      label: UI_CONSTANTS.HEADER.MENU.PROFILE,
       icon: 'pi pi-user',
       command: () => this.navigateToSettings(),
     },
     {
-      label: 'Configuración',
+      label: UI_CONSTANTS.HEADER.MENU.SETTINGS,
       icon: 'pi pi-cog',
       command: () => this.navigateToSettings(),
     },
@@ -105,7 +106,7 @@ export class HeaderComponent implements OnInit {
       separator: true,
     },
     {
-      label: 'Cerrar Sesión',
+      label: UI_CONSTANTS.HEADER.MENU.LOGOUT,
       icon: 'pi pi-sign-out',
       command: () => this.logout(),
     },
@@ -171,7 +172,7 @@ export class HeaderComponent implements OnInit {
 
       this.messageService.add({
         severity: 'success',
-        summary: 'Test exitoso',
+        summary: UI_CONSTANTS.HEADER.TOAST.TEST_SUCCESS,
         detail: `El token de "${workspace.name}" es válido`,
       });
 
@@ -183,9 +184,9 @@ export class HeaderComponent implements OnInit {
     } catch (error) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Test fallido',
+        summary: UI_CONSTANTS.HEADER.TOAST.TEST_ERROR,
         detail:
-          error instanceof Error ? error.message : 'No se pudo conectar con la API de Hostinger',
+          error instanceof Error ? error.message : UI_CONSTANTS.HEADER.TOAST.TEST_ERROR_DETAIL,
       });
     } finally {
       this.isTestingConnection.set(false);
@@ -202,7 +203,7 @@ export class HeaderComponent implements OnInit {
 
       this.messageService.add({
         severity: 'success',
-        summary: 'Sincronización completada',
+        summary: UI_CONSTANTS.HEADER.TOAST.SYNC_SUCCESS,
         detail: `El workspace "${workspace.name}" se ha sincronizado correctamente`,
       });
 
@@ -214,8 +215,9 @@ export class HeaderComponent implements OnInit {
     } catch (error) {
       this.messageService.add({
         severity: 'error',
-        summary: 'Error al sincronizar',
-        detail: error instanceof Error ? error.message : 'No se pudieron actualizar los datos',
+        summary: UI_CONSTANTS.HEADER.TOAST.SYNC_ERROR,
+        detail:
+          error instanceof Error ? error.message : UI_CONSTANTS.HEADER.TOAST.SYNC_ERROR_DETAIL,
       });
     } finally {
       this.isSyncing.set(false);

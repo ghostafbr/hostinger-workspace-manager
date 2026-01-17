@@ -7,6 +7,7 @@ import {
   computed,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { UI_CONSTANTS } from '@app/core/constants/ui.constants';
 
 // PrimeNG Imports
 import { CardModule } from 'primeng/card';
@@ -90,7 +91,7 @@ export default class DashboardPage implements OnInit {
   // Toolbar Menu Actions
   readonly toolbarActions = computed<MenuItem[]>(() => [
     {
-      label: 'Actualizar Datos',
+      label: this.UI.DASHBOARD.ACTIONS.REFRESH,
       icon: 'pi pi-refresh',
       command: () => this.loadDashboard(),
     },
@@ -98,7 +99,7 @@ export default class DashboardPage implements OnInit {
       separator: true,
     },
     {
-      label: 'Sincronizar Global',
+      label: 'Sincronizar Global', // TODO: Add to constants if needed, keeping simple for now
       icon: 'pi pi-sync',
       command: () => this.syncAllWorkspaces(),
     },
@@ -111,7 +112,7 @@ export default class DashboardPage implements OnInit {
       separator: true,
     },
     {
-      label: 'Salir',
+      label: this.UI.HEADER.MENU.LOGOUT,
       icon: 'pi pi-sign-out',
       styleClass: 'text-red-500',
       command: () => this.onLogout(),
@@ -129,6 +130,9 @@ export default class DashboardPage implements OnInit {
   readonly upcomingEvents = signal<TimelineEvent[]>([]);
   readonly expirationTrends = signal<ExpirationTrendData[]>([]);
   readonly isLoadingEvents = signal<boolean>(false);
+
+  readonly UI = UI_CONSTANTS;
+
   readonly allWorkspaces = this.workspaceService.workspaces;
 
   // Collapse states for dashboard sections

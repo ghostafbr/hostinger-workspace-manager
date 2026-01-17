@@ -7,21 +7,21 @@
       <div class="toolbar-left-content">
         <h1 class="dashboard-title">
           <i class="pi pi-chart-line"></i>
-          Dashboard
+          {{ UI.DASHBOARD.TITLE }}
         </h1>
         @if (stats() && !isLoading()) {
           <div class="welcome-inline">
-            <span class="welcome-user">Hola, {{ userDisplayName() }}</span>
+            <span class="welcome-user">{{ UI.DASHBOARD.GREETING }}{{ userDisplayName() }}</span>
             @if (hasIssues()) {
               <span class="status-text warning-text">
                 <i class="pi pi-exclamation-circle"></i>
                 {{ stats()!.domainsExpiring7Days + stats()!.subscriptionsExpiring7Days }}
-                vencimientos
+                {{ UI.DASHBOARD.STATUS.ISSUES }}
               </span>
             } @else {
               <span class="status-text success-text">
                 <i class="pi pi-check-circle"></i>
-                Todo en orden
+                {{ UI.DASHBOARD.STATUS.OK }}
               </span>
             }
           </div>
@@ -31,14 +31,14 @@
 
     <div class="p-toolbar-group-end gap-2">
       <p-button
-        label="Ver Workspaces"
+        [label]="UI.DASHBOARD.ACTIONS.VIEW_WORKSPACES"
         icon="pi pi-briefcase"
         severity="success"
         size="small"
         (onClick)="navigateToWorkspaces()"
       />
       <p-splitButton
-        label="Actualizar"
+        [label]="UI.DASHBOARD.ACTIONS.REFRESH"
         icon="pi pi-refresh"
         [model]="toolbarActions()"
         severity="secondary"
@@ -57,11 +57,11 @@
     @if (stats() && !isLoading()) {
       <div class="stats-section-container">
         <div class="section-title-row">
-          <h3><i class="pi pi-chart-bar"></i> Estadísticas Rápidas</h3>
+          <h3><i class="pi pi-chart-bar"></i> {{ UI.DASHBOARD.SECTIONS.QUICK_STATS }}</h3>
         </div>
         <div class="compact-stats-grid">
           <app-expiration-card
-            title="Dominios"
+            [title]="UI.DASHBOARD.SECTIONS.DOMAINS"
             icon="pi pi-globe"
             [totalCount]="stats()!.totalDomains"
             [count7Days]="stats()!.domainsExpiring7Days"
@@ -71,7 +71,7 @@
             class="glass-card full-height"
           />
           <app-expiration-card
-            title="Suscripciones"
+            [title]="UI.DASHBOARD.SECTIONS.SUBSCRIPTIONS"
             icon="pi pi-ticket"
             [totalCount]="stats()!.totalSubscriptions"
             [count7Days]="stats()!.subscriptionsExpiring7Days"
@@ -81,8 +81,8 @@
             class="glass-card full-height"
           />
           <div class="glass-card summary-card-container">
-            <h3>Resumen</h3>
-            <div>Workspaces: {{ stats()!.totalWorkspaces }}</div>
+            <h3>{{ UI.DASHBOARD.SECTIONS.SUMMARY }}</h3>
+            <div>{{ UI.DASHBOARD.SECTIONS.WORKSPACES }} {{ stats()!.totalWorkspaces }}</div>
           </div>
         </div>
       </div>
@@ -102,12 +102,18 @@
       </div>
 
       <div class="charts-grid mb-4">
-        <app-domain-status-chart [stats]="stats()" title="Estado de Dominios" />
-        <app-expiration-trends-chart [data]="expirationTrends()" title="Tendencias" />
+        <app-domain-status-chart [stats]="stats()" [title]="UI.DASHBOARD.TITLES.DOMAINS_STATUS" />
+        <app-expiration-trends-chart
+          [data]="expirationTrends()"
+          [title]="UI.DASHBOARD.TITLES.TRENDS"
+        />
       </div>
 
       <div class="mb-4">
-        <app-upcoming-events-timeline [events]="upcomingEvents()" title="Próximos" />
+        <app-upcoming-events-timeline
+          [events]="upcomingEvents()"
+          [title]="UI.DASHBOARD.TITLES.UPCOMING"
+        />
       </div>
     }
   </div>
