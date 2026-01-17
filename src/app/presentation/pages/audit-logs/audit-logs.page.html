@@ -146,6 +146,8 @@
             placeholder="Todas las acciones"
             [showClear]="true"
             styleClass="glass-dropdown"
+            [panelStyle]="{ width: '100%', 'max-width': '100vw' }"
+            appendTo="body"
           >
             <ng-template pTemplate="selectedItem" let-selectedOption>
               <div class="flex align-items-center gap-2" *ngIf="selectedOption">
@@ -171,6 +173,8 @@
             placeholder="Todos los estados"
             [showClear]="true"
             styleClass="glass-dropdown"
+            [panelStyle]="{ width: '100%', 'max-width': '100vw' }"
+            appendTo="body"
           >
             <ng-template pTemplate="selectedItem" let-selectedOption>
               <div class="flex align-items-center gap-2" *ngIf="selectedOption">
