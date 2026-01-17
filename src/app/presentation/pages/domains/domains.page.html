@@ -2,14 +2,13 @@
   <p-toast />
 
   <!-- Toolbar -->
-  <p-toolbar>
-    <div class="p-toolbar-group-start">
-      <h2 class="app-page-title">
-        <i class="fa fa-globe"></i>
-        Dominios - {{ workspaceName() }}
-      </h2>
-    </div>
-    <div class="p-toolbar-group-end">
+  <!-- Header -->
+  <div class="flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <h1 class="app-page-title m-0">
+      <i class="fa fa-globe text-primary mr-2"></i>
+      Dominios - {{ workspaceName() }}
+    </h1>
+    <div class="flex gap-2">
       <p-button
         label="Actualizar"
         icon="fa fa-refresh"
@@ -27,12 +26,11 @@
         severity="secondary"
         [outlined]="true"
         size="small"
-        class="ml-2"
         (onClick)="exportToCSV()"
         [disabled]="domains().length === 0"
       />
     </div>
-  </p-toolbar>
+  </div>
 
   <!-- Loading State -->
   @if (isLoading() && !stats()) {

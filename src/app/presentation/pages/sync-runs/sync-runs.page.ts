@@ -4,7 +4,6 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ToastModule } from 'primeng/toast';
-import { ToolbarModule } from 'primeng/toolbar';
 import { MessageService } from 'primeng/api';
 import { SyncRunService } from '@app/application';
 import { SyncRunsTableComponent } from '@app/presentation/components/organisms/sync-runs-table/sync-runs-table.component';
@@ -19,34 +18,26 @@ import { SyncRun } from '@app/domain';
   selector: 'app-sync-runs-page',
 
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CardModule,
-    ButtonModule,
-    SkeletonModule,
-    ToastModule,
-    ToolbarModule,
-    SyncRunsTableComponent,
-  ],
+  imports: [CardModule, ButtonModule, SkeletonModule, ToastModule, SyncRunsTableComponent],
   providers: [MessageService],
   template: `
     <div class="fade-in">
       <!-- Toast Notifications -->
       <p-toast />
 
-      <!-- Toolbar -->
-      <p-toolbar class="sync-runs-toolbar">
-        <div class="p-toolbar-group-start">
-          <h1 class="app-page-title">
-            <i class="pi pi-sync"></i>
-            Historial de Sincronización
-          </h1>
-        </div>
-
-        <div class="p-toolbar-group-end">
+      <!-- Header -->
+      <div class="flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <h1 class="app-page-title m-0">
+          <i class="pi pi-sync text-primary mr-2"></i>
+          Historial de Sincronización
+        </h1>
+        <div class="flex gap-2">
           <p-button
             label="Actualizar"
             icon="pi pi-refresh"
             [outlined]="true"
+            severity="secondary"
+            size="small"
             [loading]="isLoading()"
             (onClick)="loadSyncRuns()"
             pTooltip="Actualizar historial"
@@ -57,11 +48,11 @@ import { SyncRun } from '@app/domain';
             icon="pi pi-arrow-left"
             severity="secondary"
             [outlined]="true"
-            class="ml-2"
+            size="small"
             (onClick)="goBack()"
           />
         </div>
-      </p-toolbar>
+      </div>
 
       <!-- Main Content -->
       <div>
@@ -98,13 +89,6 @@ import { SyncRun } from '@app/domain';
   `,
   styles: [
     `
-      .sync-runs-toolbar {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-        margin-bottom: 2rem;
-        background: white;
-        border-bottom: 1px solid var(--surface-200);
-      }
-
       .error-state {
         text-align: center;
         padding: 3rem;

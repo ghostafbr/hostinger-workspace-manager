@@ -4,7 +4,6 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ToastModule } from 'primeng/toast';
-import { ToolbarModule } from 'primeng/toolbar';
 import { MessageService } from 'primeng/api';
 import { AlertService } from '@app/application';
 import { AlertsTableComponent } from '@app/presentation/components/organisms/alerts-table/alerts-table.component';
@@ -19,34 +18,26 @@ import { AlertLogModel } from '@app/domain';
   selector: 'app-alerts-page',
 
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CardModule,
-    ButtonModule,
-    SkeletonModule,
-    ToastModule,
-    ToolbarModule,
-    AlertsTableComponent,
-  ],
+  imports: [CardModule, ButtonModule, SkeletonModule, ToastModule, AlertsTableComponent],
   providers: [MessageService],
   template: `
     <div class="fade-in">
       <!-- Toast Notifications -->
       <p-toast />
 
-      <!-- Toolbar -->
-      <p-toolbar class="alerts-toolbar">
-        <div class="p-toolbar-group-start">
-          <h1 class="app-page-title">
-            <i class="pi pi-bell"></i>
-            Alertas
-          </h1>
-        </div>
-
-        <div class="p-toolbar-group-end">
+      <!-- Header -->
+      <div class="flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+        <h1 class="app-page-title m-0">
+          <i class="pi pi-bell text-primary mr-2"></i>
+          Alertas
+        </h1>
+        <div class="flex gap-2">
           <p-button
             label="Actualizar"
             icon="pi pi-refresh"
             [outlined]="true"
+            severity="secondary"
+            size="small"
             [loading]="isLoading()"
             (onClick)="loadAlerts()"
             pTooltip="Actualizar alertas"
@@ -57,11 +48,11 @@ import { AlertLogModel } from '@app/domain';
             icon="pi pi-arrow-left"
             severity="secondary"
             [outlined]="true"
-            class="ml-2"
+            size="small"
             (onClick)="goBack()"
           />
         </div>
-      </p-toolbar>
+      </div>
 
       <!-- Main Content -->
       <div>
@@ -97,13 +88,6 @@ import { AlertLogModel } from '@app/domain';
   `,
   styles: [
     `
-      .alerts-toolbar {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-        margin-bottom: 2rem;
-        background: white;
-        border-bottom: 1px solid var(--surface-200);
-      }
-
       .error-state {
         text-align: center;
         padding: 3rem;

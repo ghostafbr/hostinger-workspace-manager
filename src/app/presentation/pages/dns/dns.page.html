@@ -15,21 +15,10 @@
         <i class="pi pi-globe card-icon" aria-hidden="true"></i>
         Seleccionar Dominio
       </span>
-      <p-select
-        inputId="domain-select"
-        [options]="domainOptions()"
-        [(ngModel)]="selectedDomain"
-        (ngModelChange)="onDomainChange($event)"
-        placeholder="Selecciona un dominio..."
-        [filter]="true"
-        filterPlaceholder="Buscar dominio"
-        [showClear]="true"
-        [loading]="isLoadingDomains()"
-        optionLabel="label"
-        optionValue="value"
-        class="w-auto domain-toolbar-select"
-        [disabled]="isLoadingDomains()"
-      >
+      <p-select inputId="domain-select" [options]="domainOptions()" [(ngModel)]="selectedDomain"
+        (ngModelChange)="onDomainChange($event)" placeholder="Selecciona un dominio..." [filter]="true"
+        filterPlaceholder="Buscar dominio" [showClear]="true" [loading]="isLoadingDomains()" optionLabel="label"
+        optionValue="value" class="w-auto domain-toolbar-select" [disabled]="isLoadingDomains()">
         <ng-template pTemplate="empty">
           <div class="empty-state-dropdown">
             <i class="pi pi-inbox" aria-hidden="true"></i>
@@ -41,65 +30,51 @@
       <span class="domain-toolbar-count">
         <i class="pi pi-info-circle" aria-hidden="true"></i>
         {{ domains().length }} dominio{{ domains().length !== 1 ? 's' : '' }} disponible{{
-          domains().length !== 1 ? 's' : ''
+        domains().length !== 1 ? 's' : ''
         }}
       </span>
-      <p-button
-        icon="pi pi-refresh"
-        severity="secondary"
-        [outlined]="true"
-        [loading]="isSyncingDns()"
-        (onClick)="syncDnsRecords()"
-        pTooltip="Sincronizar registros DNS"
-        tooltipPosition="bottom"
-        aria-label="Sincronizar registros DNS desde Hostinger API"
-        [text]="true"
-      />
+      <p-button icon="pi pi-refresh" severity="secondary" [outlined]="true" [loading]="isSyncingDns()"
+        (onClick)="syncDnsRecords()" pTooltip="Sincronizar registros DNS" tooltipPosition="bottom"
+        aria-label="Sincronizar registros DNS desde Hostinger API" [text]="true" />
     </div>
   </p-toolbar>
 
   <!-- Main Content -->
   <div class="dns-content">
     @if (domainName()) {
-      <!-- DNS Records Section -->
-      <div class="dns-section" @slideUp>
-        <app-dns-viewer [domainName]="domainName()" />
-      </div>
+    <!-- DNS Records Section -->
+    <div class="dns-section" @slideUp>
+      <app-dns-viewer [domainName]="domainName()" />
+    </div>
 
-      <!-- DNS Validation Section -->
-      <div class="dns-section" @slideUp>
-        <app-dns-validation [domainName]="domainName()" />
-      </div>
+    <!-- DNS Validation Section -->
+    <div class="dns-section" @slideUp>
+      <app-dns-validation [domainName]="domainName()" />
+    </div>
 
-      <!-- DNS Comparison Section -->
-      <div class="dns-section" @slideUp>
-        <app-dns-comparator [domainName]="domainName()" />
-      </div>
+    <!-- DNS Comparison Section -->
+    <div class="dns-section" @slideUp>
+      <app-dns-comparator [domainName]="domainName()" />
+    </div>
     } @else {
-      <!-- Empty State -->
-      <div class="empty-state-container" @fadeIn>
-        <p-card>
-          <div class="empty-state-content">
-            <div class="empty-icon">
-              <i class="pi pi-search" aria-hidden="true"></i>
-            </div>
-            <h3>Selecciona un Dominio</h3>
-            <p>
-              Elige un dominio del selector para visualizar sus registros DNS y comparar snapshots
-            </p>
-            @if (domains().length === 0) {
-              <p-button
-                label="Sincronizar Dominios"
-                icon="pi pi-refresh"
-                severity="primary"
-                [outlined]="true"
-                (onClick)="syncDnsRecords()"
-                [loading]="isSyncingDns()"
-              />
-            }
+    <!-- Empty State -->
+    <div class="empty-state-container" @fadeIn>
+      <p-card>
+        <div class="empty-state-content">
+          <div class="empty-icon">
+            <i class="pi pi-search" aria-hidden="true"></i>
           </div>
-        </p-card>
-      </div>
+          <h3>Selecciona un Dominio</h3>
+          <p>
+            Elige un dominio del selector para visualizar sus registros DNS y comparar snapshots
+          </p>
+          @if (domains().length === 0) {
+          <p-button label="Sincronizar Dominios" icon="pi pi-refresh" severity="primary" [outlined]="true"
+            (onClick)="syncDnsRecords()" [loading]="isSyncingDns()" />
+          }
+        </div>
+      </p-card>
+    </div>
     }
   </div>
 </div>
