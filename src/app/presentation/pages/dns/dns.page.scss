@@ -4,52 +4,46 @@
 .domain-toolbar-group {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  border-radius: 0.5rem;
-  padding: 0.25rem 1.25rem 0.25rem 0.75rem;
-  margin-right: 0.5rem;
+  gap: 1rem;
+  // Removed previous styling to adapt to new toolbar
 }
 
 .domain-toolbar-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-color);
-  background: transparent;
-  padding-right: 0.5rem;
-  border-right: 1px solid var(--surface-border);
-}
+  display: none; // Hide label on desktop for cleaner look (Dashboard style usually cleaner)
 
-.domain-toolbar-label .card-icon {
-  font-size: 1.25rem;
-  color: var(--primary-color);
+  @media (max-width: 768px) {
+    display: none;
+  }
 }
 
 .domain-toolbar-select {
-  min-width: 220px;
+  min-width: 240px;
   max-width: 320px;
   font-size: 1rem;
   margin: 0 0.5rem;
+
+  // Customizing internal PrimeNG select if needed via ng-deep elsewhere
 }
 
 .domain-toolbar-count {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.95rem;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
   color: var(--text-color-secondary);
   background: var(--surface-100);
-  border-radius: 0.4rem;
+  border-radius: 6px;
   padding: 0.25rem 0.75rem;
-  margin-right: 0.5rem;
-  border-left: 3px solid var(--primary-color);
+
+  i {
+    color: var(--primary-color);
+  }
 }
 
 .domain-toolbar-count i {
-  color: var(--primary-color);
-  font-size: 1rem;
+  color: var(--primary-600);
+  font-size: 0.9rem;
 }
 
 // Ajuste para el botón de refrescar
@@ -70,15 +64,17 @@
   }
 }
 
+// Main Container (Matches Audit Logs .system-health-container)
 .dns-page {
+  // Use global background
   min-height: 100vh;
-  background-color: var(--surface-50);
 }
 
 // Toolbar Styles
 ::ng-deep .dns-toolbar {
-  border-bottom: 2px solid var(--surface-border);
-  padding: 1rem 2rem;
+  // Remove local border to use global glass style
+  border-bottom: none;
+  padding: 1rem 1.5rem;
   margin-bottom: 0;
 
   .page-title {
@@ -104,10 +100,12 @@
 
 // Main Content
 .dns-content {
-  padding: 2rem 0;
+  padding: 1.5rem; // Match Audit Logs padding
+  // max-width: 1600px; // Removed to align with full-width toolbar
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem; // Match Audit Logs grid gap
 }
 
 // Domain Selector Card
