@@ -3,15 +3,16 @@ import { ExpirationTrendsChartComponent } from './expiration-trends-chart.compon
 import { describe, it, expect, beforeEach } from 'vitest';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
+import { ChartCardComponent } from '../../molecules/chart-card/chart-card.component';
 
 describe('ExpirationTrendsChartComponent', () => {
   let component: ExpirationTrendsChartComponent;
   let fixture: ComponentFixture<ExpirationTrendsChartComponent>;
 
   beforeEach(async () => {
-    // Hack: Override inputs to avoid "Input is required" error in JIT
-    TestBed.overrideComponent(ExpirationTrendsChartComponent, {
-      set: { inputs: [] },
+    // Override ChartCardComponent to remove required inputs during tests
+    TestBed.overrideComponent(ChartCardComponent, {
+      set: { template: '<div></div>', inputs: [] },
     });
 
     await TestBed.configureTestingModule({

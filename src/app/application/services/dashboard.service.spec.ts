@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { DashboardService } from './dashboard.service';
 import { AuthService } from './auth.service';
 import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
+import { DASHBOARD_REPOSITORY } from '@app/domain/repositories/dashboard.repository';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 vi.mock('firebase/firestore', async () => {
@@ -30,9 +31,16 @@ describe('DashboardService', () => {
   beforeEach(() => {
     vi.spyOn(FirebaseAdapter, 'getFirestore').mockReturnValue({} as any);
 
+    const mockDashboardRepo = {
+      getWorkspacesByUserId: vi.fn().mockResolvedValue([]),
+      getDomainsByWorkspaceIds: vi.fn().mockResolvedValue([]),
+      getSubscriptionsByWorkspaceIds: vi.fn().mockResolvedValue([]),
+    };
+
     TestBed.configureTestingModule({
       providers: [
         DashboardService,
+        { provide: DASHBOARD_REPOSITORY, useValue: mockDashboardRepo },
         {
           provide: AuthService,
           useValue: {
@@ -75,8 +83,8 @@ describe('DashboardService', () => {
     });
 
     it('should return empty stats when no workspaces', async () => {
-      const { getDocs } = await import('firebase/firestore');
-      vi.mocked(getDocs).mockResolvedValue({ docs: [] } as any);
+      const mockRepo = TestBed.inject(DASHBOARD_REPOSITORY) as any;
+      vi.mocked(mockRepo.getWorkspacesByUserId).mockResolvedValue([]);
 
       const stats = await service.loadDashboardStats();
 
@@ -89,9 +97,9 @@ describe('DashboardService', () => {
 
     it('should handle firestore errors', async () => {
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-      const { getDocs } = await import('firebase/firestore');
+      const mockRepo = TestBed.inject(DASHBOARD_REPOSITORY) as any;
       const error = new Error('Firestore error');
-      vi.mocked(getDocs).mockRejectedValue(error);
+      vi.mocked(mockRepo.getWorkspacesByUserId).mockRejectedValue(error);
 
       await expect(service.loadDashboardStats()).rejects.toThrow('Firestore error');
       expect(service.error()).toBe('Firestore error');
@@ -100,12 +108,12 @@ describe('DashboardService', () => {
     });
 
     it('should set loading state during fetch', async () => {
-      const { getDocs } = await import('firebase/firestore');
+      const mockRepo = TestBed.inject(DASHBOARD_REPOSITORY) as any;
       let loadingDuringFetch = false;
 
-      vi.mocked(getDocs).mockImplementation(async () => {
+      vi.mocked(mockRepo.getWorkspacesByUserId).mockImplementation(async () => {
         loadingDuringFetch = service.isLoading();
-        return { docs: [] } as any;
+        return [];
       });
 
       await service.loadDashboardStats();
@@ -116,8 +124,8 @@ describe('DashboardService', () => {
 
   describe('signals', () => {
     it('should update stats signal', async () => {
-      const { getDocs } = await import('firebase/firestore');
-      vi.mocked(getDocs).mockResolvedValue({ docs: [] } as any);
+      const mockRepo = TestBed.inject(DASHBOARD_REPOSITORY) as any;
+      vi.mocked(mockRepo.getWorkspacesByUserId).mockResolvedValue([]);
 
       await service.loadDashboardStats();
 
@@ -126,10 +134,10 @@ describe('DashboardService', () => {
 
     it('should clear error on successful operation', async () => {
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-      const { getDocs } = await import('firebase/firestore');
+      const mockRepo = TestBed.inject(DASHBOARD_REPOSITORY) as any;
 
       // First fail
-      vi.mocked(getDocs).mockRejectedValue(new Error('First error'));
+      vi.mocked(mockRepo.getWorkspacesByUserId).mockRejectedValue(new Error('First error'));
       try {
         await service.loadDashboardStats();
       } catch {
@@ -138,7 +146,7 @@ describe('DashboardService', () => {
       expect(service.error()).toBe('First error');
 
       // Then succeed
-      vi.mocked(getDocs).mockResolvedValue({ docs: [] } as any);
+      vi.mocked(mockRepo.getWorkspacesByUserId).mockResolvedValue([]);
       await service.loadDashboardStats();
 
       expect(service.error()).toBeNull();
