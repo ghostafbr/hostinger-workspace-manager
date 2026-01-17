@@ -296,7 +296,8 @@ export class DomainService {
       }
 
       const renewalPrice =
-        Number(domain.renewalPrice) || (Number(domain.hostingRenewalPrice) || 0) + (Number(domain.domainRenewalPrice) || 0);
+        Number(domain.renewalPrice) ||
+        (Number(domain.hostingRenewalPrice) || 0) + (Number(domain.domainRenewalPrice) || 0);
       stats.totalValue += renewalPrice;
     });
 

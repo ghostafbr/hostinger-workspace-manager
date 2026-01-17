@@ -8,99 +8,110 @@
       </h2>
     </div>
     <div class="p-toolbar-group-end">
-      <p-button label="Actualizar" icon="fa fa-refresh" severity="secondary" [outlined]="true" size="small"
-        [loading]="isLoading()" (onClick)="refreshData()" pTooltip="Actualizar métricas de salud"
-        tooltipPosition="bottom" />
+      <p-button
+        label="Actualizar"
+        icon="fa fa-refresh"
+        severity="secondary"
+        [outlined]="true"
+        size="small"
+        [loading]="isLoading()"
+        (onClick)="refreshData()"
+        pTooltip="Actualizar métricas de salud"
+        tooltipPosition="bottom"
+      />
     </div>
   </p-toolbar>
 
   <!-- Loading State -->
   @if (isLoading()) {
-  <div class="loading-container">
-    <p-progressBar mode="indeterminate" />
-  </div>
+    <div class="loading-container">
+      <p-progressBar mode="indeterminate" />
+    </div>
   }
 
   <!-- System Summary Cards -->
   @if (systemSummary(); as summary) {
-  <div class="summary-cards">
-    <!-- Overall Health Card -->
-    <p-card>
-      <div class="stat-card">
-        <div class="stat-icon health">
-          <i class="fa fa-heart"></i>
-        </div>
-        <div class="stat-content">
-          <div class="stat-label">Health Score Promedio</div>
-          <div class="stat-value">{{ summary.averageHealthScore | number: '1.0-0' }}/100</div>
-          <div class="stat-subtitle">
-            {{ summary.getHealthyPercentage() }}% workspaces saludables
+    <div class="summary-cards">
+      <!-- Overall Health Card -->
+      <p-card>
+        <div class="stat-card">
+          <div class="stat-icon health">
+            <i class="fa fa-heart"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Health Score Promedio</div>
+            <div class="stat-value">{{ summary.averageHealthScore | number: '1.0-0' }}/100</div>
+            <div class="stat-subtitle">
+              {{ summary.getHealthyPercentage() }}% workspaces saludables
+            </div>
           </div>
         </div>
-      </div>
-    </p-card>
+      </p-card>
 
-    <!-- Workspaces Status Card -->
-    <p-card>
-      <div class="stat-card">
-        <div class="stat-icon workspaces">
-          <i class="fa fa-briefcase"></i>
-        </div>
-        <div class="stat-content">
-          <div class="stat-label">Estado de Workspaces</div>
-          <div class="stat-value">{{ summary.totalWorkspaces }}</div>
-          <div class="stat-breakdown">
-            <span class="success">✓ {{ summary.healthyWorkspaces }}</span>
-            <span class="warning">⚠ {{ summary.warningWorkspaces }}</span>
-            <span class="danger">✗ {{ summary.criticalWorkspaces }}</span>
+      <!-- Workspaces Status Card -->
+      <p-card>
+        <div class="stat-card">
+          <div class="stat-icon workspaces">
+            <i class="fa fa-briefcase"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Estado de Workspaces</div>
+            <div class="stat-value">{{ summary.totalWorkspaces }}</div>
+            <div class="stat-breakdown">
+              <span class="success">✓ {{ summary.healthyWorkspaces }}</span>
+              <span class="warning">⚠ {{ summary.warningWorkspaces }}</span>
+              <span class="danger">✗ {{ summary.criticalWorkspaces }}</span>
+            </div>
           </div>
         </div>
-      </div>
-    </p-card>
+      </p-card>
 
-    <!-- Rate Limit Card Removed -->
+      <!-- Rate Limit Card Removed -->
 
-    <!-- Sync Rate Card -->
-    <p-card>
-      <div class="stat-card">
-        <div class="stat-icon sync">
-          <i class="fa fa-refresh"></i>
-        </div>
-        <div class="stat-content">
-          <div class="stat-label">Sync Success Rate (Hoy)</div>
-          <div class="stat-value">{{ summary.getSyncSuccessRate() }}%</div>
-          <div class="stat-subtitle">
-            {{ summary.successfulSyncsToday }}/{{ summary.totalSyncsToday }} exitosos
+      <!-- Sync Rate Card -->
+      <p-card>
+        <div class="stat-card">
+          <div class="stat-icon sync">
+            <i class="fa fa-refresh"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Sync Success Rate (Hoy)</div>
+            <div class="stat-value">{{ summary.getSyncSuccessRate() }}%</div>
+            <div class="stat-subtitle">
+              {{ summary.successfulSyncsToday }}/{{ summary.totalSyncsToday }} exitosos
+            </div>
           </div>
         </div>
-      </div>
-    </p-card>
+      </p-card>
 
-    <!-- Errors Card -->
-    <p-card>
-      <div class="stat-card">
-        <div class="stat-icon errors">
-          <i class="fa fa-exclamation-triangle"></i>
+      <!-- Errors Card -->
+      <p-card>
+        <div class="stat-card">
+          <div class="stat-icon errors">
+            <i class="fa fa-exclamation-triangle"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Errores (24h)</div>
+            <div class="stat-value">{{ summary.totalErrors24h }}</div>
+            <div class="stat-subtitle">{{ summary.workspacesWithErrors }} workspaces afectados</div>
+          </div>
         </div>
-        <div class="stat-content">
-          <div class="stat-label">Errores (24h)</div>
-          <div class="stat-value">{{ summary.totalErrors24h }}</div>
-          <div class="stat-subtitle">{{ summary.workspacesWithErrors }} workspaces afectados</div>
-        </div>
-      </div>
-    </p-card>
-  </div>
+      </p-card>
+    </div>
   }
 
   <!-- Charts Section -->
   @if (!isLoading() && workspaceMetrics().length > 0) {
-  <div class="charts-section">
-    <div class="chart-card">
-      <p-card>
-        <div class="chart-header">
-          <h3>Health Score por Workspace</h3>
-        </div>
-        <p-chart type="bar" [data]="healthScoreChartData()" [options]="{
+    <div class="charts-section">
+      <div class="chart-card">
+        <p-card>
+          <div class="chart-header">
+            <h3>Health Score por Workspace</h3>
+          </div>
+          <p-chart
+            type="bar"
+            [data]="healthScoreChartData()"
+            [options]="{
               responsive: true,
               maintainAspectRatio: false,
               plugins: {
@@ -109,16 +120,21 @@
               scales: {
                 y: { beginAtZero: true, max: 100 },
               },
-            }" [style]="{ height: '300px' }" />
-      </p-card>
-    </div>
+            }"
+            [style]="{ height: '300px' }"
+          />
+        </p-card>
+      </div>
 
-    <div class="chart-card">
-      <p-card>
-        <div class="chart-header">
-          <h3>Sync Success Rate por Workspace</h3>
-        </div>
-        <p-chart type="bar" [data]="syncRateChartData()" [options]="{
+      <div class="chart-card">
+        <p-card>
+          <div class="chart-header">
+            <h3>Sync Success Rate por Workspace</h3>
+          </div>
+          <p-chart
+            type="bar"
+            [data]="syncRateChartData()"
+            [options]="{
               responsive: true,
               maintainAspectRatio: false,
               plugins: {
@@ -127,34 +143,59 @@
               scales: {
                 y: { beginAtZero: true, max: 100 },
               },
-            }" [style]="{ height: '300px' }" />
-      </p-card>
+            }"
+            [style]="{ height: '300px' }"
+          />
+        </p-card>
+      </div>
     </div>
-  </div>
   }
 
   <!-- Filter Buttons -->
   <div class="filter-toolbar">
-    <p-button [label]="'Todos (' + workspaceMetrics().length + ')'"
-      [severity]="selectedFilter() === 'all' ? 'primary' : 'secondary'" [outlined]="selectedFilter() !== 'all'"
-      size="small" (onClick)="setFilter('all')" />
-    <p-button [label]="'Saludables (' + healthService.healthyWorkspaces().length + ')'"
-      [severity]="selectedFilter() === 'healthy' ? 'success' : 'secondary'" [outlined]="selectedFilter() !== 'healthy'"
-      size="small" (onClick)="setFilter('healthy')" />
-    <p-button [label]="'Advertencias (' + healthService.warningWorkspaces().length + ')'"
-      [severity]="selectedFilter() === 'warning' ? 'warn' : 'secondary'" [outlined]="selectedFilter() !== 'warning'"
-      size="small" (onClick)="setFilter('warning')" />
-    <p-button [label]="'Críticos (' + healthService.criticalWorkspaces().length + ')'"
-      [severity]="selectedFilter() === 'critical' ? 'danger' : 'secondary'" [outlined]="selectedFilter() !== 'critical'"
-      size="small" (onClick)="setFilter('critical')" />
+    <p-button
+      [label]="'Todos (' + workspaceMetrics().length + ')'"
+      [severity]="selectedFilter() === 'all' ? 'primary' : 'secondary'"
+      [outlined]="selectedFilter() !== 'all'"
+      size="small"
+      (onClick)="setFilter('all')"
+    />
+    <p-button
+      [label]="'Saludables (' + healthService.healthyWorkspaces().length + ')'"
+      [severity]="selectedFilter() === 'healthy' ? 'success' : 'secondary'"
+      [outlined]="selectedFilter() !== 'healthy'"
+      size="small"
+      (onClick)="setFilter('healthy')"
+    />
+    <p-button
+      [label]="'Advertencias (' + healthService.warningWorkspaces().length + ')'"
+      [severity]="selectedFilter() === 'warning' ? 'warn' : 'secondary'"
+      [outlined]="selectedFilter() !== 'warning'"
+      size="small"
+      (onClick)="setFilter('warning')"
+    />
+    <p-button
+      [label]="'Críticos (' + healthService.criticalWorkspaces().length + ')'"
+      [severity]="selectedFilter() === 'critical' ? 'danger' : 'secondary'"
+      [outlined]="selectedFilter() !== 'critical'"
+      size="small"
+      (onClick)="setFilter('critical')"
+    />
   </div>
 
   <!-- Workspace Metrics Table -->
   <p-card>
-    <p-table [value]="getFilteredMetrics()" [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+    <p-table
+      [value]="getFilteredMetrics()"
+      [paginator]="true"
+      [rows]="10"
+      [showCurrentPageReport]="true"
       currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} workspaces"
-      [rowsPerPageOptions]="[10, 25, 50]" [globalFilterFields]="['workspaceName']" class="p-datatable-sm"
-      [tableStyle]="{ 'min-width': '50rem' }">
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [globalFilterFields]="['workspaceName']"
+      class="p-datatable-sm"
+      [tableStyle]="{ 'min-width': '50rem' }"
+    >
       <ng-template pTemplate="header">
         <tr>
           <th pSortableColumn="workspaceName">
@@ -191,20 +232,27 @@
           <td>
             <div class="health-score-cell">
               <span class="score-value">{{ metrics.healthScore }}</span>
-              <p-progressBar [value]="metrics.healthScore" [showValue]="false"
-                [style]="{ height: '6px', width: '60px' }" />
+              <p-progressBar
+                [value]="metrics.healthScore"
+                [showValue]="false"
+                [style]="{ height: '6px', width: '60px' }"
+              />
             </div>
           </td>
 
           <!-- Health Status -->
           <td>
-            <p-tag [value]="metrics.healthStatus" [severity]="getHealthSeverity(metrics.healthStatus)" [icon]="
+            <p-tag
+              [value]="metrics.healthStatus"
+              [severity]="getHealthSeverity(metrics.healthStatus)"
+              [icon]="
                 metrics.healthStatus === HealthStatus.HEALTHY
                   ? 'fa fa-check'
                   : metrics.healthStatus === HealthStatus.WARNING
                     ? 'fa fa-exclamation-triangle'
                     : 'fa fa-times'
-              " />
+              "
+            />
           </td>
 
           <!-- Sync Status -->
@@ -219,17 +267,21 @@
 
           <!-- Circuit Breaker -->
           <td>
-            <p-tag [value]="metrics.circuitBreakerStatus"
-              [severity]="getCircuitSeverity(metrics.circuitBreakerStatus)" />
+            <p-tag
+              [value]="metrics.circuitBreakerStatus"
+              [severity]="getCircuitSeverity(metrics.circuitBreakerStatus)"
+            />
           </td>
 
           <!-- Consecutive Failures -->
           <td>
             @if (metrics.consecutiveFailures > 0) {
-            <p-tag [value]="metrics.consecutiveFailures.toString()"
-              [severity]="metrics.consecutiveFailures >= 3 ? 'danger' : 'warn'" />
+              <p-tag
+                [value]="metrics.consecutiveFailures.toString()"
+                [severity]="metrics.consecutiveFailures >= 3 ? 'danger' : 'warn'"
+              />
             } @else {
-            <span class="text-muted">0</span>
+              <span class="text-muted">0</span>
             }
           </td>
 
@@ -237,27 +289,32 @@
           <td>
             <div class="last-sync">
               @if (metrics.lastSuccessfulSync) {
-              <div>
-                <i class="fa fa-check-circle text-success"></i>
-                {{ formatRelativeTime(metrics.lastSuccessfulSync) }}
-              </div>
+                <div>
+                  <i class="fa fa-check-circle text-success"></i>
+                  {{ formatRelativeTime(metrics.lastSuccessfulSync) }}
+                </div>
               }
               @if (metrics.lastFailedSync) {
-              <div class="text-danger">
-                <i class="fa fa-times-circle"></i>
-                {{ formatRelativeTime(metrics.lastFailedSync) }}
-              </div>
+                <div class="text-danger">
+                  <i class="fa fa-times-circle"></i>
+                  {{ formatRelativeTime(metrics.lastFailedSync) }}
+                </div>
               }
               @if (!metrics.lastSuccessfulSync && !metrics.lastFailedSync) {
-              <span class="text-muted">Sin datos</span>
+                <span class="text-muted">Sin datos</span>
               }
             </div>
           </td>
 
           <!-- Actions -->
           <td>
-            <p-button icon="fa fa-arrow-right" [text]="true" size="small" (onClick)="goToWorkspace(metrics.workspaceId)"
-              pTooltip="Ver detalles del workspace" />
+            <p-button
+              icon="fa fa-arrow-right"
+              [text]="true"
+              size="small"
+              (onClick)="goToWorkspace(metrics.workspaceId)"
+              pTooltip="Ver detalles del workspace"
+            />
           </td>
         </tr>
       </ng-template>

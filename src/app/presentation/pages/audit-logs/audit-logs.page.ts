@@ -103,11 +103,13 @@ export default class AuditLogsPage implements OnInit {
   async loadData(): Promise<void> {
     try {
       const id = this.workspaceId();
-      
+
       // Parallel loading
       const [logs, stats] = await Promise.all([
-        id ? this.auditLogService.getWorkspaceAuditLogs(id) : this.auditLogService.getRecentAuditLogs(),
-        this.auditLogService.getAuditStats(id)
+        id
+          ? this.auditLogService.getWorkspaceAuditLogs(id)
+          : this.auditLogService.getRecentAuditLogs(),
+        this.auditLogService.getAuditStats(id),
       ]);
 
       // Process Stats
@@ -115,7 +117,7 @@ export default class AuditLogsPage implements OnInit {
       const success = stats.success;
       const failure = stats.failure;
       const successRate = total > 0 ? (success / total) * 100 : 0;
-      
+
       // Find top action
       let topAction = 'N/A';
       let maxCount = 0;
@@ -131,9 +133,8 @@ export default class AuditLogsPage implements OnInit {
         success,
         failure,
         successRate,
-        topAction: this.formatActionLabel(topAction)
+        topAction: this.formatActionLabel(topAction),
       });
-
     } catch {
       this.messageService.add({
         severity: 'error',
@@ -147,7 +148,7 @@ export default class AuditLogsPage implements OnInit {
    * Helper to format action label
    */
   formatActionLabel(action: string): string {
-     const labels: Record<string, string> = {
+    const labels: Record<string, string> = {
       'workspace.create': 'Crear Workspace',
       'workspace.update': 'Actualizar Workspace',
       'workspace.disable': 'Deshabilitar Workspace',
@@ -189,12 +190,16 @@ export default class AuditLogsPage implements OnInit {
   }
 
   getHealthSeverity(status: string): 'success' | 'warn' | 'danger' | 'info' | 'secondary' {
-      switch (status) {
-        case AuditStatus.SUCCESS: return 'success';
-        case AuditStatus.PARTIAL: return 'warn';
-        case AuditStatus.FAILED: return 'danger';
-        default: return 'info';
-      }
+    switch (status) {
+      case AuditStatus.SUCCESS:
+        return 'success';
+      case AuditStatus.PARTIAL:
+        return 'warn';
+      case AuditStatus.FAILED:
+        return 'danger';
+      default:
+        return 'info';
+    }
   }
 
   getStatusIcon(status: string): string {

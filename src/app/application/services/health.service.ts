@@ -455,7 +455,6 @@ export class HealthService {
     for (const metric of metrics) {
       // Rate Limit alerts removed
 
-
       // Alert for consecutive failures
       if (metric.hasConsecutiveFailures()) {
         await this.createHealthAlert(

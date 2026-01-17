@@ -1,231 +1,284 @@
 <div class="system-health-container">
-    <p-toast />
+  <p-toast />
 
-    <!-- Toolbar -->
-    <p-toolbar>
-        <div class="p-toolbar-group-start">
-            <h2 class="page-title">
-                <i class="fa fa-history"></i>
-                Audit Logs
-            </h2>
-        </div>
-        <div class="p-toolbar-group-end">
-            <p-button label="Actualizar" icon="fa fa-refresh" severity="secondary" [outlined]="true" size="small"
-                [loading]="isLoading()" (onClick)="loadData()" pTooltip="Actualizar logs" tooltipPosition="bottom" />
-            <p-button label="Volver" icon="fa fa-arrow-left" severity="secondary" [outlined]="true" size="small"
-                class="ml-2" (onClick)="goBack()" />
-        </div>
-    </p-toolbar>
+  <!-- Toolbar -->
+  <p-toolbar>
+    <div class="p-toolbar-group-start">
+      <h2 class="page-title">
+        <i class="fa fa-history"></i>
+        Audit Logs
+      </h2>
+    </div>
+    <div class="p-toolbar-group-end">
+      <p-button
+        label="Actualizar"
+        icon="fa fa-refresh"
+        severity="secondary"
+        [outlined]="true"
+        size="small"
+        [loading]="isLoading()"
+        (onClick)="loadData()"
+        pTooltip="Actualizar logs"
+        tooltipPosition="bottom"
+      />
+      <p-button
+        label="Volver"
+        icon="fa fa-arrow-left"
+        severity="secondary"
+        [outlined]="true"
+        size="small"
+        class="ml-2"
+        (onClick)="goBack()"
+      />
+    </div>
+  </p-toolbar>
 
-    <!-- Loading State -->
-    @if (isLoading() && !stats()) {
+  <!-- Loading State -->
+  @if (isLoading() && !stats()) {
     <div class="loading-container">
-        <p-skeleton height="200px" width="100%" />
-        <div class="mt-4">
-            <p-skeleton height="400px" width="100%" />
-        </div>
+      <p-skeleton height="200px" width="100%" />
+      <div class="mt-4">
+        <p-skeleton height="400px" width="100%" />
+      </div>
     </div>
-    }
+  }
 
-    <!-- Summary Cards -->
-    @if (stats(); as s) {
+  <!-- Summary Cards -->
+  @if (stats(); as s) {
     <div class="summary-cards">
-        <!-- Total Actions -->
-        <p-card>
-            <div class="stat-card">
-                <div class="stat-icon total">
-                    <i class="fa fa-list-ul"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-label">Total Acciones (24h)</div>
-                    <div class="stat-value">{{ s.total }}</div>
-                    <div class="stat-subtitle">Registros procesados</div>
-                </div>
-            </div>
-        </p-card>
+      <!-- Total Actions -->
+      <p-card>
+        <div class="stat-card">
+          <div class="stat-icon total">
+            <i class="fa fa-list-ul"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Total Acciones (24h)</div>
+            <div class="stat-value">{{ s.total }}</div>
+            <div class="stat-subtitle">Registros procesados</div>
+          </div>
+        </div>
+      </p-card>
 
-        <!-- Success Rate -->
-        <p-card>
-            <div class="stat-card">
-                <div class="stat-icon success">
-                    <i class="fa fa-check-circle"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-label">Tasa de Éxito</div>
-                    <div class="stat-value">{{ s.successRate | number: '1.0-1' }}%</div>
-                    <div class="stat-breakdown">
-                        <span class="success">✓ {{ s.success }}</span>
-                        <span class="danger">✗ {{ s.failure }}</span>
-                    </div>
-                </div>
+      <!-- Success Rate -->
+      <p-card>
+        <div class="stat-card">
+          <div class="stat-icon success">
+            <i class="fa fa-check-circle"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Tasa de Éxito</div>
+            <div class="stat-value">{{ s.successRate | number: '1.0-1' }}%</div>
+            <div class="stat-breakdown">
+              <span class="success">✓ {{ s.success }}</span>
+              <span class="danger">✗ {{ s.failure }}</span>
             </div>
-        </p-card>
+          </div>
+        </div>
+      </p-card>
 
-        <!-- Top Action -->
-        <p-card>
-            <div class="stat-card">
-                <div class="stat-icon action">
-                    <i class="fa fa-star"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-label">Acción Más Frecuente</div>
-                    <div class="stat-value text-sm">{{ s.topAction }}</div>
-                    <div class="stat-subtitle">Mayor actividad reciente</div>
-                </div>
-            </div>
-        </p-card>
+      <!-- Top Action -->
+      <p-card>
+        <div class="stat-card">
+          <div class="stat-icon action">
+            <i class="fa fa-star"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Acción Más Frecuente</div>
+            <div class="stat-value text-sm">{{ s.topAction }}</div>
+            <div class="stat-subtitle">Mayor actividad reciente</div>
+          </div>
+        </div>
+      </p-card>
 
-        <!-- Info/System -->
-        <p-card>
-            <div class="stat-card">
-                <div class="stat-icon system">
-                    <i class="fa fa-server"></i>
-                </div>
-                <div class="stat-content">
-                    <div class="stat-label">Sistema</div>
-                    <div class="stat-value">Audit</div>
-                    <div class="stat-subtitle">Logging Activo</div>
-                </div>
-            </div>
-        </p-card>
+      <!-- Info/System -->
+      <p-card>
+        <div class="stat-card">
+          <div class="stat-icon system">
+            <i class="fa fa-server"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Sistema</div>
+            <div class="stat-value">Audit</div>
+            <div class="stat-subtitle">Logging Activo</div>
+          </div>
+        </div>
+      </p-card>
     </div>
-    }
+  }
 
-    <!-- Audit Table -->
-    <p-card>
-        <p-table #dt [value]="auditLogs()" [loading]="isLoading()" [paginator]="true" [rows]="10"
-            [rowsPerPageOptions]="[10, 25, 50, 100]" [globalFilterFields]="['action', 'actorEmail', 'workspaceId']"
-            [tableStyle]="{ 'min-width': '70rem' }" class="p-datatable-sm" [rowHover]="true">
-            <!-- Caption -->
-            <ng-template pTemplate="caption">
-                <div class="filter-toolbar">
-                    <!-- Search -->
-                    <div class="search-wrapper">
-                        <i class="fa fa-search search-icon"></i>
-                        <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                            placeholder="Buscar..." class="glass-input with-icon" />
-                    </div>
+  <!-- Audit Table -->
+  <p-card>
+    <p-table
+      #dt
+      [value]="auditLogs()"
+      [loading]="isLoading()"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[10, 25, 50, 100]"
+      [globalFilterFields]="['action', 'actorEmail', 'workspaceId']"
+      [tableStyle]="{ 'min-width': '70rem' }"
+      class="p-datatable-sm"
+      [rowHover]="true"
+    >
+      <!-- Caption -->
+      <ng-template pTemplate="caption">
+        <div class="filter-toolbar">
+          <!-- Search -->
+          <div class="search-wrapper">
+            <i class="fa fa-search search-icon"></i>
+            <input
+              pInputText
+              type="text"
+              (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+              placeholder="Buscar..."
+              class="glass-input with-icon"
+            />
+          </div>
 
-                    <!-- Action Filter -->
-                    <p-select [options]="actionOptions" [ngModel]="selectedAction()"
-                        (onChange)="selectedAction.set($event.value); dt.filter($event.value, 'action', 'equals')"
-                        placeholder="Todas las acciones" [showClear]="true" styleClass="glass-dropdown">
-                        <ng-template pTemplate="selectedItem" let-selectedOption>
-                            <div class="flex align-items-center gap-2" *ngIf="selectedOption">
-                                <i class="fa fa-bolt text-primary-500"></i>
-                                <div>{{ selectedOption.label }}</div>
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="item" let-option>
-                            <div class="flex align-items-center gap-2">
-                                <i class="fa fa-bolt text-primary-400"></i>
-                                <div>{{ option.label }}</div>
-                            </div>
-                        </ng-template>
-                    </p-select>
-
-                    <!-- Status Filter -->
-                    <p-select [options]="statusOptions" [ngModel]="selectedStatus()"
-                        (onChange)="selectedStatus.set($event.value); dt.filter($event.value, 'status', 'equals')"
-                        placeholder="Todos los estados" [showClear]="true" styleClass="glass-dropdown">
-                        <ng-template pTemplate="selectedItem" let-selectedOption>
-                            <div class="flex align-items-center gap-2" *ngIf="selectedOption">
-                                <i class="fa fa-tag text-primary-500"></i>
-                                <div>{{ selectedOption.label }}</div>
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="item" let-option>
-                            <div class="flex align-items-center gap-2">
-                                <i class="fa fa-tag text-primary-400"></i>
-                                <div>{{ option.label }}</div>
-                            </div>
-                        </ng-template>
-                    </p-select>
-                </div>
+          <!-- Action Filter -->
+          <p-select
+            [options]="actionOptions"
+            [ngModel]="selectedAction()"
+            (onChange)="
+              selectedAction.set($event.value); dt.filter($event.value, 'action', 'equals')
+            "
+            placeholder="Todas las acciones"
+            [showClear]="true"
+            styleClass="glass-dropdown"
+          >
+            <ng-template pTemplate="selectedItem" let-selectedOption>
+              <div class="flex align-items-center gap-2" *ngIf="selectedOption">
+                <i class="fa fa-bolt text-primary-500"></i>
+                <div>{{ selectedOption.label }}</div>
+              </div>
             </ng-template>
-
-            <!-- Header -->
-            <ng-template pTemplate="header">
-                <tr>
-                    <th pSortableColumn="createdAt">
-                        Fecha
-                        <p-sortIcon field="createdAt" />
-                    </th>
-                    <th pSortableColumn="action">
-                        Acción
-                        <p-sortIcon field="action" />
-                    </th>
-                    <th pSortableColumn="actorEmail">
-                        Usuario
-                        <p-sortIcon field="actorEmail" />
-                    </th>
-                    <th pSortableColumn="workspaceId">Workspace</th>
-                    <th style="text-align: center">Estado</th>
-                    <th style="text-align: center">Acciones</th>
-                </tr>
+            <ng-template pTemplate="item" let-option>
+              <div class="flex align-items-center gap-2">
+                <i class="fa fa-bolt text-primary-400"></i>
+                <div>{{ option.label }}</div>
+              </div>
             </ng-template>
+          </p-select>
 
-            <!-- Body -->
-            <ng-template pTemplate="body" let-log>
-                <tr>
-                    <!-- Created At -->
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <i class="fa fa-calendar mr-2 text-primary-400"></i>
-                            <span>{{ log.createdAt.toDate() | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
-                        </div>
-                    </td>
-
-                    <!-- Action -->
-                    <td>
-                        <div class="action-cell">
-                            <i [class]="log.getActionIcon()" class="mr-2 text-primary-500"></i>
-                            <span class="font-medium">{{ log.getActionLabel() }}</span>
-                        </div>
-                    </td>
-
-                    <!-- Actor -->
-                    <td>
-                        <div class="actor-cell">
-                            <i class="fa fa-user mr-2 text-primary-400"></i>
-                            {{ log.actorEmail || log.actorUid }}
-                        </div>
-                    </td>
-
-                    <!-- Workspace -->
-                    <td>
-                        @if (log.workspaceId) {
-                        <span class="workspace-badge">{{ log.workspaceId }}</span>
-                        } @else {
-                        <span class="text-muted">Sistema</span>
-                        }
-                    </td>
-
-                    <!-- Status -->
-                    <td style="text-align: center">
-                        <p-tag [value]="log.getStatusLabel()" [severity]="getHealthSeverity(log.status)"
-                            [icon]="getStatusIcon(log.status)" />
-                    </td>
-
-                    <!-- Actions -->
-                    <td style="text-align: center">
-                        <p-button icon="fa fa-eye" [rounded]="true" [text]="true" severity="secondary"
-                            (onClick)="onViewDetails(log)" pTooltip="Ver detalles" />
-                    </td>
-                </tr>
+          <!-- Status Filter -->
+          <p-select
+            [options]="statusOptions"
+            [ngModel]="selectedStatus()"
+            (onChange)="
+              selectedStatus.set($event.value); dt.filter($event.value, 'status', 'equals')
+            "
+            placeholder="Todos los estados"
+            [showClear]="true"
+            styleClass="glass-dropdown"
+          >
+            <ng-template pTemplate="selectedItem" let-selectedOption>
+              <div class="flex align-items-center gap-2" *ngIf="selectedOption">
+                <i class="fa fa-tag text-primary-500"></i>
+                <div>{{ selectedOption.label }}</div>
+              </div>
             </ng-template>
-
-            <!-- Empty State -->
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                    <td colspan="6" style="text-align: center; padding: 3rem">
-                        <div class="empty-state">
-                            <i class="fa fa-inbox"></i>
-                            <p>No se encontraron registros de auditoría</p>
-                        </div>
-                    </td>
-                </tr>
+            <ng-template pTemplate="item" let-option>
+              <div class="flex align-items-center gap-2">
+                <i class="fa fa-tag text-primary-400"></i>
+                <div>{{ option.label }}</div>
+              </div>
             </ng-template>
-        </p-table>
-    </p-card>
+          </p-select>
+        </div>
+      </ng-template>
+
+      <!-- Header -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="createdAt">
+            Fecha
+            <p-sortIcon field="createdAt" />
+          </th>
+          <th pSortableColumn="action">
+            Acción
+            <p-sortIcon field="action" />
+          </th>
+          <th pSortableColumn="actorEmail">
+            Usuario
+            <p-sortIcon field="actorEmail" />
+          </th>
+          <th pSortableColumn="workspaceId">Workspace</th>
+          <th style="text-align: center">Estado</th>
+          <th style="text-align: center">Acciones</th>
+        </tr>
+      </ng-template>
+
+      <!-- Body -->
+      <ng-template pTemplate="body" let-log>
+        <tr>
+          <!-- Created At -->
+          <td>
+            <div class="d-flex align-items-center">
+              <i class="fa fa-calendar mr-2 text-primary-400"></i>
+              <span>{{ log.createdAt.toDate() | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
+            </div>
+          </td>
+
+          <!-- Action -->
+          <td>
+            <div class="action-cell">
+              <i [class]="log.getActionIcon()" class="mr-2 text-primary-500"></i>
+              <span class="font-medium">{{ log.getActionLabel() }}</span>
+            </div>
+          </td>
+
+          <!-- Actor -->
+          <td>
+            <div class="actor-cell">
+              <i class="fa fa-user mr-2 text-primary-400"></i>
+              {{ log.actorEmail || log.actorUid }}
+            </div>
+          </td>
+
+          <!-- Workspace -->
+          <td>
+            @if (log.workspaceId) {
+              <span class="workspace-badge">{{ log.workspaceId }}</span>
+            } @else {
+              <span class="text-muted">Sistema</span>
+            }
+          </td>
+
+          <!-- Status -->
+          <td style="text-align: center">
+            <p-tag
+              [value]="log.getStatusLabel()"
+              [severity]="getHealthSeverity(log.status)"
+              [icon]="getStatusIcon(log.status)"
+            />
+          </td>
+
+          <!-- Actions -->
+          <td style="text-align: center">
+            <p-button
+              icon="fa fa-eye"
+              [rounded]="true"
+              [text]="true"
+              severity="secondary"
+              (onClick)="onViewDetails(log)"
+              pTooltip="Ver detalles"
+            />
+          </td>
+        </tr>
+      </ng-template>
+
+      <!-- Empty State -->
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 3rem">
+            <div class="empty-state">
+              <i class="fa fa-inbox"></i>
+              <p>No se encontraron registros de auditoría</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
 </div>

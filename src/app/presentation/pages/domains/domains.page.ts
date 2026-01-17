@@ -1,4 +1,11 @@
-import { Component, ChangeDetectionStrategy, OnInit, inject, signal, computed } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  OnInit,
+  inject,
+  signal,
+  computed,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -127,8 +134,8 @@ export default class DomainsPage implements OnInit {
         });
       }
     } catch (error) {
-       console.error('[DomainsPage] Error loading data:', error);
-       this.messageService.add({
+      console.error('[DomainsPage] Error loading data:', error);
+      this.messageService.add({
         severity: 'error',
         summary: 'Error',
         detail: 'Error al cargar los datos de dominios',
@@ -142,11 +149,15 @@ export default class DomainsPage implements OnInit {
   getSeverity(expiresAt: any): 'success' | 'warn' | 'danger' | 'info' {
     const status = this.domainService.getExpirationStatus(expiresAt);
     switch (status) {
-      case 'ok': return 'success';
-      case 'warning': return 'warn';
+      case 'ok':
+        return 'success';
+      case 'warning':
+        return 'warn';
       case 'critical':
-      case 'expired': return 'danger';
-      default: return 'info';
+      case 'expired':
+        return 'danger';
+      default:
+        return 'info';
     }
   }
 
@@ -162,11 +173,16 @@ export default class DomainsPage implements OnInit {
   getStatusIcon(expiresAt: any): string {
     const status = this.domainService.getExpirationStatus(expiresAt);
     switch (status) {
-        case 'ok': return 'fa fa-check-circle';
-        case 'warning': return 'fa fa-exclamation-triangle';
-        case 'critical': return 'fa fa-exclamation-circle';
-        case 'expired': return 'fa fa-times-circle';
-        default: return 'fa fa-question-circle';
+      case 'ok':
+        return 'fa fa-check-circle';
+      case 'warning':
+        return 'fa fa-exclamation-triangle';
+      case 'critical':
+        return 'fa fa-exclamation-circle';
+      case 'expired':
+        return 'fa fa-times-circle';
+      default:
+        return 'fa fa-question-circle';
     }
   }
 
