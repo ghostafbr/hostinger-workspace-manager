@@ -1,15 +1,16 @@
 @use '../../../../../styles/variables';
 
 .footer {
-  background: rgba(255, 255, 255, 0.6); // More transparent
-  backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(229, 231, 235, 0.5);
-  box-shadow: none; // Remove shadow for cleaner look
-  padding: 1rem 2rem;
+  width: 100%; // Ensure full width
+  background: rgba(255, 255, 255, 0.8); // Slightly less transparent for better readability
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--surface-border);
+  padding: 1rem 2rem; // Keep padding
   position: sticky;
   bottom: 0;
   z-index: 99;
   font-size: 0.875rem;
+  color: var(--text-color-secondary);
 }
 
 .footer-content {
@@ -17,12 +18,13 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  max-width: 100%; // Ensure content doesn't overflow
 
   @include variables.media-max-md {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 0.75rem;
+    gap: 1rem;
   }
 
   @include variables.media-xxxl {
@@ -33,17 +35,18 @@
   .footer-right {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem; // Increased gap for better spacing
     font-size: 0.875rem;
 
     @include variables.media-max-md {
       justify-content: center;
       flex-wrap: wrap;
+      gap: 1rem;
     }
 
     @include variables.media-xxxl {
       font-size: 1rem;
-      gap: 1.5rem;
+      gap: 2rem;
     }
 
     .separator {
@@ -55,49 +58,102 @@
     .last-sync {
       display: flex;
       align-items: center;
-      gap: 0.375rem;
+      gap: 0.5rem;
       color: var(--text-color-secondary);
+      font-weight: 500;
 
       i {
-        font-size: 0.75rem;
-
-        @include variables.media-xxxl {
-          font-size: 0.875rem;
-        }
+        font-size: 0.875rem;
+        color: var(--primary-color); // Brand color icon
       }
     }
   }
 
   .footer-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     flex: 1;
     text-align: center;
+    flex-wrap: wrap;
+
+    .separator {
+      color: var(--surface-border);
+    }
+
+    .hidden-mobile {
+      @include variables.media-max-md {
+        display: none;
+      }
+    }
 
     @include variables.media-max-md {
-      order: -1;
+      order: 3; // Move to bottom on mobile
       width: 100%;
+      flex-direction: column;
+      gap: 0.25rem;
     }
   }
 
   .copyright {
     font-size: 0.875rem;
     color: var(--text-color-secondary);
+  }
 
-    @include variables.media-xxxl {
-      font-size: 1rem;
+  .developer-credit {
+    font-size: 0.875rem;
+    color: var(--text-color-secondary);
+
+    .dev-link {
+      color: var(--primary-color);
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #111827; // Darker on hover
+        text-decoration: underline;
+      }
     }
   }
 
   .footer-links {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     align-items: center;
 
-    @include variables.media-max-md {
-      gap: 0.75rem;
+    .footer-link {
+      color: var(--text-color-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+
+      &:hover {
+        color: var(--primary-color);
+      }
     }
 
-    @include variables.media-xxxl {
-      gap: 1.5rem;
+    @include variables.media-max-md {
+      gap: 1rem;
+    }
+  }
+
+  // Custom Badge Style
+  ::ng-deep .footer-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    height: auto;
+
+    &.p-tag-success {
+      background: rgba(34, 197, 94, 0.1);
+      color: #15803d;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+
+      .p-tag-icon {
+        font-size: 0.5rem; // Tiny dot
+        margin-right: 0.25rem;
+      }
     }
   }
 }
@@ -105,106 +161,11 @@
 // Mobile phones
 @include variables.media-max-sm {
   .footer {
-    padding: 1rem;
+    padding: 1.5rem 1rem; // More padding top/bottom
+    position: relative; // Unstick on mobile if content is long
   }
 
   .footer-content {
-    font-size: 0.75rem;
-
-    .footer-left,
-    .footer-right {
-      font-size: 0.75rem;
-      gap: 0.5rem;
-    }
-
-    .copyright {
-      font-size: 0.75rem;
-    }
-  }
-}
-
-// 2K screens
-@include variables.media-2k {
-  .footer {
-    padding: 2rem 3rem;
-  }
-
-  .footer-content {
-    .footer-left,
-    .footer-right {
-      font-size: 1.125rem;
-      gap: 2rem;
-
-      .version,
-      .last-sync {
-        gap: 0.5rem;
-
-        i {
-          font-size: 1rem;
-        }
-      }
-    }
-
-    .copyright {
-      font-size: 1.125rem;
-    }
-
-    .footer-links {
-      gap: 2rem;
-    }
-  }
-}
-
-// 4K screens
-@include variables.media-4k {
-  .footer {
-    padding: 3rem 4rem;
-  }
-
-  .footer-content {
-    gap: 3rem;
-
-    .footer-left,
-    .footer-right {
-      font-size: 1.5rem;
-      gap: 3rem;
-
-      .version,
-      .last-sync {
-        gap: 0.75rem;
-
-        i {
-          font-size: 1.25rem;
-        }
-      }
-    }
-
-    .copyright {
-      font-size: 1.5rem;
-    }
-
-    .footer-links {
-      gap: 3rem;
-
-      a {
-        font-size: 1.5rem;
-      }
-    }
-  }
-
-  .footer-link {
-    color: var(--text-color-secondary);
-    text-decoration: none;
-    font-size: 0.875rem;
-    transition: color 0.2s;
-
-    &:hover {
-      color: var(--primary-color);
-      text-decoration: underline;
-    }
-
-    @include variables.media-xxxl {
-      font-size: 1rem;
-    }
+    font-size: 0.8rem;
   }
 }

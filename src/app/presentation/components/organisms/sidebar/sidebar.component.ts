@@ -108,10 +108,6 @@ export class SidebarComponent {
     this.router.navigate([route]);
   }
 
-  isActiveRoute(route: string): boolean {
-    return this.router.url === route || this.router.url.startsWith(route + '/');
-  }
-
   /**
    * Construye la ruta completa del workspace contextual
    */

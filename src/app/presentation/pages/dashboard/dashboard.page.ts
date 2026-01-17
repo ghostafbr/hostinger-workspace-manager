@@ -275,23 +275,23 @@ import { DomainStatusChartComponent } from '@app/presentation/components/organis
           gap: 0.5rem;
           margin-top: 0.75rem; // Reduced margin
         }
-        
+
         // Target buttons for smaller size on mobile
         .p-toolbar-group-end ::ng-deep p-button,
         .p-toolbar-group-end ::ng-deep .p-button {
-           width: 100%;
-           font-size: 0.85rem; // Smaller font
-           padding: 0.5rem 1rem; // Smaller padding
+          width: 100%;
+          font-size: 0.85rem; // Smaller font
+          padding: 0.5rem 1rem; // Smaller padding
         }
 
         // SplitButton Separation Logic
         .p-toolbar-group-end ::ng-deep p-splitButton {
           width: 100%;
-          
+
           .p-splitbutton {
-             display: flex;
-             width: 100%;
-             gap: 0.5rem; // The requested separation
+            display: flex;
+            width: 100%;
+            gap: 0.5rem; // The requested separation
           }
         }
 
@@ -300,7 +300,7 @@ import { DomainStatusChartComponent } from '@app/presentation/components/organis
           border-radius: 8px !important; // Restore full radius
           flex: 1; // Take available space
         }
-        
+
         .p-toolbar-group-end ::ng-deep .p-splitbutton-menubutton {
           display: flex;
           align-items: center;
@@ -313,9 +313,9 @@ import { DomainStatusChartComponent } from '@app/presentation/components/organis
         .dashboard-title {
           font-size: 1.15rem; // Even smaller
           gap: 0.5rem;
-          
+
           i {
-             font-size: 1.15rem;
+            font-size: 1.15rem;
           }
         }
 

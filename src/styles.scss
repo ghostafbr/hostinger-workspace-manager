@@ -94,12 +94,12 @@ body {
   .p-datatable {
     font-size: 1rem;
 
-    .p-datatable-thead>tr>th {
+    .p-datatable-thead > tr > th {
       padding: 1rem 1.25rem;
       font-size: 0.95rem;
     }
 
-    .p-datatable-tbody>tr>td {
+    .p-datatable-tbody > tr > td {
       padding: 1rem 1.25rem;
     }
   }
@@ -229,7 +229,9 @@ body {
   // Default / Primary / Success -> Dark Brand Color
   &.p-button-primary,
   &.p-button-success,
-  &:not(.p-button-outlined):not(.p-button-text):not(.p-button-secondary):not(.p-button-info):not(.p-button-warning):not(.p-button-help):not(.p-button-danger) {
+  &:not(.p-button-outlined):not(.p-button-text):not(.p-button-secondary):not(.p-button-info):not(
+      .p-button-warning
+    ):not(.p-button-help):not(.p-button-danger) {
     background: #1f2937 !important; // Dark Slate (Sidebar Active)
     border: 1px solid #1f2937 !important;
     color: #ffffff !important;
