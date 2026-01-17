@@ -233,6 +233,21 @@ import { DomainStatusChartComponent } from '@app/presentation/components/organis
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
       }
 
+      /* Prevent grid blowout */
+      .charts-grid > * {
+        min-width: 0;
+      }
+
+      @media (max-width: 1400px) {
+        .charts-grid {
+          gap: 1rem; // Reduce gap to save space
+        }
+
+        .charts-grid .glass-card {
+          padding: 1rem; // Reduce padding to save space
+        }
+      }
+
       @media (max-width: 992px) {
         .compact-stats-grid,
         .charts-grid {
@@ -251,6 +266,49 @@ import { DomainStatusChartComponent } from '@app/presentation/components/organis
       .welcome-user {
         font-weight: 500;
         color: #334155;
+      }
+
+      @media (max-width: 576px) {
+        .p-toolbar-group-end {
+          flex-direction: column;
+          width: 100%;
+          gap: 0.5rem;
+          margin-top: 1rem;
+        }
+
+        .p-toolbar-group-end ::ng-deep p-button,
+        .p-toolbar-group-end ::ng-deep .p-button,
+        .p-toolbar-group-end ::ng-deep p-splitButton {
+          width: 100%;
+        }
+
+        .p-toolbar-group-end ::ng-deep .p-splitbutton-defaultbutton {
+          width: 100%;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+
+        .dashboard-title {
+          font-size: 1.25rem; // Smaller title
+          flex-wrap: wrap;
+        }
+
+        .welcome-inline {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
+          margin-top: 1rem;
+        }
+
+        .system-status {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: #f8fafc;
+          padding: 0.5rem;
+          border-radius: 8px;
+        }
       }
     `,
   ],

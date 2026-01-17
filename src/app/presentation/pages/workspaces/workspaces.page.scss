@@ -42,6 +42,25 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  @media (max-width: 576px) {
+    .page-header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+
+      // Container of buttons
+      > div.flex {
+        flex-direction: column;
+        width: 100%;
+
+        ::ng-deep p-button,
+        ::ng-deep .p-button {
+          width: 100%;
+        }
+      }
+    }
+  }
 }
 
 // Animaciones
@@ -50,6 +69,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

@@ -19,7 +19,7 @@ $active-bg: rgba(31, 41, 55, 0.05);
   background: $surface-glass-sidebar;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-right: 1px solid rgba(229, 231, 235, 0.6);
+  border-right: none; // Removed global border
   display: flex;
   flex-direction: column;
   transition:
@@ -91,6 +91,7 @@ $active-bg: rgba(31, 41, 55, 0.05);
   flex: 1;
   overflow-y: auto;
   padding: 1.5rem 0;
+  border-right: 1px solid rgba(229, 231, 235, 0.6); // Added border here
 
   .menu-list {
     list-style: none;
@@ -215,6 +216,7 @@ $active-bg: rgba(31, 41, 55, 0.05);
 .sidebar-footer {
   padding: 1rem;
   border-top: 1px solid rgba(229, 231, 235, 0.6);
+  border-right: 1px solid rgba(229, 231, 235, 0.6); // Added border here
   background: transparent;
 
   .logout-btn {
@@ -238,10 +240,18 @@ $active-bg: rgba(31, 41, 55, 0.05);
 // Collapsed state adjustments
 .sidebar.collapsed {
   .sidebar-header {
-    gap: 1rem;
+    gap: 0.25rem;
+    flex-direction: row;
+    justify-content: center;
+    padding: 1.5rem 0.5rem; // Add horizontal padding
+
+    .logo-icon {
+      width: auto; // Prevent full width
+    }
 
     .toggle-btn {
-      width: 100%;
+      width: auto; // Prevent full width
+      margin: 0;
     }
   }
 

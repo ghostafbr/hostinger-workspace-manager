@@ -240,3 +240,50 @@ $bg-info: #dbeafe;
     }
   }
 }
+
+// Mobile Optimization
+@media (max-width: 576px) {
+  .glass-events-card {
+    padding: 1rem; // Reduce container padding
+  }
+
+  .event-card {
+    margin-left: 0.5rem; // Reduce spacing from timeline line
+    padding: 0.75rem; // Reduce internal padding
+    margin-bottom: 1.5rem;
+    min-width: 0; // Allow flex shrinkage
+  }
+
+  // Force timeline markers closer
+  ::ng-deep .custom-timeline .p-timeline-event-connector {
+    width: 2px;
+  }
+
+  .event-header {
+    flex-wrap: wrap; // Allow wrapping
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    .event-title {
+      font-size: 0.9em;
+      margin-right: 0;
+      white-space: normal; // Ensure text wraps
+      overflow-wrap: break-word;
+      max-width: 100%;
+    }
+
+    .days-badge {
+      font-size: 0.7rem;
+    }
+  }
+
+  .event-details {
+    flex-direction: column; // Stack grid details
+    gap: 0.25rem;
+    align-items: flex-start;
+
+    .detail-item {
+      font-size: 0.8rem;
+    }
+  }
+}
