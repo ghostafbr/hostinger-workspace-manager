@@ -18,17 +18,6 @@ import {
 import { CommonModule } from '@angular/common';
 import { ToolbarModule } from 'primeng/toolbar';
 
-@Component({
-  selector: 'app-advanced-search',
-
-  template: '',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-class MockAdvancedSearchComponent {
-  searchApplied = output<any>();
-  searchCleared = output<void>();
-}
-
 describe('DashboardPage', () => {
   let component: DashboardPage;
   let fixture: ComponentFixture<DashboardPage>;
@@ -77,10 +66,7 @@ describe('DashboardPage', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
     })
-      .overrideComponent(DashboardPage, {
-        remove: { imports: [] },
-        add: { imports: [MockAdvancedSearchComponent] },
-      })
+
       .compileComponents();
 
     fixture = TestBed.createComponent(DashboardPage);

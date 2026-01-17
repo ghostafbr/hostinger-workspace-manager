@@ -6,9 +6,7 @@ export * from './sidebar/sidebar.component';
 // Dashboard components
 export { ExpirationTrendsChartComponent } from './expiration-trends-chart/expiration-trends-chart.component';
 export { UpcomingEventsTimelineComponent } from './upcoming-events-timeline/upcoming-events-timeline.component';
-export { StatsComparisonComponent } from './stats-comparison/stats-comparison.component';
 
 // Export types
 export type { ExpirationTrendData } from './expiration-trends-chart/expiration-trends-chart.component';
 export type { TimelineEvent } from './upcoming-events-timeline/upcoming-events-timeline.component';
-export type { StatComparison } from './stats-comparison/stats-comparison.component';

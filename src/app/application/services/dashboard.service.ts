@@ -3,11 +3,7 @@ import { Firestore, collection, getDocs, query, where, Timestamp } from 'firebas
 import { FirebaseAdapter } from '@app/infrastructure/adapters/firebase.adapter';
 import { AuthService } from './auth.service';
 import { Workspace, WorkspaceStatus, IDomain, ISubscription } from '@app/domain';
-import type {
-  ExpirationTrendData,
-  TimelineEvent,
-  StatComparison,
-} from '@app/presentation/components/organisms';
+import type { ExpirationTrendData, TimelineEvent } from '@app/presentation/components/organisms';
 
 /**
  * Dashboard Statistics
@@ -350,42 +346,5 @@ export class DashboardService {
       console.error('Error getting upcoming events:', error);
       return [];
     }
-  }
-
-  /**
-   * Get stats comparison data
-   * Note: This is a placeholder - you'll need to implement historical data tracking
-   */
-  getStatsComparison(): StatComparison[] {
-    const stats = this.stats();
-    if (!stats) return [];
-
-    // Placeholder: using current values with simulated previous values
-    // In a real implementation, you'd fetch historical data from Firestore
-    return [
-      {
-        label: 'Total Workspaces',
-        current: stats.totalWorkspaces,
-        previous: Math.max(0, stats.totalWorkspaces - 1),
-      },
-      {
-        label: 'Dominios',
-        current: stats.totalDomains,
-        previous: Math.max(0, stats.totalDomains - Math.floor(Math.random() * 5)),
-      },
-      {
-        label: 'Suscripciones',
-        current: stats.totalSubscriptions,
-        previous: Math.max(0, stats.totalSubscriptions - Math.floor(Math.random() * 3)),
-      },
-      {
-        label: 'Vencimientos (7d)',
-        current: stats.domainsExpiring7Days + stats.subscriptionsExpiring7Days,
-        previous: Math.floor(
-          (stats.domainsExpiring7Days + stats.subscriptionsExpiring7Days) *
-            (0.8 + Math.random() * 0.4),
-        ),
-      },
-    ];
   }
 }
