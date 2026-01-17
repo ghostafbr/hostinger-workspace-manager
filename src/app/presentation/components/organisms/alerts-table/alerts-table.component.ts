@@ -1,14 +1,14 @@
 import { Component, ChangeDetectionStrategy, input, output, signal } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { ChipModule } from 'primeng/chip';
-import { TagModule } from 'primeng/tag';
-import { TooltipModule } from 'primeng/tooltip';
-import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AlertLogModel, EntityType } from '@app/domain';
+import { TableToolbarComponent } from '../../molecules/table-toolbar/table-toolbar.component';
+import { SearchInputComponent } from '../../molecules/search-input/search-input.component';
+import { StatusTagComponent } from '../../atoms/status-tag/status-tag.component';
+import { ActionButtonComponent } from '../../atoms/action-button/action-button.component';
+import { EmptyStateComponent } from '../../molecules/empty-state/empty-state.component';
 
 /**
  * Alerts Table Component
@@ -17,18 +17,18 @@ import { AlertLogModel, EntityType } from '@app/domain';
  */
 @Component({
   selector: 'app-alerts-table',
-
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     TableModule,
-    ButtonModule,
-    ChipModule,
-    TagModule,
-    TooltipModule,
-    InputTextModule,
     SelectModule,
     DatePipe,
     FormsModule,
+    TableToolbarComponent,
+    SearchInputComponent,
+    StatusTagComponent,
+    ActionButtonComponent,
+    EmptyStateComponent,
   ],
   template: `
     <p-table
@@ -45,44 +45,30 @@ import { AlertLogModel, EntityType } from '@app/domain';
     >
       <!-- Caption -->
       <ng-template pTemplate="caption">
-        <div class="table-header">
-          <div class="header-left">
-            <h2><i class="pi pi-bell"></i> Alertas</h2>
-            <p-chip [label]="alerts().length.toString()" class="ml-2" />
-          </div>
-          <div class="header-right">
-            <!-- Search -->
-            <span class="p-input-icon-left">
-              <i class="pi pi-search"></i>
-              <input
-                pInputText
-                type="text"
-                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                placeholder="Buscar..."
-              />
-            </span>
+        <app-table-toolbar title="Alertas" icon="pi pi-bell" [count]="alerts().length">
+          <!-- Search -->
+          <app-search-input (onInput)="dt.filterGlobal($event, 'contains')" />
 
-            <!-- Entity Type Filter -->
-            <p-select
-              [options]="entityTypeOptions"
-              [(ngModel)]="selectedEntityType"
-              (onChange)="onEntityTypeFilter($event)"
-              placeholder="Todos los tipos"
-              [showClear]="true"
-              class="ml-2"
-            />
+          <!-- Entity Type Filter -->
+          <p-select
+            [options]="entityTypeOptions"
+            [(ngModel)]="selectedEntityType"
+            (onChange)="onEntityTypeFilter($event)"
+            placeholder="Todos los tipos"
+            [showClear]="true"
+            class="w-full sm:w-auto"
+          />
 
-            <!-- Days Before Filter -->
-            <p-select
-              [options]="daysBeforeOptions"
-              [(ngModel)]="selectedDaysBefore"
-              (onChange)="onDaysBeforeFilter($event)"
-              placeholder="Todos los días"
-              [showClear]="true"
-              class="ml-2"
-            />
-          </div>
-        </div>
+          <!-- Days Before Filter -->
+          <p-select
+            [options]="daysBeforeOptions"
+            [(ngModel)]="selectedDaysBefore"
+            (onChange)="onDaysBeforeFilter($event)"
+            placeholder="Todos los días"
+            [showClear]="true"
+            class="w-full sm:w-auto"
+          />
+        </app-table-toolbar>
       </ng-template>
 
       <!-- Header -->
@@ -124,9 +110,9 @@ import { AlertLogModel, EntityType } from '@app/domain';
 
           <!-- Entity Type -->
           <td>
-            <p-tag
+            <app-status-tag
               [value]="alert.getEntityTypeLabel()"
-              [severity]="alert.entityType === 'domain' ? 'info' : 'success'"
+              [severityOverride]="alert.entityType === 'domain' ? 'info' : 'success'"
               [icon]="alert.entityType === 'domain' ? 'pi pi-globe' : 'pi pi-shopping-cart'"
             />
           </td>
@@ -138,9 +124,10 @@ import { AlertLogModel, EntityType } from '@app/domain';
 
           <!-- Days Before -->
           <td style="text-align: center">
-            <p-chip
-              [label]="alert.getDaysBeforeLabel()"
-              [class]="getDaysBeforeChipClass(alert.daysBefore)"
+            <app-status-tag
+              [value]="alert.getDaysBeforeLabel()"
+              [severityOverride]="getDaysBeforeSeverity(alert.daysBefore)"
+              [rounded]="true"
             />
           </td>
 
@@ -152,22 +139,19 @@ import { AlertLogModel, EntityType } from '@app/domain';
 
           <!-- Severity -->
           <td style="text-align: center">
-            <p-tag
+            <app-status-tag
               [value]="getSeverityLabel(alert.getSeverity())"
-              [severity]="alert.getSeverity()"
+              [severityOverride]="alert.getSeverity()"
               [icon]="getSeverityIcon(alert.getSeverity())"
             />
           </td>
 
           <!-- Actions -->
           <td style="text-align: center">
-            <p-button
-              icon="pi pi-eye"
-              [rounded]="true"
-              [text]="true"
-              severity="secondary"
+            <app-action-button
+              action="view"
+              tooltip="Ver detalles"
               (onClick)="viewDetails.emit(alert)"
-              pTooltip="Ver detalles"
             />
           </td>
         </tr>
@@ -176,83 +160,13 @@ import { AlertLogModel, EntityType } from '@app/domain';
       <!-- Empty State -->
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td colspan="7" style="text-align: center; padding: 3rem">
-            <i class="pi pi-inbox" style="font-size: 3rem; color: var(--text-color-secondary)"></i>
-            <p style="margin-top: 1rem; color: var(--text-color-secondary)">
-              No se encontraron alertas
-            </p>
+          <td colspan="7">
+            <app-empty-state title="No se encontraron alertas" />
           </td>
         </tr>
       </ng-template>
     </p-table>
   `,
-  styles: [
-    `
-      .table-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem;
-        background: var(--surface-100);
-        border-radius: 8px;
-        margin-bottom: 1rem;
-      }
-
-      .header-left {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-
-        h2 {
-          margin: 0;
-          font-size: 1.5rem;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-
-          i {
-            color: var(--primary-color);
-          }
-        }
-      }
-
-      .header-right {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      :host ::ng-deep {
-        .chip-critical {
-          background-color: var(--red-600) !important;
-          color: white !important;
-          font-weight: 600;
-          border: 2px solid var(--red-700);
-        }
-
-        .chip-warning {
-          background-color: var(--orange-600) !important;
-          color: white !important;
-          font-weight: 600;
-          border: 2px solid var(--orange-700);
-        }
-
-        .chip-info {
-          background-color: var(--blue-600) !important;
-          color: white !important;
-          font-weight: 600;
-          border: 2px solid var(--blue-700);
-        }
-
-        .chip-success {
-          background-color: var(--green-600) !important;
-          color: white !important;
-          font-weight: 600;
-          border: 2px solid var(--green-700);
-        }
-      }
-    `,
-  ],
 })
 export class AlertsTableComponent {
   readonly alerts = input.required<AlertLogModel[]>();
@@ -278,19 +192,17 @@ export class AlertsTableComponent {
 
   onEntityTypeFilter(event: { value: EntityType | null }): void {
     this.selectedEntityType.set(event.value);
-    // Emit filter change if needed
   }
 
   onDaysBeforeFilter(event: { value: number | null }): void {
     this.selectedDaysBefore.set(event.value);
-    // Emit filter change if needed
   }
 
-  getDaysBeforeChipClass(daysBefore: number): string {
-    if (daysBefore <= 3) return 'chip-critical';
-    if (daysBefore <= 7) return 'chip-warning';
-    if (daysBefore <= 30) return 'chip-info';
-    return 'chip-success';
+  getDaysBeforeSeverity(daysBefore: number): 'danger' | 'warn' | 'info' | 'success' {
+    if (daysBefore <= 3) return 'danger';
+    if (daysBefore <= 7) return 'warn';
+    if (daysBefore <= 30) return 'info';
+    return 'success';
   }
 
   getSeverityLabel(severity: string): string {

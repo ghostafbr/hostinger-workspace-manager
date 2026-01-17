@@ -17,6 +17,11 @@ import { Subscription as ISubscription } from '@app/domain/interfaces/subscripti
 
 // Components
 import { ExpirationSemaphoreComponent } from '../../molecules/expiration-semaphore/expiration-semaphore.component';
+import { TableToolbarComponent } from '../../molecules/table-toolbar/table-toolbar.component';
+import { SearchInputComponent } from '../../molecules/search-input/search-input.component';
+import { StatusTagComponent } from '../../atoms/status-tag/status-tag.component';
+import { ActionButtonComponent } from '../../atoms/action-button/action-button.component';
+import { EmptyStateComponent } from '../../molecules/empty-state/empty-state.component';
 
 /**
  * Subscriptions Table Component
@@ -25,13 +30,12 @@ import { ExpirationSemaphoreComponent } from '../../molecules/expiration-semapho
  */
 @Component({
   selector: 'app-subscriptions-table',
-
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DatePipe,
     FormsModule,
     TableModule,
-    InputTextModule,
+    InputTextModule, // Keep needed for potential underlying usage or if not fully replaced yet
     ButtonModule,
     SelectModule,
     TagModule,
@@ -39,6 +43,11 @@ import { ExpirationSemaphoreComponent } from '../../molecules/expiration-semapho
     InputIconModule,
     ToggleButtonModule,
     ExpirationSemaphoreComponent,
+    TableToolbarComponent,
+    SearchInputComponent,
+    StatusTagComponent,
+    ActionButtonComponent,
+    EmptyStateComponent,
   ],
   templateUrl: './subscriptions-table.component.html',
   styleUrl: './subscriptions-table.component.scss',
@@ -96,17 +105,5 @@ export class SubscriptionsTableComponent {
    */
   onAutoRenewFilterChange(value: boolean | null): void {
     this.selectedAutoRenewFilter.set(value);
-  }
-
-  /**
-   * Get status severity for tags
-   */
-  getStatusSeverity(status: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
-    const statusLower = status.toLowerCase();
-    if (statusLower.includes('active') || statusLower.includes('activ')) return 'success';
-    if (statusLower.includes('pending') || statusLower.includes('pendiente')) return 'warn';
-    if (statusLower.includes('suspended') || statusLower.includes('suspendid')) return 'danger';
-    if (statusLower.includes('cancelled') || statusLower.includes('cancelad')) return 'secondary';
-    return 'info';
   }
 }

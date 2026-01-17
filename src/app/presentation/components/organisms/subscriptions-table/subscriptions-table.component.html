@@ -1,31 +1,4 @@
 <div class="subscriptions-table-container">
-  <!-- Search and Filters Header -->
-  <div class="table-header">
-    <div class="search-container">
-      <p-iconfield iconPosition="left">
-        <p-inputicon class="pi pi-search" />
-        <input
-          type="text"
-          pInputText
-          placeholder="Buscar por producto..."
-          [(ngModel)]="searchText"
-          class="search-input"
-        />
-      </p-iconfield>
-    </div>
-
-    <p-select
-      [options]="autoRenewFilterOptions"
-      [(ngModel)]="selectedAutoRenewFilter"
-      (ngModelChange)="onAutoRenewFilterChange($event)"
-      optionLabel="label"
-      optionValue="value"
-      placeholder="Filtrar por renovación"
-      class="autorenew-filter"
-    />
-  </div>
-
-  <!-- Table -->
   <p-table
     [value]="filteredSubscriptions()"
     [loading]="isLoading()"
@@ -37,7 +10,31 @@
     currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} suscripciones"
     class="subscriptions-table"
     responsiveLayout="scroll"
+    #dt
   >
+    <!-- Caption -->
+    <ng-template pTemplate="caption">
+      <app-table-toolbar
+        title="Suscripciones"
+        icon="pi pi-shopping-cart"
+        [count]="filteredSubscriptions().length"
+      >
+        <!-- Search -->
+        <app-search-input placeholder="Buscar por producto..." [(value)]="searchText" />
+
+        <!-- Auto Renew Filter -->
+        <p-select
+          [options]="autoRenewFilterOptions"
+          [(ngModel)]="selectedAutoRenewFilter"
+          (ngModelChange)="onAutoRenewFilterChange($event)"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Filtrar por renovación"
+          class="w-full sm:w-auto"
+        />
+      </app-table-toolbar>
+    </ng-template>
+
     <ng-template pTemplate="header">
       <tr>
         <th>Estado</th>
@@ -102,22 +99,14 @@
 
         <!-- Status -->
         <td>
-          <p-tag
-            [value]="subscription.status"
-            [severity]="getStatusSeverity(subscription.status)"
-          />
+          <app-status-tag [value]="subscription.status" />
         </td>
 
         <!-- Actions -->
         <td class="actions-cell">
-          <p-button
-            icon="pi pi-eye"
-            [rounded]="true"
-            [text]="true"
-            severity="info"
-            size="small"
-            pTooltip="Ver detalles"
-            tooltipPosition="left"
+          <app-action-button
+            action="view"
+            tooltip="Ver detalles"
             (onClick)="onRowClick(subscription); $event.stopPropagation()"
           />
         </td>
@@ -126,18 +115,15 @@
 
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="7" class="empty-message">
-          <div class="empty-state">
-            <i class="pi pi-inbox empty-icon"></i>
-            <p class="empty-text">No se encontraron suscripciones</p>
-            <p class="empty-hint">
-              @if (searchText() || selectedAutoRenewFilter() !== null) {
-                Intenta cambiar los filtros de búsqueda
-              } @else {
-                No hay suscripciones sincronizadas para este workspace
-              }
-            </p>
-          </div>
+        <td colspan="7">
+          <app-empty-state
+            title="No se encontraron suscripciones"
+            [description]="
+              searchText() || selectedAutoRenewFilter() !== null
+                ? 'Intenta cambiar los filtros de búsqueda'
+                : 'No hay suscripciones sincronizadas para este workspace'
+            "
+          />
         </td>
       </tr>
     </ng-template>

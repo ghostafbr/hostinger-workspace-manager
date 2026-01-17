@@ -1,13 +1,14 @@
 import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
 import { ChipModule } from 'primeng/chip';
-import { TagModule } from 'primeng/tag';
-import { TooltipModule } from 'primeng/tooltip';
-import { InputTextModule } from 'primeng/inputtext';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { DatePipe } from '@angular/common';
 import { SyncRun } from '@app/domain';
+import { TableToolbarComponent } from '../../molecules/table-toolbar/table-toolbar.component';
+import { SearchInputComponent } from '../../molecules/search-input/search-input.component';
+import { StatusTagComponent } from '../../atoms/status-tag/status-tag.component';
+import { ActionButtonComponent } from '../../atoms/action-button/action-button.component';
+import { EmptyStateComponent } from '../../molecules/empty-state/empty-state.component';
 
 /**
  * Sync Runs Table Component
@@ -16,17 +17,18 @@ import { SyncRun } from '@app/domain';
  */
 @Component({
   selector: 'app-sync-runs-table',
-
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     TableModule,
-    ButtonModule,
     ChipModule,
-    TagModule,
-    TooltipModule,
-    InputTextModule,
     ProgressBarModule,
     DatePipe,
+    TableToolbarComponent,
+    SearchInputComponent,
+    StatusTagComponent,
+    ActionButtonComponent,
+    EmptyStateComponent,
   ],
   template: `
     <p-table
@@ -42,23 +44,14 @@ import { SyncRun } from '@app/domain';
     >
       <!-- Caption -->
       <ng-template pTemplate="caption">
-        <div class="table-header">
-          <div class="header-left">
-            <h2><i class="pi pi-sync"></i> Historial de Sincronizaciones</h2>
-            <p-chip [label]="syncRuns().length.toString()" class="ml-2" />
-          </div>
-          <div class="header-right">
-            <span class="p-input-icon-left">
-              <i class="pi pi-search"></i>
-              <input
-                pInputText
-                type="text"
-                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                placeholder="Buscar..."
-              />
-            </span>
-          </div>
-        </div>
+        <app-table-toolbar
+          title="Historial de Sincronizaciones"
+          icon="pi pi-sync"
+          [count]="syncRuns().length"
+        >
+          <!-- Search -->
+          <app-search-input (onInput)="dt.filterGlobal($event, 'contains')" />
+        </app-table-toolbar>
       </ng-template>
 
       <!-- Header -->
@@ -115,9 +108,9 @@ import { SyncRun } from '@app/domain';
 
           <!-- Status -->
           <td style="text-align: center">
-            <p-tag
+            <app-status-tag
               [value]="run.getStatusLabel()"
-              [severity]="run.getSeverity()"
+              [severityOverride]="run.getSeverity()"
               [icon]="getStatusIcon(run)"
             />
           </td>
@@ -125,14 +118,11 @@ import { SyncRun } from '@app/domain';
           <!-- Errors -->
           <td>
             @if (run.errors && run.errors.length > 0) {
-              <p-button
-                [label]="run.errors.length + ' error(es)'"
-                icon="pi pi-exclamation-triangle"
-                severity="danger"
-                [text]="true"
-                [size]="'small'"
+              <app-action-button
+                action="custom"
+                customIcon="pi pi-exclamation-triangle"
+                [tooltip]="run.errors.length + ' errores'"
                 (onClick)="viewErrors.emit(run)"
-                pTooltip="Ver errores"
               />
             } @else {
               <span class="text-success">
@@ -144,13 +134,10 @@ import { SyncRun } from '@app/domain';
 
           <!-- Actions -->
           <td style="text-align: center">
-            <p-button
-              icon="pi pi-eye"
-              [rounded]="true"
-              [text]="true"
-              severity="secondary"
+            <app-action-button
+              action="view"
+              tooltip="Ver detalles"
               (onClick)="viewDetails.emit(run)"
-              pTooltip="Ver detalles"
             />
           </td>
         </tr>
@@ -159,11 +146,8 @@ import { SyncRun } from '@app/domain';
       <!-- Empty State -->
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td colspan="7" style="text-align: center; padding: 3rem">
-            <i class="pi pi-inbox" style="font-size: 3rem; color: var(--text-color-secondary)"></i>
-            <p style="margin-top: 1rem; color: var(--text-color-secondary)">
-              No se encontraron sincronizaciones
-            </p>
+          <td colspan="7">
+            <app-empty-state title="No se encontraron sincronizaciones" />
           </td>
         </tr>
       </ng-template>
@@ -171,40 +155,6 @@ import { SyncRun } from '@app/domain';
   `,
   styles: [
     `
-      .table-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1rem;
-        background: var(--surface-100);
-        border-radius: 8px;
-        margin-bottom: 1rem;
-      }
-
-      .header-left {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-
-        h2 {
-          margin: 0;
-          font-size: 1.5rem;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-
-          i {
-            color: var(--primary-color);
-          }
-        }
-      }
-
-      .header-right {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
       .duration-chip {
         background-color: var(--blue-100);
         color: var(--blue-900);
