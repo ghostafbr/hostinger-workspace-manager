@@ -69,7 +69,7 @@ export default class WorkspacesPage implements OnInit {
   readonly searchTerm = signal<string>('');
   readonly isTestingConnection = signal<string | null>(null);
   readonly isSyncing = signal<string | null>(null);
-  readonly isSyncingAll = signal<boolean>(false); // TEMP: For testing batch sync
+  readonly isSyncingAll = signal<boolean>(false);
 
   ngOnInit(): void {
     this.loadWorkspaces();
@@ -122,7 +122,7 @@ export default class WorkspacesPage implements OnInit {
     this.confirmationService.confirm({
       message: `¿Desactivar el workspace "${workspace.name}"? Se mantendrán todos los datos pero dejará de sincronizarse.`,
       header: 'Confirmar Desactivación',
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'fa fa-exclamation-triangle',
       acceptLabel: 'Desactivar',
       rejectLabel: 'Cancelar',
       acceptButtonStyleClass: 'p-button-warning',
@@ -225,7 +225,7 @@ export default class WorkspacesPage implements OnInit {
     this.confirmationService.confirm({
       message: `¿Estás seguro de eliminar el workspace "${workspace.name}"? Esta acción no se puede deshacer.`,
       header: 'Confirmar Eliminación',
-      icon: 'pi pi-trash',
+      icon: 'fa fa-trash',
       acceptButtonStyleClass: 'p-button-danger',
       accept: async () => {
         try {
@@ -298,19 +298,11 @@ export default class WorkspacesPage implements OnInit {
     return timestamp.toLocaleDateString('es-ES');
   }
 
-  /**
-   * TEMP: Sync All Workspaces (for testing)
-   *
-   * This is a temporary method to test the batch sync functionality.
-   * Production uses automatic Cloud Scheduler at 03:00 AM.
-   *
-   * TODO: Remove this method after testing is complete
-   */
   async syncAllWorkspaces(): Promise<void> {
     this.confirmationService.confirm({
       message: '¿Deseas sincronizar TODOS los workspaces activos? Esto puede tomar varios minutos.',
       header: 'Confirmar Sincronización Batch',
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'fa fa-exclamation-triangle',
       acceptLabel: 'Sí, sincronizar',
       rejectLabel: 'Cancelar',
       accept: async () => {

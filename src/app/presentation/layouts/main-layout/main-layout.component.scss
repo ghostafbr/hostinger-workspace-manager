@@ -86,11 +86,11 @@ $surface-glass-sidebar: rgba(255, 255, 255, 0.95); // Mostly opaque sidebar
 // Large screens
 @media screen and (min-width: 1920px) {
   .layout-main {
-    margin-left: 320px;
+    margin-left: 300px;
     max-width: calc(100vw - 320px);
 
     &.sidebar-collapsed {
-      margin-left: 100px;
+      margin-left: 80px;
       max-width: calc(100vw - 100px);
     }
   }

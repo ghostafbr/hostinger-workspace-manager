@@ -55,10 +55,10 @@ export const routes: Routes = [
             (m) => m.EmailConfigPage,
           ),
       },
-      {
-        path: 'settings',
-        loadComponent: () => import('./presentation/pages/dashboard/dashboard.page'), // Temporal
-      },
+      // {
+      //   path: 'settings', // Future route
+      //   loadComponent: () => import('./presentation/pages/settings/settings.page'),
+      // },
 
       // ============================================
       // WORKSPACE CONTEXTUAL ROUTES
@@ -104,7 +104,7 @@ export const routes: Routes = [
       },
 
       // ============================================
-      // DEFAULT REDIRECTS
+      // DEFAULT REDIRECTS (Protected Area)
       // ============================================
       {
         path: 'dashboard',
@@ -116,12 +116,18 @@ export const routes: Routes = [
         redirectTo: '/home',
         pathMatch: 'full',
       },
+      // 404 inside Protected Layout (optional, handled by global but nice to keep layout)
+      // For now, let global handle it to full screen
     ],
   },
 
-  // Wildcard - redirect to home
+  // ============================================
+  // GLOBAL 404
+  // ============================================
   {
     path: '**',
-    redirectTo: '/home',
+    loadComponent: () =>
+      import('./presentation/pages/not-found/not-found.page').then((m) => m.NotFoundPage),
+    title: 'Página no encontrada | Hostinger WM',
   },
 ];

@@ -210,11 +210,11 @@ export class HealthService {
     const errorFrequency = recentErrors.length;
 
     // Rate limit metrics (mock - would come from workspace metadata or API)
-    // In a real implementation, this would be stored after each API call
-    const rateLimitRequests = 0;
-    const rateLimitRemaining = 1000; // Default Hostinger limit
-    const rateLimitResetTime = null;
-    const rateLimitPercentage = 0;
+    // Removed as per user request (no API support yet)
+    // const rateLimitRequests = 0;
+    // const rateLimitRemaining = 1000;
+    // const rateLimitResetTime = null;
+    // const rateLimitPercentage = 0;
 
     // Circuit breaker status (based on consecutive failures)
     const circuitBreakerStatus: 'closed' | 'open' | 'half-open' =
@@ -228,7 +228,7 @@ export class HealthService {
 
     // Calculate health score
     const healthScore = HealthMetrics.calculateHealthScore({
-      rateLimitPercentage,
+      rateLimitPercentage: 0,
       consecutiveFailures,
       errorFrequency,
       circuitBreakerStatus,
@@ -239,10 +239,10 @@ export class HealthService {
     const metricsData: IHealthMetrics = {
       workspaceId,
       workspaceName,
-      rateLimitRequests,
-      rateLimitRemaining,
-      rateLimitResetTime,
-      rateLimitPercentage,
+      rateLimitRequests: 0,
+      rateLimitRemaining: 0,
+      rateLimitResetTime: null,
+      rateLimitPercentage: 0,
       lastSuccessfulSync:
         lastSuccessfulSync?.['startedAt'] &&
         typeof (lastSuccessfulSync['startedAt'] as FirebaseTimestamp | undefined)?.toDate ===
@@ -319,12 +319,8 @@ export class HealthService {
       (m) => m.healthStatus === HealthStatus.CRITICAL,
     ).length;
 
-    const totalRateLimitUsage =
-      totalWorkspaces > 0
-        ? metrics.reduce((sum, m) => sum + m.rateLimitPercentage, 0) / totalWorkspaces
-        : 0;
-
-    const workspacesNearLimit = metrics.filter((m) => m.isNearRateLimit()).length;
+    const totalRateLimitUsage = 0;
+    const workspacesNearLimit = 0;
 
     // Sync metrics for today
     const today = new Date();
@@ -457,29 +453,8 @@ export class HealthService {
     let alertsCreated = 0;
 
     for (const metric of metrics) {
-      // Alert for critical rate limit usage
-      if (metric.hasCriticalRateLimit()) {
-        await this.createHealthAlert(
-          metric.workspaceId,
-          metric.workspaceName,
-          'critical',
-          'Rate Limit Critical',
-          `Rate limit usage at ${metric.rateLimitPercentage}%. Immediate action required.`,
-        );
-        alertsCreated++;
-      }
+      // Rate Limit alerts removed
 
-      // Alert for near rate limit
-      else if (metric.isNearRateLimit()) {
-        await this.createHealthAlert(
-          metric.workspaceId,
-          metric.workspaceName,
-          'warning',
-          'Rate Limit Warning',
-          `Rate limit usage at ${metric.rateLimitPercentage}%. Consider reducing API calls.`,
-        );
-        alertsCreated++;
-      }
 
       // Alert for consecutive failures
       if (metric.hasConsecutiveFailures()) {

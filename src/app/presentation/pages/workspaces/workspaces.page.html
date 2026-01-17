@@ -9,19 +9,19 @@
         <div class="flex gap-2" role="group" aria-label="Acciones principales">
           <!-- TEMP: Batch Sync Button (remove after testing) -->
           <p-button
-            label="🧪 Sincronizar Todos"
-            icon="pi pi-sync"
+            label="Sincronizar Todos"
+            icon="fa fa-refresh"
             severity="secondary"
             [outlined]="true"
             [loading]="isSyncingAll()"
             (onClick)="syncAllWorkspaces()"
-            pTooltip="TEMP: Test batch sync (producción usa cron job a las 03:00 AM)"
+            pTooltip="Sincronizar manualmente todos los workspaces activos"
             tooltipPosition="bottom"
-            aria-label="Sincronizar todos los workspaces (característica temporal de prueba)"
+            aria-label="Sincronizar todos los workspaces"
           />
           <p-button
             label="Nuevo Workspace"
-            icon="pi pi-plus"
+            icon="fa fa-plus"
             (onClick)="createWorkspace()"
             aria-label="Crear nuevo workspace"
           />
@@ -32,7 +32,7 @@
     <!-- Search Bar -->
     <div class="search-container mb-4" role="search">
       <p-iconField iconPosition="left">
-        <p-inputIcon class="pi pi-search" />
+        <p-inputIcon class="fa fa-search" />
         <input
           pInputText
           type="text"
@@ -88,7 +88,7 @@
           <td>
             <div class="flex gap-2">
               <p-button
-                icon="pi pi-wifi"
+                icon="fa fa-wifi"
                 [rounded]="true"
                 [text]="true"
                 severity="secondary"
@@ -97,7 +97,7 @@
                 (onClick)="testConnection(workspace)"
               />
               <p-button
-                icon="pi pi-refresh"
+                icon="fa fa-refresh"
                 [rounded]="true"
                 [text]="true"
                 severity="secondary"
@@ -106,7 +106,7 @@
                 (onClick)="syncNow(workspace)"
               />
               <p-button
-                icon="pi pi-pencil"
+                icon="fa fa-pencil"
                 [rounded]="true"
                 [text]="true"
                 severity="info"
@@ -115,7 +115,7 @@
               />
               @if (workspace.status !== 'disabled') {
                 <p-button
-                  icon="pi pi-ban"
+                  icon="fa fa-ban"
                   [rounded]="true"
                   [text]="true"
                   severity="warn"
@@ -124,7 +124,7 @@
                 />
               }
               <p-button
-                icon="pi pi-trash"
+                icon="fa fa-trash"
                 [rounded]="true"
                 [text]="true"
                 severity="danger"
@@ -140,11 +140,11 @@
         <tr>
           <td colspan="5" class="text-center">
             <div class="py-5">
-              <i class="pi pi-inbox text-4xl text-gray-400"></i>
+              <i class="fa fa-inbox text-4xl text-gray-400"></i>
               <p class="mt-3 text-gray-500">No se encontraron workspaces</p>
               <p-button
                 label="Crear Primer Workspace"
-                icon="pi pi-plus"
+                icon="fa fa-plus"
                 (onClick)="createWorkspace()"
                 class="mt-3"
               />

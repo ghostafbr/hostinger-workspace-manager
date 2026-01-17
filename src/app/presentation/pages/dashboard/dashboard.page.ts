@@ -106,14 +106,13 @@ import { DomainStatusChartComponent } from '@app/presentation/components/organis
           </div>
         </div>
 
-        <div class="p-toolbar-group-end">
+        <div class="p-toolbar-group-end gap-2">
           <p-button
             label="Ver Workspaces"
             icon="pi pi-briefcase"
             severity="success"
             size="small"
             (onClick)="navigateToWorkspaces()"
-            class="mr-2"
           />
           <p-splitButton
             label="Actualizar"
@@ -266,6 +265,20 @@ import { DomainStatusChartComponent } from '@app/presentation/components/organis
       .welcome-user {
         font-weight: 500;
         color: #334155;
+      }
+
+      // Separate SplitButton parts
+      :host ::ng-deep .p-splitbutton {
+        gap: 0.5rem;
+      }
+
+      :host ::ng-deep .p-splitbutton > .p-button {
+        border-radius: 12px !important; // Restore full roundedness for separated buttons
+        border: 1px solid rgba(209, 213, 219, 0.6) !important; // Force border back (PrimeNG removes it for joined buttons)
+      }
+
+      :host ::ng-deep .p-splitbutton > .p-button:hover {
+        border-color: #9ca3af !important;
       }
 
       @media (max-width: 576px) {

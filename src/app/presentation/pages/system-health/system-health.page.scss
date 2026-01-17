@@ -43,28 +43,27 @@
         font-size: 1.75rem;
 
         &.health {
-          background: linear-gradient(135deg, #10b981, #059669);
-          color: white;
+          background: rgba(16, 185, 129, 0.15);
+          color: #10b981;
+          border: 1px solid rgba(16, 185, 129, 0.2);
         }
 
         &.workspaces {
-          background: linear-gradient(135deg, #3b82f6, #2563eb);
-          color: white;
-        }
-
-        &.rate-limit {
-          background: linear-gradient(135deg, #f59e0b, #d97706);
-          color: white;
+          background: rgba(59, 130, 246, 0.15);
+          color: #3b82f6;
+          border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         &.sync {
-          background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-          color: white;
+          background: rgba(139, 92, 246, 0.15);
+          color: #8b5cf6;
+          border: 1px solid rgba(139, 92, 246, 0.2);
         }
 
         &.errors {
-          background: linear-gradient(135deg, #ef4444, #dc2626);
-          color: white;
+          background: rgba(239, 68, 68, 0.15);
+          color: #ef4444;
+          border: 1px solid rgba(239, 68, 68, 0.2);
         }
       }
 
